@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>カルダシェフ文明マップ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Murecho:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* 単一テーマ（夜空）。上段＝文明レベル、下段＝7つのビュー。全レベルで同じビュー構成を使い回す */
+:root{
+  --bg:#0a0f1f;
+  --surface:#121a30;
+  --surface-2:#18223d;
+  --ink:#e9edf7;
+  --muted:#8e98b5;
+  --line:#2b3658;
+  --accent:#f4b942;
+  --cool:#7fb2ff;
+  --c-heritage:#e8a46a;
+  --c-modern:#c99cf2;
+  --c-science:#6fd3c7;
+  --c-nature:#8fd16a;
+  --font-display:"Murecho","Noto Sans JP",system-ui,sans-serif;
+  --font-body:"Noto Sans JP","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --font-num:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:radial-gradient(1200px 700px at 50% 30%,#15204099 0%,transparent 70%),var(--bg);
+  color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.65;padding:22px 18px 56px}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--cool);outline-offset:2px}
+
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
+h1{font-family:var(--font-display);font-weight:900;font-size:28px;margin:0;letter-spacing:.02em;text-wrap:balance}
+.sub{color:var(--muted);font-size:13px;margin:4px 0 0}
+body.t1 .top h1::after{content:"Type I・もしも";font:600 11px var(--font-body);color:#06222c;background:#7ee0ff;border-radius:99px;padding:3px 9px;margin-left:10px;vertical-align:middle}
+body.t1 .whev[data-fut="1"]{border-style:dashed}
+.view .note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6}
+.thwrap{position:relative;height:min(70vh,640px);min-height:420px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#02030a}
+.thstage{position:absolute;inset:0;cursor:grab;touch-action:none}.thstage canvas{display:block}
+.thstage.thfade{animation:thf .9s ease}@keyframes thf{0%{filter:brightness(3)}100%{filter:none}}
+.thphase{position:absolute;left:16px;top:14px;font-size:13px;color:#cdd6ea;pointer-events:none}.thphase b{display:inline-block;margin-right:8px;padding:2px 10px;border-radius:99px;background:var(--accent);color:#1a1204;font-weight:700}
+.thpaleo{position:absolute;left:16px;top:44px;font-size:12px;color:#9fd8ff;pointer-events:none;text-shadow:0 1px 3px #000}
+.thcap{position:absolute;left:16px;bottom:16px;max-width:min(460px,70%);padding:14px 16px;border-radius:12px;background:rgba(8,12,24,.72);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);pointer-events:none}
+.thcap h3{margin:2px 0 6px;font-size:20px}.thcap p{margin:0;font-size:13.5px;line-height:1.65;color:#cfd7ea}.thy{color:var(--accent);font-size:13px}
+.thmeta{display:flex;gap:6px;margin-bottom:4px}.thmeta .pill{font-size:11px;padding:1px 8px;border-radius:99px;border:1px solid #ffffff40;color:#dfe6f5}.thmeta .pill.fut{border-color:#7ee0ff;color:#7ee0ff}
+.thlog{position:absolute;right:14px;top:14px;width:250px;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;pointer-events:none}
+.thlog li{font-size:12px;padding:6px 9px;border-radius:8px;background:rgba(8,12,24,.6);color:#cbd3e6;border-left:3px solid var(--accent);animation:thin .5s ease}.thlog li:first-child{color:#fff;background:rgba(20,26,44,.85)}
+.thlog li.fut{border-left-color:#7ee0ff}.thlog li .num{display:block;font-size:10.5px;color:#9aa6c2}@keyframes thin{from{opacity:0;transform:translateX(12px)}}
+.thbar{display:flex;align-items:center;gap:14px;margin-top:14px}
+.thplay{font:700 14px var(--font-body);padding:9px 16px;border-radius:10px;border:0;background:var(--accent);color:#1a1204;cursor:pointer;min-width:118px}
+.thscrubw{flex:1;position:relative;padding-bottom:20px}.thscrubw input{width:100%;accent-color:#f4b942}
+.thticks{position:absolute;left:0;right:0;bottom:0;height:18px}.thticks span{position:absolute;transform:translateX(-50%);font-size:10.5px;color:var(--muted);white-space:nowrap}
+.thticks span::before{content:"";position:absolute;left:50%;top:-6px;width:1px;height:5px;background:var(--muted)}
+.thyear{min-width:150px;text-align:right;font-size:15px;color:var(--accent)}
+.throw{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:8px}.throw .lab{font-size:12px;color:var(--muted)}
+#thspeed .chip[aria-pressed="true"]{background:var(--accent);color:#1a1204;border-color:var(--accent)}
+@media (max-width:760px){.thlog{display:none}.thcap{max-width:calc(100% - 32px)}.thticks span:nth-child(even){display:none}}
+.erabar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px;padding:10px 14px;border-radius:12px;background:linear-gradient(90deg,#b48cff1f,#7fb2ff14);border:1px solid #b48cff55;font-size:13px}
+.erabar b{font-weight:700}.eramsg{color:var(--muted);flex:1;min-width:240px}.erapill{font-size:11.5px;padding:2px 10px;border-radius:99px;background:#b48cff;color:#120a24;font-weight:700}.erapill.past{background:#8e98b5}.erapill.future{background:var(--cool)}
+.erabar[hidden],.mappaleo[hidden]{display:none!important}
+.erapre{padding:40px;color:var(--muted);text-align:center}
+.mappaleo{position:absolute;inset:0;z-index:4;background:#02040c;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:18px}
+.mappaleo canvas{width:min(100%,900px);aspect-ratio:2/1;border-radius:10px;box-shadow:0 0 0 1px #ffffff22}
+.mpin{max-width:760px;text-align:center}.mpin b{font-size:16px}.mpin p{color:var(--muted);font-size:13px;margin:4px 0 0}
+.sphid{font-size:12px;color:#c9b4ff;background:#b48cff18;border-radius:8px;padding:6px 9px}
+.tlswitch{display:inline-flex;gap:4px;padding:4px;border-radius:12px;background:#ffffff0c;border:1px solid var(--line);margin-bottom:14px}
+.tlswitch button{font:600 14px var(--font-body);color:var(--muted);background:transparent;border:0;border-radius:9px;padding:8px 18px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px}
+.tlswitch button small{font-size:10.5px;font-weight:400;opacity:.8}.tlswitch button[aria-pressed="true"]{background:var(--accent);color:#1a1204}
+.tlpane[hidden],#hist-branch[hidden],#hist-grid[hidden]{display:none}
+.histsw{display:flex;gap:6px;margin-bottom:10px}.histsw button{font:600 13px var(--font-body);color:var(--muted);background:#ffffff08;border:1px solid var(--line);border-radius:9px;padding:6px 14px;cursor:pointer}.histsw button[aria-pressed="true"]{color:#1a1204;background:var(--accent);border-color:var(--accent)}
+.bghost{position:relative}.bgwrap{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:#070b18;cursor:grab;user-select:none;-webkit-user-select:none}
+.bgsvg{display:block}.bgtools{position:absolute;right:10px;top:8px;display:flex;gap:4px}.bgtools button{font:600 13px var(--font-body);color:var(--text);background:#0e1528dd;border:1px solid var(--line);border-radius:8px;padding:4px 10px;cursor:pointer}
+.bgband{font-size:11px;fill:#e9edf7;opacity:.8;font-weight:700}.bgband2{font-size:10px;fill:#cfd7ea}.bgtick{stroke:#ffffff14}.bgtl{font-size:10.5px;fill:#9aa6c2}
+.bgmark{stroke:#f06a6a88;stroke-dasharray:3 3}.bgml{font-size:10px;fill:#f08a8a}.bgname{font-size:12px;fill:#e9edf7;font-weight:600;cursor:pointer;paint-order:stroke;stroke:#070b18;stroke-width:3px}.bgname.th{fill:#cdbfff;font-style:italic}
+.bgev{font-size:10.5px;fill:#cbd3e6;cursor:pointer;paint-order:stroke;stroke:#070b18;stroke-width:3px}.bgl,.bge{cursor:pointer}.bgcut{font-size:12px;fill:#cdbfff;font-weight:700}
+.bgpanel[hidden]{display:none!important}
+.whpanel.bgpanel{position:fixed;right:24px;top:110px;width:min(380px,90vw);max-height:calc(100vh - 140px);overflow:auto;z-index:30;box-shadow:0 12px 40px #0009}
+.subh{margin:22px 0 10px;font-size:16px}.cshapes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.cshape{border:1px solid var(--line);border-radius:12px;padding:12px;background:#ffffff06}.cshape svg{width:120px;height:80px;display:block}.cshape b{display:block;margin:4px 0}.cshape p{font-size:12.5px;color:var(--muted);margin:0;line-height:1.6}
+.lforces{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.lforce{border:1px solid var(--line);border-left:4px solid var(--fc);border-radius:12px;padding:14px;background:#ffffff06}.lfh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.lfh b{font-size:17px;color:var(--fc)}.lfh span{font-size:12px;color:var(--muted)}
+.lfbar{height:6px;border-radius:3px;background:#ffffff12;margin:10px 0}.lfbar i{display:block;height:100%;border-radius:3px;background:var(--fc)}.lforce p{font-size:13px;line-height:1.7;color:#cfd7ea;margin:8px 0 0}
+.lforce dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:12.5px;margin:0}.lforce dt{color:var(--muted)}
+.lformulas{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}.lformula{border:1px solid var(--line);border-radius:12px;padding:14px;background:#ffffff06}
+.lfm{font:500 19px "Times New Roman",serif;font-style:italic;color:var(--accent);padding:10px 0 12px;line-height:1.5;word-break:break-word}.lformula b{display:block}.lwho{font-size:12px;color:var(--muted)}.lformula p{font-size:13px;line-height:1.7;color:#cfd7ea;margin:6px 0 0}
+.ltable{border-collapse:collapse;width:100%;font-size:13.5px}.ltable th,.ltable td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left}.ltable th{font-weight:600;width:28%}
+.lpgrid{display:grid;grid-template-columns:2fr 2fr 1fr 1fr;gap:14px}.lpcol h4{margin:0 0 8px;font-size:13px;color:var(--muted)}.lp2{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.lp1{display:grid;gap:8px}
+.lpart{position:relative;text-align:left;border:1px solid var(--line);border-top:3px solid var(--pc);border-radius:10px;background:#ffffff08;padding:8px 10px;color:var(--text);cursor:pointer;display:flex;flex-direction:column;gap:1px;font-family:var(--font-body)}
+.lpart:hover{background:#ffffff14}.lps{font:700 22px "Times New Roman",serif;color:var(--pc)}.lpn{font-size:12px;font-weight:600}.lpm,.lpq{font-size:10.5px;color:var(--muted)}.lpart.off,.pt.off{opacity:.25;filter:grayscale(1)}
+.ptwrap{overflow-x:auto;padding-bottom:6px}.ptable{display:grid;grid-template-columns:repeat(18,minmax(52px,1fr));grid-template-rows:repeat(7,auto) 14px repeat(2,auto);gap:3px;min-width:980px}
+.pt{border:0;border-radius:6px;background:color-mix(in srgb,var(--ec) 22%,#0b1124);border-top:2px solid var(--ec);color:var(--text);padding:4px 3px 5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;line-height:1.1;font-family:var(--font-body)}
+.pt:hover{background:color-mix(in srgb,var(--ec) 45%,#0b1124)}.pt b{font-size:16px}.ptz{font-size:9.5px;color:var(--muted);align-self:flex-start}.ptn{font-size:9.5px;color:#cfd7ea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.ptgap{font-size:10px;color:var(--muted);display:flex;align-items:center;justify-content:center;border:1px dashed var(--line);border-radius:6px}
+.ptlegend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;margin:0 0 10px}.ptlegend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.ptbig{display:flex;align-items:baseline;gap:10px}.ptbig span{color:var(--muted)}.ptbig b{font-size:44px;font-family:"Times New Roman",serif}
+.lmols{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}.lmol{text-align:left;border:1px solid var(--line);border-radius:10px;background:#ffffff06;padding:10px 12px;color:var(--text);cursor:pointer;display:flex;flex-direction:column;gap:2px;font-family:var(--font-body)}
+.lmol:hover{background:#ffffff12}.lmol span{color:var(--accent);font-size:13px}.lmol small{font-size:11.5px;color:var(--muted);line-height:1.5}
+@media (max-width:900px){.lpgrid{grid-template-columns:1fr 1fr}}
+.spwrap.mcwrap{grid-template-columns:200px 1fr 300px}.mclist{display:flex;flex-direction:column;gap:4px;max-height:560px;overflow-y:auto;padding-right:4px}
+.mclist button{text-align:left;border:1px solid var(--line);border-radius:8px;background:#ffffff06;color:var(--text);padding:6px 9px;cursor:pointer;font-family:var(--font-body);display:flex;flex-direction:column}
+.mclist button small{font-size:10.5px;color:var(--muted)}.mclist button[aria-pressed="true"]{background:var(--accent);color:#1a1204;border-color:var(--accent)}.mclist button[aria-pressed="true"] small{color:#3a2a08}
+#mclevels .chip[aria-pressed="true"]{background:var(--accent);color:#1a1204;border-color:var(--accent)}.adot{display:inline-block;width:9px;height:9px;border-radius:50%;margin:0 3px 0 6px;border:1px solid #fff5}
+@media (max-width:900px){.mcwrap{grid-template-columns:1fr}.mclist{flex-direction:row;flex-wrap:wrap;max-height:none}}
+.scaleswitch a{font:600 14px var(--font-body);color:var(--muted);border-radius:9px;padding:7px 16px;text-decoration:none}.scaleswitch a.on{background:var(--accent);color:#1a1204}
+.whc{border:1px solid var(--line);border-radius:12px;padding:12px;background:linear-gradient(135deg,#ffffff08,#ffffff02)}.whch{display:flex;gap:10px;align-items:center;margin-bottom:8px}.whch b{font-size:14px;line-height:1.4}
+.whct{font-size:11.5px;font-weight:700;color:var(--muted)}.whcemb{flex:0 0 34px;height:34px;border-radius:50%;border:2.5px solid var(--wc,#8e98b5);display:grid;place-items:center}.whcemb i{width:15px;height:15px;border:2.5px solid var(--wc,#8e98b5);transform:rotate(45deg)}.whcemb.off{opacity:.35}
+.whc dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:0;font-size:12.5px}.whc dt{color:var(--muted)}.whcc{display:block;line-height:1.55}.whcc b{color:var(--accent);margin-right:5px}.whcn{font-size:12px;color:var(--muted);margin:8px 0 0;line-height:1.6}
+.ktype{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.ktsteps{display:flex;gap:4px}.ktsteps span{font:500 11.5px var(--font-body);color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:3px 10px}
+.ktsteps span.on{background:var(--accent);color:#1a1204;border-color:var(--accent);font-weight:700}.ktnow{font-size:12.5px;color:var(--muted);display:flex;gap:8px;align-items:baseline}.ktnow b{color:var(--text);font-size:15px}
+.thpiplab{position:absolute;right:14px;font-size:11.5px;color:#fff;background:#0a0f1fcc;padding:4px 8px;border-radius:8px 8px 0 0;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.thlinks{margin-top:8px;pointer-events:auto}.thcap .chip{pointer-events:auto}
+.ev3d{position:relative;width:100%;aspect-ratio:16/10;border-radius:10px;overflow:hidden;background:#05070f;flex:0 0 auto;cursor:grab}.ev3d canvas{display:block;width:100%!important;height:100%!important}
+.ev3dcap{position:absolute;left:0;right:0;bottom:0;font-size:11.5px;line-height:1.5;color:#fff;background:linear-gradient(transparent,#000c);padding:16px 10px 6px;pointer-events:none}
+.thgo{align-self:flex-start}
+.kglobal{margin:6px 0 4px;padding:6px 18px 8px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#121a30,#0c1224)}
+.kglabel{display:flex;gap:12px;align-items:baseline;font-size:12px;color:var(--muted);margin-bottom:-6px}.kglabel b{color:var(--text);font-size:13px}
+.kglobal .krange{margin:10px 0 2px}.kglobal .kbtns{margin-top:2px}
+.c3d{display:block;width:100%;aspect-ratio:36/22;border-radius:9px;background:#0a0f1f;margin-bottom:10px}.c3d.sm{margin:-2px 0 6px;border-radius:6px}
+.lmol .c3d{margin-bottom:6px}
+.ctabs{display:flex;gap:2px;align-items:flex-end;border-bottom:1px solid #3a4466;overflow-x:auto;padding:0 6px;scrollbar-width:thin}
+.ctabs button{font:600 13px var(--font-body);color:var(--muted);background:#ffffff08;border:1px solid var(--line);border-bottom:0;border-radius:10px 10px 0 0;padding:9px 18px;cursor:pointer;white-space:nowrap;position:relative;top:1px}
+.ctabs button:hover{background:#ffffff14;color:var(--text)}.ctabs button[aria-selected="true"]{background:#141c33;color:var(--text);border-color:#3a4466;padding-top:11px}
+.ctabbody{background:#141c33;border:1px solid #3a4466;border-top:0;border-radius:0 0 14px 14px;padding:18px}.ltab[hidden]{display:none}
+.lunsolved{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}.lun{border:1px solid var(--line);border-radius:12px;padding:12px;background:#ffffff06}
+.lun .lunc{font-size:11px;font-weight:700;color:var(--muted)}.lun b{display:block;font-size:15px;margin:2px 0 4px}.lun p{font-size:12.5px;line-height:1.65;color:#cfd7ea;margin:0 0 6px}.lun .lunst{font-size:11.5px;color:var(--accent)}.lunh{grid-column:1/-1;margin:8px 0 0;font-size:14px}
+.thbar2{display:block;width:100%;border:1px solid var(--line);border-radius:10px;background:#0a0f1f;cursor:grab;touch-action:none;user-select:none}
+.thbarhead{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:4px}.thbz{display:flex;gap:4px}.thbz button{font:600 12px var(--font-body);color:var(--text);background:#ffffff0c;border:1px solid var(--line);border-radius:7px;padding:3px 9px;cursor:pointer}
+.tbph{font-size:10.5px;fill:#cfd7ea;font-weight:700}.tbl{font-size:10.5px;fill:#cbd3e6}.tbtip{font-size:11px;fill:#fff}.tbev{cursor:pointer}
+.thbar{align-items:flex-start}
+.ev3dreset,.threset{position:absolute;top:8px;right:8px;font:600 12px var(--font-body);color:#fff;background:#0a0f1fcc;border:1px solid #ffffff40;border-radius:8px;padding:4px 10px;cursor:pointer;z-index:2}
+.threset{top:12px;right:280px}@media (max-width:760px){.threset{right:12px;top:40px}}
+.thdock{margin:0 0 16px;border:1px solid var(--line);border-radius:14px;padding:10px 14px;background:#0c1224}.thdock summary{cursor:pointer;font-weight:700;font-size:15px;padding:4px 0 10px}.thdock summary small{font-weight:400;color:var(--muted);font-size:12px;margin-left:8px}
+.tllegend{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:12px;color:var(--muted);margin:0 0 12px;padding:8px 12px;border:1px dashed var(--line);border-radius:10px}.tllegend b{color:var(--text)}.tllegend span{display:inline-flex;align-items:center;gap:5px}
+.spstar{color:#f4d06a;font-style:normal;margin-right:3px}
+.spshape{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}.spshape .chip[aria-pressed="true"]{background:var(--accent);color:#1a1204;border-color:var(--accent)}.spshd{font-size:12.5px;line-height:1.7;color:#cfd7ea}
+.tguide{margin-top:22px}.tgbody h3{margin:0 0 6px}.tglead{font-size:14px;color:var(--accent)}.tgbody h4{margin:18px 0 8px;font-size:14px}.tgbody p,.tgbody li{font-size:13.5px;line-height:1.8;color:#cfd7ea}.tgbody .ltable{margin:4px 0}.tday{list-style:none;padding:0}.tday b{color:var(--accent);margin-right:8px;font-family:var(--font-num)}
+/* 地球大全 */
+.ebwrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:22px;align-items:start}
+.ebtoc{position:sticky;top:10px;display:flex;flex-direction:column;gap:2px;padding:10px;border:1px solid var(--line);border-radius:14px;background:var(--surface);max-height:calc(100vh - 20px);overflow:auto}
+.ebtoc a{display:flex;gap:8px;align-items:center;padding:6px 10px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:13px;line-height:1.4}
+.ebtoc a:hover{background:var(--surface-2);color:var(--ink)}.ebtoc a.on{background:#f4b94220;color:var(--accent)}
+.ebook{display:flex;flex-direction:column;gap:18px;min-width:0}
+.ebch{padding:20px 24px 22px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--surface),#0f1629);scroll-margin-top:12px}
+.ebch h3{display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px;margin:0 0 14px;font:900 22px/1.3 var(--font-display)}
+.ebch h3 small{flex-basis:100%;font:600 11.5px var(--font-num);color:var(--muted);letter-spacing:.08em}
+.ebch h4{margin:20px 0 8px;font-size:15px;color:var(--accent)}
+.ebch p,.ebch li{font-size:14px;line-height:1.85;color:#d4dbec}.ebch ul{padding-left:1.2em}
+.ebic{font-size:26px}
+.eblead{font-size:15.5px!important;color:#eef2fb!important;margin-top:0;padding-left:12px;border-left:3px solid var(--accent)}
+.ebt th{color:#f4d79a;white-space:nowrap}.ebt td{color:#d4dbec}
+.ebbars{display:flex;flex-direction:column;gap:7px;margin:8px 0 6px}
+.ebbar{display:grid;grid-template-columns:150px 1fr 150px;gap:10px;align-items:center;font-size:13px}
+.ebbn{color:#d4dbec;text-align:right}.ebbt{height:12px;border-radius:99px;background:#ffffff0d;overflow:hidden}.ebbt i{display:block;height:100%;border-radius:99px}
+.ebbv{color:var(--ink);font-size:12.5px}.ebbv small{display:block;color:var(--muted);font-size:10.5px}
+.ebfig{margin:14px 0;padding:10px;border:1px solid var(--line);border-radius:12px;background:#070b17}.ebfig figcaption{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+.ebsvg{display:block;width:100%;max-width:560px;height:auto;margin:0 auto}
+.ebnums{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}
+.ebnums div{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border:1px solid var(--line);border-radius:10px;background:#0b1122}
+.ebnums b{font-size:22px;color:var(--accent)}.ebnums small{font-size:10.5px;color:var(--muted)}
+.ebdots{font-size:7px;letter-spacing:1px;color:#7fb2ff;text-align:center;max-width:70px;word-break:break-all;line-height:1.1}
+.ebmono{font-size:14px;letter-spacing:.05em;color:#f4d79a!important}
+.ebscroll{overflow:auto;max-width:100%}
+.ebcode{font-size:11.5px}.ebcode td{vertical-align:top;padding:6px 8px!important}.ebcode td div{white-space:nowrap;line-height:1.55}.ebcode th{width:auto!important;text-align:center!important}
+.ebscripts{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:8px 0}
+.ebscripts div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px;border:1px solid var(--line);border-radius:10px;background:#0b1122;text-align:center}
+.ebscripts b{font-size:20px;color:#fff}.ebscripts small{font-size:10.5px;color:var(--muted)}
+.ebtl{font-size:13.5px;line-height:2.1!important;padding:10px 14px;border-radius:10px;background:#0b1122;border:1px solid var(--line)}
+.ebc3d{display:block;width:100%;max-width:520px;aspect-ratio:360/220;margin:4px auto 10px;border-radius:12px;border:1px solid var(--line)}
+@media (max-width:820px){.ebwrap{grid-template-columns:1fr}.ebtoc{position:static;flex-direction:row;flex-wrap:wrap;max-height:none}.ebtoc a{font-size:12px;padding:4px 8px}.ebbar{grid-template-columns:96px 1fr 92px}.ebnums,.ebscripts{grid-template-columns:repeat(3,1fr)}.ebch{padding:16px 14px}}
+/* スケールの「くわしく」 */
+.lvmore{border:1px solid #f4b94255;border-radius:12px;background:#0b1122;overflow:hidden;flex-shrink:0}
+.lvmore summary{cursor:pointer;padding:9px 34px 9px 12px;font-weight:700;font-size:12.5px;color:var(--accent);list-style:none;position:relative;line-height:1.5}
+.lvmore summary::-webkit-details-marker{display:none}
+.lvmore summary::after{content:"＋";position:absolute;right:12px;top:8px;color:var(--accent)}
+.lvmore[open] summary::after{content:"−"}.lvmore summary:hover{background:#f4b94212}
+.lvbody{padding:0 12px 12px}
+.lvt{font-size:12px!important}.lvt th{width:30%!important;color:#f4d79a;vertical-align:top;padding:6px 6px!important}.lvt td{color:#d4dbec;padding:6px 6px!important;line-height:1.6}
+.lvbody h5{margin:12px 0 4px;font-size:12.5px;color:#9fd8ff}
+.lvbody ul{margin:0;padding-left:1.1em}.lvbody li,.lvbody p{font-size:12.5px!important;line-height:1.75;color:#cfd7ea}
+.lvmyth{margin:0}.lvmyth dt{font-size:12.5px;color:#ff9a8a;margin-top:4px}.lvmyth dd{margin:2px 0 6px 0;font-size:12.5px;color:#a8e6a0;line-height:1.7}
+/* 検索・ナビ・使い方 */
+:root{--navh:48px}
+nav.views{position:sticky;top:0;z-index:50;background:rgba(10,15,31,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:center}
+.navera{flex:none;margin-left:auto;display:inline-flex;align-items:center;gap:6px;font:600 11.5px var(--font-num);color:var(--muted);padding:4px 10px;border:1px solid var(--line);border-radius:99px;cursor:pointer;white-space:nowrap}
+.navera i{width:8px;height:8px;border-radius:50%;background:#8e98b5}.navera.now i{background:var(--accent)}.navera.fut i{background:#7fb2ff}.navera.pre i{background:#b48cff}
+.navsearch{flex:none;display:inline-flex;align-items:center;gap:6px;margin-left:8px;font:500 13px var(--font-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:6px 10px;cursor:pointer}
+.navsearch:hover,.navhelp:hover{border-color:var(--accent)}
+kbd{font:600 10.5px var(--font-num);padding:1px 6px;border-radius:5px;border:1px solid #3a4670;background:#0b1122;color:#cfd7ea;white-space:nowrap}
+.navhelp{flex:none;width:30px;height:30px;margin:0 2px 0 6px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:700;cursor:pointer}
+.sx{position:fixed;inset:0;z-index:200;background:rgba(3,5,12,.66);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;justify-content:center;align-items:flex-start;padding:9vh 16px 16px}
+.sxbox{width:min(720px,100%);max-height:80vh;display:flex;flex-direction:column;background:#0e1529;border:1px solid #33416b;border-radius:16px;box-shadow:0 30px 80px #000a;overflow:hidden}
+.sxin{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);font-size:18px}
+.sxin input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--ink);font:500 17px var(--font-body)}
+.sxfil{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line)}
+.sxres{overflow-y:auto;padding:6px;flex:1;min-height:120px}
+.sxr{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:8px 10px;border:0;border-radius:10px;background:transparent;color:var(--ink);cursor:pointer;font-family:inherit}
+.sxr.on,.sxr:hover{background:#1b2647}
+.sxk{width:30px;height:30px;flex:none;display:grid;place-items:center;border-radius:8px;background:#0a0f1f;font-size:16px}
+.sxt{display:flex;flex-direction:column;min-width:0}.sxt b{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sxt small{font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sxt mark{background:#f4b94233;color:#ffd680;border-radius:3px;padding:0 1px}
+.sxgo{margin-left:auto;color:var(--muted);opacity:0}.sxr.on .sxgo{opacity:1}
+.sxfoot{display:flex;gap:14px;flex-wrap:wrap;padding:9px 14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}#sxcount{margin-left:auto}
+.sxsug{padding:12px 10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px}.sxsug b{width:100%;color:var(--muted);font-weight:500;margin-bottom:2px}
+.sxnone{padding:24px 14px;color:var(--muted);font-size:13.5px;text-align:center}
+body.sxopen{overflow:hidden}
+.hxbox{padding:18px 22px;overflow-y:auto;position:relative}.hxbox h3{margin:6px 0 8px;font:900 18px var(--font-display)}
+.hxsteps{padding-left:1.3em;margin:0 0 8px}.hxsteps li{font-size:13.5px;line-height:1.8;color:#d4dbec;margin-bottom:4px}
+.hxkeys th{white-space:nowrap;width:40%!important}.hxkeys td{font-size:13px;color:#d4dbec}
+.hxstar{color:#f4d06a;font-size:16px}.hxdot{display:inline-block;width:10px;height:10px;border-radius:50%;border:2.4px solid #7fb2ff}.hxdia{display:inline-block;width:9px;height:9px;border:2px solid #7fb2ff;transform:rotate(45deg)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:210;max-width:min(560px,90vw);padding:10px 16px;border-radius:12px;background:#1b2647;border:1px solid #3a4a7a;color:var(--ink);font-size:13px;box-shadow:0 10px 30px #0008}
+.sxflash{animation:sxf 1.8s ease}@keyframes sxf{0%,40%{box-shadow:0 0 0 3px #f4b942,0 0 30px #f4b94288}100%{box-shadow:0 0 0 0 transparent}}
+.hello{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:12px 16px;border:1px solid #f4b94266;border-radius:14px;background:linear-gradient(90deg,#f4b94214,#7fb2ff10)}
+.hello b{display:block;color:var(--accent);font-size:14px;margin-bottom:2px}.hello span{font-size:13px;color:#d4dbec;line-height:1.7}.hellob{display:flex;gap:6px;flex-wrap:wrap}
+.fieldnav{top:var(--navh)!important}.detail{top:calc(var(--navh) + 10px)!important}.ebtoc{top:calc(var(--navh) + 10px)!important;max-height:calc(100vh - var(--navh) - 20px)!important}.ebch{scroll-margin-top:calc(var(--navh) + 10px)!important}
+@media (max-width:720px){.navsearch kbd,.navera{display:none}}
+@media (max-width:720px){.tkw{display:none}.klegend{flex-wrap:wrap;white-space:nowrap}.klegend i+*{white-space:nowrap}
+  .navsearch{position:fixed;right:14px;bottom:18px;z-index:120;border-radius:99px;padding:12px 16px;box-shadow:0 8px 24px #000a;border-color:#f4b94288;background:#1b2647}
+  nav.views{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(10,15,31,.97)}.navhelp{display:none}.ebbar{font-size:12px}.sx{padding:4vh 10px 10px}.sxbox{max-height:88vh}}
+
+.levels{display:flex;gap:6px;flex-wrap:wrap}
+.levels button{font:500 13px var(--font-body);color:var(--muted);background:transparent;border:1px solid var(--line);
+  border-radius:999px;padding:6px 14px;display:flex;gap:8px;align-items:center}
+.levels .k{font-family:var(--font-num);font-size:12px}
+.levels button[aria-current="true"]{color:#1a1204;background:var(--accent);border-color:var(--accent);font-weight:700}
+.levels button[disabled]{opacity:.5;cursor:not-allowed}
+
+nav.views{display:flex;gap:2px;overflow-x:auto;border-bottom:1px solid var(--line);scrollbar-width:thin}
+nav.views a{flex:none;color:var(--muted);text-decoration:none;padding:10px 14px 9px;font-size:14px;font-weight:500;
+  border-bottom:2px solid transparent;display:flex;gap:7px;align-items:baseline}
+nav.views a .n{font-family:var(--font-num);font-size:11px;opacity:.7}
+nav.views a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.views a:hover{color:var(--ink)}
+
+section.view{display:none;flex-direction:column;gap:18px}
+section.view.on{display:flex}
+.view-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 20px}
+.view-head h2{font-family:var(--font-display);font-size:21px;margin:0;text-wrap:balance}
+.view-head p{margin:0;color:var(--muted);font-size:13px;max-width:70ch}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 12.5px var(--font-body);color:var(--muted);background:transparent;border:1px solid var(--line);
+  border-radius:999px;padding:4px 12px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.chip[aria-pressed="true"]{color:var(--ink);background:var(--surface-2);border-color:#46558a}
+.chip .dot{width:9px;height:9px;border-radius:50%}
+.num{font-family:var(--font-num);font-variant-numeric:tabular-nums}
+
+/* ゲージ */
+.track{position:relative;height:46px;margin:6px 6px 0}
+.bar{position:absolute;left:0;right:0;top:16px;height:8px;border-radius:4px;background:#26314f}
+.fill{position:absolute;left:0;top:16px;height:8px;border-radius:4px;background:linear-gradient(90deg,#8a6420,var(--accent))}
+.tick{position:absolute;top:10px;width:1px;height:20px;background:var(--muted);opacity:.6}
+.tick-label{position:absolute;top:32px;transform:translateX(-50%);font-size:11.5px;color:var(--muted);white-space:nowrap;font-family:var(--font-num)}
+.gauge-head{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:space-between;align-items:baseline}
+.gauge-head b{font-family:var(--font-display)}
+.gauge-head span,.gauge-foot{color:var(--muted);font-size:12.5px}
+.gauge-foot{display:flex;flex-wrap:wrap;gap:4px 20px;margin-top:10px}
+.gauge-foot strong{color:var(--ink);font-family:var(--font-num);font-weight:600}
+
+/* 全体マップ */
+.mm{position:relative;display:grid;gap:22px 22px;grid-template-columns:repeat(5,1fr);
+  grid-template-areas:"a b c d e" "f core core core g" "h i j k l"}
+svg.links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+svg.links path{fill:none;stroke:var(--line);stroke-width:1.5}
+svg.links circle{fill:var(--accent)}
+.core{grid-area:core;justify-self:center;align-self:center;position:relative;z-index:1;width:260px;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,#2a6fb0 0%,#174a7c 38%,#0e2a4a 70%,#0a1a30 100%);
+  border:1px solid #3a6ea3;box-shadow:0 0 0 10px #f4b94214,0 0 60px #2a6fb055;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+.core .eyebrow{font-size:12px;color:#bcd3ee;letter-spacing:.08em}
+.core h3{font-family:var(--font-display);font-weight:900;font-size:22px;margin:2px 0 4px}
+.core .big{font-family:var(--font-num);font-weight:600;font-size:32px;color:var(--accent);line-height:1.1}
+.core .big small{font-size:13px;color:#d8e4f5;font-weight:500}
+.core .facts{font-size:12px;color:#cfdcef;margin-top:8px;line-height:1.5}
+.mnode{position:relative;z-index:1;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:11px 13px;cursor:pointer;color:var(--ink);align-self:center;display:flex;flex-direction:column;gap:3px;transition:border-color .15s,transform .15s}
+.mnode:hover{border-color:var(--accent);transform:translateY(-2px)}
+.mnode .t{font-family:var(--font-display);font-weight:700;font-size:15px;display:flex;justify-content:space-between;gap:6px}
+.mnode .t span{font-family:var(--font-num);font-size:10.5px;color:var(--muted);font-weight:500}
+.mnode .v{font-family:var(--font-num);color:var(--accent);font-weight:600;font-size:17px;line-height:1.3}
+.mnode .l{font-size:11.5px;color:var(--muted);line-height:1.45}
+.mnode .go{font-size:11px;color:var(--cool);margin-top:2px}
+
+/* 年表 */
+.scale{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.scale div{background:var(--surface-2);border-radius:10px;padding:10px 12px}
+.scale b{display:block;font-family:var(--font-num);color:var(--accent);font-size:18px}
+.scale span{font-size:12px;color:var(--muted)}
+.tl{position:relative;list-style:none;margin:0;padding:0 0 0 0}
+.era{font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--accent);margin:18px 0 8px;display:flex;gap:10px;align-items:baseline}
+.era small{color:var(--muted);font-family:var(--font-body);font-weight:400;font-size:12px}
+.ev{display:grid;grid-template-columns:120px 16px 1fr;gap:0 12px;align-items:start}
+.ev .y{font-family:var(--font-num);font-size:12.5px;color:var(--muted);text-align:right;padding-top:3px}
+.ev .rail{position:relative;align-self:stretch}
+.ev .rail::before{content:"";position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--line)}
+.ev .rail::after{content:"";position:absolute;left:3px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--bg);border:2px solid var(--cool)}
+.ev .body{padding-bottom:12px}
+.ev .body b{font-weight:700}
+.ev .body p{margin:1px 0 4px;color:#c3cbe0;font-size:13px}
+.tag{display:inline-block;font-size:10.5px;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:0 6px;margin-right:4px}
+
+/* 世界地図 */
+.maprow{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
+.mapbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px;overflow-x:auto}
+.mapbox svg{display:block;width:100%;min-width:640px;height:auto}
+.sphere{fill:#0e1830}
+.grat{fill:none;stroke:#1d2a4a;stroke-width:.5}
+.land{fill:#25324f;stroke:#33416a;stroke-width:.4}
+.pin{cursor:pointer}
+.pin circle.o{fill-opacity:.25}
+.pin.sel circle.i{stroke:#fff;stroke-width:1.5}
+.pin.dim{opacity:.12;pointer-events:none}
+.pin text{fill:var(--ink);paint-order:stroke;stroke:#0a0f1f;pointer-events:none}
+.bubble circle{fill:var(--accent);fill-opacity:.18;stroke:var(--accent);stroke-width:1}
+.bubble text{fill:var(--ink);font-size:11px;text-anchor:middle;paint-order:stroke;stroke:#0a0f1f;stroke-width:3px}
+.bubble text.n{font-family:var(--font-num);font-size:12px;fill:var(--accent)}
+.info h3{font-family:var(--font-display);margin:4px 0 6px;font-size:18px}
+.info p{margin:0;color:#c3cbe0;font-size:13.5px}
+.info .cat{font-size:11.5px;display:inline-flex;align-items:center;gap:6px;color:var(--muted)}
+.pinlist{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:2px;max-height:330px;overflow:auto}
+.pinlist button{width:100%;text-align:left;background:transparent;border:0;color:var(--ink);font-size:13px;padding:5px 6px;border-radius:6px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.pinlist button:hover,.pinlist button.sel{background:var(--surface-2)}
+.pinlist .dot{width:8px;height:8px;border-radius:50%;flex:none}
+
+/* 宇宙マップ */
+.space svg{display:block;width:100%;height:auto;min-width:760px}
+.space .mapbox{padding:12px}
+.sp-zone{font-size:11px;fill:var(--muted)}
+.sp-axis{font-family:var(--font-num);font-size:10px;fill:var(--muted)}
+.sp-name{font-size:11.5px;fill:var(--ink);font-weight:700}
+.sp-sub{font-size:10px;fill:var(--muted)}
+.sp-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.sp-list div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;border-left:3px solid var(--line)}
+.sp-list div.crew{border-left-color:var(--accent)}
+.sp-list div.robot{border-left-color:var(--cool)}
+.sp-list div.none{border-left-color:#59607a}
+.sp-list b{font-size:14px}
+.sp-list .d{font-family:var(--font-num);color:var(--accent);font-size:12.5px}
+.sp-list p{margin:2px 0 0;font-size:12.5px;color:#c3cbe0}
+
+/* 一日 */
+.day{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.slot{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 15px;display:flex;flex-direction:column;gap:6px}
+.slot .time{font-family:var(--font-num);color:var(--accent);font-size:20px;font-weight:600;line-height:1}
+.slot h3{margin:0;font-family:var(--font-display);font-size:15.5px}
+.slot p{margin:0;font-size:13.5px;color:#c9d1e6}
+.slot .stat{font-size:12px;color:var(--muted);border-top:1px dashed #263155;padding-top:6px}
+.slot .stat b{color:var(--ink);font-family:var(--font-num);font-weight:600}
+.slot .gapnote{font-size:12px;color:#c7d8f5;background:#7fb2ff14;border-left:3px solid var(--cool);border-radius:0 6px 6px 0;padding:5px 8px}
+
+/* 発明品 */
+.inv{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 15px;display:flex;flex-direction:column;gap:6px}
+.card .yr{font-family:var(--font-num);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.card h3{margin:0;font-family:var(--font-display);font-size:16px}
+.card p{margin:0;font-size:13px;color:#c9d1e6}
+.card .without{font-size:12px;color:var(--muted)}
+.card .without b{color:var(--cool);font-weight:500}
+
+/* 分野 */
+.invbox{background:#f4b9421a;border:1px solid #f4b94255;border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.invbox b{color:var(--accent);font-size:12.5px}.invbox p{font-size:13px}.invbox .without span{color:var(--cool);font-size:12px}
+.fpts{margin:0;padding-left:1.2em;font-size:13px;color:#d4dbec;display:grid;gap:3px}
+.gpanel .stats{grid-template-columns:1fr 1fr}
+.fieldnav{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line)}
+.field{scroll-margin-top:64px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.field h3{margin:0;font-family:var(--font-display);font-size:20px;display:flex;gap:10px;align-items:baseline}
+.field h3 span{font-family:var(--font-num);font-size:12px;color:var(--muted);font-weight:500}
+.field .lead{margin:0;font-size:14.5px;max-width:72ch;color:#d4dbec}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.stats div{background:var(--surface-2);border-radius:10px;padding:10px 12px}
+.stats b{display:block;font-family:var(--font-num);color:var(--accent);font-size:18px;line-height:1.3}
+.stats span{font-size:12px;color:var(--muted)}
+.field ul{margin:0;padding-left:1.2em;display:grid;gap:3px;font-size:13.5px;color:#d4dbec}
+.sym{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+.sym span{border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--ink)}
+
+/* 系統樹 */
+.tree-top{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--muted);align-items:center}
+.legend i{display:inline-block;width:22px;height:5px;border-radius:3px;vertical-align:middle;margin-right:5px}
+.toggle{display:inline-flex;gap:6px;align-items:center;font-size:12.5px;color:var(--muted);cursor:pointer}
+.counts{display:flex;gap:4px;align-items:flex-end;flex-wrap:wrap}
+.counts div{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:52px}
+.counts b{font-family:var(--font-num);font-size:12px;color:var(--ink)}
+.counts span{font-size:10.5px;color:var(--muted)}
+.counts i{display:block;width:26px;border-radius:3px 3px 0 0}
+.treerow{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start}
+.treebox{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 6px;overflow-x:auto}
+.treebox svg{display:block;min-width:1000px;width:100%;height:auto}
+.t-era{font-family:var(--font-display);font-size:12px;fill:var(--ink);font-weight:700}
+.t-tick{font-family:var(--font-num);font-size:9.5px;fill:var(--muted)}
+.t-band{fill:#ffffff06}
+.t-node{cursor:pointer}
+.t-node text{font-size:11.5px;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:3px}
+.t-node.dead text{fill:var(--muted)}
+.t-node.sel text{font-weight:700;fill:#fff}
+.t-node:hover text{fill:#fff}
+.t-node:focus{outline:none}
+.t-node:focus-visible rect.hit{stroke:var(--cool);stroke-width:1.5}
+.t-link{fill:none;stroke-width:1.2}
+.detail{position:sticky;top:12px;display:flex;flex-direction:column;gap:10px}
+.plate{border-radius:10px;height:150px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:12px}
+.plate svg{position:absolute;inset:0;width:100%;height:100%}
+.plate .cap{position:relative;font-size:11px;color:#ffffffcc;background:#0006;border-radius:6px;padding:2px 8px}
+.detail h3{margin:0;font-family:var(--font-display);font-size:19px;text-wrap:balance}
+.detail .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+.pill{display:inline-block;font-size:11px;border-radius:999px;padding:1px 9px;border:1px solid var(--line)}
+.pill.alive{color:#bff0b3;border-color:#3f6b3a}
+.pill.fade{color:#ffd9a0;border-color:#7a5a2a}
+.pill.dead{color:#c9cbd6;border-color:#55596b;background:#ffffff0a}
+.detail p{margin:0;font-size:13.5px;color:#d4dbec}
+.detail h4{margin:4px 0 2px;font-size:12px;color:var(--muted);font-weight:500}
+.lineage{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:12.5px}
+.lineage button,.linkbtn{background:var(--surface-2);border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:2px 8px;font-size:12.5px;cursor:pointer}
+.lineage button:hover,.linkbtn:hover{border-color:var(--accent)}
+.linkbtn.dead{color:var(--muted);text-decoration:line-through}
+.snap{display:flex;flex-direction:column;gap:5px;max-height:260px;overflow:auto}
+.snap div{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:12px}
+.snap div > span{color:var(--muted);min-width:7.5em}
+.photo{display:flex;gap:8px;flex-wrap:wrap}
+.photo a{font-size:12.5px;color:var(--cool)}
+
+
+.gwrap{position:relative}
+.gcanvas{position:relative;height:min(82vh,900px);min-height:520px;background:#0b1124;border:1px solid var(--line);border-radius:14px;overflow:hidden;touch-action:none;cursor:grab;user-select:none}
+.gcanvas.dragging{cursor:grabbing}
+.gcanvas:focus-visible{outline:2px solid var(--cool)}
+.gcanvas svg{display:block;width:100%;height:100%}
+.g-hit{cursor:pointer}
+.g-lab{paint-order:stroke;stroke:#0b1124;stroke-width:2.5px;stroke-opacity:.75;pointer-events:none}
+.gtools{position:absolute;right:12px;bottom:12px;display:flex;gap:6px;align-items:center;background:#0a0f1fe6;border:1px solid var(--line);border-radius:10px;padding:6px}
+.gtools button{background:var(--surface-2);border:1px solid var(--line);color:var(--ink);border-radius:7px;min-width:34px;height:30px;padding:0 10px;font-size:13px;cursor:pointer}
+.gtools button:hover{border-color:var(--accent)}
+.gtoggle{font-size:12px;color:var(--muted);display:inline-flex;gap:4px;align-items:center;padding:0 4px}
+.ghint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font-size:12px;color:#c7d0e6;background:#0a0f1fcc;border:1px solid var(--line);border-radius:999px;padding:5px 14px;pointer-events:none;transition:opacity .4s;white-space:nowrap}
+.ghint.off{opacity:0}
+.gzoom{position:absolute;left:12px;bottom:14px;font-size:11px;color:var(--muted);background:#0a0f1fcc;border-radius:6px;padding:3px 8px;pointer-events:none}
+.gwrap.open{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:12px;align-items:start}
+.gpanel{height:min(82vh,900px);min-height:520px;overflow-y:auto;overscroll-behavior:contain;position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:auto;box-shadow:0 10px 40px #0008}
+.gpanel[hidden]{display:none}
+.gclose{position:sticky;float:right;top:8px;right:8px;z-index:2;background:#0a0f1fcc;border:1px solid var(--line);color:var(--ink);border-radius:6px;width:28px;height:28px;cursor:pointer}
+@media (max-width:860px){.gwrap.open{grid-template-columns:1fr}.gpanel{height:auto;max-height:70vh;min-height:0}}
+@media (max-width:720px){.ghint{display:none}.gtools{bottom:auto;top:48px}}
+
+/* 世界史年表 */
+.whcount{margin:0;color:var(--muted);font-size:12px}
+.whgrid{display:grid;gap:0;border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:80vh;background:var(--surface)}
+.whhead{position:sticky;top:0;z-index:2;background:#0e1530;font-weight:700;font-size:12.5px;padding:8px 10px;border-bottom:1px solid var(--line)}
+.whera{grid-column:1;background:#0e1530;padding:10px;border-top:1px solid var(--line);position:sticky;left:0;z-index:1}
+.whera b{font-family:var(--font-display);font-size:13px;color:var(--accent);writing-mode:horizontal-tb}
+.whcell{border-top:1px solid var(--line);border-left:1px solid #ffffff0a;padding:8px;display:flex;flex-direction:column;gap:8px}
+.whev{border-left:3px solid var(--rc);padding:2px 0 2px 8px}
+.whev .y{font-size:11px;color:var(--muted)}
+.whev b{font-size:13px;display:block;line-height:1.4}
+.whev p{margin:2px 0 3px;font-size:12px;color:#c3cbe0;line-height:1.5}
+.whlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.whlist .whev{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--rc);border-radius:8px;padding:8px 10px}
+/* 地点 */
+.locsec{display:flex;flex-direction:column;gap:14px;scroll-margin-top:10px}
+.loc{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start}
+.loc3d{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#000}
+.scene{height:min(62vh,560px);min-height:360px;touch-action:none;cursor:grab}
+.scene canvas{display:block}
+.noscene{padding:40px;color:var(--muted);font-size:13px}
+.scenectl{position:absolute;left:10px;top:10px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.scenectl .chip{background:#0a0f1fcc;color:#e9edf7}
+.scenectl .chip[aria-pressed="true"]{background:var(--accent);color:#1a1204;border-color:var(--accent)}
+.scnote{position:absolute;right:10px;bottom:10px;font-size:12px;color:#fff;background:#0008;border-radius:6px;padding:2px 8px}
+.scnote:empty{display:none}
+.locinfo h3{font-family:var(--font-display);margin:4px 0 6px;font-size:19px}
+.locinfo h4{margin:12px 0 4px;font-size:12px;color:var(--muted);font-weight:500}
+.locinfo p{margin:0;font-size:13.5px;color:#d4dbec}
+.locinfo ul{margin:0;padding-left:1.2em;font-size:13.5px;color:#d4dbec;display:grid;gap:3px}
+.locinfo .cat{font-size:11.5px;color:var(--muted);display:inline-flex;gap:6px;align-items:center}
+.locinfo .cat .dot{width:9px;height:9px;border-radius:50%}
+.daytl{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0;position:relative}
+.daytl::before{content:"";position:absolute;left:0;right:0;top:19px;height:2px;background:var(--line)}
+.tlitem{position:relative;text-align:left;background:transparent;border:0;color:var(--ink);padding:0 12px 4px 0;cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.tlitem .time{font-size:13px;color:var(--muted);background:var(--surface);padding-right:6px;align-self:flex-start;position:relative;z-index:1}
+.tlitem .tod{align-self:flex-start;font-size:11px;border-radius:999px;padding:1px 9px;border:1px solid var(--line)}
+.tod-m{color:#ffd4a0}.tod-n{color:#bfe3ff}.tod-e{color:#ffb070}.tod-x{color:#a9b8ff}
+.tlitem .txt{font-size:13px;color:#d4dbec;line-height:1.55}
+.tlitem.on .time{color:var(--accent)}
+.tlitem.on .tod{background:var(--accent);color:#1a1204;border-color:var(--accent)}
+.tlitem:hover .txt{color:#fff}
+@media (max-width:960px){.loc{grid-template-columns:1fr}.daytl{grid-template-columns:1fr}.daytl::before{display:none}}
+
+/* ズーム地図 */
+.mapbox{position:relative}
+#mapbox{height:min(64vh,620px);min-height:380px;padding:0;overflow:hidden;touch-action:none;cursor:grab;background:#0b1124}
+#mapbox.dragging{cursor:grabbing}
+#mapbox svg{width:100%;height:100%;min-width:0}
+.ctry{stroke:#0b1124;stroke-width:.6;vector-effect:non-scaling-stroke;cursor:pointer;transition:fill .15s}
+.ctry.hov{fill:#5a6fa8}
+.ctry.sel{fill:#f4b942;fill-opacity:.85}
+.sm{fill:#e9edf7;fill-opacity:.65;stroke:#0b1124;stroke-width:.5;vector-effect:non-scaling-stroke;cursor:pointer}
+.sm.sel{fill:#f4b942;fill-opacity:1}
+.clab{fill:#e9edf7;fill-opacity:.8;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:#0b1124;stroke-width:.3px;font-weight:500}
+.pin text{fill:var(--ink);paint-order:stroke;stroke:#0a0f1f;pointer-events:none}
+.mapctl{position:absolute;right:10px;bottom:10px;display:flex;gap:6px;align-items:center;background:#0a0f1fe6;border:1px solid var(--line);border-radius:10px;padding:5px}
+.mapctl button{background:var(--surface-2);border:1px solid var(--line);color:var(--ink);border-radius:7px;min-width:32px;height:28px;padding:0 10px;cursor:pointer}
+.mapctl span{font-size:11px;color:var(--muted);padding:0 4px}
+.maptip{position:absolute;pointer-events:none;background:#0a0f1fee;border:1px solid var(--line);border-radius:6px;padding:3px 9px;font-size:12.5px;white-space:nowrap}
+.info{max-height:min(64vh,620px);overflow-y:auto;overscroll-behavior:contain}
+#csearch{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:8px 10px;font:inherit;font-size:13.5px}
+.ccount{font-size:11.5px;color:var(--muted);margin:6px 0}
+.clist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px}
+.clist .cgrp{font-size:11.5px;color:var(--accent);margin:8px 0 2px;font-weight:700}
+.clist button{width:100%;text-align:left;background:transparent;border:0;color:var(--ink);font-size:13px;padding:4px 6px;border-radius:6px;cursor:pointer}
+.clist button:hover,.clist button.sel{background:var(--surface-2)}
+.clist small{color:var(--muted)}
+.cflag{font-size:44px;line-height:1}
+.info h3{font-family:var(--font-display);margin:4px 0 2px;font-size:20px}
+.info h4{margin:12px 0 4px;font-size:12px;color:var(--muted);font-weight:500}
+.info ul{margin:0;padding-left:1.2em;font-size:13px;display:grid;gap:3px}
+.info p{margin:0;font-size:13px;color:#d4dbec}
+.cen{font-size:12px;color:var(--muted)}
+.cdl{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;margin:12px 0 0;font-size:13px}
+.cdl dt{color:var(--muted)}.cdl dd{margin:0}.cdl small{color:var(--muted)}
+.backlist{margin-top:14px}
+.loc{grid-template-columns:minmax(0,1fr) 330px}
+.locinfo{max-height:min(62vh,560px);overflow-y:auto}
+.locinfo h4{margin:12px 0 4px;font-size:12px;color:var(--muted);font-weight:500}
+.dayhint{font-size:11.5px;color:var(--muted);margin:0 0 8px}
+.locinfo .daytl{grid-template-columns:1fr;gap:10px}
+.locinfo .daytl::before{display:none}
+/* 宇宙ズーム */
+.spwrap{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12px;align-items:start}
+.spscene{position:relative;height:min(72vh,720px);min-height:440px;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#02030a;touch-action:none;cursor:grab}
+.spscene canvas{display:block}
+.splabels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.splab{position:absolute;left:0;top:0;pointer-events:auto;background:transparent;border:0;color:#dfe6ff;font-size:12px;display:flex;align-items:center;gap:5px;cursor:pointer;white-space:nowrap;padding:2px 4px;margin:-9px 0 0 -5px;text-shadow:0 0 4px #000,0 0 2px #000}
+.splab i{width:9px;height:9px;border:1.5px solid #9fc0ff;border-radius:50%;flex:none}
+.splab:hover,.splab.on{color:#f4b942}.splab.on i{border-color:#f4b942;background:#f4b94255}
+.spfade{position:absolute;inset:0;background:#02030a;opacity:0;pointer-events:none;transition:opacity .2s}
+.spfade.on{opacity:1}
+.sptools{position:absolute;left:10px;bottom:10px;display:flex;gap:6px}
+.sptools button{background:#0a0f1fcc;border:1px solid var(--line);color:var(--ink);border-radius:8px;height:30px;padding:0 12px;font-size:12.5px;cursor:pointer}
+.spinfo{height:min(72vh,720px);min-height:440px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.spinfo h3{font-family:var(--font-display);margin:0;font-size:20px}
+.spinfo p{margin:0;font-size:13px;color:#d4dbec}
+.splv,.spunit{font-size:11.5px;color:var(--muted)}
+.spobj{background:#f4b9421a;border:1px solid #f4b94255;border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.spobj h4{margin:0;font-size:15px;color:var(--accent)}
+.spdist{font-size:13px;color:#fff}
+.sphint{font-size:12px!important;color:var(--muted)!important}
+.spobjs{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.spbarbox{padding:6px 10px;overflow-x:auto}
+.spbarbox svg{min-width:900px;width:100%;display:block}
+.spp{cursor:pointer}.spp:hover text,.spp.sel text{fill:var(--accent)}
+.spp.lv circle{stroke:#f4b942;stroke-width:2}
+.spp:focus{outline:none}.spp:focus-visible circle{stroke:#fff;stroke-width:2.5}
+#splevels .chip[aria-pressed="true"]{background:var(--accent);color:#1a1204;border-color:var(--accent)}
+@media (max-width:960px){.spwrap{grid-template-columns:1fr}.spinfo{height:auto;min-height:0}.loc{grid-template-columns:1fr}}
+
+/* 世界史年表（横向き） */
+.whwrap{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start}
+.whwrap.open{grid-template-columns:minmax(0,1fr) 340px}
+.whscroll{overflow:auto;max-height:78vh;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.whh{display:grid;width:max-content;min-width:100%}
+.whcorner,.whhead{position:sticky;top:0;z-index:3;background:#0e1530;padding:8px 10px;border-bottom:1px solid var(--line);font-size:12.5px;font-weight:700}
+.whcorner{left:0;z-index:4;color:var(--muted);font-weight:500}
+.whhead{color:var(--accent);font-family:var(--font-display);display:flex;flex-direction:column}
+.whhead small{color:var(--muted);font-family:var(--font-num);font-weight:500;font-size:10.5px}
+.whreg{position:sticky;left:0;z-index:2;background:#0e1530;padding:10px;border-top:1px solid var(--line);border-left:3px solid var(--rc);display:flex;flex-direction:column;gap:2px}
+.whreg b{font-size:13px;color:var(--rc)}.whreg small{font-size:11px;color:var(--muted)}
+.whcell{border-top:1px solid var(--line);border-left:1px solid #ffffff0a;padding:8px;display:flex;flex-direction:column;gap:5px}
+.whev{all:unset;box-sizing:border-box;cursor:pointer;border-left:3px solid var(--rc);padding:3px 6px 3px 8px;border-radius:0 6px 6px 0;display:flex;flex-direction:column}
+.whev:hover{background:#ffffff0a}.whev.sel{background:#f4b94222;outline:1px solid #f4b94288}
+.whev:focus-visible{outline:2px solid var(--cool)}
+.whev .y{font-size:10.5px;color:var(--muted)}
+.whev b{font-size:12.5px;line-height:1.4;font-weight:500}
+.whcount{margin:6px 2px 0;color:var(--muted);font-size:12px}
+.whpanel{max-height:78vh;overflow-y:auto;display:flex;flex-direction:column;gap:10px;position:relative}
+.whpanel h3{margin:0;font-family:var(--font-display);font-size:19px}
+.whpanel h4{margin:6px 0 4px;font-size:12px;color:var(--muted);font-weight:500}
+.whpanel p{margin:0;font-size:13.5px;color:#d4dbec}
+.whdy{font-size:13px;color:var(--accent)}
+.whnav{display:flex;flex-direction:column;gap:4px}
+.whnav .linkbtn{text-align:left}
+.whtree{margin:0;padding:0;list-style:none;display:grid;gap:3px;font-size:12.5px}
+.whtree span{display:inline-block;min-width:7em;color:var(--muted);font-size:11.5px}
+@media (max-width:960px){.whwrap.open{grid-template-columns:1fr}}
+
+#mapbox,#mapbox *{user-select:none;-webkit-user-select:none}
+.spbarbox{user-select:none;-webkit-user-select:none;cursor:grab;touch-action:none;overflow:hidden}
+.spbarbox svg{min-width:0}
+.spbarhead{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:6px}
+.spbtools{display:flex;gap:5px}.spbtools button{background:var(--surface-2);border:1px solid var(--line);color:var(--ink);border-radius:7px;min-width:30px;height:26px;padding:0 9px;cursor:pointer}
+.spearth{background:#2a6fb0!important;color:#fff!important;border-color:#5aa0e0!important;align-self:flex-start}
+.splabels,.splab{user-select:none;-webkit-user-select:none}
+.veil{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 50%,#1b3a6a,#02030a 70%);color:#dfe8ff;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:20px;letter-spacing:.1em;opacity:0;pointer-events:none;transition:opacity .35s}
+.veil.on{opacity:1}
+
+/* 年表ズーム */
+.whscroll{cursor:grab;user-select:none;-webkit-user-select:none;height:min(76vh,780px);max-height:none}
+.whscroll.dragging{cursor:grabbing}
+.whbar{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted)}
+.whhint{flex:1;min-width:200px}
+.whtools{display:flex;gap:5px;align-items:center}
+.whtools button{background:var(--surface-2);border:1px solid var(--line);color:var(--ink);border-radius:7px;min-width:30px;height:28px;padding:0 10px;cursor:pointer}
+.whtools span{min-width:44px;text-align:center;color:var(--ink)}
+/* 共通スクロールバー */
+*{scrollbar-width:thin;scrollbar-color:#4a5d94 transparent}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#5a6fb0,#3a4a7a);border-radius:999px;border:3px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#f4b942,#c98a1a);border:3px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-corner{background:transparent}
+.whscroll::-webkit-scrollbar-thumb:horizontal,.spbarbox::-webkit-scrollbar-thumb:horizontal{background:linear-gradient(90deg,#5a6fb0,#3a4a7a);background-clip:padding-box}
+
+/* 時代スライダー */
+.kgrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px;margin:12px 0 6px}
+.kcanvas{width:100%;height:280px;border-radius:12px;background:#02040c;border:1px solid var(--line);display:block}
+.kcard{display:flex;flex-direction:column;gap:8px;min-height:280px}
+.kcard h3{margin:0;font-family:var(--font-display);font-size:22px}
+.kera{font-size:12.5px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.kera.k-now{color:var(--accent)}.kera.k-future{color:var(--cool)}
+.kif{font-size:11px;border:1px solid var(--cool);color:var(--cool);border-radius:999px;padding:0 8px}
+.kstat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kstat div{background:var(--surface-2);border-radius:9px;padding:8px 10px}
+.kstat b{display:block;color:var(--accent);font-size:15px;line-height:1.3}
+.kstat span{font-size:11px;color:var(--muted)}
+.kdl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:0;font-size:13px}.kdl dt{color:var(--muted)}.kdl dd{margin:0}
+.kcard p{margin:0;font-size:13.5px;color:#d4dbec}
+.kcard .knote{font-size:11.5px;color:var(--muted)}
+.klinks{display:flex;gap:6px;flex-wrap:wrap}.klinks a{text-decoration:none}
+.ktrack{margin:26px 8px 4px;cursor:pointer;touch-action:none}
+.kstop{position:absolute;top:13px;width:12px;height:12px;margin-left:-6px;border-radius:50%;border:2px solid #0b1124;background:#8e98b5;cursor:pointer;padding:0;z-index:1}
+.kstop.is-now{background:var(--accent)}.kstop.fut{background:var(--cool)}.kstop.pre{background:#b48cff}
+.kstop.on{box-shadow:0 0 0 3px #ffffff55}
+.knob{position:absolute;top:2px;transform:translateX(-50%);cursor:grab;z-index:2;touch-action:none}
+.knob i{display:block;width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid var(--accent);box-shadow:0 0 14px #f4b942aa;margin-top:8px}
+.knob em{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);font-style:normal;font-family:var(--font-num);font-size:12px;color:var(--accent);white-space:nowrap}
+.krange{width:100%;margin:22px 0 4px;accent-color:#f4b942}
+.kbtns{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.klegend{margin-left:auto;font-size:11.5px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.klegend .d{width:10px;height:10px;border-radius:50%;display:inline-block}.d.past{background:#8e98b5}.d.isnow{background:var(--accent)}.d.fut{background:var(--cool)}.d.pre{background:#b48cff}
+@media (max-width:860px){.kgrid{grid-template-columns:1fr}.kstat{grid-template-columns:1fr}}
+.mnode.fut{border-color:#4a6aa8;background:#121c38}.mnode.fut .v{color:var(--cool)}.mnode.past .v{color:#e8c98a}
+.core.fut{background:radial-gradient(circle at 38% 32%,#4a7ad0 0%,#2a3f8a 40%,#141c48 75%,#0a0f2a 100%);border-color:#6a8ad8}
+footer{color:var(--muted);font-size:12px;line-height:1.7;border-top:1px solid var(--line);padding-top:14px}
+footer p{margin:0 0 6px;max-width:120ch}
+
+@media (max-width:960px){
+  .mm{grid-template-columns:1fr 1fr;grid-template-areas:none}
+  .mm .core{grid-column:1/-1;grid-area:auto}
+  .mm .mnode{grid-area:auto !important}
+  svg.links{display:none}
+  .maprow{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  h1{font-size:22px}
+  .mm{grid-template-columns:1fr}
+  .ev{grid-template-columns:78px 16px 1fr;gap:0 8px}
+}
+@media (prefers-reduced-motion:no-preference){
+  @keyframes pulse{50%{box-shadow:0 0 0 7px #f4b94222,0 0 26px #f4b942cc}}
+}
+@media (prefers-reduced-motion:reduce){.mnode{transition:none}}
+</style>
+</head>
+<body>
+<div class="veil" id="veil"></div>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>カルダシェフ文明マップ</h1>
+      <p class="sub" id="modesub">文明レベルごとに、同じビューで世界を描くガイドブック。いまは「現在の地球」を表示中。</p>
+    </div>
+    <div class="ktype" id="ktype" aria-live="polite"></div>
+  </header>
+
+  <div class="kglobal" aria-label="カルダシェフ・スライダー（全ビュー共通）"><div class="kglabel"><b>カルダシェフ・スライダー</b><span>動かすと全ビューの時代が切り替わります</span></div>
+      <div class="track ktrack" id="track"><div class="bar"></div><div class="fill" id="fill"></div><div class="knob" id="knob" role="slider" aria-label="時代"><em></em><i></i></div></div>
+      <input type="range" id="krange" min="-0.6" max="3" step="0.01" class="krange" aria-label="カルダシェフ値">
+      <div class="kbtns"><button class="chip" id="kprev">◀ 前の時代</button><button class="chip" id="know">現在に戻る</button><button class="chip" id="knext">次の時代 ▶</button><span class="klegend"><i class="d pre"></i>宇宙・地球史<i class="d past"></i>過去（推定）<i class="d isnow"></i>現在<i class="d fut"></i>未来（もしも）</span></div>
+  </div>
+  <nav class="views" id="views" aria-label="ビュー"></nav>
+
+  <!-- ① 全体マップ -->
+  <section class="view" id="v-overview">
+    <div class="panel kpanel">
+      <div class="gauge-head"><b>エネルギー利用量で見る文明の歩み</b><span>つまみをスライドすると時代が動きます。セーガンの式 K = (log₁₀P − 6) / 10　P＝文明全体の消費電力（W）</span></div>
+      <div class="kgrid">
+        <canvas id="kcanvas" class="kcanvas" aria-label="選んだ時代の文明のイメージ"></canvas>
+        <div class="kcard" id="kcard" aria-live="polite"></div>
+      </div>
+
+    </div>
+    <div class="view-head"><h2>全体マップ</h2><p id="mmnote">12分野の現在地。カードを押すと、その分野の系統樹へ移動します。</p></div>
+    <div class="mm" id="mm">
+      <svg class="links" id="links" aria-hidden="true"></svg>
+      <div class="core" id="core">
+        <div class="eyebrow">2025〜26年時点</div>
+        <h3>地球文明</h3>
+        <div class="big">K≈0.73 <small>Type 0</small></div>
+        <div class="facts">人口 約82億人<br>活動範囲 地球＋地球周辺<br>主な動力 化石燃料（86%）</div>
+      </div>
+    </div>
+    <div class="panel tguide" id="tguide"><div class="gauge-head"><b>文明タイプ・ガイド（もしもの世界）</b><span>スライダーの位置に合わせて自動で切り替わります</span></div>
+      <div class="ctabs"><button data-t="t1">Type I 惑星</button><button data-t="t2">Type II 恒星</button><button data-t="t3">Type III 銀河</button></div><div class="ctabbody tgbody"></div></div>
+  </section>
+
+  <!-- ② 年表 -->
+  <section class="view" id="v-timeline">
+    <div class="view-head"><h2 id="tlhead">宇宙年表</h2><p>宇宙・地球史・世界史の3つの年表を切り替えられます。宇宙と地球史はGitHubのブランチのように、枝分かれ（分岐）と合流で表示。点線は仮説や予測です。ホイールでズーム、ドラッグで移動、線や点を押すと詳細。</p></div>
+    <div class="tlswitch" id="tlswitch"><button data-m="cosmos">宇宙<small>138億年＋未来</small></button><button data-m="earth">地球史<small>46億年＋未来</small></button><button data-m="hist">世界史<small>30万年</small></button></div>
+    <details class="thdock" id="thdock"><summary>🎬 3Dシアター（地球全体の映像で通し再生） <small>開くと再生プレーヤーが出ます。年表の点を押すと、その出来事の3Dが右のパネルに出ます</small></summary>
+<div class="thwrap">
+      <div class="thstage" id="thstage" aria-label="歴史シアターの3D表示"></div>
+      <div class="thphase" id="thphase"></div><div class="thpaleo" id="thpaleo"></div>
+      <div class="thcap" id="thcap"></div><div class="thpiplab" id="thpiplab">👤 人の目線</div><button class="threset" id="threset">↺ 視点を戻す</button>
+      <ol class="thlog" id="thlog" aria-label="直前の出来事"></ol>
+    </div>
+    <div class="thbar">
+      <button class="thplay" id="thplay">▶ 再生</button>
+      <div class="thscrubw"><input type="range" id="thscrub" min="0" max="1000" value="0" aria-label="再生位置" hidden><div class="thticks" id="thticks" hidden></div><div class="thbarhead"><span id="thzoom"></span><span class="thbz" id="thbz"><button data-z="in">＋</button><button data-z="out">−</button><button data-z="follow">再生位置へ</button><button data-z="all">全体</button></span></div><svg id="thbar2" class="thbar2" role="img" aria-label="出来事のバー（ホイールで拡大、ドラッグで移動、点を押すとそこへ）"></svg></div>
+      <span class="thyear num" id="thyear"></span>
+    </div>
+    <div class="throw"><span class="lab">表示</span><div class="chips" id="thview"></div></div><div class="throw"><span class="lab">速さ</span><div class="chips" id="thspeed"></div><span class="lab">ジャンプ</span><div class="chips" id="thjumps"></div></div>
+    <p class="note">場所の表示：世界史の出来事は、本文の地名から位置を推定し、見つからない場合は地域内の陸地に置いています（目安）。大陸の配置は、5.4億年前から現在までは PALEOMAP（Scotese 2016、Scotese & Wright 2018、CC BY 4.0）の古地理データを2°格子にしたもの（500万年ごと）。それより古い時代は、プレートを回転させた大まかな推定です。年代には諸説あるものを含みます。</p>
+      </details>
+    <div class="tllegend"><b>点の見方</b>
+      <span><svg width="16" height="16"><circle cx="8" cy="8" r="5" fill="#0a0f1f" stroke="#7fb2ff" stroke-width="2.4"/></svg>出来事（押すと説明と3D）</span>
+      <span><svg width="18" height="18"><polygon points="9,1 11,6.5 17,7 12.4,10.6 14,16.5 9,13.2 4,16.5 5.6,10.6 1,7 7,6.5" fill="#f4d06a"/></svg>特別な3D映像あり（専用の場面・小道具）</span>
+      <span><svg width="16" height="16"><circle cx="8" cy="8" r="4.5" fill="#7fb2ff" stroke="#0a0f1f" stroke-width="1.5"/></svg>枝の始まり（ここで分かれた）</span>
+      <span><svg width="16" height="16"><rect x="4" y="4" width="8" height="8" fill="#0a0f1f" stroke="#7fb2ff" stroke-width="2" transform="rotate(45 8 8)"/></svg>枝の終わり（消滅・滅亡）</span>
+      <span><svg width="26" height="12"><path d="M1,10 C10,10 8,2 25,2" fill="none" stroke="#7fb2ff" stroke-width="2"/></svg>分岐・合流の線</span>
+      <span><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#c99cf2" stroke-width="2" stroke-dasharray="5 3"/></svg>点線：仮説・予測</span>
+      <span><svg width="14" height="16"><line x1="7" y1="0" x2="7" y2="16" stroke="#f4b942" stroke-width="2"/></svg>今いる位置（シアターの再生位置）</span>
+      <span>シアターのバーの点の色：地域（ヨーロッパ＝青、東アジア＝赤…）、紫＝宇宙、緑＝地球と生命、橙＝人類の誕生、水色＝未来</span></div>
+    <div id="tlw-cosmos" class="tlpane"><div class="bgrow"><div id="bg-cosmos" class="bghost"></div></div>
+      <p class="note">宇宙の形の説（平坦・球・双曲・トーラス・多元宇宙）は、<a href="#space-map" onclick="setTimeout(()=>SPZ.go(SPZ.LEVELS.length-1),300)">「宇宙・地球・ミクロ」のスケール12</a>で3Dで切り替えて見られます。</p>
+      <p class="note">横軸は「ビッグバンからの時間」の対数（1目盛りごとに10倍）。ごく初期の一瞬から10¹⁰⁰年後までを1本に並べるためです。ビッグバン以前と宇宙の終わり方は、確かめられていない仮説・予測です。</p></div>
+    <div id="tlw-earth" class="tlpane" hidden><div class="bgrow"><div id="bg-earth" class="bghost"></div></div>
+      <p class="note">横軸は区間ごとに縮尺を変えています（古い時代ほど縮めて表示）。✕は大量絶滅。大陸の系譜の古い部分（30億年以上前）は証拠が少なく、議論があります。</p></div>
+    <aside class="panel whpanel detail bgpanel" id="bgpanel" hidden></aside>
+    <div id="tlw-hist" class="tlpane" hidden>
+      <div class="histsw" id="histsw"><button data-hv="branch">🌿 ブランチ表示（文明の系譜）</button><button data-hv="grid">▦ 表（地域×時代）</button></div>
+      <div id="hist-branch"><div class="bgrow"><div id="bg-hist" class="bghost"></div></div><p class="note">文明や国家が分かれ、合流していく流れを枝で表示。点は出来事（押すと3Dと説明）。横軸は時代ごとに縮尺を変えています。国家の系譜は代表的なものに絞った簡略図です。</p></div>
+      <div id="hist-grid" hidden>
+    <div class="panel">
+      <div class="gauge-head" style="margin-bottom:10px"><b>人類史30万年を1日に縮めると</b><span>0:00に現生人類が登場、24:00が現在</span></div>
+      <div class="scale">
+        <div><b>23:02</b><span>農耕の始まり（約1万2000年前）</span></div>
+        <div><b>23:36</b><span>文字の発明（約5000年前）</span></div>
+        <div><b>23:58:48</b><span>産業革命（約250年前）</span></div>
+        <div><b>23:59:50</b><span>Webの公開（1991年）</span></div>
+      </div>
+    </div>
+    <div class="chips" id="tlregions"></div>
+    <div class="whbar"><span id="whcount"></span><span class="whhint">ホイールでズーム／ドラッグで移動／Shift＋ホイールで横移動／出来事を押すと詳細</span><span class="whtools"><button id="whz-out" aria-label="縮小">−</button><span id="whzoom" class="num">100%</span><button id="whz-in" aria-label="拡大">＋</button><button id="whz-reset">100%に戻す</button></span></div>
+    <div class="whwrap" id="whwrap">
+      <div id="tl" class="whscroll"></div>
+      <aside class="panel whpanel detail" id="whpanel" hidden></aside>
+    </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ③ 世界地図 -->
+  <section class="view" id="v-world-map">
+    <div class="view-head"><h2>世界地図</h2><p>ホイール・ピンチでズーム、ドラッグで移動。国やランドマークを押すと右に情報、下にその土地の3Dの風景が出ます。全体表示からさらにズームアウトすると宇宙へ上がります。</p></div>
+    <div class="chips" id="maplayers"></div>
+    <div class="chips" id="mapchips"></div>
+    <div class="maprow">
+      <div class="mapbox" id="mapbox">
+        <svg id="world" role="img" aria-label="ズームできる世界地図" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="mapctl"><button id="mz-in" aria-label="ズームイン">＋</button><button id="mz-out" aria-label="ズームアウト">−</button><button id="mz-fit">全体</button><button id="mz-space">🚀 宇宙へ</button><button id="mz-micro">🔬 ミクロへ</button><span id="mapzoom" class="num"></span></div>
+        <div id="maptip" class="maptip" hidden></div>
+      </div>
+      <aside class="panel info" id="info">
+        <div id="clistpanel"><input id="csearch" type="search" placeholder="国名・首都で検索（日本語・英語）" aria-label="国を検索"><div id="ccount" class="ccount"></div><ul id="clist" class="clist"></ul></div>
+      </aside>
+    </div>
+    <div id="locsec" class="locsec">
+      <div class="view-head"><h2 id="locname"></h2><p id="locsub"></p></div>
+      <div class="loc">
+        <div class="loc3d">
+          <div id="scene" class="scene"></div>
+          <div class="scenectl" id="scenectl"><div class="chips" id="todbtns"></div><div class="chips" id="wxbtns"></div><button class="chip" data-reset="1">視点を戻す</button></div>
+        </div>
+        <aside class="panel locinfo"><div id="locinfo"></div><div id="daybox"><h4>そこに暮らす人の1日</h4><p class="dayhint">時刻を押すと3Dの時間帯が切り替わります</p><div class="daytl" id="daytl"></div></div></aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ 宇宙マップ -->
+  <section class="view space" id="v-space-map">
+    <div class="view-head"><h2>宇宙と地球</h2><p>宇宙の形（説）から大規模構造、地球まで12段階。名前や目盛りの点を押すとそこへ近づきます。地球に向かってズームインし続けると世界地図に降ります。</p></div>
+    <div class="chips" id="splevels"></div>
+    <div class="spwrap">
+      <div id="spscene" class="spscene"><div id="splabels" class="splabels"></div><div id="spfade" class="spfade"></div>
+        <div class="sptools"><button id="sp-in">◀ 内側のスケールへ</button><button id="sp-out">外側のスケールへ ▶</button></div></div>
+      <aside id="spinfo" class="panel spinfo"></aside>
+    </div>
+    <div class="spbarhead"><span>地球からの距離（対数目盛り）— ホイールで拡大縮小、ドラッグで移動</span><span class="spbtools"><button id="spb-in">＋</button><button id="spb-out">−</button><button id="spb-all">全体</button></span></div><div class="mapbox spbarbox" id="spbarbox"><svg id="spbar" role="img" aria-label="地球からの距離の目盛り"></svg></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>人が行った範囲</span><span><i style="background:var(--cool)"></i>無人探査機が届いた範囲</span><span><i style="background:#8e98b5"></i>未到達</span><span>惑星や探査機の大きさは見やすいよう誇張しています</span></div>
+  </section>
+
+  <section class="view space" id="v-micro">
+    <div class="view-head"><h2>ミクロの世界</h2><p>生き物から細胞、微生物、ウイルス、分子、原子、原子核、クオーク、素粒子、量子の世界、超ひも理論（仮説）まで11段階。左の一覧から選ぶと3Dで表示します。拡大し続けると次の小さな世界へ、縮小し続けると大きな世界（最後は世界地図）へ戻ります。</p></div>
+    <div class="chips" id="mclevels"></div>
+    <div class="spwrap mcwrap">
+      <div class="mclist" id="mclist"></div>
+      <div id="mcscene" class="spscene"><div id="mcfade" class="spfade"></div>
+        <div class="sptools"><button id="mc-out">◀ 大きな世界へ</button><button id="mc-in">小さな世界へ ▶</button></div></div>
+      <aside id="mcinfo" class="panel spinfo"></aside>
+    </div>
+    <p class="note">3Dモデルは特徴をつかむための簡略表現で、色や大きさの比率は実物どおりではありません。原子・原子核・クオークの姿は、量子力学的な実体を「目に見える形」に置き換えたイメージです。</p>
+  </section>
+
+  <!-- ⑧ 系統樹 -->
+  <section class="view" id="v-lineage">
+    <div class="view-head"><h2>系統樹（全分野）</h2><p>人類という幹から16分野・約900の要素が枝分かれしていく。時間軸は1年あたり同じ幅（均等）。消えた要素は後継に合流（マージ）する。上の分野を押すとON/OFFで絞り込めます（複数選択可）。</p></div>
+    <div class="chips" id="gchips"></div>
+    <div class="gwrap">
+      <div class="gcanvas" id="gcanvas" tabindex="0" aria-label="系統樹のキャンバス。ホイールまたはピンチでズーム、ドラッグで移動">
+        <svg id="gsvg" role="img" aria-label="全分野の系統樹"></svg>
+        <div class="gtools">
+          <button id="gz-in" title="ズームイン">＋</button>
+          <button id="gz-out" title="ズームアウト">−</button>
+          <button id="gz-fit" title="30万年すべて">全期間</button><button id="gz-civ" title="文明の誕生以降">文明以降</button><button id="gz-mod" title="産業革命以降">近現代</button>
+          <button id="gz-read" title="名前が読める大きさに">読める大きさ</button>
+          <label class="gtoggle"><input type="checkbox" id="gdead" checked> 消えた要素</label>
+        </div>
+        <div class="ghint" id="ghint">ホイール・ピンチでズーム／ドラッグで移動／Alt＋ホイールで時間軸だけ伸縮／右下で期間を切り替え</div>
+        <div class="gzoom num" id="gzoom"></div>
+      </div>
+      <aside class="gpanel detail" id="gpanel" aria-live="polite" hidden></aside>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--accent)"></i>現役のブランチ</span>
+      <span><i style="background:linear-gradient(90deg,var(--accent),transparent)"></i>衰退中</span>
+      <span><i style="background:#59607a"></i>消滅（✕）</span>
+      <span><b style="color:#f4b942">◆</b> 暮らしを変えた発明（旧・発明品カタログ）</span>
+      <span><i style="background:repeating-linear-gradient(90deg,#8e98b5 0 3px,transparent 3px 6px)"></i>途絶えた後に受け継がれた／後継へ合流</span>
+    </div>
+  </section>
+  <section class="view" id="v-laws">
+    <div class="view-head"><h2>宇宙の法則</h2><p>宇宙を動かす4つの力、主な公式と定数、物質のいちばん小さな部品（素粒子）、118の元素、身近な分子。元素・素粒子・分子を押すと説明が出て、「ミクロの世界」で3Dモデルを見られます。</p></div>
+    <div class="ctabs" id="ltabs" role="tablist"><button data-t="forces">⚛ 4つの力</button><button data-t="parts">● 素粒子</button><button data-t="pt">▦ 周期表</button><button data-t="mols">⬡ 分子</button><button data-t="formulas">∑ 公式</button><button data-t="consts">π 物理定数</button><button data-t="unsolved">？ 未解決問題</button></div>
+    <div class="ctabbody">
+    <div class="ltab" data-t="forces"><div class="lforces" id="lforces"></div></div>
+    <div class="ltab" data-t="parts"><p class="note" style="margin-top:0">物質を作る粒子（クオーク・レプトン）と、力を伝える粒子。スライダーの時代にまだ見つかっていない粒子は暗く表示します。</p><div id="lparts"></div></div>
+    <div class="ltab" data-t="pt"><p class="note" id="ptcount" style="margin-top:0"></p><div class="ptlegend" id="ptlegend"></div><div class="ptwrap"><div class="ptable" id="ptable"></div></div></div>
+    <div class="ltab" data-t="mols"><div class="lmols" id="lmols"></div></div>
+    <div class="ltab" data-t="formulas"><div class="lformulas" id="lformulas"></div></div>
+    <div class="ltab" data-t="consts"><div id="lconsts"></div></div>
+    <div class="ltab" data-t="unsolved"><p class="note" style="margin-top:0">人類がまだ答えを持っていない「この世の謎」。物理・宇宙、生命と心、数学（クレイ研究所のミレニアム懸賞問題を含む）に分けています。状態は2026年時点の目安です。</p><div class="lunsolved" id="lunsolved"></div></div>
+    </div>
+    <aside class="panel whpanel detail bgpanel" id="lpanel" hidden></aside>
+  </section>
+  <!-- ⑥ 地球大全 -->
+  <section class="view" id="v-earth-book">
+    <div class="view-head"><h2>地球大全 ── 宇宙人のための地球ガイド</h2><p>地球の外から来た知的存在が、地球と人類を理解するための手引き。数と単位から始めて、住所・惑星・生命・人類・社会・技術・課題へ。目次から章へ飛べます。</p></div>
+    <div class="ebwrap"><nav class="ebtoc" id="ebtoc" aria-label="地球大全の目次"></nav><div class="ebook" id="ebook"></div></div>
+  </section>
+
+
+
+  <footer>
+    <p>数値は概数。K値は2025年の世界の総エネルギー供給「600 EJ超」を秒あたりに換算（約1.9×10¹³ W）してセーガンの式に当てはめたもの。Type I＝10¹⁶ W、Type II＝10²⁶ W、Type III＝10³⁶ W。</p>
+    <p>主な出典：Energy Institute「Statistical Review of World Energy 2026」／SIPRI（2026年4月、軍事費）／UCDP・ウプサラ大学（2026年6月、紛争）／FAOほか「SOFI 2026」（飢餓・食料）／ITU「Facts and Figures 2025」（インターネット）／UN Tourism（2026年1月、観光）／UNESCO世界遺産委員会（2026年7月）／日本動画協会「アニメ産業レポート2025」／NASA（アルテミスII、ボイジャー1号）／国連「World Population Prospects 2024」。地球大全・スケール解説：WMO（2025年の気温、2026年1月）／NOAA マウナロア観測所（CO₂）／SIPRI Yearbook 2026（核弾頭）／IUCNレッドリスト（2025年10月）／NASA Exoplanet Archive（系外惑星）／Ethnologue 2025（言語）／Pew Research Center（2020年の宗教人口）／KeepTrack・CelesTrak（衛星数、2026年10月）。上記以外の一般的な数値（言語数、識字率、穀物生産など）は国際機関の公表値をもとにした概数です。</p>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+window.KMODE="all";
+const EARTHPATH = __EARTHPATH__;
+__PALEO__
+__SCENE3D__
+__SPACE3D__
+</script>
+<script>
+const MAP = __MAPDATA__;
+const COUNTRIES = __COUNTRIES__;
+
+__TREEDATA__
+__TREEADD__
+__TREEADD2__
+__WHDATA__
+__WHDATA2__
+__PLACES__
+__MICRODATA__
+__TYPE1__
+__TYPE2__
+__TYPE3__
+const FIELD2TREE={history:'nations',politics:'politics',war:'war',tech:'info',energy:'energy',space:'space',medicine:'medicine',academia:'academia',agriculture:'agri',food:'food',culture:'culture',subculture:'ent'};
+
+/* ---------- データ ---------- */
+const FIELDS = [
+ {id:"history",area:"a",t:"歴史",v:"約30万年",l:"現生人類の歴史。産業革命からは約250年",
+  lead:"約30万年前にアフリカで現生人類が現れ、約1万2000年前に農耕を、約5000年前に文字を手に入れた。いまの工業文明は産業革命から約250年の、とても若い文明。",
+  stats:[["約30万年","現生人類の歴史"],["約1万2000年前","農耕の始まり"],["約250年","産業革命からの時間"]],
+  pts:["人類史の9割以上は狩猟採集の時代","都市・国家・文字はメソポタミアやエジプトで生まれた","二度の世界大戦（1914〜18、1939〜45）が今の国際秩序の出発点","冷戦終結（1991年）後、グローバル化が一気に進んだ"],
+  sym:["ピラミッド","活版印刷","蒸気機関","国際連合"]},
+ {id:"politics",area:"b",t:"政治・経済",v:"193か国",l:"国連加盟国。全体をまとめる政府はない",
+  lead:"約200の主権国家が並び立ち、国連が調整役を担う。惑星全体を治める政府はなく、貿易と条約でゆるくつながっている。",
+  stats:[["193","国連加盟国"],["2兆8870億ドル","世界の軍事費（2025年）"],["2.5%","軍事費の世界GDP比（2009年以来の高さ）"]],
+  pts:["民主主義と権威主義の体制が併存","関税・貿易をめぐる対立と経済のブロック化","気候変動やパンデミックなど国境を越える課題に、一つの意思で対応できない","南極と宇宙は条約で「どの国のものでもない」場所とされている"],
+  sym:["国連","G20","パスポート","国境"]},
+ {id:"war",area:"c",t:"戦争・安全保障",v:"65件",l:"国家が関わる武力紛争（2025年）。1946年以降で最多",
+  lead:"2025年、国家が関わる武力紛争は65件で、記録が残る1946年以降で最多。国家間の紛争も8件に増えた。核兵器による抑止が大国同士の全面戦争を防いでいる、とされる。",
+  stats:[["65件","国家が関わる武力紛争（2025年）"],["8件","国家間の紛争（2023年の2件から2年連続で倍増）"],["約24万4600人","組織的な暴力による死者（2025年）"]],
+  pts:["ウクライナ、スーダン、中東などで大規模な戦闘が続く","ドローン・衛星・サイバー攻撃が戦い方を変えた","世界の軍事費は11年連続で増加","核兵器を持つ国は9か国"],
+  sym:["核抑止","ドローン","平和維持活動","難民"]},
+ {id:"tech",area:"d",t:"技術・情報",v:"60億人",l:"インターネット利用者（2025年、人口の74%）",
+  lead:"半導体とインターネットが社会の土台。2020年代に入って生成AIが一般に広がり始めた。",
+  stats:[["60億人","インターネット利用者（74%）"],["22億人","まだオフラインの人"],["約30億","5Gの契約数"]],
+  pts:["スマートフォンが人類共通の道具になった","ネット利用は高所得国94%、低所得国23%と格差が大きい","生成AI（大規模言語モデル）が仕事や学習に入り始めた","量子コンピュータは研究段階"],
+  sym:["スマホ","半導体","生成AI","海底ケーブル"]},
+ {id:"energy",area:"e",t:"エネルギー・環境",v:"600 EJ超",l:"年間の総エネルギー供給（2025年）。86%が化石燃料",
+  lead:"文明の動力の86%を化石燃料に頼る。一方で太陽光・風力が急成長し、2025年は新しく増えたエネルギーの最大の供給源になった。",
+  stats:[["600 EJ超","総エネルギー供給（2025年）"],["86%","化石燃料の比率"],["358億t","エネルギー由来のCO₂排出（2025年）"]],
+  pts:["電化（電気自動車、ヒートポンプ）が進む","一次エネルギーに占める割合は太陽光1.7%、風力1.6%","気温は産業革命前より約1.3〜1.5℃上昇","核融合発電は実験段階"],
+  sym:["送電網","太陽光パネル","リチウムイオン電池","原子力発電所"]},
+ {id:"space",area:"f",t:"宇宙",v:"約320回",l:"軌道への打ち上げ（2025年、過去最多）",
+  lead:"人類は地球低軌道に常駐し、2026年4月には54年ぶりに人を月の近くまで送った。無人の探査機は太陽系の外を進んでいる。",
+  stats:[["約320回","軌道打ち上げ（2025年）"],["40万6771km","人が到達した最遠点（アルテミスII、2026年）"],["1光日","ボイジャー1号が11月18日に到達予定"]],
+  pts:["SpaceX1社で世界の打ち上げの約半分","再使用ロケットで打ち上げ費用が下がった","常時有人の宇宙ステーションは2つ（ISS・天宮）","月面着陸の再開（アルテミスIII）は2027年の予定"],
+  sym:["ISS","再使用ロケット","宇宙望遠鏡","衛星コンステレーション"]},
+ {id:"medicine",area:"g",t:"医療",v:"約73歳",l:"世界の平均寿命。1900年の約32歳から倍以上に",
+  lead:"抗生物質とワクチンで感染症による死が激減し、平均寿命はこの約120年で倍以上になった。いまの主な課題は慢性疾患と、国による格差。",
+  stats:[["約73歳","世界の平均寿命"],["約32歳","1900年の平均寿命"],["1つ","根絶できた人の感染症（天然痘、1980年）"]],
+  pts:["mRNAワクチンが新型コロナで実用化（2020年）","ゲノム編集による治療が初めて承認（2023年）","がん・心疾患・認知症など慢性疾患が主な死因に","国による平均寿命の差は約30年"],
+  sym:["抗生物質","ワクチン","MRI","ゲノム編集"]},
+ {id:"academia",area:"h",t:"学問・教育",v:"約87%",l:"成人の識字率",
+  lead:"科学的方法が知識の土台。学問は細かく分かれ、国をまたぐ共同研究が当たり前になった。それでも宇宙の大半はまだ正体がわからない。",
+  stats:[["約87%","成人の識字率"],["約900万人","世界の研究者"],["約95%","正体不明の宇宙の中身（暗黒物質・暗黒エネルギー）"]],
+  pts:["大学進学が世界的に広がった","論文やデータを無料で公開する流れが進む","AIが研究そのもの（タンパク質の構造予測など）に使われ始めた","意識、量子重力、生命の起源などは未解明"],
+  sym:["大学","査読論文","ノーベル賞","大型実験施設"]},
+ {id:"agriculture",area:"i",t:"農業",v:"約28億t",l:"年間の穀物生産量",
+  lead:"化学肥料と品種改良（緑の革命）で、80億人を養える生産量に達した。その代わり、土地と水を大量に使っている。",
+  stats:[["約28億t","年間の穀物生産"],["約半分","居住可能な土地のうち農地の割合"],["約7割","淡水の利用のうち農業が占める割合"]],
+  pts:["ハーバー・ボッシュ法の窒素肥料が、人類の約半分の食料を支えているとされる","遺伝子組み換えやゲノム編集の作物","ドローンや衛星を使った精密農業","気候変動による干ばつや不作のリスク"],
+  sym:["トラクター","化学肥料","灌漑","種子銀行"]},
+ {id:"food",area:"j",t:"食料",v:"6億4500万人",l:"飢餓に直面する人（2025年、7.8%）",
+  lead:"地球全体では全員分の食料があるのに、分け方が偏っているため、飢餓と肥満が同時に存在する。",
+  stats:[["6億4500万人","飢餓に直面する人（2025年）"],["26.9億人","健康的な食事を買えない人"],["1億5000万人","発育阻害の5歳未満児"]],
+  pts:["米・小麦・トウモロコシで、植物由来のカロリーの約半分","冷蔵・冷凍の流通網で、世界中の食材が届く","食料の約3分の1が失われるか、捨てられている","アフリカの飢餓人口（3億900万人）が初めてアジアを上回った"],
+  sym:["冷蔵庫","スーパーマーケット","即席めん","代替肉"]},
+ {id:"culture",area:"k",t:"文化",v:"約7000",l:"世界で話されている言語の数",
+  lead:"約7000の言語と多くの宗教・芸術が並び立つ。グローバル化とネットで混ざり合う一方、少数言語は消えつつある。",
+  stats:[["約7000","世界の言語"],["1,273件","世界遺産（173か国、2026年）"],["15.2億人","国際観光客（2025年、過去最多）"]],
+  pts:["英語が事実上の国際共通語","映画・音楽・料理が国境を越える（K-POP、寿司、ハリウッド映画）","言語の約4割が消滅の危機にある","オリンピックやワールドカップに世界中が同時に熱中する"],
+  sym:["オリンピック","ワールドカップ","世界遺産","万博"]},
+ {id:"subculture",area:"l",t:"サブカル",v:"3兆8407億円",l:"日本のアニメ産業市場（2024年、過去最高）",
+  lead:"マンガ・アニメ・ゲーム・配信が、ネットを通じて世界規模の文化になった。見る人がそのまま作る人になる時代。",
+  stats:[["3兆8407億円","日本のアニメ産業市場（2024年）"],["56%","そのうち海外の売上"],["約970億円超","劇場版『鬼滅の刃 無限城編』の世界興行収入"]],
+  pts:["動画・配信サイトで個人がクリエイターになれる","推し活、同人誌即売会、コスプレなどファン文化が経済を動かす","VTuber、ミーム、短い動画が流行の中心","生成AIでイラストや音楽を作る人が増え、著作権の議論が続く"],
+  sym:["同人誌即売会","eスポーツ","VTuber","ミーム"]},
+];
+
+const CAT = {
+ heritage:["歴史遺産","var(--c-heritage)"],
+ modern:["現代のランドマーク","var(--c-modern)"],
+ science:["科学・宇宙","var(--c-science)"],
+ nature:["自然","var(--c-nature)"],
+};
+
+const SPACE = [
+ // name, km, sub, kind
+ ["カーマン線",100,"宇宙の入口とされる高度","crew"],
+ ["ISS・天宮",400,"人が常に暮らす宇宙ステーション","crew"],
+ ["GPS衛星",20200,"位置情報を送る衛星群","robot"],
+ ["静止軌道",35786,"気象・通信衛星の定位置","robot"],
+ ["月",384400,"1969〜72年に12人が月面を歩いた","crew"],
+ ["人類の最遠到達",406771,"アルテミスII（2026年4月）","crew"],
+ ["火星（最接近時）",5.46e7,"探査車が走行中。人はまだ行っていない","robot"],
+ ["木星",6.3e8,"探査機が周回観測","robot"],
+ ["冥王星",5.9e9,"ニューホライズンズが2015年に通過","robot"],
+ ["ボイジャー1号",2.59e10,"約259億km＝1光日（11月18日到達予定）","robot"],
+ ["プロキシマ・ケンタウリ",4.0e13,"最も近い恒星（4.24光年）。未到達","none"],
+];
+
+const INV_TAGS = ["情報","エネルギー","医療","食料","交通","宇宙"];
+const INV = [
+ ["活版印刷","1450年頃","情報","本が大量に作れるようになり、宗教改革や科学革命を後押しした。","知識は一部の人のもの。読み書きが広がらない。"],
+ ["蒸気機関","1769年（ワットの改良）","エネルギー","石炭の熱を動力に変え、工場・鉄道・蒸気船を動かした。","産業革命が起きず、動力は人・家畜・水車・風車のまま。"],
+ ["ワクチン","1796年","医療","天然痘の根絶をはじめ、子どもの死亡を大きく減らした。","はしかやポリオで多くの子どもが亡くなる。"],
+ ["電力網","1882年","エネルギー","発電所から家庭まで電気を届ける。現代のあらゆる機械の前提。","夜は暗く、冷蔵も通信もコンピュータもない。"],
+ ["自動車（内燃機関）","1886年","交通","人と物の移動を個人単位で自由にした。都市の形も変えた。","物流と郊外の暮らしが成り立たない。"],
+ ["ハーバー・ボッシュ法","1913年","食料","空気中の窒素から化学肥料を作る。80億人を養う食料生産の土台。","養える人口は今の半分ほどとされる。"],
+ ["抗生物質","1928年（ペニシリン）","医療","細菌による感染症を治せるようになった。手術も安全に。","小さな傷や出産が命取りになる。"],
+ ["トランジスタ","1947年","情報","電気信号を切り替える小さな部品。半導体チップの原点。","コンピュータは部屋サイズのまま。スマホは存在しない。"],
+ ["コンテナ船","1956年","交通","箱の規格をそろえ、海上輸送の費用を劇的に下げた。","世界中の品物が安く手に入るグローバル経済が成り立たない。"],
+ ["人工衛星","1957年","宇宙","気象予報、通信、地球観測。","台風の進路予測も衛星放送も国際電話もない。"],
+ ["インターネット","1969年（原型）／1991年（Web）","情報","世界中のコンピュータをつなぐ。60億人が使う。","調べ物は図書館、連絡は手紙と電話。"],
+ ["GPS","1978年（衛星打ち上げ開始）","宇宙","地球上のどこでも位置がわかる。地図アプリや物流、金融の時刻合わせにも。","道に迷い、配送も航空も今より非効率に。"],
+ ["リチウムイオン電池","1991年（商用化）","エネルギー","軽くて大容量の電池。スマホと電気自動車を可能にした。","持ち運べる電子機器は重く、すぐ電池が切れる。"],
+ ["スマートフォン","2007年","情報","電話・カメラ・地図・財布・テレビを1台にまとめた。","人々の情報への入口がばらばらのまま。"],
+ ["再使用ロケット","2015年（初の着陸成功）","宇宙","打ち上げ費用を下げ、年300回超の打ち上げ時代を開いた。","衛星インターネット網や頻繁な有人飛行は難しい。"],
+ ["mRNAワクチン","2020年","医療","設計図を変えるだけで素早く作れるワクチン。新型コロナで実用化。","パンデミックへの対応にもっと時間がかかる。"],
+ ["大規模言語モデル（生成AI）","2022年（一般公開）","情報","文章・コード・画像を作り、質問に答えるAI。","知的作業の自動化はまだ先の話。"],
+];
+
+/* ---------- ビューの切り替え ---------- */
+const VIEWS = [["overview","全体マップ"],["timeline","年表（宇宙・地球・世界史）"],["space-map","宇宙・地球・ミクロ"],["lineage","系統樹（全分野）"],["laws","宇宙の法則"],["earth-book","地球大全"]];
+const nav = document.getElementById("views");
+nav.innerHTML = VIEWS.map(([id,t],i)=>`<a href="#${id}" data-v="${id}"><span class="n">${String(i+1).padStart(2,"0")}</span>${t}</a>`).join("");
+function show(){
+  let h = (location.hash||"").slice(1);if(h==="theater"){h="timeline";history.replaceState(null,"","#timeline");}
+  const id = (VIEWS.some(v=>v[0]===h)||h==="world-map"||h==="micro") ? h : "overview";
+  document.querySelectorAll("section.view").forEach(s=>s.classList.toggle("on", s.id==="v-"+id));
+  nav.querySelectorAll("a").forEach(a=>a.setAttribute("aria-current", a.dataset.v===(id==="world-map"||id==="micro"?"space-map":id)?"page":"false"));
+  if(id==="overview") requestAnimationFrame(drawLinks);
+}
+window.addEventListener("hashchange", show);
+
+/* ---------- ① 全体マップ ---------- */
+const mm = document.getElementById("mm");
+FIELDS.forEach((f,i)=>{
+  const b=document.createElement("button");
+  b.className="mnode"; b.style.gridArea=f.area;
+  b.innerHTML=`<span class="t">${f.t}<span>${String(i+1).padStart(2,"0")}</span></span><span class="v">${f.v}</span><span class="l">${f.l}</span><span class="go">系統樹で見る →</span>`;
+  b.addEventListener("click",()=>{ location.hash="lineage"; setTimeout(()=>window.openTreeField&&window.openTreeField(FIELD2TREE[f.id]),80); });
+  mm.appendChild(b);
+});
+function drawLinks(){
+  const svg=document.getElementById("links");
+  if(getComputedStyle(svg).display==="none"||!mm.offsetParent) return;
+  const mr=mm.getBoundingClientRect(), cr=document.getElementById("core").getBoundingClientRect();
+  const cx=cr.left+cr.width/2-mr.left, cy=cr.top+cr.height/2-mr.top, R=cr.width/2;
+  let h="";
+  mm.querySelectorAll(".mnode").forEach(n=>{
+    const r=n.getBoundingClientRect();
+    const nx=Math.min(Math.max(cx+mr.left,r.left),r.right)-mr.left, ny=Math.min(Math.max(cy+mr.top,r.top),r.bottom)-mr.top;
+    const a=Math.atan2(ny-cy,nx-cx), sx=cx+Math.cos(a)*R, sy=cy+Math.sin(a)*R;
+    h+=`<path d="M${sx},${sy} Q${(sx+nx)/2},${sy} ${nx},${ny}"/><circle cx="${sx}" cy="${sy}" r="3"/>`;
+  });
+  svg.innerHTML=h;
+}
+window.addEventListener("resize",drawLinks);
+__WHC__
+__ERADATA__
+
+/* ---------- 右上：現在のタイプ表示（スライダーに連動） ---------- */
+window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=document.getElementById("ktype");
+  const k=+(document.getElementById("krange")||{}).value||.73;const T=E.kind==="pre"?"pre":k>=3?3:k>=2?2:k>=1?1:0;
+  const nm=["Type 0","Type I","Type II","Type III"];
+  el.innerHTML=`<div class="ktsteps">${["文明以前",...nm].map((t,i)=>`<span class="${(T==="pre"?0:T+1)===i?"on":""}">${t}</span>`).join("")}</div><div class="ktnow"><b>${T==="pre"?"文明以前":nm[T]}</b><span>${E.when}・${E.name}${E.kind==="future"&&!/もしも/.test(E.when)?"（もしも）":""}</span></div>`;
+  document.getElementById("modesub").textContent=E.now?"文明レベルごとに、同じビューで世界を描くガイドブック。いまは「現在の地球」を表示中。":`いまは「${E.when}・${E.name}」の世界を表示中。${E.kind==="future"?"2026年より先は予測・目標と想像です。":E.kind==="pre"?"人類が登場する前の宇宙・地球です。":"その時代までに起きたこと・知られていたことだけを表示します。"}`;});
+
+/* 宇宙・地図・ミクロの切り替え */
+(function(){const T=[["space-map","🌌 宇宙"],["world-map","🌏 世界地図"],["micro","🔬 ミクロの世界"]];
+  T.forEach(([id])=>{const sec=document.getElementById("v-"+id);if(!sec)return;const d=document.createElement("div");d.className="tlswitch scaleswitch";d.innerHTML=T.map(([h,t])=>`<a href="#${h}" class="${h===id?"on":""}">${t}</a>`).join("");sec.querySelector(".view-head").after(d);});})();
+__ERA__
+__KSLIDER__
+__TGUIDE__
+
+__NEWVIEWS__
+__BRANCHDATA__
+__HISTBRANCH__
+__BRANCH__
+
+__WORLDMAP__
+__SPACEVIEW__
+
+__GRAPHJS__
+__EV3D__
+__THEATER__
+__LAWS3D__
+__LAWS__
+__EARTHBOOK__
+__LVINFO__
+__ORG3D__
+__MICRO3D__
+__SEARCH__
+show();
+document.fonts?.ready.then(drawLinks);
+</script>
+</body>
+</html>
