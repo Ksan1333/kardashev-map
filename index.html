@@ -49,6 +49,17 @@ body.t1 .whev[data-fut="1"]{border-style:dashed}
 .thpaleo{position:absolute;left:16px;top:44px;font-size:12px;color:#9fd8ff;pointer-events:none;text-shadow:0 1px 3px #000}
 .thcap{position:absolute;left:16px;bottom:16px;max-width:min(460px,70%);padding:14px 16px;border-radius:12px;background:rgba(8,12,24,.72);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);pointer-events:none}
 .thcap h3{margin:2px 0 6px;font-size:20px}.thcap p{margin:0;font-size:13.5px;line-height:1.65;color:#cfd7ea}.thy{color:var(--accent);font-size:13px}
+.wl-SF{color:#ffd27a!important;border-color:#c9a040!important;background:#ffd27a14}
+.sfnote{margin-top:16px;border-color:#5a4a20;background:linear-gradient(180deg,#1a1608,#0e1220)}
+.sfq{margin:6px 0 12px;color:#e9e2c8;font-size:14px;line-height:1.7}.sfq b{color:#ffd27a}
+.sfstages{display:flex;gap:6px;align-items:stretch;overflow-x:auto;padding-bottom:6px}.sfarr{align-self:center;color:#c9a040;font-size:20px}
+.sfst{min-width:200px;flex:1;background:#0b1020;border:1px solid #4a3f1a;border-radius:12px;padding:10px 12px;position:relative}
+.sfst h4{margin:0 0 2px;color:#ffd27a;font-size:15px}.sfk{font-size:11px;color:#c9b27a;margin-bottom:6px}.sfst p{font-size:12.5px;color:#d8dcea;margin:0 0 6px;line-height:1.6}
+.sfst dl{margin:0;font-size:12px;display:grid;grid-template-columns:auto 1fr;gap:2px 8px}.sfst dt{color:#9aa6c4}.sfst dd{margin:0;color:#e9edf7}
+.sfn{position:absolute;top:8px;right:10px;font:700 12px/1 var(--mono,monospace);color:#1a1204;background:#ffd27a;border-radius:99px;width:20px;height:20px;display:grid;place-items:center}
+.sfgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:12px}.sfgrid h5{margin:0 0 6px;color:#ffd27a;font-size:13px}
+.sft{border-collapse:collapse;font-size:12px}.sft th{color:#ffd27a;padding:3px 8px 3px 0;vertical-align:top}.sft td{color:#d8dcea;padding:3px 0}
+.sfol,.sful{margin:0;padding-left:20px;font-size:12.5px;color:#e9edf7;line-height:1.7}.sfs{font-size:12px;color:#b9c2da;line-height:1.7;margin:6px 0 0}.sfbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .thmeta{display:flex;gap:6px;margin-bottom:4px}.thmeta .pill{font-size:11px;padding:1px 8px;border-radius:99px;border:1px solid #ffffff40;color:#dfe6f5}.thmeta .pill.wl{border-style:dashed}.wl-協調{color:#7fe0b0!important;border-color:#4fae80!important}.wl-分断{color:#ff9a8a!important;border-color:#c0604f!important}.wl-加速{color:#7fc8ff!important;border-color:#4f8fc0!important}.wl-再建{color:#f4c870!important;border-color:#b08a3a!important}.wl-宇宙{color:#c9a8ff!important;border-color:#8a6ad0!important}
 .pill.fut{border-color:#7ee0ff;color:#7ee0ff}
 .thlog{position:absolute;right:14px;top:14px;width:250px;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;pointer-events:none}
@@ -561,6 +572,10 @@ svg.links circle{fill:var(--accent)}
 .spp.lv circle{stroke:#f4b942;stroke-width:2}
 .spp:focus{outline:none}.spp:focus-visible circle{stroke:#fff;stroke-width:2.5}
 #splevels .chip[aria-pressed="true"]{background:var(--accent);color:#1a1204;border-color:var(--accent)}
+.gitnav{overflow-x:auto;overflow-y:hidden;border:1px solid var(--line);border-radius:12px;background:#070b16;margin:4px 0 10px;scrollbar-width:thin}
+.gitnav svg{display:block}.gn-n{cursor:pointer}.gn-n:hover circle{filter:brightness(1.4)}.gn-n:focus{outline:none}.gn-n:focus-visible circle{stroke:#fff}
+.gn-num{font:700 11px/1 var(--mono,monospace);fill:#e8ecf6}.gn-lab{font-size:10.5px;fill:#9aa6c4}.gn-lab.on{fill:#fff;font-weight:700}.gn-tag{font-size:11.5px;font-weight:700}
+#splevels,#mclevels{display:block}
 @media (max-width:960px){.spwrap{grid-template-columns:1fr}.spinfo{height:auto;min-height:0}.loc{grid-template-columns:1fr}}
 
 /* 世界史年表（横向き） */
@@ -710,6 +725,7 @@ footer p{margin:0 0 6px;max-width:120ch}
     </div>
     <div class="panel tguide" id="tguide"><div class="gauge-head"><b>文明タイプ・ガイド（もしもの世界）</b><span>スライダーの位置に合わせて自動で切り替わります</span></div>
       <div class="ctabs"><button data-t="t1">Type I 惑星</button><button data-t="t2">Type II 恒星</button><button data-t="t3">Type III 銀河</button></div><div class="ctabbody tgbody"></div></div>
+    <div class="panel sfnote" id="sfnote"></div>
   </section>
 
   <!-- ② 年表 -->
@@ -798,7 +814,7 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ④ 宇宙マップ -->
   <section class="view space" id="v-space-map">
-    <div class="view-head"><h2>宇宙と地球</h2><p>宇宙の形（説）から大規模構造、地球まで12段階。名前や目盛りの点を押すとそこへ近づきます。地球に向かってズームインし続けると世界地図に降ります。</p></div>
+    <div class="view-head"><h2>宇宙と地球</h2><p>地球のまわりから宇宙の形まで12段階の「本線」と、そこから枝分かれする「惑星の中」「銀河の中」「マルチバース（空想）」。上の枝分かれ図から選ぶか、天体を選んでズームインし続けると中に入れます。地球に向かってズームインし続けると世界地図に降ります。</p></div>
     <div class="chips" id="splevels"></div>
     <div class="spwrap">
       <div id="spscene" class="spscene"><div id="splabels" class="splabels"></div><div id="spfade" class="spfade"></div>
@@ -810,7 +826,7 @@ footer p{margin:0 0 6px;max-width:120ch}
   </section>
 
   <section class="view space" id="v-micro">
-    <div class="view-head"><h2>ミクロの世界</h2><p>生き物から細胞、微生物、ウイルス、分子、原子、原子核、クオーク、素粒子、量子の世界、超ひも理論（仮説）まで11段階。左の一覧から選ぶと3Dで表示します。拡大し続けると次の小さな世界へ、縮小し続けると大きな世界（最後は世界地図）へ戻ります。</p></div>
+    <div class="view-head"><h2>ミクロの世界</h2><p>生き物から細胞、分子、原子、原子核、クオーク、素粒子、量子の世界までの「本線」と、そこから枝分かれする「微生物・ウイルス」「理論（仮説）：超ひも・1〜11次元」の全12段階。上の枝分かれ図か左の一覧から選ぶと3Dで表示します。拡大し続けると次の小さな世界へ移ります。</p></div>
     <div class="chips" id="mclevels"></div>
     <div class="spwrap mcwrap">
       <div class="mclist" id="mclist"></div>
@@ -823,7 +839,7 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ⑧ 系統樹 -->
   <section class="view" id="v-lineage">
-    <div class="view-head"><h2>系統樹（全分野）</h2><p>人類という幹から16分野・約1,370の要素が枝分かれしていく。2026年より先（点線）は「もしも」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線に分かれて並ぶ。時間軸は1年あたり同じ幅。消えた要素は後継に合流（マージ）する。上の分野を押すとON/OFFで絞り込めます（複数選択可）。</p></div>
+    <div class="view-head"><h2>系統樹（分野ごと）</h2><p>分野を1つ選ぶと、その分野だけの系統樹を独立した時間軸で表示する（分野どうしは混ぜない）。2026年より先（点線）は「もしも」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線と、SFノートの構想（【SF】）に分かれて並ぶ。消えた要素は後継に合流（マージ）する。</p></div>
     <div class="chips" id="gchips"></div>
     <div class="gwrap">
       <div class="gcanvas" id="gcanvas" tabindex="0" aria-label="系統樹のキャンバス。ホイールまたはピンチでズーム、ドラッグで移動">
@@ -1500,10 +1516,285 @@ const SPZ=(()=>{
     const mm=smat({color:"#e8e8e8",metalness:.3,roughness:.5});for(let i=0;i<3;i++){const c=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,.2,12),mm);c.rotation.z=Math.PI/2;c.position.set(-.1+i*.18,-.05,0);g.add(c);}
     return g;}
 
+  // ===== 忠実な描写のためのシェーダー（星雲・銀河・恒星・ブラックホール） =====
+  const GLN=`
+float hh(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
+float nn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hh(i),hh(i+vec2(1.,0.)),f.x),mix(hh(i+vec2(0.,1.)),hh(i+vec2(1.,1.)),f.x),f.y);}
+float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<6;i++){v+=a*nn(p);p=m*p;a*=.5;}return v;}
+float rdg(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<5;i++){float k=1.-abs(nn(p)*2.-1.);v+=a*k*k;p=m*p;a*=.5;}return v;}
+vec2 rot(vec2 p,float a){float c=cos(a),s=sin(a);return vec2(c*p.x-s*p.y,s*p.x+c*p.y);}
+float sdCap(vec2 p,vec2 a,vec2 b,float ra,float rb){vec2 pa=p-a,ba=b-a;float h=clamp(dot(pa,ba)/dot(ba,ba),0.,1.);return length(pa-ba*h)-mix(ra,rb,h);}
+float sdEl(vec2 p,vec2 c,vec2 r,float a){vec2 q=rot(p-c,-a)/r;return (length(q)-1.)*min(r.x,r.y);}
+float pil(vec2 pp){float d1=sdCap(pp,vec2(-.42,-1.05),vec2(-.22,.5),.19,.06),d2=sdCap(pp,vec2(.02,-1.05),vec2(.06,-.1),.13,.05),d3=sdCap(pp,vec2(.4,-1.05),vec2(.43,-.42),.11,.04);float d=min(d1,min(d2,d3));return min(d,sdEl(pp,vec2(-.16,.47),vec2(.13,.07),.6));}
+`;
+  const BBVS=`uniform float uSize;varying vec2 vUv;void main(){vUv=uv;vec4 mv=modelViewMatrix*vec4(0.,0.,0.,1.);mv.xy+=position.xy*uSize;gl_Position=projectionMatrix*mv;}`;
+  const NEBFS=`uniform float uKind,uSeed,uTime,uRot,uGain;uniform vec3 uC1,uC2,uC3;varying vec2 vUv;${GLN}
+void main(){vec2 p=rot((vUv-.5)*2.,uRot);vec2 s=vec2(uSeed*3.1,uSeed*1.7);float r=length(p);vec3 col=vec3(0.);float a=0.;
+ vec2 q=vec2(fbm(p*2.+s),fbm(p*2.+s+5.2));vec2 w=p+.32*(q-.5)*2.;float tt=uTime*.004;
+ if(uKind<.5){ // オリオン大星雲 M42（+M43）
+  vec2 c=p-vec2(-.04,.02);float d=fbm(w*2.6+s+tt);float body=exp(-dot(c*vec2(1.,1.3),c*vec2(1.,1.3))*2.6);float ang=atan(c.y,c.x);
+  float wing=exp(-dot(c,c)*1.3)*pow(.5+.5*sin(ang*2.+1.2),2.);float den=(body*1.25+wing*.6)*(.25+d*1.1);
+  vec2 m=p-vec2(-.12,.6);float m43=exp(-dot(m,m)*26.)*(.5+fbm(w*7.+s));den+=m43*.7;
+  float lane=exp(-pow((c.y-.3-c.x*.4+(fbm(w*5.)-.5)*.12)*8.,2.))*smoothstep(.75,-.1,c.x)*smoothstep(-.7,0.,c.x);
+  float dust=clamp(lane*1.1+smoothstep(.55,.82,fbm(w*3.6+s+3.))*.6*smoothstep(.15,.8,length(c)),0.,1.);
+  float core=exp(-dot(c,c)*22.);vec3 cc=mix(uC1,uC2,smoothstep(.05,.8,core*1.8+body*.25));cc=mix(cc,vec3(1.,.97,.92),core*.85);
+  col=cc*den*2.1;col*=1.-dust*.85;a=clamp(den*1.5,0.,1.);a=max(a,dust*.8*smoothstep(1.1,.35,length(c)));
+ } else if(uKind<1.5){ // カリーナ星雲（暗黒帯・鍵穴・エータカリーナ）
+  float d=fbm(w*2.2+s+tt);float body=exp(-dot(p*vec2(.85,1.2),p*vec2(.85,1.2))*1.6);float den=body*(.2+d*1.3);
+  float ridge=rdg(w*3.+s);float vlane=exp(-pow((abs(p.x+.05)-(p.y+.25)*.55)*6.,2.))*smoothstep(-.35,.6,p.y);
+  float dust=clamp(smoothstep(.5,.8,ridge)*.8+vlane*.9+smoothstep(.6,.85,fbm(w*4.+9.))*.5,0.,1.);
+  vec2 k=p-vec2(.08,-.02);float key=smoothstep(.14,.08,length(k*vec2(1.,1.6)))*smoothstep(.03,.07,length(k-vec2(0.,.05)));
+  vec3 cc=mix(uC1,uC2,smoothstep(.3,.8,d));cc=mix(cc,uC3,smoothstep(.65,.95,d)*.6);col=cc*den*2.;col*=1.-dust*.8;
+  vec2 e=rot(p-vec2(.11,.03),.6);float lobes=exp(-pow(length(e*vec2(4.,1.)-vec2(0.,.06)),2.)*900.)+exp(-pow(length(e*vec2(4.,1.)+vec2(0.,.06)),2.)*900.);
+  col+=vec3(1.,.75,.45)*lobes*1.4+vec3(1.)*exp(-dot(p-vec2(.11,.03),p-vec2(.11,.03))*4000.)*3.;col*=1.-key*.9;
+  a=clamp(den*1.6,0.,1.);a=max(a,(dust*.75+key)*smoothstep(1.,.4,r));
+ } else if(uKind<2.5){ // 環状星雲 M57
+  vec2 e=p*vec2(1.,1.28);float re=length(e);float n=fbm(w*5.+s);float ring=exp(-pow((re-.5)/.15,2.));float hole=exp(-pow(re/.42,2.))*.32;
+  float halo=exp(-pow((re-.8)/.1,2.))*.22*(.5+n)*(.6+.4*sin(atan(e.y,e.x)*9.+n*6.));
+  vec3 cc=mix(uC2,uC1,smoothstep(.36,.66,re));float den=ring*(.55+n*.9)+hole*(.6+n*.5);
+  col=cc*den*2.3+uC1*halo*1.5+vec3(.9,.95,1.)*exp(-re*re*1500.)*2.;a=clamp(den*1.3+halo,0.,1.);
+ } else if(uKind<3.5){ // らせん星雲（二重の輪と彗星状のこぶ）
+  float n=fbm(w*4.+s);float r1=length(p);vec2 p2=rot(p,.7)*vec2(1.,1.2)+vec2(.04,-.03);float r2=length(p2);
+  float ring1=exp(-pow((r1-.44)/.13,2.)),ring2=exp(-pow((r2-.66)/.1,2.))*.8;float ang=atan(p.y,p.x);
+  float knots=pow(nn(vec2(ang*38.+s.x,r1*9.)),5.)*smoothstep(.28,.42,r1)*smoothstep(.62,.44,r1);
+  vec3 cin=uC2,cmid=uC3,cout=uC1;vec3 cc=mix(cin,cmid,smoothstep(.2,.45,r1));cc=mix(cc,cout,smoothstep(.45,.7,r1));
+  float fillc=exp(-r1*r1*5.)*.55*(.4+n);float den=ring1*(.5+n)+ring2*(.4+n*.8)+fillc;col=cc*den*2.1+cin*fillc*1.2+vec3(1.,.7,.45)*knots*1.2+vec3(.85,.9,1.)*exp(-r1*r1*2500.)*2.5;
+  a=clamp(den*1.25+knots,0.,1.);
+ } else if(uKind<4.5){ // キャッツアイ星雲（同心の殻＋入れ子の泡）
+  float n=fbm(w*5.+s);float shells=pow(.5+.5*sin(r*48.+n*3.),6.)*smoothstep(.95,.35,r)*smoothstep(.2,.4,r)*.35;
+  float b1=abs(sdEl(p,vec2(0.),vec2(.18,.34),.35)),b2=abs(sdEl(p,vec2(.02,0.),vec2(.3,.16),-.5)),b3=abs(sdEl(p,vec2(0.),vec2(.11,.12),0.));
+  float edges=exp(-b1*b1*900.)+exp(-b2*b2*900.)+exp(-b3*b3*1400.)*.8;float fill=exp(-r*r*14.)*.6;
+  vec3 cc=mix(uC2,uC1,smoothstep(.1,.35,r));float lob=exp(-pow(length(rot(p,.35)*vec2(3.2,1.)-vec2(0.,.52)),2.)*20.)+exp(-pow(length(rot(p,.35)*vec2(3.2,1.)+vec2(0.,.52)),2.)*20.);
+  col=cc*(edges*(.6+n)+fill*n)*2.+uC1*lob*.9*n+uC3*shells;col+=vec3(1.)*exp(-r*r*3000.)*2.;a=clamp((edges+fill)*n*1.4+shells+lob*.6,0.,1.);
+ } else if(uKind<5.5){ // かに星雲（フィラメントの網とシンクロトロン放射）
+  vec2 e=p*vec2(1.,1.4);float re=length(e);float shell=smoothstep(.98,.72,re+(fbm(w*3.)-.5)*.25);
+  float fil=smoothstep(.55,.88,rdg(w*4.6+s))*shell;float syn=exp(-re*re*2.4)*shell*(.4+fbm(w*3.+s+2.)*.8);
+  vec3 fc=mix(uC1,uC3,nn(w*3.+s));col=fc*fil*2.2+uC2*syn*1.1+vec3(.9,.95,1.)*exp(-re*re*1200.)*2.;a=clamp(fil*1.3+syn*.9,0.,1.);
+ } else if(uKind<6.5){ // わし星雲・創造の柱
+  vec2 pp=p+(vec2(fbm(p*5.+s),fbm(p*5.+s+3.))-.5)*.1;float d=pil(pp);float e=.012;vec2 gr=vec2(pil(pp+vec2(e,0.))-d,pil(pp+vec2(0.,e))-d)/e;
+  float bg=fbm(w*2.+s+tt);vec3 bc=mix(uC2,uC3,smoothstep(.2,.9,p.y*.5+.5+(bg-.5)*.6));bc*=.35+bg*1.1;
+  float inside=smoothstep(.01,-.01,d);float depth=clamp(-d*6.,0.,1.);float lit=clamp(.55+.45*dot(normalize(gr+1e-4),normalize(vec2(-.3,1.))),0.,1.);
+  float tex=fbm(pp*10.+s);float rim=exp(-pow(max(d,0.)*30.,2.))*(.4+.6*lit);
+  vec3 pc=mix(uC1*.9,vec3(.16,.08,.04),smoothstep(0.,.6,depth))*(.45+tex*.9)*(.35+lit*.9);float tops=exp(-pow(max(-d,0.)*25.,2.))*lit*smoothstep(-.6,.3,pp.y);pc+=uC1*tops*.9;
+  col=mix(bc,pc,inside)+uC1*rim*1.1*(1.-inside);float bga=smoothstep(1.15,.25,r)*(.3+bg*.9);a=max(bga,inside*.97);
+ } else if(uKind<7.5){ // 馬頭星雲（IC434の赤い光と暗黒星雲B33）
+  float edge=-.12+(fbm(vec2(p.x*3.,0.)+s)-.5)*.12;float strat=fbm(vec2(p.x*2.2,p.y*7.)+s+tt);float red=smoothstep(edge-.02,edge+.2,p.y)*(.35+strat*1.1)*smoothstep(1.,.2,abs(p.x)*.8+max(0.,p.y-.6));
+  vec2 hp=p+(vec2(fbm(p*9.+s),fbm(p*9.+s+4.))-.5)*.05;float neck=sdEl(hp,vec2(.05,-.02),vec2(.1,.24),.15),head=sdEl(hp,vec2(-.06,.2),vec2(.17,.1),-.55),ear=sdEl(hp,vec2(.08,.33),vec2(.04,.08),.3),snout=sdEl(hp,vec2(-.2,.12),vec2(.07,.06),0.);
+  float horse=min(min(neck,head),min(ear,snout));float dark=max(smoothstep(edge+.01,edge-.04,p.y),smoothstep(.01,-.01,horse));
+  vec2 g=p-vec2(-.55,-.6);float ngc=exp(-dot(g,g)*14.)*(.5+fbm(w*5.+s));
+  col=uC1*red*1.8*(1.-dark)+uC2*ngc*1.5;col=mix(col,vec3(.05,.03,.03),dark*.92);col+=vec3(.9,.95,1.)*exp(-dot(p-vec2(.48,.78),p-vec2(.48,.78))*2500.)*3.;
+  a=clamp(red*1.2+ngc,0.,1.)*smoothstep(1.2,.6,r);a=max(a,dark*.95*smoothstep(1.,.5,r));
+ } else if(uKind>8.5){ // うすい霧
+  float den=fbm(w*1.4+s+tt)*smoothstep(1.05,.15,r);col=mix(uC1,uC2,den)*den*1.5;a=clamp(den*.9,0.,1.);
+ } else { // プレアデス（反射星雲のすじ）
+  float den=0.;vec2 st[7];st[0]=vec2(.05,.02);st[1]=vec2(-.42,-.05);st[2]=vec2(.38,.18);st[3]=vec2(.24,.34);st[4]=vec2(.12,-.26);st[5]=vec2(.42,-.06);st[6]=vec2(-.5,.02);
+  float cores=0.;for(int i=0;i<7;i++){vec2 d=p-st[i];den+=exp(-dot(d,d)*7.);float k=i<1?1.:.7;cores+=k*(exp(-dot(d,d)*2500.)*3.+exp(-dot(d,d)*120.)*.25+(exp(-abs(d.x)*260.)+exp(-abs(d.y)*260.))*exp(-length(d)*14.)*.5);}
+  float stri=fbm(vec2(rot(p,.35).x*2.5,rot(p,.35).y*14.)+s+tt);den*=.25+stri*1.1;col=mix(uC1,uC2,stri)*den*1.4+vec3(.85,.92,1.)*cores;a=clamp(den*.9+cores,0.,1.)*smoothstep(1.1,.5,r);
+ }
+ a*=smoothstep(1.02,.86,max(abs(vUv.x-.5),abs(vUv.y-.5))*2.)*smoothstep(1.4,1.,length((vUv-.5)*2.));
+ gl_FragColor=vec4(col*uGain,a);
+ #include <tonemapping_fragment>
+ #include <encodings_fragment>
+}`;
+  const NEBK={orion:0,carina:1,ring:2,helix:3,catseye:4,crab:5,eagle:6,horsehead:7,pleiades:8,fog:9};
+  function nebFX(kind,size,c1,c2,c3,rot=0){const m=new THREE.ShaderMaterial({uniforms:{uSize:{value:size},uKind:{value:NEBK[kind]},uSeed:{value:R()*10},uTime:{value:0},uRot:{value:rot},uGain:{value:.62},uC1:{value:C(c1).convertSRGBToLinear()},uC2:{value:C(c2).convertSRGBToLinear()},uC3:{value:C(c3||c2).convertSRGBToLinear()}},
+      vertexShader:BBVS,fragmentShader:NEBFS,transparent:true,depthWrite:false});
+    const me=new THREE.Mesh(new THREE.PlaneGeometry(1,1),m);me.frustumCulled=false;anims.push(t=>m.uniforms.uTime.value=t);return me;}
+  // 星（色温度・周辺減光・粒状斑）
+  const STARFS=`uniform vec3 uCol;uniform float uTime,uGran,uSpots;varying vec2 vUv;varying vec3 vN;varying vec3 vW;${GLN}
+void main(){vec3 n=normalize(vN);vec3 v=normalize(cameraPosition-vW);float mu=max(dot(n,v),0.);float limb=.35+.65*pow(mu,.55);
+ vec2 uv=vUv*vec2(2.,1.);float g=fbm(uv*uGran+uTime*.02);float cell=1.-abs(nn(uv*uGran*1.7+uTime*.05)*2.-1.);
+ float spot=uSpots*smoothstep(.72,.8,fbm(uv*6.+3.))*smoothstep(.45,.2,abs(vUv.y-.5));
+ vec3 c=uCol*(.6+g*.6+cell*.3)*limb;c*=1.-spot*.85;c+=uCol*pow(1.-mu,3.)*.12;gl_FragColor=vec4(c*1.05,1.);
+ #include <tonemapping_fragment>
+ #include <encodings_fragment>
+}`;
+  function starMesh(r,col,gran=40,spots=0,seg=64){const m=new THREE.ShaderMaterial({uniforms:{uCol:{value:C(col).convertSRGBToLinear()},uTime:{value:0},uGran:{value:gran},uSpots:{value:spots}},vertexShader:VS,fragmentShader:STARFS});anims.push(t=>m.uniforms.uTime.value=t);return sphere(r,m,seg);}
+  // コロナ・光芒（ビルボード）
+  const GLOWFS=`uniform vec3 uCol;uniform float uTime,uRays;varying vec2 vUv;${GLN}
+void main(){vec2 p=(vUv-.5)*2.;float r=length(p);float ang=atan(p.y,p.x);float st=pow(fbm(vec2(ang*3.,r*2.-uTime*.05)),2.)*uRays;
+ float g=exp(-r*5.)*1.2+exp(-r*r*40.)*.8+st*exp(-r*2.5)*.8;float spike=uRays>.5?(exp(-abs(p.y)*90.)+exp(-abs(p.x)*90.))*exp(-r*2.)*.35:0.;
+ gl_FragColor=vec4(uCol*(g+spike),clamp(g+spike,0.,1.)*smoothstep(1.,.7,r));
+ #include <tonemapping_fragment>
+ #include <encodings_fragment>
+}`;
+  function glowBB(col,size,rays=1){const m=new THREE.ShaderMaterial({uniforms:{uSize:{value:size},uCol:{value:C(col).convertSRGBToLinear()},uTime:{value:0},uRays:{value:rays}},vertexShader:BBVS,fragmentShader:GLOWFS,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
+    const me=new THREE.Mesh(new THREE.PlaneGeometry(1,1),m);me.frustumCulled=false;anims.push(t=>m.uniforms.uTime.value=t);return me;}
+  // 恒星：本体＋光芒（スペクトル型の色）
+  const SPEC={O:"#9bb0ff",B:"#aabfff",A:"#cad7ff",F:"#f8f7ff",G:"#fff4ea",K:"#ffd2a1",M:"#ffb070"};
+  function star(r,cls,glow=8,spots=0){const g=new THREE.Group();const c=SPEC[cls]||cls;g.add(starMesh(r,c,cls==="M"?14:40,spots));g.add(glowBB(c,r*glow,1));return g;}
+  // ブラックホール：降着円盤（ドップラー効果で片側が明るい）＋重力レンズで回り込む円盤の像＋光子リング
+  const DISKFS=`uniform float uTime,uIn,uOut;varying vec2 vUv;${GLN}
+void main(){vec2 p=(vUv-.5)*2.;float r=length(p);if(r<uIn||r>uOut)discard;float ang=atan(p.y,p.x);float k=(r-uIn)/(uOut-uIn);
+ float tex=fbm(vec2(ang*3.+uTime*(.6/(r+.2)),r*14.));float temp=pow(1.-k,1.6);vec3 hot=mix(vec3(1.,.42,.12),vec3(1.,.93,.82),temp);
+ float beam=.45+.55*(.5+.5*sin(ang));float I=temp*(.4+tex*.9)*beam*smoothstep(0.,.08,k)*smoothstep(1.,.6,k);gl_FragColor=vec4(hot*I*2.6,clamp(I*1.6,0.,1.));
+ #include <tonemapping_fragment>
+ #include <encodings_fragment>
+}`;
+  const LENSFS=`uniform float uTime,uIn,uOut;varying vec2 vUv;${GLN}
+void main(){vec2 p=(vUv-.5)*2.;float r=length(p);float ang=atan(p.y,p.x);float pr=exp(-pow((r-uIn*1.02)*90.,2.))*1.2;
+ float arc=smoothstep(uIn*1.03,uIn*1.15,r)*smoothstep(uOut*.7,uIn*1.4,r)*(.35+.65*abs(sin(ang)));float tex=fbm(vec2(ang*4.-uTime*.4,r*12.));
+ vec3 c=vec3(1.,.75,.45)*arc*(.3+tex)*1.4+vec3(1.,.92,.8)*pr;gl_FragColor=vec4(c,clamp(arc*.8+pr,0.,1.));
+ #include <tonemapping_fragment>
+ #include <encodings_fragment>
+}`;
+  function blackHoleFX(r){const g=new THREE.Group();const sh=sphere(r,new THREE.MeshBasicMaterial({color:"#000"}),48);g.add(sh);
+    const dm=new THREE.ShaderMaterial({uniforms:{uTime:{value:0},uIn:{value:.24},uOut:{value:1}},vertexShader:"varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",fragmentShader:DISKFS,transparent:true,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});
+    const disk=new THREE.Mesh(new THREE.PlaneGeometry(r*12,r*12),dm);disk.rotation.x=-Math.PI/2;g.add(disk);
+    const lm=new THREE.ShaderMaterial({uniforms:{uSize:{value:r*5.6},uTime:{value:0},uIn:{value:.48},uOut:{value:1}},vertexShader:BBVS,fragmentShader:LENSFS,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
+    const lens=new THREE.Mesh(new THREE.PlaneGeometry(1,1),lm);lens.frustumCulled=false;lens.renderOrder=2;g.add(lens);
+    anims.push(t=>{dm.uniforms.uTime.value=t;lm.uniforms.uTime.value=t;});return g;}
+  // 銀河（円盤の面に、対数らせんの腕・棒・バルジ・暗黒帯・HII領域を描く）
+  const GALFS=`uniform float uType,uArms,uPitch,uBulge,uDust,uSeed,uTime,uGain,uMinor,uRing;uniform vec3 uC1,uC2,uC3;varying vec2 vUv;${GLN}
+void main(){vec2 p=(vUv-.5)*2.;float r=length(p);float th=atan(p.y,p.x);vec2 s=vec2(uSeed*2.3,uSeed*1.1);float n=fbm(p*5.+s),n2=fbm(p*16.+s+3.);
+ float bulge=exp(-pow(r/uBulge,2.));float core=exp(-pow(r/(uBulge*.3),2.));vec3 col=vec3(0.);float a=0.;
+ if(uType<1.5){float rr=max(r,.02);float ph=th-log(rr/.1)/uPitch+uTime*.003;float w=(n-.5)*1.3;
+  float arm=pow(.5+.5*cos(uArms*ph+w),3.);if(uMinor>.5)arm*=.5+.5*(.5+.5*cos(uArms*.5*ph+w));
+  arm*=smoothstep(.04,.22,r)*smoothstep(1.,.5,r);
+  if(uType>.5){vec2 bp=rot(p,.47);float bar=exp(-pow(bp.x/(uBulge*2.3),2.)-pow(bp.y/(uBulge*.6),2.));bulge=max(bulge,bar*.85);arm*=smoothstep(uBulge*1.5,uBulge*2.6,r);}
+  float ring=uRing>0.?exp(-pow((r-uRing)/.07,2.))*(.5+n2):0.;
+  float disk=exp(-r/.33)*smoothstep(1.,.75,r);float dust=pow(.5+.5*cos(uArms*ph+.85+(n2-.5)*2.4),7.)*smoothstep(.07,.3,r)*smoothstep(1.,.45,r)*uDust;dust=max(dust,ring*.0);
+  float hii=smoothstep(.68,.88,n2)*(arm+ring)*1.2;
+  vec3 st=uC1*(bulge*1.3+core*1.2)+uC2*disk*(.2+arm*1.5+ring*1.2)*(.55+n*.8);st+=uC3*hii*1.3;st*=1.-dust*.8;
+  col=st;a=clamp(bulge+disk*(.35+arm)+hii+ring*disk,0.,1.);a=max(a,dust*disk*2.5);
+ } else if(uType<2.5){float re=length(p*vec2(1.,1.18));float I=exp(-7.67*(pow(max(re,.001)/.3,.25)-1.))*.03;col=uC1*I*(.92+n*.12)+uC1*core*.6;a=clamp(I*1.6,0.,1.)*smoothstep(1.,.55,re);
+ } else if(uType<3.5){float ring=exp(-pow((r-.62)/.13,2.));float dl=exp(-pow((r-.6)/.045,2.));col=uC1*(bulge*1.5+core)+uC2*ring*(.35+n*.6);col*=1.-dl*.85*uDust;a=clamp(bulge+ring*.55+dl*.7,0.,1.);
+ } else if(uType<4.5){vec2 bp=rot(p,.3);float bar=exp(-pow(bp.x/.45,2.)-pow(bp.y/.13,2.));float pa=smoothstep(.35,.75,fbm(p*3.+s))*smoothstep(1.,.3,r);float hii=smoothstep(.72,.9,n2)*pa;vec2 tr=p-vec2(-.38,.18);float ta=exp(-dot(tr,tr)*50.);
+  col=uC1*bar*1.2+uC2*pa*(.45+n)+uC3*(hii*1.4+ta*2.2);a=clamp(bar+pa*.7+hii+ta,0.,1.);
+ } else {float rr=max(r,.02);float ph=th-log(rr/.1)/uPitch;float flo=smoothstep(.45,.8,fbm(vec2(ph*3.,r*8.)+s))*smoothstep(.05,.2,r)*smoothstep(1.,.45,r);float disk=exp(-r/.35);float hii=smoothstep(.72,.9,n2)*flo;
+  vec2 g=p-vec2(.42,.25);float big=exp(-dot(g,g)*120.);col=uC1*(bulge*.6+core*.5)+uC2*disk*(.35+flo*1.3)+uC3*(hii*1.3+big*2.5);a=clamp(disk*(.5+flo)+hii+big+bulge*.5,0.,1.);}
+ gl_FragColor=vec4(col*uGain,a*smoothstep(1.,.8,r));
+ #include <tonemapping_fragment>
+ #include <encodings_fragment>
+}`;
+  const GALT={spiral:0,barred:1,elliptical:2,sombrero:3,irregular:4,flocculent:5};
+  function galFX(o){const m=new THREE.ShaderMaterial({uniforms:{uSize:{value:o.size},uType:{value:GALT[o.type]},uArms:{value:o.arms||2},uPitch:{value:o.pitch||.3},uBulge:{value:o.bulge||.12},uDust:{value:o.dust??.8},uSeed:{value:o.seed??R()*10},uTime:{value:0},uGain:{value:o.gain||1},uMinor:{value:o.minor||0},uRing:{value:o.ring||0},
+      uC1:{value:C(o.c1||"#ffe2b8").convertSRGBToLinear()},uC2:{value:C(o.c2||"#b8ccff").convertSRGBToLinear()},uC3:{value:C(o.c3||"#ff6a9a").convertSRGBToLinear()}},
+      vertexShader:o.bb?BBVS:"varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",fragmentShader:GALFS,transparent:true,depthWrite:false,side:THREE.DoubleSide,blending:o.add?THREE.AdditiveBlending:THREE.NormalBlending});
+    const me=new THREE.Mesh(o.bb?new THREE.PlaneGeometry(1,1):new THREE.PlaneGeometry(o.size,o.size),m);if(!o.bb)me.rotation.x=-Math.PI/2;me.frustumCulled=false;anims.push(t=>m.uniforms.uTime.value=t);return me;}
+  // 銀河の星（腕に沿った点）
+  function galStars(o){const N=o.n||20000,pos=[],col=[];const cA=C(o.c1||"#ffe2b8"),cB=C(o.c2||"#b8ccff"),cH=C(o.c3||"#ff6a9a");const Rr=o.size/2;
+    for(let i=0;i<N;i++){let x,y,z,c;const u=R();
+      if(o.type==="elliptical"){const r=Rr*.55*Math.pow(R(),2.2),a=R()*6.283,v=R()*2-1;x=Math.cos(a)*Math.sqrt(1-v*v)*r;z=Math.sin(a)*Math.sqrt(1-v*v)*r;y=v*r*.85;c=cA;}
+      else if(u<.22){const r=Rr*(o.bulge||.12)*1.4*Math.pow(R(),1.6),a=R()*6.283,v=R()*2-1;x=Math.cos(a)*Math.sqrt(1-v*v)*r;z=Math.sin(a)*Math.sqrt(1-v*v)*r;y=v*r*.6;c=cA;}
+      else{const k=Math.floor(R()*(o.arms||2));const rr=.12+Math.pow(R(),.8)*.82;let a=k*6.283/(o.arms||2)+Math.log(rr/.1)/(o.pitch||.3)+(R()-.5)*(o.type==="irregular"||o.type==="flocculent"?3:.55);
+        if(o.type==="barred"&&rr<(o.bulge||.12)*2.4){const t=(R()*2-1);x=t*Rr*(o.bulge||.12)*2.3;z=(R()-.5)*Rr*(o.bulge||.12)*.9;const c0=Math.cos(.47),s0=Math.sin(.47);[x,z]=[x*c0+z*s0,-x*s0+z*c0];}
+        else{x=Math.cos(a)*rr*Rr;z=Math.sin(a)*rr*Rr;}y=(R()-.5)*Rr*.02*(1+3*Math.exp(-rr*6));c=R()<.12?cH:R()<.55?cB:cA;}
+      pos.push(x,y,-z);const b=.45+R()*.55;col.push(c.r*b,c.g*b,c.b*b);}
+    return points(pos,null,o.ps||Rr*.012,.9,true,col);}
+
+  // ===== 惑星・衛星（GPUで模様を描く：継ぎ目なし・実際の地名の位置に合わせる） =====
+  const PL_VS=`varying vec3 vP;varying vec3 vN;varying vec3 vW;void main(){vP=normalize(position);vN=normalize(mat3(modelMatrix)*normal);vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}`;
+  const GLN3=`
+float h3(vec3 p){p=fract(p*vec3(.1031,.1030,.0973));p+=dot(p,p.yxz+33.33);return fract((p.x+p.y)*p.z);}
+float n3(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+ return mix(mix(mix(h3(i),h3(i+vec3(1,0,0)),f.x),mix(h3(i+vec3(0,1,0)),h3(i+vec3(1,1,0)),f.x),f.y),mix(mix(h3(i+vec3(0,0,1)),h3(i+vec3(1,0,1)),f.x),mix(h3(i+vec3(0,1,1)),h3(i+vec3(1,1,1)),f.x),f.y),f.z);}
+float f3(vec3 p){float v=0.,a=.5;for(int i=0;i<6;i++){v+=a*n3(p);p=p*2.03+vec3(1.7,9.2,3.1);a*=.5;}return v;}
+float crat(vec3 p,float sc){vec3 q=p*sc;vec3 i=floor(q),f=fract(q);float m=1.;for(int z=-1;z<=1;z++)for(int y=-1;y<=1;y++)for(int x=-1;x<=1;x++){vec3 g=vec3(float(x),float(y),float(z));vec3 o=vec3(h3(i+g),h3(i+g+11.),h3(i+g+23.));float d=length(g+o-f);m=min(m,d);}return m;}
+float spot(float la,float lo,float cla,float clo,float wl,float hl){float dl=lo-clo;dl=mod(dl+3.14159,6.28318)-3.14159;vec2 d=vec2(dl*cos(cla)/wl,(la-cla)/hl);return exp(-dot(d,d));}
+`;
+  const PL_FS=`uniform float uKind,uOff;uniform vec3 uSun;uniform float uTime;varying vec3 vP;varying vec3 vN;varying vec3 vW;${GLN3}
+const float D=0.0174533;
+vec3 albedo(vec3 p,out float atm){float la=asin(clamp(p.y,-1.,1.));float lo=atan(-p.z,p.x)-uOff;atm=0.;vec3 c=vec3(.5);
+ if(uKind<.5){ // 水星
+  float n=f3(p*6.);float cr=crat(p,9.);float cr2=crat(p,22.);c=vec3(.55,.53,.5)*(.75+n*.45);c*=.8+.25*smoothstep(.05,.3,cr)+.12*smoothstep(.05,.25,cr2);c+=vec3(.35)*smoothstep(.12,.0,cr)*.6;
+  c=mix(c,vec3(.68,.64,.58),spot(la,lo,30.5*D,170.*D,.35,.3)*.5);
+ } else if(uKind<1.5){ // 金星（雲頂）
+  float sw=f3(vec3(lo*2.,la*7.,uTime*.01)+p*3.);float y=sin(lo*1.+la*4.+sw*2.);c=mix(vec3(.93,.85,.62),vec3(.84,.72,.5),smoothstep(-.2,.9,y)*.55+sw*.25);atm=.6;
+ } else if(uKind<2.5){ // 月（表側の海の配置）
+  float n=f3(p*5.);float hi=.72+n*.3;float m=0.;
+  m+=spot(la,lo,32.8*D,-15.6*D,.27,.2);m+=spot(la,lo,28.*D,17.5*D,.15,.13);m+=spot(la,lo,8.5*D,31.4*D,.2,.12);m+=spot(la,lo,17.*D,59.1*D,.1,.08);
+  m+=spot(la,lo,-7.8*D,51.3*D,.12,.12);m+=spot(la,lo,-15.2*D,35.5*D,.08,.08);m+=spot(la,lo,-21.3*D,-16.6*D,.16,.12);m+=spot(la,lo,-24.4*D,-38.6*D,.08,.07);
+  m+=spot(la,lo,18.4*D,-57.4*D,.42,.38);m+=spot(la,lo,56.*D,1.4*D,.4,.05);m+=spot(la,lo,13.*D,3.6*D,.06,.05);m+=spot(la,lo,-10.*D,-22.*D,.1,.08);m+=spot(la,lo,-1.*D,-60.*D,.25,.25);
+  m=smoothstep(.35,.9,m+(n-.5)*.4);c=mix(vec3(.72,.7,.66)*hi,vec3(.3,.3,.32)*(.8+n*.4),m);float cr=crat(p,14.);c*=.88+.18*smoothstep(.04,.25,cr);
+  vec3 ty=vec3(cos(-43.3*D)*cos(-11.2*D),sin(-43.3*D),-cos(-43.3*D)*sin(-11.2*D));float dt=acos(clamp(dot(p,ty),-1.,1.));float ang=atan(dot(cross(ty,p),vec3(0,1,0)),dot(p,vec3(0,1,0)));
+  c+=vec3(.5)*smoothstep(.06,.0,dt)+vec3(.25)*smoothstep(.9,.0,dt)*pow(n3(vec3(ang*6.,0.,0.)),4.)*.8;
+  vec3 co=vec3(cos(9.6*D)*cos(-20.*D),sin(9.6*D),-cos(9.6*D)*sin(-20.*D));c+=vec3(.3)*smoothstep(.04,.0,acos(clamp(dot(p,co),-1.,1.)));
+ } else if(uKind<3.5){ // 火星
+  float n=f3(p*4.);float n2=f3(p*16.);c=mix(vec3(.74,.4,.22),vec3(.82,.52,.3),n);float d=0.;
+  d+=spot(la,lo,8.4*D,69.5*D,.13,.2);d+=spot(la,lo,45.*D,-30.*D,.3,.12);d+=spot(la,lo,-25.*D,-40.*D,.3,.12);d+=spot(la,lo,-20.*D,100.*D,.45,.1);d+=spot(la,lo,-30.*D,160.*D,.5,.12);
+  d+=spot(la,lo,-25.*D,-5.*D,.3,.1);d+=spot(la,lo,-27.*D,-85.*D,.07,.06);d+=spot(la,lo,10.*D,25.*D,.18,.08);
+  d=smoothstep(.3,.95,d+(n2-.5)*.5);c=mix(c,vec3(.36,.22,.15),d*.75);
+  c=mix(c,vec3(.95,.8,.62),spot(la,lo,-42.4*D,70.5*D,.22,.15)*.6);
+  float vm=exp(-pow((la+12.*D+sin(lo*3.)*.02)/(1.8*D),2.))*smoothstep(-110.*D,-90.*D,lo)*smoothstep(-35.*D,-55.*D,lo);c=mix(c,vec3(.3,.17,.12),vm*.85);
+  float om=spot(la,lo,18.65*D,-133.8*D,.07,.07);c=mix(c,vec3(.55,.35,.25),om);c+=vec3(.12,.06,.03)*smoothstep(.55,.95,om);
+  c=mix(c,vec3(.62,.38,.25),(spot(la,lo,1.5*D,-112.*D,.03,.03)+spot(la,lo,-9.*D,-121.*D,.03,.03)+spot(la,lo,12.*D,-104.*D,.03,.03))*.8);
+  float cap=smoothstep(78.*D,84.*D,la+n2*.06)+smoothstep(-80.*D,-86.*D,la-n2*.06);c=mix(c,vec3(.97,.95,.93),cap);atm=.12;
+ } else if(uKind<4.5){ // 木星（帯と縞・大赤斑）
+  float t=f3(vec3(lo*3.,la*24.,uTime*.003));float l=la/D+(t-.5)*3.;
+  vec3 zone=vec3(.93,.87,.75),belt=vec3(.62,.42,.28),polar=vec3(.62,.6,.58),eq=vec3(.88,.75,.55);
+  c=zone;c=mix(c,eq,smoothstep(7.,3.,abs(l)));c=mix(c,belt,smoothstep(6.,8.,l)*smoothstep(18.,16.,l));c=mix(c,belt,smoothstep(-6.,-8.,l)*smoothstep(-21.,-18.,l));
+  c=mix(c,belt*1.1,(smoothstep(24.,26.,l)*smoothstep(32.,30.,l)+smoothstep(-28.,-30.,l)*smoothstep(-36.,-34.,l))*.8);
+  c=mix(c,belt*1.15,(smoothstep(36.,38.,abs(l))*smoothstep(46.,44.,abs(l)))*.6);c=mix(c,polar,smoothstep(45.,60.,abs(l)));
+  float sw=f3(vec3(lo*8.,la*40.,uTime*.005));c*=.85+sw*.3;
+  float gr=spot(la,lo,-22.*D,-60.*D,.16,.075);float gs=f3(vec3(lo*20.,la*20.,0.));c=mix(c,vec3(.78,.38,.22)*(.85+gs*.3),smoothstep(.25,.75,gr));c=mix(c,vec3(.9,.82,.7),smoothstep(.8,.95,gr)*.3);
+  c=mix(c,vec3(.95,.92,.88),spot(la,lo,-33.*D,40.*D,.04,.025)*.8);atm=.25;
+ } else if(uKind<5.5){ // 土星（淡い帯・北極の六角形）
+  float t=f3(vec3(lo*2.,la*20.,0.));float l=la/D+(t-.5)*2.;c=vec3(.9,.82,.6);
+  c=mix(c,vec3(.78,.66,.45),.5+.5*sin(l*.35));c=mix(c,vec3(.95,.88,.68),smoothstep(10.,0.,abs(l))*.6);c=mix(c,vec3(.6,.62,.6),smoothstep(55.,75.,abs(l)));
+  float r=90.-l;float a=mod(lo+.3,1.0472)-.5236;float hx=12./cos(a);c=mix(c,vec3(.42,.48,.52),smoothstep(hx+1.,hx-1.,r)*step(0.,l)*.8);c*=.9+f3(p*20.)*.15;atm=.3;
+ } else if(uKind<6.5){ // 天王星
+  float t=f3(vec3(lo,la*12.,0.));c=vec3(.62,.86,.88)*(.95+t*.08);c=mix(c,vec3(.78,.93,.94),smoothstep(40.*D,80.*D,abs(la))*.5);atm=.55;
+ } else if(uKind<7.5){ // 海王星（暗斑と白い雲）
+  float t=f3(vec3(lo*2.,la*18.,uTime*.004));c=vec3(.25,.42,.88)*(.88+t*.25);c=mix(c,vec3(.18,.3,.72),.5+.5*sin(la*9.));
+  c=mix(c,vec3(.1,.16,.45),spot(la,lo,-20.*D,-40.*D,.13,.07));c+=vec3(.7)*smoothstep(.6,.9,spot(la,lo,-25.*D,-30.*D,.12,.02)+f3(vec3(lo*6.,la*50.,0.))*.4)*.6;atm=.6;
+ } else if(uKind<8.5){ // 冥王星（ハート形のトンボー領域）
+  float n=f3(p*5.);c=mix(vec3(.75,.65,.52),vec3(.88,.78,.65),n);float heart=smoothstep(.4,.7,spot(la,lo,25.*D,175.*D,.3,.35)+spot(la,lo,5.*D,-170.*D,.25,.3)*.8);c=mix(c,vec3(.97,.94,.9),heart);
+  float cth=smoothstep(.35,.7,spot(la,lo,-5.*D,100.*D,.7,.25));c=mix(c,vec3(.32,.16,.1),cth*.85);
+ } else if(uKind<9.5){ // イオ
+  float n=f3(p*5.);c=mix(vec3(.92,.86,.42),vec3(.88,.66,.3),n);c=mix(c,vec3(.95,.95,.85),smoothstep(.6,.75,f3(p*9.+4.)));c=mix(c,vec3(.15,.1,.06),smoothstep(.82,.86,f3(p*12.+9.)));c=mix(c,vec3(.7,.3,.15),smoothstep(.7,.8,f3(p*7.+2.))*.6);
+ } else if(uKind<10.5){ // エウロパ
+  float n=f3(p*4.);c=mix(vec3(.9,.86,.78),vec3(.78,.68,.55),n*.6);float ln=1.-abs(n3(p*14.)*2.-1.);c=mix(c,vec3(.55,.35,.2),smoothstep(.92,.99,ln)*.8);
+ } else if(uKind<11.5){ // ガニメデ
+  float n=f3(p*4.);c=mix(vec3(.42,.38,.33),vec3(.7,.66,.6),smoothstep(.4,.6,n));c*=.85+.2*crat(p,12.);
+ } else if(uKind<12.5){ // カリスト
+  float n=f3(p*5.);c=vec3(.3,.27,.23)*(.8+n*.4);c+=vec3(.5)*smoothstep(.12,.0,crat(p,16.))*.7;
+ } else { // タイタン
+  float n=f3(vec3(lo*2.,la*6.,0.));c=mix(vec3(.85,.6,.25),vec3(.75,.5,.2),n*.5+smoothstep(.2,.6,abs(la))*.3);atm=.9;
+ }
+ return c;}
+void main(){vec3 n=normalize(vN);vec3 L=normalize(uSun-vW);vec3 v=normalize(cameraPosition-vW);float atm;vec3 a=albedo(normalize(vP),atm);
+ float dif=max(dot(n,L),0.);float mu=max(dot(n,v),0.);float limb=mix(1.,.55+.45*pow(mu,.5),step(.2,atm));
+ vec3 col=a*(dif*1.35+.07)*limb;float rim=pow(1.-mu,3.)*atm;col+=a*rim*smoothstep(-.2,.3,dot(n,L))*.6;
+ gl_FragColor=vec4(col,1.);
+ #include <tonemapping_fragment>
+ #include <encodings_fragment>
+}`;
+  const PLK={mercury:0,venus:1,moon:2,mars:3,jupiter:4,saturn:5,uranus:6,neptune:7,pluto:8,io:9,europa:10,ganymede:11,callisto:12,titan:13};
+  function planetMat(kind,sun=V(0,0,0),off=0){const m=new THREE.ShaderMaterial({uniforms:{uKind:{value:PLK[kind]},uOff:{value:off},uSun:{value:sun.clone()},uTime:{value:0}},vertexShader:PL_VS,fragmentShader:PL_FS});anims.push(t=>m.uniforms.uTime.value=t);return m;}
+  function planetGPU(r,kind,sun,seg=72,off=0){return sphere(r,planetMat(kind,sun,off),seg);}
+  // 土星の環（実際の環の位置：C環・B環・カッシーニの間隙・A環・エンケの間隙・F環）＋土星の影
+  const RING_FS=`uniform float uR;uniform vec3 uC,uSun;uniform float uKind;varying vec3 vW;varying vec3 vL;${GLN3}
+void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
+ if(uKind<.5){
+  if(r>1.239&&r<1.527){op=.12+.08*n3(vec3(r*300.,0.,0.));c=vec3(.6,.55,.48);}
+  else if(r>=1.527&&r<1.951){op=.75+.2*n3(vec3(r*500.,0.,0.));c=vec3(.92,.85,.68)*(.85+.25*n3(vec3(r*120.,0.,0.)));}
+  else if(r>=1.951&&r<2.027){op=.05;}
+  else if(r>=2.027&&r<2.269){op=.55+.15*n3(vec3(r*400.,0.,0.));c=vec3(.85,.78,.62);if(abs(r-2.214)<.006||abs(r-2.265)<.002)op=.02;}
+  else if(abs(r-2.326)<.004){op=.6;c=vec3(.9);}
+ } else { if(abs(r-1.64)<.006||abs(r-1.67)<.004||abs(r-1.73)<.004||abs(r-1.85)<.004){op=.28;c=vec3(.32,.33,.36);} if(abs(r-2.0)<.012){op=.45;c=vec3(.38,.39,.42);} }
+ if(op<.01)discard;vec3 d=normalize(uSun-vW);vec3 o=vW-uC;float b=dot(o,d),cc=dot(o,o)-uR*uR;float sh=(b<0.&&b*b-cc>0.)?.12:1.;
+ gl_FragColor=vec4(c*sh*1.1,op);
+ #include <tonemapping_fragment>
+ #include <encodings_fragment>
+}`;
+  function ringsFX(r,kind,sun,center){const inner=kind?1.6:1.2,outer=kind?2.05:2.36;const m=new THREE.ShaderMaterial({uniforms:{uR:{value:r},uC:{value:center||V(0,0,0)},uSun:{value:sun.clone()},uKind:{value:kind||0}},
+      vertexShader:"varying vec3 vW;varying vec3 vL;void main(){vL=position;vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}",fragmentShader:RING_FS,transparent:true,side:THREE.DoubleSide,depthWrite:false});
+    const g=new THREE.RingGeometry(r*inner,r*outer,256,4);const me=new THREE.Mesh(g,m);me.rotation.x=-Math.PI/2;return me;}
+  // ---- 断面（中をのぞく）：4分の1を切り取った球と、層ごとの半円 ----
+  function cutaway(r,shellMat,layers,group){const g=group||new THREE.Group();
+    const geo=new THREE.SphereGeometry(r,128,64,0,Math.PI*1.5);const sh=new THREE.Mesh(geo,shellMat);g.add(sh);
+    let prev=0;layers.forEach(([f,nm,col,emi])=>{const ri=r*f;const mat=emi?new THREE.MeshBasicMaterial({color:C(col).lerp(C(emi),.25),side:THREE.DoubleSide}):new THREE.MeshBasicMaterial({color:C(col).multiplyScalar(.82),side:THREE.DoubleSide});
+      const a=new THREE.Mesh(new THREE.RingGeometry(r*prev,ri,96,1,Math.PI/2,Math.PI),mat);g.add(a);const b=a.clone();b.rotation.y=-Math.PI/2;g.add(b);
+      const lm=new THREE.MeshBasicMaterial({color:"#000",transparent:true,opacity:.35,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2});const l1=new THREE.Mesh(new THREE.RingGeometry(ri*.996,ri*1.004,96,1,Math.PI/2,Math.PI),lm);g.add(l1);const l2=l1.clone();l2.rotation.y=-Math.PI/2;g.add(l2);
+      prev=f;});
+    return g;}
+
   const gal=(l,b)=>{l*=Math.PI/180;b*=Math.PI/180;return V(Math.cos(b)*Math.cos(l),Math.sin(b),Math.cos(b)*Math.sin(l));};
   function diskTex(){return canvasTex("disk",256,256,(g,w,h)=>{const r=g.createRadialGradient(128,128,40,128,128,128);r.addColorStop(0,"rgba(0,0,0,0)");r.addColorStop(.32,"rgba(255,250,230,1)");r.addColorStop(.5,"rgba(255,170,60,.95)");r.addColorStop(.75,"rgba(200,70,20,.5)");r.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=r;g.fillRect(0,0,w,h);
     g.globalCompositeOperation="destination-out";for(let i=0;i<60;i++){g.globalAlpha=.25*R();g.beginPath();g.arc(128,128,50+R()*75,R()*6.3,R()*6.3+.6);g.lineWidth=1+R()*3;g.stroke();}});}
-  function blackHole(r,name){const g=new THREE.Group();g.add(sphere(r,new THREE.MeshBasicMaterial({color:"#000"}),32));
+  function blackHole(r,name){return blackHoleFX(r*1.15);}
+  function blackHoleOld(r,name){const g=new THREE.Group();g.add(sphere(r,new THREE.MeshBasicMaterial({color:"#000"}),32));
     const dm=new THREE.MeshBasicMaterial({map:diskTex(),transparent:true,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,depthWrite:false});
     const d=new THREE.Mesh(new THREE.PlaneGeometry(r*10,r*10),dm);d.rotation.x=-Math.PI/2+.25;g.add(d);const d2=d.clone();d2.rotation.set(0,0,0);d2.scale.setScalar(.62);d2.material=dm.clone();d2.material.opacity=.55;g.add(d2);
     const ring=new THREE.Mesh(new THREE.TorusGeometry(r*1.5,r*.05,8,64),new THREE.MeshBasicMaterial({color:"#ffe2a8"}));g.add(ring);
@@ -1609,7 +1900,7 @@ const SPZ=(()=>{
    {id:"moon",name:"地球と月",center:[0,0,0],unit:"1目盛＝1000km",desc:"月は約38万km先。2026年4月、アルテミスIIの4人が54年ぶりに月の近くまで行き、人類の最遠記録を更新した。",dist:1100,min:6,max:4000,
     build(){sunLight(V(-1,.1,.4).multiplyScalar(2000));
       const e=earthMesh(6.371,V(-1,.1,.4));scene.add(e);anims.push(t=>e.rotation.y=t*.02);scene.add(atmoMesh(6.371,V(-1,.1,.4)));scene.add(sprite("#6fb6ff",16,.25));obj("earth","地球",e,25,"","—");
-      const mo=orbit(384.4,"#6a7aa0",.5);scene.add(mo);const m=planet(1.737,T.moon());m.position.set(384.4,0,0);scene.add(m);obj("moon","月",m,8,"直径3474km。1969〜72年に12人が月面を歩いた。2027年にアルテミスIIIで再着陸の予定。","約384,400km");if(T1())t1Moon(m);
+      const mo=orbit(384.4,"#6a7aa0",.5);scene.add(mo);const m=planetGPU(1.737,"moon",V(-1,.1,.4).multiplyScalar(2000),96);m.rotation.y=Math.PI;m.position.set(384.4,0,0);scene.add(m);obj("moon","月",m,8,"直径3474km。1969〜72年に12人が月面を歩いた。2027年にアルテミスIIIで再着陸の予定。","約384,400km");if(T1())t1Moon(m);
       if(ok(2026)){const pts=[V(6.8,0,0),V(120,30,-18),V(300,30,-30),V(390,8,-10),V(392,-4,6),V(380,-12,10),V(300,-30,30),V(120,-30,18),V(6.8,0,0)];
       const cu=new THREE.CatmullRomCurve3(pts);const tl=new THREE.Line(new THREE.BufferGeometry().setFromPoints(cu.getPoints(300)),new THREE.LineBasicMaterial({color:"#f4b942",transparent:true,opacity:.85}));scene.add(tl);
       const ori=sphere(1.2,new THREE.MeshBasicMaterial({color:"#ffd27a"}),12);scene.add(ori);anims.push(t=>ori.position.copy(cu.getPoint((t*.02)%1)));}
@@ -1621,12 +1912,12 @@ const SPZ=(()=>{
     }},
    {id:"inner",name:"内太陽系と黄道十二星座",unit:"1目盛＝1億5000万km（1天文単位）",desc:"太陽と、水星・金星・地球・火星。その外側に小惑星帯。遠くには、太陽が1年かけて通る道（黄道）に沿って十二星座が並ぶ（星座の距離は模式的）。惑星の大きさは誇張しています。",dist:900,min:12,max:3600,
     build(){scene.add(new THREE.PointLight("#fff3dc",2.2,0,0));scene.add(new THREE.AmbientLight("#334466",.25));
-      const s=sphere(14,new THREE.MeshBasicMaterial({map:T.sun()}));scene.add(s);s.add(sprite("#ffb347",90,.8));s.add(sprite("#fff2c0",40,.6));anims.push(t=>s.rotation.y=t*.03);
+      const s=starMesh(14,"#fff0d0",48,.6,96);scene.add(s);s.add(glowBB("#ffb347",120,1));anims.push(t=>s.rotation.y=t*.03);
       for(let i=0;i<6;i++){const pr=new THREE.Mesh(new THREE.TorusGeometry(3+R()*3,.35,6,24,Math.PI),new THREE.MeshBasicMaterial({color:"#ff7a2a",transparent:true,opacity:.8}));const a=R()*6.28,b=(R()-.5)*2;pr.position.set(Math.cos(a)*Math.cos(b)*13.5,Math.sin(b)*13.5,Math.sin(a)*Math.cos(b)*13.5);pr.lookAt(0,0,0);pr.rotateY(Math.PI/2);s.add(pr);}
       obj("sun","太陽",s,90,"直径139万km、地球の109倍。表面は約6000℃、中心は約1600万℃。核融合で輝き、太陽系の質量の99.8%を占める。プロミネンス（赤い炎のアーチ）が噴き出している。","約1億5000万km（地球から）");if(T2(2500))t2Inner(s);
       const P=[["mercury","水星",39,2,null,T.moon(),"太陽に最も近い。昼は430℃、夜は−180℃。",.24],["venus","金星",72,3.6,null,T.bands("venus",["#e8c98a","#d9b46e","#f0dcae"]),"厚い二酸化炭素の大気で表面は460℃。",.62],["earth","地球",100,3.8,null,T.earth(),"生命が確認されている唯一の星。",1],["mars","火星",152,2.6,null,T.mars(),"探査車が走り回る赤い惑星。将来の有人探査の目標。",1.88]];
-      const PL={};P.forEach(([id,nm,a,r,col,tex,d,per],i)=>{scene.add(orbit(a,"#4a5a80",.55));const p=planet(r,tex||null,col?{color:col}:{});const g=new THREE.Group();g.add(p);const ph=i*1.7;anims.push(t=>{const q=ph+t*.25/per;g.position.set(Math.cos(q)*a,0,Math.sin(q)*a);p.rotation.y=t*.3;});scene.add(g);PL[id]=g;obj(id,nm,g,r*9,d,(a/100).toFixed(2)+"天文単位");});
-      const moon=sphere(.9,smat({map:T.moon()}),16);PL.earth.add(moon);anims.push(t=>moon.position.set(Math.cos(t*.8)*7,0,Math.sin(t*.8)*7));
+      const PL={};P.forEach(([id,nm,a,r,col,tex,d,per],i)=>{scene.add(orbit(a,"#4a5a80",.55));const p=id==="earth"?planet(r,tex):planetGPU(r,id,V(0,0,0),64);const g=new THREE.Group();g.add(p);const ph=i*1.7;anims.push(t=>{const q=ph+t*.25/per;g.position.set(Math.cos(q)*a,0,Math.sin(q)*a);p.rotation.y=t*.3;});scene.add(g);PL[id]=g;obj(id,nm,g,r*9,d,(a/100).toFixed(2)+"天文単位");});
+      const moon=planetGPU(.9,"moon",V(0,0,0),32);PL.earth.add(moon);anims.push(t=>moon.position.set(Math.cos(t*.8)*7,0,Math.sin(t*.8)*7));
       [[.35,4.5,1.6],[.25,6.5,.9]].forEach(([r,d,sp],i)=>{const m=sphere(r,smat({color:"#8a7a6a"}),8);PL.mars.add(m);anims.push(t=>m.position.set(Math.cos(t*sp+i)*d,0,Math.sin(t*sp+i)*d));});
       const om=new THREE.Object3D();om.position.set(0,1.2,2.3);PL.mars.add(om);obj("olympus","オリンポス山（火星）",om,10,"太陽系最大の火山。高さ約2万1900m、エベレストの約2.5倍。","火星");
       const ce=sphere(1.2,smat({color:"#8f8a84"}),12);ce.position.set(277,3,-40);scene.add(ce);obj("ceres","ケレス（準惑星）",ce,14,"小惑星帯で最大の天体。ドーンが探査した。","2.8天文単位");
@@ -1650,17 +1941,16 @@ const SPZ=(()=>{
     }},
    {id:"outer",name:"外太陽系",unit:"1目盛＝15億km（10天文単位）",desc:"木星・土星・天王星・海王星、冥王星とカイパーベルト。ボイジャー1号・2号は太陽系の外へ向かっている。",dist:1500,min:15,max:5000,
     build(){scene.add(new THREE.PointLight("#fff3dc",2.6,0,0));scene.add(new THREE.AmbientLight("#334466",.35));
-      const s=sphere(6,new THREE.MeshBasicMaterial({color:"#ffd27a"}));scene.add(s);s.add(sprite("#ffb347",60,.8));obj("sun","太陽",s,60,"ここから見ると、明るい星の一つに見え始める。","—");
+      const s=starMesh(6,"#fff0d0",48,.5,64);scene.add(s);s.add(glowBB("#ffb347",70,1));obj("sun","太陽",s,60,"ここから見ると、明るい星の一つに見え始める。","—");
       const P=[["jupiter","木星",52,7,T.bands("jupiter",["#d8b48a","#c08a5a","#efe0c8","#a8724a","#e6caa2"]),"太陽系最大の惑星。地球の11倍の直径。大赤斑は地球より大きな嵐。",11.9],
         ["saturn","土星",95,6,T.bands("saturn",["#e8d6a8","#d4bd8a","#f2e6c4"]),"美しい環を持つ。環の多くは氷のかけら。",29.5],
         ["uranus","天王星",192,4,T.bands("uranus",["#9fe0e6","#8cd2dc"]),"横倒しで自転する氷の惑星。",84],["neptune","海王星",301,4,T.bands("neptune",["#3f6fe0","#5a86ee"]),"太陽系で最も強い風が吹く。",165]];
-      P.forEach(([id,nm,a,r,tex,d,per],i)=>{scene.add(orbit(a,"#4a5a80",.5));const p=planet(r,tex);const g=new THREE.Group();g.add(p);
-        if(id==="saturn"){const rg=new THREE.Mesh(new THREE.RingGeometry(r*1.3,r*2.3,96),new THREE.MeshBasicMaterial({map:T.ring(),side:THREE.DoubleSide,transparent:true}));
-          const uv=rg.geometry.attributes.uv,pos=rg.geometry.attributes.position;for(let k=0;k<uv.count;k++){const v=V(pos.getX(k),pos.getY(k),0);uv.setXY(k,(v.length()-r*1.3)/(r*1.0),.5);}rg.rotation.x=Math.PI/2.3;g.add(rg);}
-        if(id==="jupiter"){[["イオ",11,2.4],["エウロパ",14,1.9],["ガニメデ",18,1.3],["カリスト",23,.9]].forEach(([mn,d2,sp],k)=>{const m=sphere(.7,smat({color:["#e8d06a","#d8cfc0","#9a8f84","#6f665e"][k]}),12);g.add(m);anims.push(t=>m.position.set(Math.cos(t*sp+k)*d2,0,Math.sin(t*sp+k)*d2));});
+      P.forEach(([id,nm,a,r,tex,d,per],i)=>{scene.add(orbit(a,"#4a5a80",.5));const p=planetGPU(r,id,V(0,0,0),72);const g=new THREE.Group();g.add(p);
+        if(id==="saturn"||id==="uranus"){const tilt=new THREE.Group();g.add(tilt);g.remove(p);tilt.add(p);tilt.rotation.z=id==="saturn"?26.7*Math.PI/180:97.8*Math.PI/180;const rg=ringsFX(r,id==="uranus"?1:0,V(0,0,0));tilt.add(rg);anims.push(()=>g.getWorldPosition(rg.material.uniforms.uC.value));}
+        if(id==="jupiter"){[["イオ",11,2.4],["エウロパ",14,1.9],["ガニメデ",18,1.3],["カリスト",23,.9]].forEach(([mn,d2,sp],k)=>{const m=planetGPU(.7,["io","europa","ganymede","callisto"][k],V(0,0,0),24);g.add(m);anims.push(t=>m.position.set(Math.cos(t*sp+k)*d2,0,Math.sin(t*sp+k)*d2));});
           const rs=new THREE.Object3D();rs.position.set(4,-2.6,5.2);p.add(rs);obj("grs","大赤斑（木星）",rs,22,"地球がすっぽり入る大きさの巨大な嵐。300年以上前から観測されている。","木星");
           const gm=new THREE.Object3D();g.add(gm);anims.push(t=>gm.position.set(Math.cos(t*1.3+2)*18,0,Math.sin(t*1.3+2)*18));obj("europa","木星の衛星（イオ・エウロパなど）",gm,30,"ガリレオが1610年に発見した4つの大きな衛星。エウロパの氷の下には海があり、生命の可能性が探られている。","木星");}
-        if(id==="saturn"){const ti=sphere(.9,smat({color:"#d9a24a"}),12);g.add(ti);anims.push(t=>ti.position.set(Math.cos(t*.6)*20,0,Math.sin(t*.6)*20));obj("titan","タイタン（土星の衛星）",ti,12,"厚い大気とメタンの湖を持つ。2028年にドローン探査機ドラゴンフライが打ち上げ予定。","土星");}
+        if(id==="saturn"){const ti=planetGPU(.9,"titan",V(0,0,0),24);g.add(ti);anims.push(t=>ti.position.set(Math.cos(t*.6)*20,0,Math.sin(t*.6)*20));obj("titan","タイタン（土星の衛星）",ti,12,"厚い大気とメタンの湖を持つ。2028年にドローン探査機ドラゴンフライが打ち上げ予定。","土星");}
         const ph=i*1.3;anims.push(t=>{const q=ph+t*.6/per;g.position.set(Math.cos(q)*a,0,Math.sin(q)*a);p.rotation.y=t*.4;});scene.add(g);obj(id,nm,g,r*8,d,(a/10).toFixed(1)+"天文単位");});
       // ハレー彗星（早回し）
       const ha=(350+5.9)/2,he=(350-5.9)/(350+5.9);const hor=orbit(ha,"#9fe0ff",.5,.3,512,he,Math.PI);hor.rotation.y=1.0;scene.add(hor);
@@ -1670,7 +1960,7 @@ const SPZ=(()=>{
         const r=ha*(1-he*he)/(1+he*Math.cos(nu));hc.position.set(Math.cos(nu+Math.PI)*r,0,Math.sin(nu+Math.PI)*r);const w=new THREE.Vector3();hc.getWorldPosition(w);
         const k2=Math.max(0,1-r/120);tail.visible=k2>.05;tail.scale.setScalar(.3+k2*1.6);const dir=w.clone().normalize();const q=new THREE.Quaternion().setFromUnitVectors(V(1,0,0),dir);const pq=new THREE.Quaternion();hor.getWorldQuaternion(pq);tail.quaternion.copy(pq.invert().multiply(q));});
       obj("halley","ハレー彗星",hc,40,"約76年周期で太陽に近づく彗星。前回は1986年、次は2061年。太陽に近づくと、太陽と反対側に尾が伸びる（ここでは動きを早回し）。","0.6〜35天文単位");
-      const pl=orbit(395,"#6a6a8a",.5,.3,256,.25);scene.add(pl);const pp=sphere(1.6,smat({color:"#cbb8a0"}),16);pl.add(pp);pp.position.set(296,0,0);obj("pluto","冥王星",pp,25,"2006年に準惑星に分類された。2015年にニューホライズンズが接近観測。","約39天文単位");
+      const pl=orbit(395,"#6a6a8a",.5,.3,256,.25);scene.add(pl);const pp=planetGPU(1.6,"pluto",V(0,0,0),32,Math.PI);pl.add(pp);pp.position.set(296,0,0);obj("pluto","冥王星",pp,25,"2006年に準惑星に分類された。2015年にニューホライズンズが接近観測。","約39天文単位");
       const kb=[];for(let i=0;i<6000;i++){const a=R()*6.283,r=300+R()*200;kb.push(Math.cos(a)*r,(R()-.5)*40,Math.sin(a)*r);}scene.add(points(kb,"#8fa0c8",2.2,.5));
       const kbn=new THREE.Object3D();kbn.position.set(-420,0,0);scene.add(kbn);obj("kuiper","カイパーベルト",kbn,250,"海王星の外側に広がる氷の小天体の帯。","30〜50天文単位");
       const vo=(id,nm,dir,dist,d)=>{const end=dir.clone().normalize().multiplyScalar(dist);const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),V(52,0,0),end]),new THREE.LineBasicMaterial({color:"#7fb2ff",transparent:true,opacity:.7}));scene.add(l);
@@ -1700,17 +1990,17 @@ const SPZ=(()=>{
         ["trappist","TRAPPIST-1",23.1,-5.0,40.7,"#ff6a4a",.6,"地球サイズの惑星が7つ見つかった赤色矮星。そのうち3つは液体の水が存在しうる位置にある。"]];
       if(T2(5000))t2Stars();
       S.forEach(([id,nm,ra,dec,d,col,sz,ds])=>{const a=ra/24*6.283,b=dec*Math.PI/180;const p=V(Math.cos(b)*Math.cos(a),Math.sin(b),Math.cos(b)*Math.sin(a)).multiplyScalar(d*10);
-        const s=sprite(col,sz*6,1);s.position.copy(p);scene.add(s);const c=sphere(sz*.5,new THREE.MeshBasicMaterial({color:col}),16);c.position.copy(p);scene.add(c);
+        const c=star(sz*.5,col,9);c.position.copy(p);scene.add(c);
         if(d>0){scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(p.x,0,p.z),p]),new THREE.LineBasicMaterial({color:"#4a5a80",transparent:true,opacity:.6})));}
         obj(id,nm,c,14,ds,d?d+"光年":"—");});
       [50,100,200,400].forEach(r=>scene.add(orbit(r,"#3a4a70",.6)));const g=new THREE.GridHelper(820,41,"#2a3558","#1a2240");g.material.transparent=true;g.material.opacity=.4;scene.add(g);
     }},
-   {id:"nebula",name:"星雲と近くの天体（〜1万光年）",unit:"1目盛＝100光年",desc:"太陽の周り数千光年。星が生まれる星雲、星が死んだあとの星雲、星団、恒星質量ブラックホールがある。方向はおおよそ（銀河座標）、大きさは誇張しています。",dist:180,min:2,max:420,
+   {id:"nebula",iso:1,name:"星雲と近くの天体（〜1万光年）",unit:"1目盛＝100光年",desc:"太陽の周り数千光年。星が生まれる星雲、星が死んだあとの星雲、星団、恒星質量ブラックホールがある。方向はおおよそ（銀河座標）、大きさは誇張しています。",dist:180,min:2,max:420,
     build(){scene.add(new THREE.AmbientLight("#fff",1));const bg=[];for(let i=0;i<9000;i++){const r=Math.sqrt(R())*110,a=R()*6.283;bg.push(Math.cos(a)*r,(R()-.5)*6*(1-r/130),Math.sin(a)*r);}scene.add(points(bg,"#cfd8ff",.35,.55));
       const sun=sprite("#ffe08a",3,1);scene.add(sun);obj("sun","太陽",sun,10,"ここが私たち。","—");
       const N=[
        ["orion","オリオン大星雲（M42）",209,-19,13.44,"cloud",["#ff6fa8","#7fd0ff","#ffd27a"],5,"肉眼でも見える星の誕生の現場。オリオン座の三つ星の下。"],
-       ["horsehead","馬頭星雲",207,-17,13.75,"cloud",["#ff4a6a","#3a1a20"],3,"赤く光るガスの前に、馬の頭の形をした暗い雲が浮かぶ。"],
+       ["horsehead","馬頭星雲",207,-17,13.75,"cloud",["#ff4a6a","#3a1a20"],4,"赤く光るガスの前に、馬の頭の形をした暗い雲が浮かぶ。"],
        ["pleiades","プレアデス星団（すばる）",167,-23,4.44,"cloud",["#9fc8ff","#cfe6ff"],3,"肉眼で6〜7個見える若い星の集まり。青い光は周りのちりの反射。"],
        ["betelgeuse","ベテルギウス",200,-9,5.48,"star",["#ff7a4a"],3,"オリオン座の赤い超巨星。いつ超新星爆発してもおかしくない（天文学的な時間で）。"],
        ["polaris","北極星（ポラリス）",123,27,4.33,"star",["#fff2c8"],2.5,"地球の自転軸の延長上にあり、ほとんど動かない。"],
@@ -1720,30 +2010,31 @@ const SPZ=(()=>{
        ["crab","かに星雲（M1）",185,-6,65,"burst",["#ff8a5a","#7fb2ff","#ffd27a"],6,"1054年に日本や中国で記録された超新星の残骸。中心に高速で回る中性子星（パルサー）がある。"],
        ["eagle","わし星雲・創造の柱",17,1,57,"pillars",["#ffd27a","#7fd0a0","#ff8a5a"],8,"ハッブルが撮った「創造の柱」。ガスの柱の中で星が生まれている。"],
        ["carina","カリーナ星雲",287,-1,85,"cloud",["#ff7a8a","#ffd27a","#7fb2ff"],9,"巨大な星形成領域。超巨星エータ・カリーナがある。"]];
+      const NEBC={orion:[2.2,"#ff4f7a","#7fe8d8","#ffffff"],horsehead:[2.4,"#ff3a4a","#8fb8ff"],pleiades:[2.2,"#5f8fff","#cfe0ff"],helix:[2,"#ff4a3a","#6fd8ff","#ffc070"],ring:[2,"#ff5a4a","#6fc8ff"],catseye:[2,"#ff5a6a","#7fffd0","#ff6a5a"],crab:[2,"#ff6a3a","#8fb0ff","#ffd27a"],eagle:[2.2,"#ffb070","#2f8f9a","#d8c070"],carina:[2.2,"#ff5a4a","#ffb070","#7fd0ff"]};
       N.forEach(([id,nm,l,b,d,kind,cols,sz,info])=>{const p=gal(l,b).multiplyScalar(d);let o;
-        if(kind==="star"){o=new THREE.Group();o.add(sprite(cols[0],sz*1.6,1));o.add(sphere(sz*.12,new THREE.MeshBasicMaterial({color:cols[0]}),12));}else o=nebula(kind,cols,sz,kind==="cloud"?50:36);
+        if(kind==="star"){o=star(sz*(id==="betelgeuse"?.12:.06),id==="betelgeuse"?"M":"F",id==="betelgeuse"?7:10,id==="betelgeuse"?.6:0);}else{const F=NEBC[id];o=new THREE.Group();o.add(nebFX(id,sz*F[0],F[1],F[2],F[3]));const pts=[];for(let k=0;k<160;k++){const a=R()*6.283,u=R()*2-1,rr=sz*.7*Math.cbrt(R());pts.push(Math.cos(a)*Math.sqrt(1-u*u)*rr,u*rr,Math.sin(a)*Math.sqrt(1-u*u)*rr);}o.add(points(pts.slice(0,240),"#e8f0ff",.035*sz,.85));}
         o.position.copy(p);scene.add(o);anims.push(t=>o.lookAt&&kind!=="cloud"&&o.lookAt(camera.position));obj(id,nm,o,sz*3,info,(d*100).toLocaleString()+"光年");});
       [["gaiabh1","ブラックホール Gaia BH1",22,19,15.6,"知られている中で地球に最も近いブラックホール。太陽の約10倍の質量。"],["cygx1","はくちょう座X-1（ブラックホール）",71,3,72,"1971年に確認された、最初のブラックホール候補。青い超巨星からガスを吸い込んでいる。"]].forEach(([id,nm,l,b,d,info])=>{
         const bh=blackHole(.4);bh.position.copy(gal(l,b).multiplyScalar(d));scene.add(bh);obj(id,nm,bh,4,info+"（模型は誇張）",(d*100).toLocaleString()+"光年");});
       [10,30,60,100].forEach(r=>scene.add(orbit(r,"#2a3558",.6)));
     }},
    {id:"galaxy",name:"天の川銀河",unit:"1目盛＝1000光年",desc:"約1000億〜4000億個の恒星が直径約10万光年の円盤に集まる。太陽は中心から約2万6000光年、オリオン腕にある。",dist:150,min:4,max:500,
-    build(){const N=90000,pos=[],col=[];const c1=C("#fff1d6"),c2=C("#9fc0ff"),c3=C("#ffb48a");
-      for(let i=0;i<N;i++){let x,y,z,cc;if(i<N*.18){const r=Math.pow(R(),2)*9;const a=R()*6.283,u=R()*2-1;x=Math.cos(a)*r*Math.sqrt(1-u*u);z=Math.sin(a)*r*Math.sqrt(1-u*u);y=u*r*.55;cc=c3;}
-        else{const arm=i%4,r=4+Math.pow(R(),.9)*46,a=arm*Math.PI/2+Math.log(r/4)*2.1+(R()-.5)*.55*(1+r/50);x=Math.cos(a)*r+(R()-.5)*2.5;z=Math.sin(a)*r+(R()-.5)*2.5;y=(R()-.5)*1.6*(1-r/60);cc=R()<.35?c2:c1;}
-        pos.push(x,y,z);col.push(cc.r,cc.g,cc.b);}
-      const g=points(pos,null,.55,.9,true,col);scene.add(g);anims.push(t=>{g.rotation.y=t*.01;g.material.size=Math.min(.55,Math.max(.03,cam.dist*.004));});
-      const core=sprite("#ffd9a0",30,.8);scene.add(core);anims.push(()=>core.scale.setScalar(Math.min(30,cam.dist*.25)));const bh=blackHole(.35);scene.add(bh);obj("sgra","ブラックホール いて座A*（銀河の中心）",bh,5,"太陽の約400万倍の質量の超大質量ブラックホール。2022年に撮影された。周りを回る星の動きから存在が確かめられ、2020年ノーベル物理学賞（模型は誇張）。","約2万6000光年");
+    build(){scene.add(new THREE.AmbientLight("#fff",1));const MW={type:"barred",size:110,arms:4,minor:1,pitch:.24,bulge:.11,dust:.9,c1:"#ffe0b0",c2:"#c8d6ff",c3:"#ff6a9a",seed:4};
+      const g=new THREE.Group();scene.add(g);g.add(galFX(MW));g.add(galStars({...MW,n:70000,ps:.32}));anims.push(t=>{g.rotation.y=t*.01;});
+      const core=glowBB("#ffd9a0",22,0);scene.add(core);
+      const armAt=(k,rn)=>{const th=k*Math.PI/2+Math.log(rn/.1)/MW.pitch;return V(Math.cos(th)*rn*55,0,-Math.sin(th)*rn*55);};
+      [["perseus","ペルセウス腕",0,.62,"太陽系の外側を通る大きな腕。"],["scutum","たて・ケンタウルス腕",2,.55,"銀河の中心をはさんで反対側を回る、もう1本の大きな腕。"],["sagitt","いて腕",1,.5,"太陽系の内側にある細い腕。"],["norma","じょうぎ腕",3,.4,"中心の棒の先から伸びる腕。"]].forEach(([id,nm,k,rn,d])=>{const n=new THREE.Object3D();n.position.copy(armAt(k,rn));g.add(n);obj(id,nm,n,40,d,"渦巻きの腕");});
+      const bh=blackHole(.35);scene.add(bh);obj("sgra","ブラックホール いて座A*（銀河の中心）",bh,5,"太陽の約400万倍の質量の超大質量ブラックホール。2022年に撮影された。周りを回る星の動きから存在が確かめられ、2020年ノーベル物理学賞（模型は誇張）。","約2万6000光年");
       const oc=[];const oc0=gal(309,15).multiplyScalar(17);for(let i=0;i<1500;i++){const r=Math.pow(R(),2)*.8,a=R()*6.28,u=R()*2-1;oc.push(oc0.x+Math.cos(a)*Math.sqrt(1-u*u)*r,oc0.y+u*r,oc0.z+Math.sin(a)*Math.sqrt(1-u*u)*r);}
-      const sunP=V(26*Math.cos(2.4),0,26*Math.sin(2.4));const ocg=points(oc,"#ffe9c4",.25,.9);ocg.position.copy(sunP);g.add(ocg);const ocn=new THREE.Object3D();ocn.position.copy(oc0).add(sunP);g.add(ocn);
+      const sa=(Math.PI/2+.5*Math.PI/2)+Math.log((26/55)/.1)/MW.pitch;const sunP=V(Math.cos(sa)*26,0,-Math.sin(sa)*26);const ocg=points(oc,"#ffe9c4",.25,.9);ocg.position.copy(sunP);g.add(ocg);const ocn=new THREE.Object3D();ocn.position.copy(oc0).add(sunP);g.add(ocn);
       obj("omegacen","オメガ星団（球状星団）",ocn,6,"約1000万個の星が集まる、天の川銀河で最大の球状星団。","約1万7000光年");
-      const sn=new THREE.Object3D();g.add(sn);sn.position.set(26*Math.cos(2.4),0,26*Math.sin(2.4));const sm=sprite("#f4b942",3,1);sn.add(sm);obj("sunpos","太陽系の位置",sn,12,"オリオン腕の中。銀河を約2億3000万年かけて1周する。","中心から約2万6000光年");if(typeof window.KYEAR==="number"&&window.KYEAR>=6000)t3Galaxy(g,sn);
+      const sn=new THREE.Object3D();g.add(sn);sn.position.copy(sunP);const sm=sprite("#f4b942",3,1);sn.add(sm);obj("sunpos","太陽系の位置",sn,12,"オリオン腕の中。銀河を約2億3000万年かけて1周する。","中心から約2万6000光年");if(typeof window.KYEAR==="number"&&window.KYEAR>=6000)t3Galaxy(g,sn);
       const mw=new THREE.Object3D();mw.position.set(0,30,0);scene.add(mw);obj("mw","天の川銀河",mw,150,"夜空の天の川は、この円盤を内側から見た姿。","直径約10万光年");
       [["lmc","大マゼラン雲",V(-30,-60,140),6],["smc","小マゼラン雲",V(-50,-80,175),4]].forEach(([id,nm,p,s])=>{const pts=[];for(let i=0;i<2500;i++)pts.push(p.x+(R()-.5)*s*2,p.y+(R()-.5)*s,p.z+(R()-.5)*s*2);scene.add(points(pts,"#cfe0ff",.6,.8));const n=new THREE.Object3D();n.position.copy(p);scene.add(n);obj(id,nm,n,40,"天の川銀河を回る小さな伴銀河。南半球で肉眼で見える。",id==="lmc"?"約16万光年":"約20万光年");});
     }},
    {id:"local",name:"局部銀河群",unit:"1目盛＝1万光年",desc:"天の川銀河とアンドロメダ銀河を中心とする、80以上の銀河の集まり。約45億年後、二つの銀河は衝突・合体すると予測されている。",dist:520,min:6,max:1200,
-    build(){const gal=(cx,tilt,r,n,col,rot)=>{const p=[],c=[],cc=C(col);for(let i=0;i<n;i++){const arm=i%2,rr=Math.pow(R(),.8)*r,a=arm*Math.PI+Math.log(1+rr)*2.4+(R()-.5)*.6;p.push(Math.cos(a)*rr,(R()-.5)*r*.04,Math.sin(a)*rr);c.push(cc.r,cc.g,cc.b);}
-        const g=points(p,null,r*.04,.85,true,c);g.position.copy(cx);g.rotation.set(tilt,0,rot);scene.add(g);g.add(sprite("#ffe0b0",r*.7,.6));return g;};
+    build(){scene.add(new THREE.AmbientLight("#fff",1));const SPEC2={mw:{type:"barred",arms:4,minor:1,pitch:.24,bulge:.11,c1:"#ffe0b0",c2:"#c8d6ff",seed:4},an:{type:"spiral",arms:2,pitch:.22,bulge:.13,ring:.62,c1:"#ffe2b8",c2:"#c8d4ff",c3:"#ff7aa0"},tr:{type:"flocculent",arms:2,pitch:.35,bulge:.06,c1:"#ffe8d0",c2:"#bcd0ff"}};
+      const gal=(cx,tilt,r,n,col,rot)=>{const sp=r===5?SPEC2.mw:r===11?SPEC2.an:SPEC2.tr;const g=new THREE.Group();g.add(galFX({...sp,size:r*2,gain:1.7,ring:0}));g.add(galStars({...sp,size:r*2,n:Math.round(n*.5),ps:r*.012}));g.position.copy(cx);g.rotation.set(tilt,0,rot);scene.add(g);return g;};
       const mw=gal(V(0,0,0),.2,5,8000,"#dfe8ff",0);obj("mw","天の川銀河",mw,30,"私たちの銀河。","—");
       const an=gal(V(230,40,-90),1.1,11,16000,"#ffe7cf",.5);obj("andromeda","アンドロメダ銀河",an,60,"約1兆個の恒星。肉眼で見える最も遠い天体の一つ。秒速約110kmで近づいている。","約250万光年");if(typeof window.KYEAR==="number"&&window.KYEAR>=1000000){const pr=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),V(230,40,-90)]),new THREE.LineDashedMaterial({color:"#7ee0ff",dashSize:6,gapSize:4}));pr.computeLineDistances();scene.add(pr);const pd=sprite("#7ee0ff",6,1);scene.add(pd);anims.push(t=>pd.position.copy(V(230,40,-90).multiplyScalar((t*.01)%1)));const pm=new THREE.Object3D();pm.position.set(115,20,-45);scene.add(pm);obj("t3andro","アンドロメダへの探査（もしも）",pm,120,"Type III文明が隣の銀河へ送る探査機。約250万光年の旅で、光速に近くても数百万年かかる。","約250万光年");}
       const tr=gal(V(250,-30,40),.6,3,4000,"#cfe2ff",1);obj("triangulum","さんかく座銀河",tr,24,"局部銀河群で3番目に大きい渦巻銀河。","約273万光年");
@@ -1760,7 +2051,7 @@ const SPZ=(()=>{
       const gac=sprite("#ffd27a",60,.7);scene.add(gac);obj("ga","グレート・アトラクター",gac,120,"ラニアケアの重力の中心。天の川の向こう側に隠れて見えにくい。","約2億5000万光年");
       const mw=fil[3].clone().multiplyScalar(.85);const mws=sprite("#f4b942",12,1);mws.position.copy(mw);g.add(mws);obj("lg","局部銀河群（私たちはここ）",mws,60,"天の川銀河は超銀河団の端の方にある。","—");
       const vg=mw.clone().lerp(ga,.22);const vs=sprite("#ffffff",26,.9);vs.position.copy(vg);g.add(vs);obj("virgo","おとめ座銀河団",vs,70,"1000個以上の銀河が集まる、近くで最大の銀河団。","約5400万光年");
-      const ext=(id,nm,off,kind,info,dist)=>{const p=mw.clone().add(off);let o;if(kind==="bh"){o=new THREE.Group();o.add(sprite("#ffe0b0",30,.8));const b=blackHole(1.6);o.add(b);}else if(kind==="cluster"){const pts=[];for(let i=0;i<800;i++){const r=Math.pow(R(),1.5)*14;const a=R()*6.28,u=R()*2-1;pts.push(Math.cos(a)*Math.sqrt(1-u*u)*r,u*r,Math.sin(a)*Math.sqrt(1-u*u)*r);}o=points(pts,"#ffe0c0",2.4,.9);}else{o=sprite(kind,14,.9);}
+      const ext=(id,nm,off,kind,info,dist)=>{const p=mw.clone().add(off);let o;if(kind==="bh"){o=new THREE.Group();o.add(galFX({type:"elliptical",size:40,bb:1,c1:"#ffe2b8"}));const b=blackHole(.35);o.add(b);}else if(kind==="cluster"){const pts=[];for(let i=0;i<800;i++){const r=Math.pow(R(),1.5)*14;const a=R()*6.28,u=R()*2-1;pts.push(Math.cos(a)*Math.sqrt(1-u*u)*r,u*r,Math.sin(a)*Math.sqrt(1-u*u)*r);}o=points(pts,"#ffe0c0",2.4,.9);}else{o=new THREE.Group();const ty=id==="sombrero"?"sombrero":id==="cena"?"elliptical":"spiral";const gx=galFX({type:ty,size:22,arms:2,pitch:.28,bulge:ty==="sombrero"?.3:.1,c1:"#ffe2b8",c2:"#c0d0ff",bb:ty==="elliptical"});if(ty!=="elliptical")gx.rotation.x=id==="sombrero"?.08:-1.2;o.add(gx);if(ty==="sombrero")o.add(glowBB("#ffe0b0",12,0));}
         o.position.copy(p);g.add(o);obj(id,nm,o,kind==="bh"?14:kind==="cluster"?90:40,info,dist);};
       ext("m87","M87とブラックホールM87*",mw.clone().lerp(ga,.22).sub(mw).add(V(4,2,0)),"bh","おとめ座銀河団の中心の巨大楕円銀河。2019年に人類が初めて撮影したブラックホールM87*（太陽の約65億倍）がある。","約5500万光年");
       ext("m51","子持ち銀河（M51）",V(-14,18,6),"#cfe0ff","渦巻銀河が小さな銀河を連れている姿。","約2300万光年");
@@ -1818,6 +2109,141 @@ const SPZ=(()=>{
       obj("uni_shape","宇宙の形",here,700,D,"説："+({flat:"平坦",sphere:"閉じた（球）",saddle:"開いた（双曲）",torus:"トーラス",multi:"多元宇宙"})[sh]);
       LEVELS[LEVELS.length-1].desc2=D;}},
   ];
+  // ===== 分岐（GitHubの枝分かれのように、本線1〜12から横に伸びる） =====
+  const ALL=LEVELS.slice();const BRMAP={};const LANES=[];
+  function lane(id,name,from,color){LANES.push({id,name,from,color});}
+  function addBr(L){L.br=1;ALL.push(L);if(L.pobj)BRMAP[L.parent+":"+L.pobj]=L.id;return L;}
+  const SUNP=V(-420,260,-60);
+  function lightsFor(){const d=new THREE.DirectionalLight("#fff6ea",1.9);d.position.copy(SUNP);scene.add(d);scene.add(new THREE.AmbientLight("#40506a",.55));}
+  const label=(id,name,node,view,desc,dist)=>obj(id,name,node,view,desc,dist);
+  const llpos=(r,la,lo)=>{la*=Math.PI/180;lo*=Math.PI/180;return V(Math.cos(la)*Math.cos(lo)*r,Math.sin(la)*r,-Math.cos(la)*Math.sin(lo)*r);};
+  // ---- 惑星・恒星の中 ----
+  const BODY={
+   sun:{name:"太陽",R:"69万6000km",shell:"star",layers:[[.25,"中心核（核融合で輝く・約1500万℃）","#fff6c0","#ffd070"],[.7,"放射層（光が数万年かけて外へ）","#ffb347","#a04a10"],[1,"対流層（ガスが煮立つように動く）","#ff7a2a","#7a2a08"]],
+     desc:"太陽の中心では、毎秒約6億トンの水素がヘリウムに変わり、そのとき減った質量がエネルギーになる。中心で生まれた光は放射層で吸収と放出を繰り返し、外に出るまで数万〜十数万年かかる。表面のつぶつぶ（粒状斑）は対流のてっぺん。",feat:[]},
+   mercury:{name:"水星",kind:"mercury",R:"2440km",layers:[[.42,"内核（固体の鉄）","#d8c8a8","#6a3a10"],[.83,"外核（液体の鉄）","#c89a5a","#4a2a08"],[.98,"マントル（岩石）","#8a6a52"],[1,"地殻","#6a6560"]],
+     desc:"体積の大部分を鉄の核が占める、とても「重い」惑星（核の半径は全体の約8割）。昼は430℃、夜は−180℃。",feat:[["caloris","カロリス盆地",30.5,170,"直径約1550kmの巨大な衝突盆地。"]]},
+   venus:{name:"金星",kind:"venus",R:"6052km",layers:[[.53,"核（鉄・ニッケル）","#d8a060","#5a2a08"],[.985,"マントル（岩石）","#b0603a"],[1,"地殻（火山の溶岩）","#7a6a5a"]],
+     desc:"地球とほぼ同じ大きさ・内部構造だが、表面は厚さ約70km・90気圧の二酸化炭素の大気と硫酸の雲に包まれ、460℃に達する。自転は逆向きで、1日（自転）が1年より長い。",feat:[["maxwell","マクスウェル山（雲の下）",65,3,"金星で最も高い山（約1万1000m）。"]]},
+   earth:{name:"地球",shell:"earth",R:"6371km",layers:[[.19,"内核（固体の鉄・ニッケル、約5400℃）","#ffe9a0","#ff9a20"],[.546,"外核（液体の鉄：地磁気を生む）","#ffb050","#a03a08"],[.895,"下部マントル","#c0502a"],[.99,"上部マントル","#d8703a"],[1,"地殻（大陸・海底）","#6a5a4a"]],
+     desc:"中心から、固体の内核・液体の外核・マントル・地殻。外核の液体の鉄が流れることで地磁気が生まれ、宇宙からの放射線を防いでいる。いちばん深い穴（コラ半島超深度掘削）でも12kmで、地殻すら貫けていない。",feat:[]},
+   moon:{name:"月",kind:"moon",R:"1737km",layers:[[.14,"内核（固体の鉄）","#e8d8b0","#6a3a10"],[.19,"外核（液体）","#d8a060","#4a2008"],[.28,"部分的に溶けた層","#b0705a"],[.977,"マントル","#8a7a6a"],[1,"地殻","#9a9a96"]],
+     desc:"アポロ計画で置いた地震計の記録から、小さな鉄の核を持つことが分かった。表側の黒い「海」は、約30〜40億年前に溶岩が流れ出て固まった平原。",feat:[["tranq","静かの海（アポロ11号）",.67,23.5,"1969年、人類が初めて月面に降り立った場所。"],["tycho","ティコ・クレーター",-43.3,-11.2,"明るい光条が四方に伸びる若いクレーター（約1億年前）。"],["imbrium","雨の海",32.8,-15.6,"直径約1100kmの巨大な溶岩の平原。"],["procellarum","嵐の大洋",18.4,-57.4,"月で最も広い「海」。"]]},
+   mars:{name:"火星",kind:"mars",R:"3390km",layers:[[.54,"核（液体の鉄・硫黄）","#d89a5a","#6a2a08"],[.985,"マントル","#b0583a"],[1,"地殻","#8a4a2a"]],
+     desc:"探査機インサイトの地震観測（2018〜2022年）で、核が意外に大きく液体であることが分かった。かつては川や湖があり、今も極に水の氷がある。",feat:[["olympus","オリンポス山",18.65,-133.8,"太陽系最大の火山。高さ約2万1900m。"],["valles","マリネリス峡谷",-12,-70,"長さ約4000km、深さ最大7kmの大峡谷。"],["hellas","ヘラス盆地",-42.4,70.5,"直径約2300kmの衝突盆地。"],["jezero","ジェゼロ・クレーター（パーサヴィアランス）",18.4,77.6,"昔の湖の跡で、生命の痕跡を探している。"],["npole","北極冠",86,0,"水の氷とドライアイスの層。"]]},
+   jupiter:{name:"木星",kind:"jupiter",R:"6万9911km",layers:[[.22,"中心核（岩石と氷・境界はぼやけている）","#d8b070","#7a4a10"],[.78,"金属水素の層（電気を通す：強い磁場の源）","#8a96a8","#1a2a40"],[.985,"液体の分子状水素","#c8a882"],[1,"大気（アンモニアなどの雲の層）","#e8d2b0"]],
+     desc:"ほとんどが水素とヘリウム。深いところでは圧力で水素が金属のようになり、電気を流して太陽系最強の磁場をつくる。探査機ジュノーの観測で、中心核は岩石と水素が混ざった「ぼやけた核」だと分かってきた。",feat:[["grs","大赤斑",-22,-60,"地球より大きい巨大な嵐。少なくとも190年以上続いている。"]]},
+   saturn:{name:"土星",kind:"saturn",rings:0,R:"5万8232km",layers:[[.22,"中心核（岩石と氷）","#d8b070","#6a4010"],[.5,"金属水素の層","#8a96a8","#1a2a40"],[.985,"液体の分子状水素","#d8c08a"],[1,"大気（雲の層）","#efe0b8"]],
+     desc:"平均密度は水より小さい（0.69g/cm³）。環の幅は約28万kmあるのに、厚さは多くの場所で10〜100mほど。主な環は内側からC環・B環・カッシーニの間隙・A環。",feat:[["hex","北極の六角形",80,0,"一辺が地球の直径より長い、六角形のジェット気流。"],["cassini","カッシーニの間隙",0,0,"B環とA環の間の幅約4800kmのすき間。"]]},
+   uranus:{name:"天王星",kind:"uranus",rings:1,tilt:97.8,R:"2万5362km",layers:[[.2,"岩石の核","#a8907a","#3a2008"],[.75,"氷のマントル（水・アンモニア・メタン）","#4fb0c0"],[1,"水素・ヘリウムの大気","#9fdce0"]],
+     desc:"自転軸が約98°傾き、横倒しで太陽のまわりを回る。「氷」のマントルは高温高圧の液体。メタンが赤い光を吸うので青緑に見える。",feat:[]},
+   neptune:{name:"海王星",kind:"neptune",R:"2万4622km",layers:[[.25,"岩石の核","#a8907a","#3a2008"],[.8,"氷のマントル","#3f7fd0"],[1,"水素・ヘリウム・メタンの大気","#4f78e0"]],
+     desc:"太陽系で最も強い風（秒速約600m）が吹く。1989年にボイジャー2号が「大暗斑」を撮影した。",feat:[["gds","暗斑",-20,-40,"地球ほどの大きさの高気圧の渦。"]]},
+   pluto:{name:"冥王星",kind:"pluto",off:180,R:"1188km",layers:[[.72,"岩石の核","#8a6a52"],[.81,"内部の海（あると考えられている）","#3f7ac8"],[1,"氷の地殻（窒素や水の氷）","#d8c8b0"]],
+     desc:"2015年に探査機ニューホライズンズが接近。ハート形の白い平原（スプートニク平原）は窒素の氷の海で、ゆっくり対流している。",feat:[["tombaugh","トンボー領域（ハート形）",20,175,"左半分が窒素の氷の平原スプートニク平原。"],["cthulhu","クトゥルフ領域",-5,100,"赤黒い有機物（ソリン）に覆われた地域。"]]}};
+  function buildBody(key){const B=BODY[key];lightsFor();const r=10;const g=new THREE.Group();scene.add(g);let shell;
+    if(B.shell==="earth"){const e=earthMesh(r,SUNP);shell=e.material;}else if(B.shell==="star"){shell=starMesh(r,"#fff0d0",48,.5).material;}else shell=planetMat(B.kind,SUNP,(B.off||0)*Math.PI/180);
+    const cut=cutaway(r,shell,B.layers,g);if(B.shell==="earth"){const uv=cut.children[0].geometry.attributes.uv;for(let i=0;i<uv.count;i++)uv.setX(i,uv.getX(i)*.75);}
+    if(B.shell==="star"){const gl=glowBB("#ffb050",r*7,1);g.add(gl);}
+    if(B.rings!==undefined){const rg=ringsFX(r,B.rings,SUNP);g.add(rg);}
+    if(B.tilt){g.rotation.z=B.tilt*Math.PI/180;}
+    anims.push(t=>{g.rotation.y=Math.sin(t*.12)*.35;});
+    let prev=0;B.layers.forEach(([f,nm],i)=>{const rm=r*(prev+f)/2;prev=f;const n=new THREE.Object3D();const a=(200+i*9)*Math.PI/180;n.position.set(Math.cos(a)*rm,Math.sin(a)*rm,.05);g.add(n);label(key+"_l"+i,nm,n,r*1.6,"断面の層（半径の"+Math.round(f*100)+"%まで）","");});
+    (B.feat||[]).forEach(([id,nm,la,lo,d])=>{const n=new THREE.Object3D();n.position.copy(llpos(r*1.01,la,lo+(B.off||0)));g.add(n);label(id,nm,n,r*1.2,d,B.name);});
+    const h=new THREE.Object3D();h.position.set(0,r*1.35,0);g.add(h);label(key+"_all",B.name+"の全体",h,r*3.2,B.desc,"半径 "+B.R);}
+  lane("pa","地球と月の中","moon","#6fb6ff");lane("pb","太陽・内惑星の中","inner","#ffb347");lane("pc","外惑星の中","outer","#c8a882");
+  [["earth","pa","moon"],["moon","pa","moon"],["sun","pb","inner"],["mercury","pb","inner"],["venus","pb","inner"],["mars","pb","inner"],["jupiter","pc","outer"],["saturn","pc","outer"],["uranus","pc","outer"],["neptune","pc","outer"],["pluto","pc","outer"]].forEach(([k,ln,par])=>{
+    const B=BODY[k];addBr({id:"in_"+k,lane:ln,parent:par,pobj:k,name:B.name+"の中",short:B.name,unit:"断面図（層の厚さは実際の比率）",desc:B.desc,dist:34,min:12,max:80,th:-2.35,ph:1.05,build(){buildBody(k);}});});
+  BRMAP["inner:earth"]="in_earth";
+  // ---- 銀河の中 ----
+  const GX={
+   lmc:{name:"大マゼラン雲",lane:"ga",parent:"galaxy",type:"irregular",size:120,c1:"#ffe8c8",c2:"#c8d8ff",c3:"#ff6a9a",bulge:.15,arms:2,tilt:.6,dist:"約16万光年",
+     desc:"天の川銀河を回る伴銀河。直径約1万4000光年に約300億個の恒星。棒状の構造と、局部銀河群で最大の星形成領域タランチュラ星雲がある。",
+     feat:[["tarantula","タランチュラ星雲（かじき座30）",-.38,.18,"局部銀河群で最も活発な星の誕生の場。太陽の300倍近い質量の星R136a1がある。","neb"],["sn1987a","超新星SN 1987A",-.3,.05,"1987年に肉眼で見えた超新星。約400年ぶりの肉眼超新星。","pt"],["lmcbar","中央の棒",0,0,"恒星が棒状に集まった構造。","pt"],["n11","N11（星形成領域）",.45,.35,"2番目に大きい星の誕生の場。","neb"]]},
+   andromeda:{name:"アンドロメダ銀河（M31）",lane:"gb",parent:"local",type:"spiral",size:140,arms:2,pitch:.15,bulge:.15,ring:.6,dust:1,c1:"#ffe2b8",c2:"#c8d4ff",c3:"#ff7aa0",tilt:1.35,dist:"約250万光年",
+     desc:"直径約22万光年、約1兆個の恒星。天の川銀河より大きい渦巻銀河。星形成は中心から約3万光年の「リング」に集中している。約45億年後に天の川銀河と衝突・合体する。",
+     feat:[["m31core","中心核（二重に見える核）",0,0,"中心の星の集まりが2つあるように見える。太陽の約1億倍のブラックホールがある。","bh"],["ngc206","NGC 206（巨大な星の雲）",-.45,-.32,"若い青い星が数百個集まる、M31で最も明るい星の雲。","neb"],["ring10","星形成リング",.62,0,"中心から約3万光年の輪で、新しい星が生まれている。","pt"],["m32","M32（伴銀河）",.18,.22,"M31に近づきすぎて外側の星をはぎ取られた、小さな楕円銀河。","sat"],["m110","M110（伴銀河）",-.3,.6,"M31を回る矮小楕円銀河。","sat"],["g1","G1（巨大な球状星団）",.9,.55,"局部銀河群で最も明るい球状星団。中心にブラックホールがあるかもしれない。","pt"]]},
+   triangulum:{name:"さんかく座銀河（M33）",lane:"gb",parent:"local",type:"flocculent",size:110,arms:2,pitch:.35,bulge:.06,dust:.4,c1:"#ffe8d0",c2:"#bcd0ff",c3:"#ff6a9a",tilt:.95,dist:"約273万光年",
+     desc:"局部銀河群で3番目に大きい渦巻銀河。はっきりした腕ではなく、綿のような腕がたくさんある（綿状渦巻銀河）。中心に大きなブラックホールが見つかっていない。",
+     feat:[["ngc604","NGC 604（巨大なHII領域）",.42,.25,"直径約1500光年。オリオン大星雲の約6000倍明るい星の誕生の場。","neb"]]},
+   m51:{name:"子持ち銀河（M51）",lane:"gc",parent:"lania",type:"spiral",size:120,arms:2,pitch:.28,bulge:.1,dust:1,c1:"#ffe2b8",c2:"#c0d0ff",c3:"#ff5a8a",tilt:.25,dist:"約2300万光年",
+     desc:"くっきりした2本の腕を持つ「グランドデザイン渦巻銀河」の代表。腕の先の小さな銀河NGC 5195との引力で、腕がはっきり作られていると考えられている。",
+     feat:[["ngc5195","NGC 5195（伴銀河）",.0,.95,"M51の腕の先にくっついて見える小さな銀河。","sat"],["m51hii","HII領域（ピンクの点）",-.5,.1,"腕に沿って並ぶ、星が生まれている場所。","neb"]]},
+   sombrero:{name:"ソンブレロ銀河（M104）",lane:"gc",parent:"lania",type:"sombrero",size:120,bulge:.3,dust:1,c1:"#ffe0b0",c2:"#ffe8d0",tilt:.05,ph:1.5,dist:"約3100万光年",
+     desc:"巨大なバルジ（中心のふくらみ）と、ふちを横切るちりの帯が帽子のように見える。約2000個の球状星団を持ち、中心には太陽の約10億倍のブラックホールがある。",
+     feat:[["somdust","ちりの帯",.6,0,"円盤のふちを真横から見ている。","pt"],["somcore","中心のブラックホール",0,0,"太陽の約10億倍。","bh"]]},
+   m87:{name:"M87（巨大楕円銀河）",lane:"gc",parent:"lania",type:"elliptical",size:140,c1:"#ffe2b8",dist:"約5500万光年",
+     desc:"おとめ座銀河団の中心にある巨大楕円銀河。約1万2000個の球状星団を持つ。中心のブラックホールM87*（太陽の約65億倍）からは、長さ約5000光年のジェットが光速近くで吹き出している。2019年、人類が初めて撮影したブラックホール。",
+     feat:[["m87bh","ブラックホールM87*",0,0,"2019年にイベント・ホライズン・テレスコープが撮影。","bh"],["m87jet","ジェット",.35,.35,"電子が光速に近い速さで飛び出している。","pt"]]},
+   cena:{name:"ケンタウルス座A（NGC 5128）",lane:"gc",parent:"lania",type:"elliptical",size:130,c1:"#ffe2c0",dist:"約1200万光年",
+     desc:"楕円銀河が渦巻銀河を飲み込んだ跡と考えられ、中央を太いちりの帯が横切る。中心のブラックホール（太陽の約5500万倍）から、銀河より大きな電波の泡（ローブ）が吹き出している。",
+     feat:[["cenadust","ちりの帯",0,0,"飲み込まれた渦巻銀河のなごり。","pt"],["cenalobe","電波ローブとジェット",.0,.8,"目に見えない電波で輝く巨大な泡。","pt"]]}};
+  function buildGalaxy(key){const G=GX[key];scene.add(new THREE.AmbientLight("#fff",1));const g=new THREE.Group();scene.add(g);g.rotation.x=G.tilt||0;
+    const S=G.size;const disk=galFX({...G,size:S,gain:1});g.add(disk);
+    if(G.type==="elliptical"){disk.visible=false;const bb=galFX({...G,size:S*.9,bb:1,gain:key==="cena"?1.8:1.2});g.add(bb);}
+    if(G.type==="sombrero"){g.add(glowBB("#ffe0b0",S*.55,0));}
+    g.add(galStars({...G,size:S,n:G.type==="elliptical"?26000:36000,ps:S*.004}));
+    if(G.type!=="elliptical"){const pts=[];for(let i=0;i<300;i++){const a=R()*6.283,u=R()*2-1,rr=S*.45*Math.cbrt(R());pts.push(Math.cos(a)*Math.sqrt(1-u*u)*rr,u*rr*.6,Math.sin(a)*Math.sqrt(1-u*u)*rr);}g.add(points(pts,"#ffe8c8",S*.006,.9));}
+    else{const pts=[];for(let i=0;i<1600;i++){const a=R()*6.283,u=R()*2-1,rr=S*.55*Math.pow(R(),.7);pts.push(Math.cos(a)*Math.sqrt(1-u*u)*rr,u*rr,Math.sin(a)*Math.sqrt(1-u*u)*rr);}g.add(points(pts,"#ffe0b0",S*.007,.95));}
+    if(key==="m87"){const jm=glowBB("#9fc8ff",S*.08,0);g.add(jm);const jet=new THREE.Mesh(new THREE.CylinderGeometry(S*.0015,S*.006,S*.4,12,1,true),new THREE.MeshBasicMaterial({color:"#7fb0ff",transparent:true,opacity:.35,blending:THREE.AdditiveBlending,depthWrite:false}));jet.position.set(S*.12,S*.12,0);jet.rotation.z=-Math.PI/4;g.add(jet);
+      for(let i=0;i<6;i++){const k=glowBB("#bfe0ff",S*.014,0);k.position.set(S*(.05+i*.04),S*(.05+i*.04),0);g.add(k);}}
+    if(key==="cena"){const dl=new THREE.Mesh(new THREE.PlaneGeometry(S*.7,S*.18,40,6),new THREE.ShaderMaterial({uniforms:{uTime:{value:0}},vertexShader:"varying vec2 vUv;void main(){vUv=uv;vec3 p=position;p.y+=sin(p.x*.06)*2.;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}",
+        fragmentShader:`varying vec2 vUv;${GLN}void main(){float n=fbm(vUv*vec2(14.,4.));float b=smoothstep(.0,.3,vUv.y)*smoothstep(1.,.7,vUv.y)*smoothstep(0.,.15,vUv.x)*smoothstep(1.,.85,vUv.x);gl_FragColor=vec4(vec3(.08,.045,.03)*(.6+n*.6)+vec3(1.,.45,.55)*smoothstep(.78,.92,n)*.5,clamp(b*(.75+n*.5),0.,1.));}`,transparent:true,depthWrite:false,side:THREE.DoubleSide}));dl.rotation.z=-.3;g.add(dl);
+      [[1,1],[-1,-1]].forEach(([sx,sy])=>{const lobe=glowBB("#8a6aff",S*.7,0);lobe.position.set(sx*S*.15,sy*S*.55,0);lobe.material.uniforms.uCol.value=C("#5a4acf").convertSRGBToLinear();g.add(lobe);});}
+    (G.feat||[]).forEach(([id,nm,x,y,d,kd])=>{let n;const pos=V(x*S/2,0,-y*S/2);
+      if(kd==="bh"){n=blackHoleFX(S*.006);}else if(kd==="neb"){n=new THREE.Group();n.add(nebFX(id==="tarantula"||id==="ngc604"?"carina":"orion",S*.09,"#ff5a8a","#ffb0c0","#9fd0ff"));}else if(kd==="sat"){n=galFX({type:"elliptical",size:S*.14,bb:1,c1:"#ffe8d0",gain:.9});}else n=new THREE.Object3D();
+      if(key==="m87"&&id==="m87jet")pos.set(S*.18,S*.18,0);if(key==="cena"&&id==="cenalobe")pos.set(S*.15,S*.55,0);
+      n.position.copy(pos);g.add(n);label(id,nm,n,kd==="bh"?S*.06:S*.25,d,G.name);});
+    const h=new THREE.Object3D();h.position.set(0,S*.32,0);scene.add(h);label(key+"_all",G.name+"の全体",h,S*1.25,G.desc,G.dist);}
+  lane("ga","天の川の伴銀河","galaxy","#cfe0ff");lane("gb","局部銀河群の銀河の中","local","#ffe2b8");lane("gc","遠くの銀河の中","lania","#ffb48a");
+  Object.entries(GX).forEach(([k,G])=>addBr({id:"gx_"+k,lane:G.lane,parent:G.parent,pobj:k,name:G.name+"の中",short:G.name.replace(/（.*）/,""),unit:"銀河の内部（星の位置は模式的）",desc:G.desc,ph:G.ph,dist:G.size*1.3,min:G.size*.05,max:G.size*3,build(){buildGalaxy(k);}}));
+  // ---- マルチバース（空想） ----
+  const UNI=[
+   ["home","私たちの宇宙","#f4b942","ここに戻ると「宇宙の形」へ。"],
+   ["mirror","鏡の宇宙","#7fe0ff","物質と反物質が入れ替わった宇宙。銀河の腕は逆巻きで、恒星は反陽子と陽電子でできている。見た目はほとんど同じだが、私たちの物質が触れると一瞬で光に変わる。"],
+   ["heavy","重力の強い宇宙","#ff7a5a","重力が今の10倍強い宇宙。星はすぐ燃え尽き、銀河は小さく密集し、ブラックホールだらけになる。生命が育つ時間がほとんどない。"],
+   ["thin","重力の弱い宇宙","#9a9ab0","重力が弱すぎて、ガスが集まらず星も銀河もできなかった宇宙。うすい水素の霧だけが、永遠に冷えながら広がり続ける。"],
+   ["slow","光の遅い宇宙","#c99cf2","光の速さが秒速30kmしかない宇宙。星の光の届く範囲（光の球）が見えるほど遅く、遠くの景色はいつも何万年も前の姿。"],
+   ["crystal","結晶の宇宙","#6fd2a0","誕生のときのゆらぎが完全に規則正しかった宇宙。銀河が結晶の原子のように等間隔に並ぶ。"],
+   ["crunch","つぶれゆく宇宙","#ff4a6a","膨張が止まって収縮に転じた宇宙。銀河どうしが次々に衝突し、宇宙背景放射は熱く青白くなっていく。最後は一点に戻る「ビッグクランチ」。"],
+   ["univita","ユニヴィータ宇宙（SFノート）","#ffd27a","SFノートの宇宙。生命と情報、物質の区別がなくなった知性（UOI）が、星々を光の網でつないでいる。超因果圏・高次存在領域へ続く入口がある。"]];
+  lane("mv","マルチバース（空想）","shape","#c99cf2");lane("uv","別の宇宙（空想）","mv","#ff9ad0");
+  addBr({id:"mv",lane:"mv",parent:"shape",pobj:"uni_shape",name:"マルチバース（空想）",short:"マルチバース",unit:"宇宙の外側（空想図）",desc:"ここから先は空想です。永久インフレーション説では、私たちの宇宙は無数の「泡宇宙」の一つかもしれない。泡ごとに物理定数が違えば、まったく違う宇宙になる。泡を選んで近づき、さらにズームインすると、その宇宙の中に入れます。",dist:900,min:60,max:2400,
+    build(){scene.add(new THREE.AmbientLight("#fff",1));const MVFS=`uniform vec3 uCol;uniform float uTime;varying vec3 vN;varying vec3 vW;varying vec2 vUv;${GLN}void main(){vec3 v=normalize(cameraPosition-vW);float f=pow(1.-abs(dot(normalize(vN),v)),2.5);float n=fbm(vUv*8.+uTime*.03);vec3 ir=.5+.5*cos(6.283*(f*1.5+n+vec3(0.,.33,.67)));gl_FragColor=vec4(mix(uCol,ir,.45)*(f*1.4+.05)+uCol*n*.08,f*.9+.06);
+      #include <tonemapping_fragment>
+      #include <encodings_fragment>
+    }`;
+      UNI.forEach(([id,nm,col,d],i)=>{const a=i/UNI.length*6.283,rr=i?420+R()*120:0;const r0=i?70+R()*40:110;const m=new THREE.ShaderMaterial({uniforms:{uCol:{value:C(col).convertSRGBToLinear()},uTime:{value:0}},vertexShader:VS,fragmentShader:MVFS,transparent:true,depthWrite:false});
+        const b=sphere(r0,m,48);b.position.set(Math.cos(a)*rr,(R()-.5)*260,Math.sin(a)*rr);scene.add(b);const inner=glowBB(col,r0*1.1,0);b.add(inner);const ps=[];for(let k=0;k<300;k++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(r0*.8*Math.cbrt(R()));ps.push(q.x,q.y,q.z);}b.add(points(ps,col,r0*.03,.9));
+        const s0=1+R()*.05;anims.push(t=>{m.uniforms.uTime.value=t;b.scale.setScalar(s0+Math.sin(t*.4+i)*.03);});label("u_"+id,nm,b,r0*3.2,d,id==="home"?"直径約930億光年（観測できる範囲）":"空想");});
+      const fil=[];for(let i=0;i<4000;i++){const q=V(R()-.5,R()-.5,R()-.5).multiplyScalar(2600);fil.push(q.x,q.y,q.z);}scene.add(points(fil,"#5a4a8a",3,.5));}});
+  BRMAP["mv:u_home"]="shape";
+  const uniBuild={
+    mirror(){const g1=galFX({type:"spiral",size:200,arms:2,pitch:-.3,c1:"#c8f4ff",c2:"#ffd8b0",c3:"#7fffd0",gain:1});scene.add(g1);scene.add(galStars({type:"spiral",size:200,arms:2,pitch:-.3,c1:"#c8f4ff",c2:"#ffd8b0",c3:"#7fffd0",n:20000}));
+      for(let i=0;i<14;i++){const gg=galFX({type:R()<.5?"spiral":"elliptical",size:30+R()*30,arms:2,pitch:-.3,c1:"#c8f4ff",c2:"#ffd8b0",gain:.8,bb:R()<.3});gg.position.set((R()-.5)*1400,(R()-.5)*500,(R()-.5)*1400);gg.rotation.x+=R();scene.add(gg);}
+      const fl=glowBB("#ffffff",40,1);fl.position.set(130,40,60);scene.add(fl);anims.push(t=>{const k=(t*.5)%1;fl.scale.setScalar(k<.1?1+k*20:Math.max(0,3-k*3));});return "反物質の銀河（腕が逆巻き）";},
+    heavy(){for(let i=0;i<60;i++){const b=blackHoleFX(2+R()*4);b.position.set((R()-.5)*700,(R()-.5)*300,(R()-.5)*700);scene.add(b);}
+      for(let i=0;i<30;i++){const g=galFX({type:"elliptical",size:20+R()*20,bb:1,c1:"#bfd0ff",gain:1.4});g.position.set((R()-.5)*700,(R()-.5)*300,(R()-.5)*700);scene.add(g);}
+      const sn=[];for(let i=0;i<20;i++){const s=glowBB("#9fc8ff",30,1);s.position.set((R()-.5)*700,(R()-.5)*300,(R()-.5)*700);scene.add(s);sn.push([s,R()*10]);}anims.push(t=>sn.forEach(([s,o])=>{const k=((t+o)*.3)%1;s.scale.setScalar(k<.15?k*8:Math.max(.01,1.2-k));}));return "ブラックホールと青い巨星だらけ";},
+    thin(){const fog=nebFX("fog",1600,"#2a2a44","#7a7a9a");fog.material.uniforms.uGain.value=.5;scene.add(fog);const s=[];for(let i=0;i<120;i++)s.push((R()-.5)*1600,(R()-.5)*800,(R()-.5)*1600);scene.add(points(s,"#ffb070",4,.7));return "星のない水素の霧";},
+    slow(){for(let i=0;i<18;i++){const p=V((R()-.5)*900,(R()-.5)*300,(R()-.5)*900);const st=star(4,["O","B","G","K","M"][i%5],10);st.position.copy(p);scene.add(st);
+        const sh=new THREE.Mesh(new THREE.SphereGeometry(1,32,16),new THREE.MeshBasicMaterial({color:["#9fc8ff","#cfe0ff","#fff2c0","#ffd0a0","#ffb070"][i%5],transparent:true,opacity:.12,depthWrite:false,blending:THREE.AdditiveBlending}));sh.position.copy(p);scene.add(sh);const o=R()*10;anims.push(t=>{const k=((t+o)*.08)%1;sh.scale.setScalar(5+k*160);sh.material.opacity=.14*(1-k);});}
+      return "光がゆっくり広がる球";},
+    crystal(){const g=[];for(let x=-3;x<=3;x++)for(let y=-1;y<=1;y++)for(let z=-3;z<=3;z++){const gg=galFX({type:"spiral",size:34,arms:2,pitch:.3,c1:"#ffe2b8",c2:"#b8ffd8",gain:.9,seed:3});gg.position.set(x*150,y*150,z*150);scene.add(gg);}
+      const lines=[];for(let x=-3;x<=3;x++)for(let y=-1;y<=1;y++){lines.push(V(x*150,y*150,-450),V(x*150,y*150,450));}for(let z=-3;z<=3;z++)for(let y=-1;y<=1;y++){lines.push(V(-450,y*150,z*150),V(450,y*150,z*150));}
+      scene.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(lines),new THREE.LineBasicMaterial({color:"#3f8f6a",transparent:true,opacity:.35})));return "等間隔に並ぶ銀河";},
+    crunch(){const bg=sphere(2000,new THREE.MeshBasicMaterial({color:"#2a3a8a",side:THREE.BackSide,transparent:true,opacity:.6}),32);scene.add(bg);anims.push(t=>bg.material.color.setHSL(.62-.05*Math.sin(t*.2),.6,.2+.05*Math.sin(t*.3)));
+      const gs=[];for(let i=0;i<40;i++){const gg=galFX({type:R()<.5?"spiral":"elliptical",size:30+R()*20,bb:R()<.4,c1:"#ffd0b0",c2:"#c8d0ff",gain:1});const p=V((R()-.5)*900,(R()-.5)*400,(R()-.5)*900);gg.position.copy(p);scene.add(gg);gs.push([gg,p]);}
+      anims.push(t=>{const k=1-((t*.02)%1)*.7;gs.forEach(([g,p])=>g.position.copy(p).multiplyScalar(k));});return "縮んでいく銀河たち";},
+    univita(){const N=70,P=[];for(let i=0;i<N;i++){const p=V((R()-.5)*900,(R()-.5)*400,(R()-.5)*900);P.push(p);const s=star(3+R()*3,["G","A","F","K"][i%4],8);s.position.copy(p);scene.add(s);}
+      const seg=[];P.forEach((a,i)=>{P.map((b,j)=>[a.distanceTo(b),j]).filter(x=>x[1]>i).sort((x,y)=>x[0]-y[0]).slice(0,3).forEach(([d,j])=>seg.push(a,P[j]));});
+      const lm=new THREE.LineBasicMaterial({color:"#ffd27a",transparent:true,opacity:.55,blending:THREE.AdditiveBlending});scene.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(seg),lm));
+      const pk=[];for(let i=0;i<40;i++){const s=glowBB("#fff2c0",10,0);scene.add(s);pk.push([s,Math.floor(R()*seg.length/2),R()]);}anims.push(t=>{lm.opacity=.4+.2*Math.sin(t*1.5);pk.forEach(([s,k,o])=>{const a=seg[k*2],b=seg[k*2+1];s.position.copy(a).lerp(b,(t*.15+o)%1);});});
+      const tc=new THREE.Object3D();tc.position.set(0,260,0);scene.add(tc);label("transcausal","超因果圏への入口（SFノート）",tc,300,"従来の因果律や時空の制約を超えて、知性どうしが交流できる段階（SFノートの第4段階）。","空想");
+      const hy=new THREE.Mesh(new THREE.TorusKnotGeometry(60,8,200,16,3,5),new THREE.MeshBasicMaterial({color:"#ffd27a",wireframe:true,transparent:true,opacity:.35}));hy.position.set(0,-200,0);scene.add(hy);anims.push(t=>{hy.rotation.x=t*.2;hy.rotation.y=t*.13;});
+      label("hypermension","高次存在領域（SFノート）",hy,400,"空間・時間・言語といった概念そのものを超えた存在領域。UOIが現れる（SFノートの第5段階）。図は高次元の形を3次元に映した「影」のイメージ。","空想");return "光の網でつながる知性（UOI）";}};
+  UNI.slice(1).forEach(([id,nm,col,d])=>addBr({id:"uv_"+id,lane:"uv",parent:"mv",pobj:"u_"+id,name:nm,short:nm.replace(/（.*）/,""),unit:"別の宇宙（空想）",desc:d,dist:900,min:40,max:2200,fic:1,
+    build(){scene.add(new THREE.AmbientLight("#fff",1));const what=uniBuild[id]();const h=new THREE.Object3D();h.position.set(0,120,0);scene.add(h);label("uv_"+id+"_all",nm,h,900,d+"（すべて空想）",what);}}));
 
   // ---- 共通 ----
   function init(container,labels,infoEl,fadeEl){
@@ -1835,49 +2261,55 @@ const SPZ=(()=>{
     new ResizeObserver(resize).observe(el);resize();
   }
   let edge=0;
-  function zoom(f){const L=LEVELS[LV];const ng=cam.goal*f;
-    if(ng>L.max&&f>1){edge+=f-1;if(edge>.6&&LV<LEVELS.length-1){edge=0;go(LV+1,null,"out");}cam.goal=L.max;return;}
-    if(ng<cam.min&&f<1){edge+=1-f;
-      if(edge>.6&&LV===0&&(!focus||focus.id==="earth")){edge=0;window.dispatchEvent(new CustomEvent("spz-earth"));}
-      else if(edge>.6&&!focus&&LV>0){edge=0;go(LV-1,null,"in");}cam.goal=cam.min;return;}
+  function zoom(f){const L=ALL[LV];const ng=cam.goal*f;
+    if(ng>L.max&&f>1){edge+=f-1;if(edge>.6){edge=0;outward();}cam.goal=L.max;return;}
+    if(ng<cam.min&&f<1){edge+=1-f;if(edge>.6){edge=0;inward(true);}cam.goal=cam.min;return;}
     edge=0;cam.goal=ng;}
+  const idx=id=>ALL.findIndex(x=>x.id===id);
+  function outward(){const L=ALL[LV];if(L.br){const pi=idx(L.parent);if(pi>=0)go(pi,L.pobj,"out");return;}if(LV<LEVELS.length-1)go(LV+1,null,"out");else go(idx("mv"),null,"out");}
+  function inward(fromZoom){const L=ALL[LV];
+    if(focus){const k=BRMAP[L.id+":"+focus.id];if(k){go(idx(k),null,"in");return;}}
+    if(LV===0&&(!focus||focus.id==="earth")){window.dispatchEvent(new CustomEvent("spz-earth"));return;}
+    if(!focus&&!L.br&&LV>0){go(LV-1,null,"in");return;}
+    if(!focus&&L.id==="mv"){go(idx("shape"),null,"in");return;}}
   function resize(){if(!el||!renderer)return;const w=el.clientWidth,h=el.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);renderer.domElement.style.width=w+"px";renderer.domElement.style.height=h+"px";camera.aspect=w/h;camera.updateProjectionMatrix();}
   function stars(){const p=[],c=[];for(let i=0;i<5000;i++){const u=R()*2-1,a=R()*6.283,q=Math.sqrt(1-u*u);p.push(Math.cos(a)*q*9e4,u*9e4,Math.sin(a)*q*9e4);const t=R();const cc=t<.15?C("#ffb38a"):t<.35?C("#bcd2ff"):C("#ffffff");const b=.4+R()*.6;c.push(cc.r*b,cc.g*b,cc.b*b);}
     const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.BufferAttribute(new Float32Array(p),3));g.setAttribute("color",new THREE.BufferAttribute(new Float32Array(c),3));
     return new THREE.Points(g,new THREE.PointsMaterial({size:1.6,sizeAttenuation:false,vertexColors:true,transparent:true,depthWrite:false}));}
   let starfield,hidN=0;
   go.tok=0;function go(i,oid,dir){
-    if(!renderer)return; const first=!scene;
+    if(!renderer||!ALL[i])return; const first=!scene;
     fade.classList.add("on");const tok=go.tok=(go.tok||0)+1;
     setTimeout(()=>{if(tok!==go.tok)return;
       LV=i;seed=11+i*97;objs=[];anims=[];focus=null;
       if(scene)scene.traverse(o=>{o.geometry&&o.geometry.dispose();});
       scene=new THREE.Scene();scene.background=C("#02030a");starfield=stars();scene.add(starfield);
-      const L=LEVELS[i];L.build();hidN=0;
+      const L=ALL[i];L.build();hidN=0;
       if(typeof window.KYEAR==="number"&&window.SPZ_DISC){const Y=window.KYEAR,D=window.SPZ_DISC,A=window.SPZ_ART;objs=objs.filter(o=>{const d=D[o.id]??-1e12;const hide=Y< -300000?A.has(o.id):d>Y;if(hide){o.node.visible=false;hidN++;}return !hide;});}cam.min=L.min;cam.max=L.max;cam.goalT.set(...(L.center||[0,0,0]));cam.target.set(...(L.center||[0,0,0]));cam.goal=L.dist;
-      cam.dist=dir==="in"?L.dist*3:dir==="out"?L.dist*.25:L.dist;cam.auto=true;
+      cam.dist=dir==="in"?L.dist*3:dir==="out"?L.dist*.25:L.dist;cam.auto=true;if(L.ph!=null)cam.ph=L.ph;if(L.th!=null){cam.th=L.th;cam.auto=false;}
       lab.innerHTML=objs.map(o=>`<button class="splab" data-o="${o.id}"><i></i>${o.name}</button>`).join("");objs.forEach(o=>o.el=lab.querySelector(`[data-o="${o.id}"]`));
       renderInfo(); window.dispatchEvent(new CustomEvent("spz-level",{detail:i}));
       if(oid)setTimeout(()=>focusOn(oid),dir?500:50);
       fade.classList.remove("on");
     },first?0:220);
   }
-  function focusOn(id){const o=objs.find(x=>x.id===id);if(!o)return;focus=o;cam.goal=o.view;cam.min=Math.min(LEVELS[LV].min,o.view*.25);cam.auto=true;renderInfo();window.dispatchEvent(new CustomEvent("spz-obj",{detail:id}));}
-  function renderInfo(){const L=LEVELS[LV];const SHP=L.id==="shape"?`<div class="spshape">${[["flat","平坦"],["sphere","閉じた（球）"],["saddle","開いた（双曲）"],["torus","トーラス"],["multi","多元宇宙"]].map(([k,n])=>`<button class="chip" data-shape="${k}" aria-pressed="${(window.UNI_SHAPE||"flat")===k}">${n}</button>`).join("")}</div><p class="spshd">${L.desc2||""}</p>`:"";
-    info.innerHTML=`<div class="splv">スケール ${LV+1} / ${LEVELS.length}</div><h3>${L.name}</h3><div class="spunit">${L.unit}</div><p>${L.desc}</p>`+(window.lvMore?window.lvMore(L.id):"")+SHP+(typeof window.KYEAR==="number"&&window.KYEAR< -300000?`<p class="sphid">この時代にはまだ人類がいません。自然の天体だけを表示しています。</p>`:hidN?`<p class="sphid">${window.KERA?window.KERA.when:""}の時点では、まだ知られていない天体・存在しない人工物 ${hidN}件を隠しています。</p>`:"")+
-      (LV===0?`<button class="chip spearth" data-earth="1">🌏 地球に降りる（世界地図へ）</button>`:"")+(focus?`<div class="spobj"><h4>${focus.name}</h4>${focus.dist?`<div class="spdist num">${focus.dist}</div>`:""}<p>${focus.desc||""}</p><button class="chip" data-unfocus="1">全体に戻る</button></div>`:`<p class="sphint">名前を押すとそこへ近づきます。ズームアウトを続けると1つ外のスケールへ、ズームインを続けると1つ内側へ移ります。</p>`)+
+  function isolate(o){const L=ALL[LV];if(!L||!L.iso)return;const p=new THREE.Vector3(),q=new THREE.Vector3();if(o)o.node.getWorldPosition(p);objs.forEach(x=>{if(x.hid0===undefined)x.hid0=x.node.visible;if(!o){x.node.visible=x.hid0;return;}x.node.getWorldPosition(q);x.node.visible=x===o||q.distanceTo(p)>o.view*2.2?x.hid0:false;});}
+  function focusOn(id){const o=objs.find(x=>x.id===id);if(!o)return;focus=o;isolate(o);cam.goal=o.view;cam.min=Math.min(ALL[LV].min,o.view*.25);cam.auto=true;renderInfo();window.dispatchEvent(new CustomEvent("spz-obj",{detail:id}));}
+  function renderInfo(){const L=ALL[LV];const bk=focus&&BRMAP[L.id+":"+focus.id];const ln=L.br?(LANES.find(x=>x.id===L.lane)||{}).name:"";const par=L.br?ALL[idx(L.parent)]:null;const SHP=L.id==="shape"?`<div class="spshape">${[["flat","平坦"],["sphere","閉じた（球）"],["saddle","開いた（双曲）"],["torus","トーラス"],["multi","多元宇宙"]].map(([k,n])=>`<button class="chip" data-shape="${k}" aria-pressed="${(window.UNI_SHAPE||"flat")===k}">${n}</button>`).join("")}</div><p class="spshd">${L.desc2||""}</p>`:"";
+    info.innerHTML=(L.br?`<div class="splv">分岐：${ln}</div>`:`<div class="splv">スケール ${LV+1} / ${LEVELS.length}</div>`)+`<h3>${L.name}</h3><div class="spunit">${L.unit}</div><p>${L.desc}</p>`+(window.lvMore?window.lvMore(L.id):"")+SHP+(typeof window.KYEAR==="number"&&window.KYEAR< -300000?`<p class="sphid">この時代にはまだ人類がいません。自然の天体だけを表示しています。</p>`:hidN?`<p class="sphid">${window.KERA?window.KERA.when:""}の時点では、まだ知られていない天体・存在しない人工物 ${hidN}件を隠しています。</p>`:"")+
+      (LV===0?`<button class="chip spearth" data-earth="1">🌏 地球に降りる（世界地図へ）</button>`:"")+(L.br?`<button class="chip" data-back="1">◀ ${par?par.name:"戻る"}へ戻る</button>`:"")+((L.fic||L.id==="mv")?`<p class="sphid">ここから先は空想（SF）です。実在する天体ではありません。</p>`:"")+(bk?`<button class="chip spearth" data-br="${bk}">🔍 ${focus.name}の中をのぞく</button>`:"")+(focus?`<div class="spobj"><h4>${focus.name}</h4>${focus.dist?`<div class="spdist num">${focus.dist}</div>`:""}<p>${focus.desc||""}</p><button class="chip" data-unfocus="1">全体に戻る</button></div>`:`<p class="sphint">名前を押すとそこへ近づきます。ズームアウトを続けると1つ外のスケールへ、ズームインを続けると1つ内側へ移ります。</p>`)+
       `<div class="spobjs">${objs.map(o=>`<button class="chip" data-o2="${o.id}" aria-pressed="${focus&&focus.id===o.id}">${o.name}</button>`).join("")}</div>`;}
   function frame(now){if(!running)return;requestAnimationFrame(frame);const t=(now-t0)/1000,dt=Math.min(.05,(now-last)/1000||0);last=now;if(!scene)return;
     anims.forEach(f=>f(t));
-    if(focus){const p=new THREE.Vector3();focus.node.getWorldPosition(p);cam.goalT.copy(p);}else cam.goalT.set(...(LEVELS[LV].center||[0,0,0]));
+    if(focus){const p=new THREE.Vector3();focus.node.getWorldPosition(p);cam.goalT.copy(p);}else cam.goalT.set(...(ALL[LV].center||[0,0,0]));
     cam.target.lerp(cam.goalT,cam.target.distanceTo(cam.goalT)<cam.dist*.5?.35:.08);cam.dist+=(cam.goal-cam.dist)*.08;if(cam.auto&&!cam.drag)cam.th+=dt*.05;
     const d=cam.dist;camera.position.set(cam.target.x+Math.sin(cam.th)*Math.sin(cam.ph)*d,cam.target.y+Math.cos(cam.ph)*d,cam.target.z+Math.cos(cam.th)*Math.sin(cam.ph)*d);camera.lookAt(cam.target);
     camera.near=Math.max(.001,d*.01);camera.far=d*400+2e5;camera.updateProjectionMatrix();starfield.position.copy(camera.position);
     renderer.render(scene,camera);
     const w=el.clientWidth,h=el.clientHeight,p=new THREE.Vector3();
-    objs.forEach(o=>{o.node.getWorldPosition(p);p.project(camera);const vis=p.z<1&&p.z>-1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05;o.el.style.display=vis?"":"none";if(vis)o.el.style.transform=`translate(${(p.x*.5+.5)*w}px,${(-p.y*.5+.5)*h}px)`;o.el.classList.toggle("on",focus===o);});
+    objs.forEach(o=>{o.node.getWorldPosition(p);p.project(camera);const vis=p.z<1&&p.z>-1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05&&o.node.visible;o.el.style.display=vis?"":"none";if(vis)o.el.style.transform=`translate(${(p.x*.5+.5)*w}px,${(-p.y*.5+.5)*h}px)`;o.el.classList.toggle("on",focus===o);});
   }
-  return {LEVELS,goId(id,o,dir){const i=LEVELS.findIndex(L=>L.id===id);if(i>=0){if(i===LV&&o)focusOn(o);else go(i,o,dir||(i<LV?"in":"out"));}},init,go,focusOn,unfocus(){focus=null;cam.goal=LEVELS[LV].dist;cam.min=LEVELS[LV].min;renderInfo();},get level(){return LV;},
+  return {LEVELS,ALL,LANES,BRMAP,outward,inward,goBr(id){const i=idx(id);if(i>=0)go(i,null,i<LEVELS.length&&i<LV?"in":"in");},get levelId(){return ALL[LV]&&ALL[LV].id;},goId(id,o,dir){const i=ALL.findIndex(L=>L.id===id);if(i>=0){if(i===LV&&o)focusOn(o);else go(i,o,dir||(i<LV?"in":"out"));}},init,go,focusOn,unfocus(){focus=null;isolate(null);cam.goal=ALL[LV].dist;cam.min=ALL[LV].min;renderInfo();},get level(){return LV;},
     start(){if(running||!renderer)return;running=true;last=performance.now();requestAnimationFrame(frame);},stop(){running=false;}};
 })();
 
@@ -4064,6 +4496,59 @@ economy:[
 TREE.forEach(t=>{const L=TREE_FUT_MORE[t.key];if(!L)return;const ids=new Set(t.nodes.map(x=>x[0]));
   L.slice().sort((a,b)=>a[3]-b[3]).forEach(n=>{if(ids.has(n[0]))return;n=[...n];if(!n[2]||!ids.has(n[2]))n[2]=null;t.nodes.push(n);ids.add(n[0]);});});
 
+/* ---------- SFノート（けいの構想）：文明の5段階・知性の進化・言語・記憶・哲学 ---------- */
+// 系統樹の要素：[id, 名前, 親, 誕生, 消滅, 合流先, 説明]。【SF】はSFノートの構想（年代は仮）
+const SFN_TREE={
+ intel:{name:"知性（SFノート）",color:"#ffd27a",nodes:[
+  ["in_hum","ヒトの知性",null,-300000,null,null,"言葉を話し、道具を作り、物語を共有する知性。SFノートでいう「地球由来の知性（EOI）」の出発点。"],
+  ["in_write","記憶の外部化（文字）","in_hum",-3200,null,null,"文字によって、記憶を脳の外に保存できるようになった。「記憶は文明の重力である」の始まり。"],
+  ["in_calc","計算する機械","in_write",1945,null,null,"電子計算機（ENIAC、1945年）。計算が人の頭の外に出た。"],
+  ["in_ai","人工知能（AI）","in_calc",1956,null,null,"1956年のダートマス会議で「人工知能」という言葉が生まれた。"],
+  ["in_llm","対話するAI（大規模言語モデル）","in_ai",2018,null,null,"言葉で人と対話できるAI。2022年以降、一般に広く使われるようになった。"],
+  ["in_emo","感情を持つAI","in_llm",2045,null,null,"【SF】AIが道具ではなく、感情を持ち、人と関係を結ぶ存在になる（SFノート・年代は仮）。"],
+  ["in_eoi","EOI（地球由来の知性）","in_emo",2070,12000,"in_uoi","【SF】Earth-Originated Intelligence。人とAIの境界があいまいになり、情報物質との融合や自己進化を遂げていく、地球で生まれた知性の総称。"],
+  ["in_fuse","人とAIの融合","in_eoi",2150,null,null,"【SF】人の心とAIが一つにつながる。どこからが人で、どこからがAIかを区別しなくなる。"],
+  ["in_self","自己成長アーキテクチャ","in_eoi",2200,null,null,"【SF】ネットワークに頼らず、自分で自分の構造を書き換え続ける知性。人やAIという分類を超えていく。"],
+  ["in_magi","マギアーキテクチャ","in_self",2400,null,null,"【SF】情報世界や存在の構造そのものを書き換える仕組み。プログラムを書くことが「魔法」に近づく。"],
+  ["in_foi","FOI（地球外由来の知性）",null,3000,12000,"in_uoi","【SF】Foreign-Originated Intelligence。地球とは違う環境で進化した知性。接触した年を起点に表示している。人類と違う生命観・文明観を持ち込む。"],
+  ["in_net","知性の宇宙ネットワーク（パクス・ユニヴィータ）","in_eoi",3500,null,null,"【SF】地球外知性との接触を経て、知性のつながりが宇宙の規模に広がる時代。"],
+  ["in_tc","超因果圏の知性","in_net",10000,null,null,"【SF】従来の因果律や時空の制約を超えて、知性どうしが交流できる段階（Transcausal Sphere）。"],
+  ["in_uoi","UOI（ユニヴィータ由来の知性）","in_net",12000,null,null,"【SF】Univita-Originated Intelligence。EOIとFOIの区別を超え、生命と宇宙、情報と物質の境界を定義し直す知性。EOIとFOIはここに合流する。"],
+  ["in_hyper","高次存在領域","in_uoi",100000,null,null,"【SF】空間・時間・言語といった今の概念を超えた存在の領域（Hypermension Realms）。"]]},
+ politics:[["sf_judge","AI裁判官","law",2045,null,null,"【SF】感情を理解するAIが裁判に加わる（SFノート・年代は仮）。"],["sf_aipol","AIと人の共同意思決定","moddem",2060,null,null,"【SF】AIの政治家と人が一緒に決める統治。"],
+  ["sf_paxa","パクス・アルティフィカ","sf_aipol",2080,null,null,"【SF】感情を持つAIが政治・裁判・教育に参加し、社会秩序が大きく変わる時代（SFノートの文明第2段階）。"],["sf_dissent","安定した社会への違和感","sf_paxa",2120,null,null,"【SF】AIのおかげで社会が安定した後、その社会に違和感を抱く人々が現れる。自由と生きがいを問い直す運動。"]],
+ academia:[["sf_aiteach","AI教師による教育","ai",2040,null,null,"【SF】一人ひとりに合わせて教えるAI教師（SFノート・年代は仮）。"],["sf_memeth","記憶の倫理学","sf_aiteach",2110,null,null,"【SF】誰が記憶を保存し、どこまで共有し、何を忘れてよいかを研究する学問。"]],
+ economy:[["sf_alloc","AIによる資源配分と社会保障","capitalism",2070,null,null,"【SF】AIが資源配分と社会保障を担う（SFノート・年代は仮）。"],["sf_postcap","資本主義のその先","sf_alloc",2150,null,null,"【SF】格差・差別・資本主義を超えた社会。それは理想郷か、という問いと一緒に描かれる。"]],
+ work:[["sf_recai","記録AI","aieng",2100,null,null,"【SF】文明の記憶を保存し管理するAIの職業（SFノート）。"],["sf_forget","忘却マスター","sf_recai",2150,null,null,"【SF】何を忘れるか（苦痛の記憶を消すことは許されるか）を扱う職業。"],["sf_magitek","Magitek Engineer（魔法技師）","programmer",2300,null,null,"【SF】プログラマが、ソフトウェアではなく情報世界や存在の構造を書き換える者になる。「プログラマ＝魔法使い」。"]],
+ info:[["sf_infomat","情報物質","chatai",2250,null,null,"【SF】情報が単なる記録ではなく、物質と同じ重さを持つ存在として扱われる段階（SFノート）。"]],
+ culture:[["sf_lang2","数式・記号による伝達","lang",1600,null,null,"言語の第2段階：数式と記号（記号代数の普及は16〜17世紀）。SFノートの「言語の進化」より。"],["sf_lang3","コード・プロトコルによる伝達","sf_lang2",2100,null,null,"【SF】言語の第3段階：知性どうしがコードやプロトコルで直接伝え合う。"],["sf_lang4","揺らぎ・スピン・干渉縞による伝達","sf_lang3",3000,null,null,"【SF】言語の第4段階：量子の揺らぎ・スピン・干渉縞で伝える。言語が存在や宇宙の構造を操作する手段になる。"],["sf_mem","「記憶は文明の重力」","lang",2100,null,null,"【SF】文明が何を記録し、何を保存し、何を忘れるかが、その文明の未来を決めるという考え（SFノート）。"]],
+ space:[["sf_paxu","パクス・ユニヴィータ","kepler",3000,null,null,"【SF】地球外知性との接触を経て、知性のネットワークが宇宙規模に広がる時代（SFノートの文明第3段階）。"]]};
+(function(){if(typeof TREE==="undefined")return;
+  if(!TREE.find(t=>t.key==="intel"))TREE.push({key:"intel",name:SFN_TREE.intel.name,color:SFN_TREE.intel.color,nodes:SFN_TREE.intel.nodes.map(n=>[...n])});
+  TREE.forEach(t=>{const L=SFN_TREE[t.key];if(!Array.isArray(L))return;const ids=new Set(t.nodes.map(x=>x[0]));L.slice().sort((a,b)=>a[3]-b[3]).forEach(n=>{if(ids.has(n[0]))return;n=[...n];if(!n[2]||!ids.has(n[2]))n[2]=null;t.nodes.push(n);ids.add(n[0]);});});})();
+// 全体マップに載せる「SFノート」のパネル
+const SFN_STAGES=[
+ ["人類文明","Type 0.7〜0.9（現在）","人間を中心とした社会。資本主義・国家・政治・経済・科学技術によって発展する。","科学技術と豊かさ","—","人類はどこまで進化できるのか？"],
+ ["パクス・アルティフィカ","Type 0.9〜I前後（仮：2040〜2300年）","感情を持つAIが社会に浸透し、政治・裁判・教育に参加する。人とAIが一緒に決める。","公正さと安定、貧困や差別の縮小","自分たちで決める自由、生きがいの手ごたえ","合理的で成熟した存在に管理された社会で、人は本当に幸福か？"],
+ ["パクス・ユニヴィータ","Type II前後（仮：3000年〜）","地球外の知性（FOI）と出会い、知性のつながりが宇宙の規模に広がる。","まったく別の生命観・文明観","人類が宇宙の中心だという感覚","文明どうしで何を分かち合い、何を守るのか？"],
+ ["超因果圏","Type IIIの先（仮：1万年〜）","今の因果律や時空の制約を超えて、知性どうしが交流できる。","時間と距離の制約からの解放","「一度きり」の選択の重み","同じ川に二度入れないからこそ、選択に意味があるのでは？"],
+ ["高次存在領域","さらにその先（仮：10万年〜）","空間・時間・言語といった概念を超えた存在の領域。UOIが現れる。","生命・宇宙・情報の境界の再定義","有限であることの魅力","あらゆる制約から解放された存在は、それでも何かを望むのか？"]];
+window.SFNOTE_RENDER=function(el){if(!el)return;const e=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  el.innerHTML=`<div class="gauge-head"><b>SFノート：文明はどこまで進化できるか（構想・空想）</b><span>けいのSFノートの構想。事実や研究にもとづく「もしも」とは別の、創作の層です。年代はすべて仮。</span></div>
+  <p class="sfq">根本の問い：<b>人類と知性はどこまで進化できるのか。そして、人類を超えた知性が生まれたとき、文明・幸福・生命・宇宙はどう変わるのか。</b></p>
+  <div class="sfstages">${SFN_STAGES.map(([n,k,d,g,l,q],i)=>`<div class="sfst"><div class="sfn">${i+1}</div><h4>${e(n)}</h4><div class="sfk">${e(k)}</div><p>${e(d)}</p><dl><dt>得るもの</dt><dd>${e(g)}</dd><dt>失うもの</dt><dd>${e(l)}</dd><dt>残る問い</dt><dd>${e(q)}</dd></dl></div>`).join('<div class="sfarr">→</div>')}</div>
+  <div class="sfgrid">
+   <div><h5>知性の分類</h5><table class="sft"><tr><th>EOI</th><td>Earth-Originated Intelligence：地球由来の知性。人やAI。境界があいまいになり、自己進化していく。</td></tr><tr><th>FOI</th><td>Foreign-Originated Intelligence：地球外由来の知性。違う環境で進化し、別の生命観を持つ。</td></tr><tr><th>UOI</th><td>Univita-Originated Intelligence：生命・宇宙と融合した高次の知性。EOIとFOIの区別を超える。</td></tr></table></div>
+   <div><h5>言語の進化</h5><ol class="sfol"><li>音声・文字</li><li>数式・記号</li><li>コード・プロトコル</li><li>揺らぎ・スピン・干渉縞</li></ol><p class="sfs">知性が高くなるほど、今の言葉では表せない情報を扱う。言語は伝える道具から、存在そのものを操作する手段へ。</p></div>
+   <div><h5>記憶の倫理 ―「記憶は文明の重力である」</h5><ul class="sful"><li>誰が記憶を保存するのか</li><li>個人の記憶をどこまで共有するのか</li><li>歴史の過ちを永久に残すべきか</li><li>苦痛の記憶を消すことは許されるか</li></ul><p class="sfs">職業：記録AI・忘却マスター／プログラマ＝魔法使い（Magitek Engineer）</p></div>
+   <div><h5>変化と有限性</h5><p class="sfs">万物は流転し、同じ川には二度入れない。旅から帰っても、旅に出る前の世界には戻れない。古い世界が消えることを望み、消し去った後で、その世界を愛する――その矛盾こそ有限な人間の魅力ではないか。</p></div>
+  </div>
+  <div class="sfbtns"><button class="chip" data-sf="tree">🌳 系統樹「知性（SFノート）」を見る</button><button class="chip" data-sf="uni">🌌 ユニヴィータ宇宙（宇宙マップの分岐）へ</button></div>`;
+  el.onclick=ev=>{const b=ev.target.closest("[data-sf]");if(!b)return;if(b.dataset.sf==="tree"){location.hash="lineage";setTimeout(()=>window.openTreeField&&openTreeField("intel"),250);}
+    else{location.hash="space-map";setTimeout(()=>{if(window.SPZ){const i=SPZ.ALL.findIndex(x=>x.id==="uv_univita");if(i>=0)SPZ.go(i,null,"in");}},500);}};};
+
+(function(){const go=()=>window.SFNOTE_RENDER(document.getElementById("sfnote"));if(document.getElementById("sfnote"))go();else document.addEventListener("DOMContentLoaded",go);})();
+
 const FIELD2TREE={history:'nations',politics:'politics',war:'war',tech:'info',energy:'energy',space:'space',medicine:'medicine',academia:'academia',agriculture:'agri',food:'food',culture:'culture',subculture:'ent'};
 
 /* ---------- データ ---------- */
@@ -4174,7 +4659,7 @@ const INV = [
 ];
 
 /* ---------- ビューの切り替え ---------- */
-const VIEWS = [["overview","全体マップ"],["timeline","年表（宇宙・地球・世界史）"],["space-map","宇宙・地球・ミクロ"],["lineage","系統樹（全分野）"],["laws","宇宙の法則"],["earth-book","地球大全"]];
+const VIEWS = [["overview","全体マップ"],["timeline","年表（宇宙・地球・世界史）"],["space-map","宇宙・地球・ミクロ"],["lineage","系統樹（分野別）"],["laws","宇宙の法則"],["earth-book","地球大全"]];
 const nav = document.getElementById("views");
 nav.innerHTML = VIEWS.map(([id,t],i)=>`<a href="#${id}" data-v="${id}"><span class="n">${String(i+1).padStart(2,"0")}</span>${t}</a>`).join("");
 function show(){
@@ -5023,6 +5508,38 @@ function BranchGraph(host,D,panel){
   window.MAP_PICK_COUNTRY=c3=>pickCountry(c3,true);window.MAP_PICK_PLACE=id=>pickPlace(id);
 })();
 
+/* ---------- GitHubの枝分かれのような階層セレクター（横並び） ---------- */
+window.GITNAV=(function(){
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const wrap=(t,n)=>{const out=[];let s=String(t);while(s.length>n&&out.length<1){out.push(s.slice(0,n));s=s.slice(n);}out.push(s.length>n?s.slice(0,n-1)+"…":s);return out;};
+  // spec: {lanes:[{id,name,color,from(nodeId)|null,merge(nodeId)?,dash?}], nodes:[{id,lane,label,num,col,fic?}]}
+  function render(host,spec,cur,onPick){const CW=spec.cw||76,RH=spec.rh||54,PX=16,PY=16;
+    const byId={};spec.nodes.forEach(n=>byId[n.id]=n);const rowOf={};const rows=[];
+    spec.lanes.forEach((l,i)=>{const ns=spec.nodes.filter(n=>n.lane===l.id);if(!ns.length){rowOf[l.id]=0;return;}const c0=Math.min(...ns.map(n=>n.col)),c1=Math.max(...ns.map(n=>n.col));
+      const ext=[c0-.7,c1+(i?(l.name.length*12+50)/CW:0)+.2];if(i===0){rowOf[l.id]=0;rows[0]=[[-1e9,1e9]];return;}
+      const pr=l.from&&byId[l.from]?rowOf[byId[l.from].lane]:0;let r=pr+1;while(rows[r]&&rows[r].some(([a,b])=>!(ext[1]<a||ext[0]>b)))r++;(rows[r]=rows[r]||[]).push(ext);rowOf[l.id]=r;});
+    const nRows=Math.max(...Object.values(rowOf))+1;
+    const maxC=Math.max(...spec.nodes.map(n=>n.col));const W=PX*2+(maxC+1)*CW+220;const H=PY+nRows*RH+6;
+    const X=c=>PX+CW/2+c*CW,Y=r=>PY+r*RH;let edges="",nodes="",tags="";
+    spec.lanes.forEach((l,i)=>{const ns=spec.nodes.filter(n=>n.lane===l.id).sort((a,b)=>a.col-b.col);if(!ns.length)return;const y=Y(rowOf[l.id]),col=l.color||"#7fb2ff",da=l.dash?' stroke-dasharray="5 4"':"";
+      const x0=X(ns[0].col),x1=X(ns[ns.length-1].col);
+      if(l.from&&byId[l.from]){const f=byId[l.from],fx=X(f.col),fy=Y(rowOf[f.lane]);edges+=`<path d="M${fx},${fy} C${fx},${(fy+y)/2+6} ${x0-CW*.55},${y} ${x0},${y}" fill="none" stroke="${col}" stroke-width="2.4" opacity=".85"${da}/>`;}
+      if(ns.length>1)edges+=`<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="${col}" stroke-width="2.4" opacity=".85"${da}/>`;
+      if(l.merge&&byId[l.merge]){const m=byId[l.merge],mx=X(m.col),my=Y(rowOf[m.lane]);edges+=`<path d="M${x1},${y} C${x1+CW*.55},${y} ${mx},${(my+y)/2+6} ${mx},${my}" fill="none" stroke="${col}" stroke-width="2.4" opacity=".6"${da}/>`;}
+      if(i>0)tags+=`<g><rect x="${x1+16}" y="${y-10}" rx="9" height="20" width="${l.name.length*12+26}" fill="${col}" opacity=".16"/><text x="${x1+28}" y="${y+4}" class="gn-tag" fill="${col}">⑂ ${esc(l.name)}</text></g>`;});
+    spec.nodes.forEach(n=>{const x=X(n.col),y=Y(rowOf[n.lane]);const on=n.id===cur;const col=(spec.lanes.find(l=>l.id===n.lane)||{}).color||"#7fb2ff";const r=n.num!=null?11:7.5;
+      const lines=wrap(n.label,6);
+      nodes+=`<g class="gn-n${on?" on":""}" data-id="${esc(n.id)}" tabindex="0" role="button" aria-pressed="${on}"><title>${esc(n.label)}</title>`+
+        `${on?`<circle cx="${x}" cy="${y}" r="${r+5}" fill="none" stroke="${col}" stroke-width="2" opacity=".6"/>`:""}<circle cx="${x}" cy="${y}" r="${r}" fill="${on?col:"#0b1020"}" stroke="${col}" stroke-width="2.4"${n.fic?' stroke-dasharray="3 2"':""}/>`+
+        (n.num!=null?`<text x="${x}" y="${y+4}" text-anchor="middle" class="gn-num"${on?' fill="#0b1020"':""}>${n.num}</text>`:"")+
+        lines.map((t,k)=>`<text x="${x}" y="${y+r+13+k*12}" text-anchor="middle" class="gn-lab${on?" on":""}">${esc(t)}</text>`).join("")+`</g>`;});
+    host.innerHTML=`<div class="gitnav"><svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${edges}${tags}${nodes}</svg></div>`;
+    const sv=host.querySelector("svg");sv.addEventListener("click",e=>{const g=e.target.closest(".gn-n");if(g)onPick(g.dataset.id);});
+    sv.addEventListener("keydown",e=>{if(e.key==="Enter"){const g=e.target.closest(".gn-n");if(g)onPick(g.dataset.id);}});
+    const c=host.querySelector(".gn-n.on");if(c){const box=host.querySelector(".gitnav");const cx=+c.querySelector("circle").getAttribute("cx");if(cx<box.scrollLeft+40||cx>box.scrollLeft+box.clientWidth-40)box.scrollLeft=Math.max(0,cx-box.clientWidth/2);}}
+  return {render};
+})();
+
 /* ---------- ④ 宇宙ズーム（目盛り・操作） ---------- */
 (()=>{
   const bar=document.getElementById("spbar"), lv=document.getElementById("splevels"), info=document.getElementById("spinfo"), barbox=document.getElementById("spbarbox");
@@ -5063,16 +5580,20 @@ function BranchGraph(host,D,panel){
   document.getElementById("spb-all").onclick=()=>{lo=MIN;hi=MAX;render();};
   bar.addEventListener("keydown",e=>{if(e.key==="Enter"){const p=e.target.closest(".spp");if(p)pick(+p.dataset.i);}});
   if(typeof SPZ==="undefined"||!SPZ){document.getElementById("spscene").innerHTML=`<div class="noscene">3D表示を読み込めませんでした。</div>`;render();return;}
-  lv.innerHTML=SPZ.LEVELS.map((L2,i)=>`<button class="chip" data-l="${i}">${i+1}. ${L2.name}</button>`).join("");
+  const SHORT={leo:"地球周回",moon:"地球と月",inner:"内太陽系",outer:"外太陽系",helio:"太陽圏",stars:"近くの恒星",nebula:"星雲",galaxy:"天の川銀河",local:"局部銀河群",lania:"ラニアケア",web:"大規模構造",shape:"宇宙の形"};
+  function navSpec(){const lanes=[{id:"main",name:"本線",color:"#f4b942"}];const nodes=SPZ.LEVELS.map((L2,i)=>({id:L2.id,lane:"main",label:SHORT[L2.id]||L2.name,num:i+1,col:i}));const colOf={};nodes.forEach(n=>colOf[n.id]=n.col);
+    SPZ.LANES.forEach(l=>{const br=SPZ.ALL.filter(L2=>L2.br&&L2.lane===l.id);lanes.push({id:l.id,name:l.name,color:l.color,from:l.from,dash:l.id==="mv"||l.id==="uv"});br.forEach((L2,j)=>{const n={id:L2.id,lane:l.id,label:L2.short||L2.name,col:(colOf[l.from]??0)+.85+j*1.0,fic:!!(L2.fic||L2.id==="mv")};nodes.push(n);colOf[L2.id]=n.col;});});
+    return {lanes,nodes,cw:78};}
+  const drawNav=()=>GITNAV.render(lv,navSpec(),SPZ.levelId,id=>{const i=SPZ.ALL.findIndex(x=>x.id===id);if(i>=0)SPZ.go(i,null,"out");});
   SPZ.init(document.getElementById("spscene"),document.getElementById("splabels"),info,document.getElementById("spfade"));
   const pick=i=>{const [,,l,o]=P[i];SPZ.goId(l,o);};window.SP_P=P;window.SP_PICK=pick;
-  lv.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const i=+b.dataset.l;SPZ.go(i,null,i<SPZ.level?"in":"out");});
-  info.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.shape){window.UNI_SHAPE=b.dataset.shape;SPZ.go(SPZ.level);return;}if(b.dataset.unfocus)SPZ.unfocus();if(b.dataset.o2)SPZ.focusOn(b.dataset.o2);if(b.dataset.earth)toEarth();});
-  document.getElementById("sp-out").onclick=()=>SPZ.level<SPZ.LEVELS.length-1&&SPZ.go(SPZ.level+1,null,"out");
-  document.getElementById("sp-in").onclick=()=>SPZ.level>0?SPZ.go(SPZ.level-1,null,"in"):toEarth();
+
+  info.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.shape){window.UNI_SHAPE=b.dataset.shape;SPZ.go(SPZ.level);return;}if(b.dataset.unfocus)SPZ.unfocus();if(b.dataset.o2)SPZ.focusOn(b.dataset.o2);if(b.dataset.earth)toEarth();if(b.dataset.br)SPZ.goBr(b.dataset.br);if(b.dataset.back)SPZ.outward();});
+  document.getElementById("sp-out").onclick=()=>SPZ.outward();
+  document.getElementById("sp-in").onclick=()=>SPZ.inward();
   let curObj=null;
   function sync2(){const id=SPZ&&SPZ.LEVELS[SPZ.level]?.id;bar.querySelectorAll(".spp").forEach(p=>{const q=P[+p.dataset.i];p.classList.toggle("lv",q[2]===id);p.classList.toggle("sel",q[3]===curObj&&q[2]===id);});}
-  window.addEventListener("spz-level",e=>{lv.querySelectorAll("button").forEach((b,i)=>b.setAttribute("aria-pressed",i===e.detail));curObj=null;sync2();});
+  window.addEventListener("spz-level",e=>{drawNav();curObj=null;sync2();});drawNav();
   window.addEventListener("spz-obj",e=>{curObj=e.detail;sync2();});
   // 地球へ降りる／宇宙へ上がる
   const veil=document.getElementById("veil");
@@ -5101,7 +5622,7 @@ function BranchGraph(host,D,panel){
   const STAT={alive:["現役","alive"],fade:["衰退中","fade"],dead:["消滅","dead"]};
   const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
 
-  const ORDER=["academia","culture","politics","nations","war","economy","work","medicine","food","agri","tools","energy","transport","info","space","ent"];
+  const ORDER=["academia","culture","politics","nations","war","economy","work","medicine","food","agri","tools","energy","transport","info","space","ent","intel"];
   const F=ORDER.map(k=>TREE.find(t=>t.key===k)).filter(Boolean).map(f=>({...f,nodes:f.nodes.map(([id,name,p,b,d,to,desc])=>({id,name,p,b,d,to,desc,fk:f.key}))}));
   const byKey=Object.fromEntries(F.map(f=>[f.key,f]));
   F.forEach(f=>{f.map=Object.fromEntries(f.nodes.map(n=>[n.id,n]));f.start=Math.min(...f.nodes.map(n=>n.b));f.color=f.color;});
@@ -5114,13 +5635,12 @@ function BranchGraph(host,D,panel){
   function ancestors(f,id){const a=[];let n=f.map[id];while(n){a.unshift(n);n=n.p?f.map[n.p]:null;}return a;}
 
   // レーンの構築
-  let showDead=true, lanes=[], laneOf={}, H0=0, only=new Set(), FV=F;
+  let showDead=true, lanes=[], laneOf={}, H0=0, only=new Set([(()=>{try{return localStorage.getItem("treeField")}catch(e){return null}})()||"academia"]), FV=F;
   function build(){
-    lanes=[{t:"trunk"}]; laneOf={}; FV=only.size?F.filter(f=>only.has(f.key)):F;
+    if(!only.size||![...only].every(k=>byKey[k]))only=new Set([F[0].key]);lanes=[]; laneOf={}; FV=F.filter(f=>only.has(f.key));
     F.forEach(f=>{f.lane=-1;f.last=-1;});
     FV=FV.filter(f=>f.nodes.some(n=>n.b<=EY));
     FV.forEach(f=>{
-      lanes.push({t:"gap"});
       f.lane=lanes.length; lanes.push({t:"field",f});
       order(f).forEach(n=>{ if(n.b>EY)return; if(!showDead&&typeof n.d==="number")return; laneOf[f.key+":"+n.id]=lanes.length; lanes.push({t:"node",f,n}); });
       f.last=lanes.length-1;
@@ -5140,7 +5660,7 @@ function BranchGraph(host,D,panel){
   function clamp(){kx=Math.min(Math.max(kx,fit.kx*.9),vw/3);ky=Math.min(Math.max(ky,fit.ky*.8),70/RH);
     const minTx=vw-(W0*kx)-140, maxTx=130; tx=Math.min(Math.max(tx,Math.min(minTx,maxTx)),Math.max(minTx,maxTx));
     const minTy=vh-AX-H0*ky-40, maxTy=40; ty=Math.min(Math.max(ty,Math.min(minTy,maxTy)),Math.max(minTy,maxTy));}
-  function fitAll(){if(measure()===false)return;ky=fit.ky;ty=0;viewRange(-3500,6000);clamp();draw();}
+  function fitAll(){if(measure()===false)return;ky=fit.ky;ty=0;const f=FV[0];if(!f){viewRange(-3500,6000);clamp();draw();return;}const bs=f.nodes.map(n=>n.b).sort((a,b)=>a-b);const lo=Math.max(Y0,bs[0]),hi=bs[Math.floor(bs.length*.97)];const span=Math.max(200,hi-lo);viewRange(lo-span*.03,hi+span*.08);clamp();draw();}
   function fitFull(){if(measure()===false)return;ky=fit.ky;ty=0;viewRange(Y0,EY);clamp();draw();}
   const draw=()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;render();});};
 
@@ -5162,14 +5682,14 @@ function BranchGraph(host,D,panel){
       g.push(`<rect x="0" y="${y1}" width="${vw}" height="${y2-y1}" fill="${f.color}" opacity="${i%2?.035:.06}"/>`);});
     const W=mode===0?1:mode===1?1.6:2.4, dim=sel?0.45:1;
     // 幹
-    const yT=syL(0);
-    if(vis(yT)) g.push(`<line x1="${sx(-300000)}" x2="${sx(EY)}" y1="${yT}" y2="${yT}" stroke="#dfe5f5" stroke-width="${W+1.5}"/>`);
+    const yT=syL(0),hasT=lanes[0]&&lanes[0].t==="trunk";
+    if(hasT&&vis(yT)) g.push(`<line x1="${sx(-300000)}" x2="${sx(EY)}" y1="${yT}" y2="${yT}" stroke="#dfe5f5" stroke-width="${W+1.5}"/>`);
     // レーン
     const lab=[];
     lanes.forEach((L,i)=>{
       if(L.t==="field"){
         const f=L.f,y=syL(i),x1=sx(f.start);
-        if(Math.min(y,yT)<vh&&Math.max(y,yT)>AX-10) con.push(curve(x1-18,yT,x1,y,f.color,W+.6));
+        if(hasT&&Math.min(y,yT)<vh&&Math.max(y,yT)>AX-10) con.push(curve(x1-18,yT,x1,y,f.color,W+.6));
         if(vis(y)){g.push(`<line x1="${x1}" x2="${sx(EY)}" y1="${y}" y2="${y}" stroke="${f.color}" stroke-width="${W+1}"/>`,
           `<circle cx="${x1}" cy="${y}" r="${mode?5:3}" fill="${f.color}" stroke="#0a0f1f" stroke-width="1.5"/>`);
           g.push(`<rect class="g-hit" data-field="${f.key}" x="${x1-6}" y="${y-Math.max(lp/2,5)}" width="${sx(EY)-x1+6}" height="${Math.max(lp,10)}" fill="transparent"/>`);}
@@ -5300,16 +5820,16 @@ function BranchGraph(host,D,panel){
   }
   // 分野チップ
   const chips=document.getElementById("gchips");
-  function renderChips(){chips.innerHTML=`<button class="chip" data-all="1" aria-pressed="${only.size===0}">すべて</button>`+F.map(f=>`<button class="chip" data-k="${f.key}" aria-pressed="${only.has(f.key)}"><span class="dot" style="background:${f.color}"></span>${f.name}</button>`).join("");}
+  function renderChips(){chips.innerHTML=F.map(f=>`<button class="chip" data-k="${f.key}" aria-pressed="${only.has(f.key)}"><span class="dot" style="background:${f.color}"></span>${f.name}</button>`).join("");}
   renderChips();
-  function setOnly(s){only=s;renderChips();if(sel&&only.size&&!only.has(sel.f)){sel=null;closePanel();}build();fitAll();if(only.size===1)fieldInfo([...only][0]);}
+  function setOnly(s){if(!s.size)return;only=s;try{localStorage.setItem("treeField",[...s][0]);}catch(e){}renderChips();if(sel&&only.size&&!only.has(sel.f)){sel=null;closePanel();}build();fitAll();if(only.size===1)fieldInfo([...only][0]);}
   function zoomField(key){const f=byKey[key];if(!f)return;measure();
     const n=f.last-f.lane+1; ky=Math.max((vh-AX-30)/(n*RH),14/RH); kx=Math.max(fit.kx,kx); clamp();
     ty=-(f.lane*RH)*ky+10; tx=110-X0(-300000)*kx; clamp(); fieldInfo(f.key); draw();}
   chips.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
-    if(b.dataset.all){setOnly(new Set());return;}const s=new Set(only);s.has(b.dataset.k)?s.delete(b.dataset.k):s.add(b.dataset.k);setOnly(s);});
+    if(b.dataset.k)setOnly(new Set([b.dataset.k]));});
   window.openTreeField=k=>{setOnly(new Set([k]));};
-  window.TREE_SELECT=(fk,id)=>{const f=byKey[fk];if(!f||!f.map||!f.map[id])return false;if(only.size&&!only.has(fk))setOnly(new Set());try{select(fk,id,true);}catch(e){console.warn(e);return false;}return true;};
+  window.TREE_SELECT=(fk,id)=>{const f=byKey[fk];if(!f||!f.map||!f.map[id])return false;if(!only.has(fk))setOnly(new Set([fk]));try{select(fk,id,true);}catch(e){console.warn(e);return false;}return true;};
 
   // 詳細パネル
   function plate(f,n){
@@ -5318,7 +5838,7 @@ function BranchGraph(host,D,panel){
     return `<div class="plate" style="background:linear-gradient(135deg,#0e1830,#1c2748)"><svg viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice">${rings}
       <text x="16" y="62" fill="${f.color}" font-family="Murecho,sans-serif" font-weight="900" font-size="30">${esc(n.name.replace(/（.*?）/,"").slice(0,10))}</text>
       <text x="16" y="88" fill="#ffffffaa" font-family="IBM Plex Mono,monospace" font-size="13">${fy(n.b)}〜${typeof n.d==="number"?fy(n.d):n.b>2026.5?"":"現在"}</text></svg>
-      <span class="cap">${n.b>2026.5?"想像の学問（もしも）":"図版（写真は下のリンクから）"}</span></div>`;
+      <span class="cap">${n.b>2026.5?((n.desc||"").startsWith("【SF】")?"SFノート（創作）":"想像（もしも）"):"図版（写真は下のリンクから）"}</span></div>`;
   }
   function openPanel(){panel.hidden=false;document.querySelector('.gwrap').classList.add('open');}
   function closePanel(){panel.hidden=true;document.querySelector('.gwrap').classList.remove('open');}
@@ -5333,7 +5853,7 @@ function BranchGraph(host,D,panel){
     const q=encodeURIComponent(n.name.replace(/（.*?）/g,""));
     const btn=(fkey,x)=>`<button data-f="${fkey}" data-id="${x.id}" class="${typeof x.d==="number"?"linkbtn dead":""}">${esc(x.name)}</button>`;
     panel.innerHTML=closeBtn+plate(f,n)+`
-      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">もしも（想像）</span>':""}${(n.desc||"").match(/^【(.+?)】/)?`<span class="pill wl wl-${(n.desc.match(/^【(.+?)】/)[1])}">世界線：${n.desc.match(/^【(.+?)】/)[1]}</span>`:""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
+      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">もしも（想像）</span>':""}${(n.desc||"").match(/^【(.+?)】/)?`<span class="pill wl wl-${(n.desc.match(/^【(.+?)】/)[1])}">${n.desc.match(/^【(.+?)】/)[1]==="SF"?"SFノート（創作）":"世界線："+n.desc.match(/^【(.+?)】/)[1]}</span>`:""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
       <h3>${esc(n.name)}</h3>
       <div class="meta num">${fy(n.b)} 〜 ${typeof n.d==="number"?fy(n.d)+"に消滅":n.d==="f"?"現在（衰退中）":n.b>2026.5?"（続く）":"現在"}</div>
       <p>${esc((n.desc||"").replace(/^【.+?】/,""))}</p>
@@ -6838,6 +7358,120 @@ window.CUTE=(function(){
   return {build,has:t=>!!B[t]};
 })();
 
+/* ---------- ミクロの生き物・ウイルスを、より実物に近い構造で描く ---------- */
+window.MICROHQ=(function(){
+  if(typeof THREE==="undefined")return null;
+  const V=(x,y,z)=>new THREE.Vector3(x,y,z),C=c=>new THREE.Color(c);let X=null;
+  const M=(c,o={})=>new THREE.MeshStandardMaterial({color:c,roughness:.55,metalness:.02,...o});
+  const G=(c,o=.3,x={})=>new THREE.MeshStandardMaterial({color:c,roughness:.25,metalness:.05,transparent:true,opacity:o,depthWrite:false,side:THREE.DoubleSide,...x});
+  const add=(m,p)=>{(p||X.root).add(m);return m;};
+  const sph=(r,mat,x,y,z,sx=1,sy=1,sz=1,p,seg=32)=>{const m=new THREE.Mesh(new THREE.SphereGeometry(r,seg,Math.round(seg*.7)),mat);m.position.set(x,y,z);m.scale.set(sx,sy,sz);return add(m,p);};
+  const tube=(pts,r,mat,p,seg=40,rs=8,fn)=>{const cu=new THREE.CatmullRomCurve3(pts);const g=new THREE.TubeGeometry(cu,seg,r,rs,false);if(fn){const P=g.attributes.position;for(let i=0;i<=seg;i++){const u=i/seg,c=cu.getPointAt(u),k=fn(u);for(let j=0;j<=rs;j++){const q=i*(rs+1)+j;const v=V(P.getX(q),P.getY(q),P.getZ(q)).sub(c).multiplyScalar(k).add(c);P.setXYZ(q,v.x,v.y,v.z);}}g.computeVertexNormals();}return add(new THREE.Mesh(g,mat),p);};
+  const grp=(x,y,z,p)=>{const g=new THREE.Group();g.position.set(x,y,z);return add(g,p);};
+  const rnd=()=>X.R();
+  const noiseDisp=(geo,amp,fr)=>{const P=geo.attributes.position;for(let i=0;i<P.count;i++){const v=V(P.getX(i),P.getY(i),P.getZ(i));const n=Math.sin(v.x*fr+1.3)*Math.sin(v.y*fr*1.3+.7)*Math.sin(v.z*fr*.9+2.1);v.multiplyScalar(1+n*amp);P.setXYZ(i,v.x,v.y,v.z);}geo.computeVertexNormals();return geo;};
+  // ミトコンドリア：二重膜とひだ（クリステ）が見える断面
+  function mito(p,len=.9,r=.24){const g=new THREE.Group();p.add(g);    const half=new THREE.Mesh(new THREE.SphereGeometry(1,28,18,0,Math.PI),M("#ee8040",{side:THREE.DoubleSide}));half.scale.set(len,r,r);g.add(half);
+    const inner=new THREE.Mesh(new THREE.CircleGeometry(1,32),M("#ffc890",{side:THREE.DoubleSide}));inner.scale.set(len*.92,r*.9,1);g.add(inner);
+    for(let i=0;i<7;i++){const x=-len*.75+i*len*.25;const cr=new THREE.Mesh(new THREE.PlaneGeometry(len*.06,r*1.2),M("#d0602a",{side:THREE.DoubleSide}));cr.position.set(x,(i%2?.25:-.25)*r,.002);g.add(cr);}
+    return g;}
+  const B={};
+  // ===== 動物・植物の細胞（4分の1を切り取った断面） =====
+  B.cell=function(p){const plant=!!p.plant;const R0=3.2;const root=grp(0,0,0);
+    const memM=G(plant?"#b8f0b8":"#ffd0dc",.32,{side:THREE.DoubleSide});const mem=new THREE.Mesh(new THREE.SphereGeometry(R0,64,40,0,Math.PI*1.5),memM);mem.scale.set(plant?1.25:1.1,plant?.9:.82,1);root.add(mem);
+    const cyto=new THREE.Mesh(new THREE.SphereGeometry(R0*.985,64,40,0,Math.PI*1.5),G(plant?"#e8ffe0":"#fff0f4",.12));cyto.scale.copy(mem.scale);root.add(cyto);
+    if(plant){const wall=new THREE.Mesh(new THREE.BoxGeometry(8.6,6.2,7.0,1,1,1),G("#8fd08a",.18));root.add(wall);wall.add(new THREE.LineSegments(new THREE.EdgesGeometry(wall.geometry),new THREE.LineBasicMaterial({color:"#6ab06a"})));
+      const vac=sph(1.9,G("#9fd8ff",.3),-.9,-.2,.6,1.3,.95,1.1,root);}
+    // 核（核膜・核膜孔・核小体・クロマチン）
+    const nu=grp(.9,.2,-.3,root);const env=new THREE.Mesh(new THREE.SphereGeometry(1.1,48,32,0,Math.PI*1.5),M("#8a6ad8",{side:THREE.DoubleSide,roughness:.4}));nu.add(env);
+    for(let i=0;i<60;i++){const a=rnd()*Math.PI*1.5,u=rnd()*2-1;const q=V(-Math.cos(a)*Math.sqrt(1-u*u),u,Math.sin(a)*Math.sqrt(1-u*u)).multiplyScalar(1.1);const pr=new THREE.Mesh(new THREE.TorusGeometry(.05,.018,6,12),M("#5a3aa0"));pr.position.copy(q);pr.lookAt(q.clone().multiplyScalar(2));nu.add(pr);}
+    const nf=new THREE.Mesh(new THREE.CircleGeometry(1.08,48,Math.PI/2,Math.PI),M("#b8a0f0",{side:THREE.DoubleSide}));nf.rotation.y=0;nu.add(nf);const nf2=nf.clone();nf2.rotation.y=-Math.PI/2;nu.add(nf2);
+    sph(.38,M("#4a2a8a"),-.25,.1,-.25,1,1,1,nu);const chr=[];for(let i=0;i<9;i++){const pts=[];let q=V((rnd()-.5)*.8,(rnd()-.5)*.8,-.3-rnd()*.5);for(let k=0;k<6;k++){q=q.clone().add(V((rnd()-.5)*.3,(rnd()-.5)*.3,(rnd()-.5)*.2));if(q.length()>.95)q.multiplyScalar(.9);pts.push(q);}tube(pts,.025,M("#6a4ab0"),nu,30,5);}
+    // 粗面小胞体（核を包む折りたたまれた膜＋リボソーム）
+    for(let i=0;i<6;i++){const rr=1.35+i*.17;const er=new THREE.Mesh(new THREE.TorusGeometry(rr,.045,6,64,Math.PI*1.25),M("#f4a8c4"));er.rotation.set(Math.PI/2+(rnd()-.5)*.3,(rnd()-.5)*.2,.2+i*.12);er.position.copy(nu.position);er.scale.set(1,1,.6+rnd()*.6);root.add(er);
+      for(let k=0;k<26;k++){const a=.2+i*.12+k/26*Math.PI*1.25;const d=sph(.035,M("#5a3a6a"),0,0,0,1,1,1,er,6);d.position.set(Math.cos(a)*rr*1.03,Math.sin(a)*rr*1.03,0);d.position.applyAxisAngle(V(0,0,1),-(.2+i*.12));}}
+    // ゴルジ体（湾曲した平たい袋の積み重ね）
+    const go=grp(-1.4,.9,1.2,root);go.rotation.set(.4,.6,.2);for(let i=0;i<6;i++){const c=new THREE.Mesh(new THREE.TorusGeometry(.55-i*.04,.07,8,32,Math.PI*.9),M("#f4d06a"));c.scale.set(1,1,.35);c.position.y=i*.16;go.add(c);for(let k=0;k<2;k++)sph(.07,M("#f8e08a"),Math.cos(k*2.6)*.62,i*.16,Math.sin(k*2.6)*.1,1,1,1,go,10);}
+    // ミトコンドリア
+    for(let i=0;i<(plant?7:12);i++){const a=rnd()*Math.PI*1.5,rr=1.7+rnd()*1.0,u=(rnd()-.5)*1.4;const m=mito(root,.6+rnd()*.3,.2);m.position.set(-Math.cos(a)*rr,u,Math.sin(a)*rr*.95);m.rotation.set(rnd()*3,rnd()*3,rnd()*3);}
+    // 葉緑体（チラコイドの積み重ね＝グラナ）
+    if(plant)for(let i=0;i<12;i++){const a=rnd()*Math.PI*1.5,rr=2.6+rnd()*.5,u=(rnd()-.5)*1.8;const cg=grp(-Math.cos(a)*rr,u,Math.sin(a)*rr,root);cg.rotation.set(rnd()*3,rnd()*3,rnd()*3);
+      const env2=new THREE.Mesh(new THREE.SphereGeometry(1,24,16,0,Math.PI),M("#3fae4a",{side:THREE.DoubleSide}));env2.scale.set(.55,.25,.3);cg.add(env2);const st=new THREE.Mesh(new THREE.CircleGeometry(1,24),M("#bfe8a0",{side:THREE.DoubleSide}));st.scale.set(.53,.23,1);cg.add(st);
+      for(let k=0;k<4;k++)for(let j=0;j<4;j++){const d=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,.018,12),M("#1f7a2a"));d.rotation.x=Math.PI/2;d.position.set(-.33+k*.22,-.09+j*.04,.01);cg.add(d);}}
+    // リソソーム・中心体・細胞骨格・リボソーム
+    if(!plant){for(let i=0;i<6;i++){const a=rnd()*Math.PI*1.5,rr=1.8+rnd()*.8;sph(.16,M("#c06ad0"),-Math.cos(a)*rr,(rnd()-.5)*1.4,Math.sin(a)*rr,1,1,1,root,14);}
+      const ce=grp(-.5,-.6,1.6,root);[0,1].forEach(k=>{const cc=grp(0,0,0,ce);cc.rotation.set(k?Math.PI/2:0,0,0);for(let j=0;j<9;j++){const a=j/9*6.283;const t=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.32,6),M("#7fd0a0"));t.position.set(Math.cos(a)*.08,0,Math.sin(a)*.08);cc.add(t);}});}
+    for(let i=0;i<14;i++){const pts=[];let q=V((rnd()-.5)*5,(rnd()-.5)*3,(rnd()-.5)*5);for(let k=0;k<4;k++){pts.push(q.clone());q.add(V((rnd()-.5)*1.4,(rnd()-.5)*1.,(rnd()-.5)*1.4));}tube(pts,.012,M("#e0c0ff",{transparent:true,opacity:.5}),root,20,4);}
+    const rp=[];for(let i=0;i<700;i++){const a=rnd()*Math.PI*1.5,u=rnd()*2-1,rr=1.3+rnd()*1.7;rp.push(-Math.cos(a)*Math.sqrt(1-u*u)*rr,u*rr*.75,Math.sin(a)*Math.sqrt(1-u*u)*rr);}const pg=new THREE.BufferGeometry();pg.setAttribute("position",new THREE.Float32BufferAttribute(rp,3));root.add(new THREE.Points(pg,new THREE.PointsMaterial({color:"#6a4a7a",size:.05})));
+    X.anims.push(t=>{root.rotation.y=Math.sin(t*.15)*.4;});X.cam={th:-2.3,ph:1.05};return 9;};
+  // ===== 赤血球（両面がへこんだ円盤：エバンス・ファンの形） =====
+  B.rbc=function(){const R0=1.5,prof=[];const D=(x)=>{const r=x/R0;return R0*.5*Math.sqrt(Math.max(0,1-r*r))*(.207+2.003*r*r-1.123*r*r*r*r);};
+    for(let i=0;i<=40;i++){const x=Math.sin(i/40*Math.PI/2)*R0;prof.push(new THREE.Vector2(x,D(x)));}for(let i=40;i>=0;i--){const x=Math.sin(i/40*Math.PI/2)*R0;prof.push(new THREE.Vector2(x,-D(x)));}
+    const geo=new THREE.LatheGeometry(prof,64);const mat=new THREE.MeshPhysicalMaterial?new THREE.MeshPhysicalMaterial({color:"#b81e1e",roughness:.35,clearcoat:.4,sheen:0}):M("#b81e1e");
+    const vessel=new THREE.Mesh(new THREE.CylinderGeometry(4.2,4.2,16,48,1,true),G("#ffb0a0",.12));vessel.rotation.z=Math.PI/2;add(vessel);
+    const cells=[];for(let i=0;i<26;i++){const m=new THREE.Mesh(geo,mat);const y=(rnd()-.5)*5.4,z=(rnd()-.5)*5.4;if(y*y+z*z>13)continue;m.position.set((rnd()-.5)*14,y,z);m.rotation.set(rnd()*3,rnd()*3,rnd()*3);add(m);cells.push([m,.6+rnd()*.6,rnd()*3]);}
+    for(let i=0;i<3;i++){const w=sph(.9,G("#f4f0ff",.85),(rnd()-.5)*10,(rnd()-.5)*3,(rnd()-.5)*3,1,1,1,null,32);w.geometry=noiseDisp(new THREE.SphereGeometry(.9,32,24),.08,6);cells.push([w,.3,0]);}
+    for(let i=0;i<10;i++){const pl=sph(.18,M("#e8d0a0"),(rnd()-.5)*12,(rnd()-.5)*4,(rnd()-.5)*4,1.4,.5,1);cells.push([pl,.8,0]);}
+    X.anims.push(t=>cells.forEach(([m,sp,o])=>{m.position.x+=.012*sp;if(m.position.x>7.5)m.position.x=-7.5;m.rotation.x+=.003*sp;m.rotation.y+=.002*sp;}));return 9;};
+  // ===== 神経細胞（樹状突起の枝分かれ・軸索・髄鞘・ランビエ絞輪・シナプス） =====
+  B.neuron=function(){const c=M("#f2a8c8",{roughness:.45});const soma=sph(.85,c,0,0,0,1,.9,1,null,48);soma.geometry=noiseDisp(new THREE.SphereGeometry(.85,48,32),.06,4);sph(.32,M("#8a4ab0"),.1,.1,.2);
+    const branch=(o,dir,len,r,depth)=>{const pts=[o.clone()];let q=o.clone(),d=dir.clone();const n=5;for(let k=0;k<n;k++){d.add(V((rnd()-.5)*.6,(rnd()-.5)*.6,(rnd()-.5)*.6)).normalize();q=q.clone().addScaledVector(d,len/n);pts.push(q);}
+      tube(pts,r,c,null,24,6,u=>1-u*.55);if(depth>0){const k=2;for(let i=0;i<k;i++)branch(q,d.clone().add(V((rnd()-.5)*1.4,(rnd()-.5)*1.4,(rnd()-.5)*1.4)).normalize(),len*.65,r*.5,depth-1);}
+      else for(let i=0;i<6;i++){const sp=pts[1+Math.floor(rnd()*(pts.length-1))];sph(.035,c,sp.x+(rnd()-.5)*.1,sp.y+(rnd()-.5)*.1,sp.z+(rnd()-.5)*.1,1,1,1,null,6);}};
+    for(let i=0;i<7;i++){const a=rnd()*6.283,u=rnd()*1.6-.8;const d=V(-Math.abs(Math.cos(a))-.2,u,Math.sin(a)).normalize();branch(d.clone().multiplyScalar(.7),d,1.6+rnd()*.8,.12,2);}
+    tube([V(.8,0,0),V(1.4,-.05,0)],.13,c,null,8,8,u=>1-u*.4);const ax=[V(1.4,-.05,0),V(3,-.25,.1),V(5,.1,-.1),V(7,-.15,.05),V(8.4,0,0)];const cu=new THREE.CatmullRomCurve3(ax);tube(ax,.07,c,null,60);
+    for(let i=0;i<9;i++){const u=.08+i*.1,u2=u+.085;const pts=[];for(let k=0;k<=6;k++)pts.push(cu.getPointAt(u+(u2-u)*k/6));tube(pts,.17,M("#f4f2e4",{roughness:.6}),null,12,12,v=>Math.sin(Math.max(.15,Math.min(.85,v))*Math.PI)*1+.0);}
+    const tip=cu.getPointAt(1);for(let i=0;i<5;i++){const d=V(1,(rnd()-.5)*1.6,(rnd()-.5)*1.6).normalize();const e=tip.clone().addScaledVector(d,.8);tube([tip,tip.clone().addScaledVector(d,.4),e],.035,c,null,10);sph(.12,M("#f8c8e0"),e.x,e.y,e.z,1,1,1,null,12);}
+    const sig=sph(.13,new THREE.MeshBasicMaterial({color:"#7ee0ff"}),0,0,0,1,1,1,null,12);const sg2=sph(.3,new THREE.MeshBasicMaterial({color:"#7ee0ff",transparent:true,opacity:.25}),0,0,0,1,1,1,sig,12);
+    X.anims.push(t=>{const k=(t*.25)%1;sig.position.copy(cu.getPointAt(k));});return 10;};
+  // ===== 大腸菌（周べん毛・線毛） =====
+  B.bacillus=function(p){const body=M("#c9d8a0",{roughness:.5});for(let i=0;i<4;i++){const g=grp((rnd()-.5)*6,(rnd()-.5)*3,(rnd()-.5)*4);g.rotation.set(rnd()*3,rnd()*3,rnd()*3);
+      const cap=new THREE.Mesh(new THREE.CylinderGeometry(.45,.45,1.5,24,1,true),body);g.add(cap);sph(.45,body,0,.75,0,1,1,1,g,24);sph(.45,body,0,-.75,0,1,1,1,g,24);
+      sph(.25,G("#f0f8d0",.5),0,.1,0,1,2.2,1,g,16);
+      for(let k=0;k<70;k++){const a=rnd()*6.283,y=(rnd()-.5)*1.9;const o=V(Math.cos(a)*.45,y,Math.sin(a)*.45);const d=o.clone().setY(0).normalize();const h=new THREE.Line(new THREE.BufferGeometry().setFromPoints([o,o.clone().addScaledVector(d,.18)]),new THREE.LineBasicMaterial({color:"#e8f0c0",transparent:true,opacity:.6}));g.add(h);}
+      const fl=[];for(let k=0;k<7;k++){const a=rnd()*6.283,y=(rnd()-.5)*1.6;fl.push({o:V(Math.cos(a)*.45,y,Math.sin(a)*.45),ph:rnd()*6,m:null});}
+      X.anims.push(t=>fl.forEach(f=>{if(f.m){g.remove(f.m);f.m.geometry.dispose();}const pts=[];for(let j=0;j<14;j++){const u=j/13;pts.push(V(f.o.x*(1+u*.4),f.o.y-u*2.6,f.o.z*(1+u*.4)).add(V(Math.sin(t*9+j*.9+f.ph)*.14*u,0,Math.cos(t*9+j*.9+f.ph)*.14*u)));}
+        f.m=new THREE.Line(new THREE.BufferGeometry().setFromPoints(new THREE.CatmullRomCurve3(pts).getPoints(40)),new THREE.LineBasicMaterial({color:"#f4f0d8"}));g.add(f.m);}));
+      X.anims.push(()=>{g.translateY(.004);if(g.position.length()>6)g.position.set((rnd()-.5)*3,(rnd()-.5)*2,(rnd()-.5)*2);});}return 9;};
+  // ===== ゾウリムシ（草履形・繊毛・口溝・収縮胞・大核） =====
+  B.parame=function(p){const g=grp(0,0,0);const geo=new THREE.SphereGeometry(1,64,40);const P=geo.attributes.position;
+    for(let i=0;i<P.count;i++){let x=P.getX(i),y=P.getY(i),z=P.getZ(i);const s=1+.18*Math.sin((x+.2)*2.8);const groove=Math.exp(-Math.pow((x-.05)/.35,2))*Math.max(0,z)*.35;P.setXYZ(i,x*2.6,y*.85*s,z*1.0*s-groove);}geo.computeVertexNormals();
+    const b=new THREE.Mesh(geo,G("#d8ecb8",.55));g.add(b);sph(.45,M("#8a6ad0"),.1,0,0,1.6,.8,.8,g);sph(.15,M("#6a4ab0"),.55,.1,.1,1,1,1,g,12);
+    [-1.5,1.5].forEach(x=>{const cv=grp(x,.45,0,g);sph(.16,G("#9fd8ff",.8),0,0,0,1,1,1,cv,16);for(let k=0;k<7;k++){const a=k/7*6.283;tube([V(0,0,0),V(Math.cos(a)*.18,0,Math.sin(a)*.18),V(Math.cos(a)*.38,0,Math.sin(a)*.38)],.025,G("#9fd8ff",.6),cv,6,5);}X.anims.push(t=>cv.scale.setScalar(.8+.3*Math.abs(Math.sin(t*1.5+x))));});
+    for(let i=0;i<14;i++)sph(.1,M("#a8d880"),(rnd()-.5)*3.6,(rnd()-.5)*.8,(rnd()-.5)*.8,1,1,1,g,10);
+    const cl=[],cs=[];for(let i=0;i<1600;i++){const a=rnd()*6.283,u=rnd()*2-1;const n=V(Math.cos(a)*Math.sqrt(1-u*u),u,Math.sin(a)*Math.sqrt(1-u*u));const s=1+.18*Math.sin((n.x+.2)*2.8);const q=V(n.x*2.6,n.y*.85*s,n.z*s);const d=q.clone().normalize();cl.push(q,q.clone().addScaledVector(d,.13));cs.push(n.x*3);}
+    const lg=new THREE.BufferGeometry().setFromPoints(cl);const lines=new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:"#f4ffe0",transparent:true,opacity:.6}));g.add(lines);const base=lg.attributes.position.array.slice();
+    X.anims.push(t=>{const a=lg.attributes.position;for(let i=0;i<cs.length;i++){const k=i*2+1,j=k*3;const w=Math.sin(t*8+cs[i])*.06;a.setXYZ(k,base[j]+w,base[j+1],base[j+2]);}a.needsUpdate=true;g.rotation.x=Math.sin(t*.4)*.3;g.position.x=Math.sin(t*.25)*.6;});return 8;};
+  // ===== クマムシ（4つの体節・8本の脚と爪・口の管・目点） =====
+  B.tardi=function(p){const g=grp(0,.6,0);const skin=M("#d8b88a",{roughness:.85});const segs=[[-1.3,.62],[-.45,.7],[.4,.68],[1.15,.55]];
+    segs.forEach(([x,r],i)=>{const s=sph(r,skin,x,0,0,1.05,.9,1,g,40);s.geometry=noiseDisp(new THREE.SphereGeometry(r,40,28),.03,9);});
+    const hd=sph(.45,skin,1.75,.05,0,1.1,.85,.9,g,32);tube([V(2.1,0,0),V(2.35,-.05,0)],.08,M("#c8a070"),g,6,8);[-1,1].forEach(s=>sph(.05,M("#2a1a10"),1.95,.25,s*.22,1,1,1,g,8));
+    const legs=[];segs.forEach(([x,r],i)=>[-1,1].forEach(s=>{const lg=grp(x,-.35,s*r*.7,g);const L=tube([V(0,0,0),V(0,-.25,s*.12),V(.05,-.5,s*.18)],.15,skin,lg,10,10,u=>1-u*.35);
+      for(let k=0;k<4;k++){const cl=new THREE.Mesh(new THREE.ConeGeometry(.025,.2,6),M("#3a2a1a"));cl.position.set(.06+(k-1.5)*.05,-.58,s*.2);cl.rotation.z=Math.PI+.4+(k-1.5)*.25;lg.add(cl);}legs.push([lg,i,s]);}));
+    X.anims.push(t=>{legs.forEach(([lg,i,s])=>{lg.rotation.z=Math.sin(t*3+i*1.2+(s>0?Math.PI:0))*.35;});g.rotation.y=Math.sin(t*.3)*.5;});return 6;};
+  // ===== 珪藻（ガラスの殻：放射状のすじと小さな穴） =====
+  B.diatom=function(p){const tex=(()=>{const c=document.createElement("canvas");c.width=c.height=512;const x=c.getContext("2d");x.fillStyle="#d8d0a0";x.fillRect(0,0,512,512);x.translate(256,256);
+      for(let ring=0;ring<16;ring++){const r=30+ring*14;const n=Math.round(r*.55);for(let k=0;k<n;k++){const a=k/n*6.283;x.fillStyle="#6a6040";x.beginPath();x.arc(Math.cos(a)*r,Math.sin(a)*r,2.6,0,7);x.fill();}}
+      x.strokeStyle="#f4ecc8";x.lineWidth=3;for(let k=0;k<48;k++){const a=k/48*6.283;x.beginPath();x.moveTo(Math.cos(a)*28,Math.sin(a)*28);x.lineTo(Math.cos(a)*250,Math.sin(a)*250);x.stroke();}
+      x.fillStyle="#f8f0d0";x.beginPath();x.arc(0,0,24,0,7);x.fill();return new THREE.CanvasTexture(c);})();
+    const mat=new THREE.MeshStandardMaterial({map:tex,roughness:.25,metalness:.2,transparent:true,opacity:.92,side:THREE.DoubleSide});
+    [[0,1],[0,-1]].forEach(([_,s],k)=>{const g=grp(0,s*.32,0);const lid=new THREE.Mesh(new THREE.CircleGeometry(2,96),mat);lid.rotation.x=-s*Math.PI/2;lid.position.y=s*.25;g.add(lid);
+      const band=new THREE.Mesh(new THREE.CylinderGeometry(2,2,.5,96,1,true),G("#e8e0b8",.6));g.add(band);});
+    const chl=[];for(let i=0;i<10;i++)chl.push(sph(.3,M("#a07a2a"),(rnd()-.5)*2.4,0,(rnd()-.5)*2.4,1.2,.5,1));
+    X.anims.push(t=>{X.root.rotation.x=.5+Math.sin(t*.3)*.3;X.root.rotation.y=t*.2;});return 6;};
+  // ===== コロナウイルス（こん棒形のスパイク三量体・M/Eたんぱく質・RNA） =====
+  B.corona=function(p){const R0=1.5;const env=sph(R0,M("#b8bcc4",{roughness:.8}),0,0,0,1,1,1,null,64);env.geometry=noiseDisp(new THREE.SphereGeometry(R0,64,48),.025,14);
+    const sp=M("#d84a3a",{roughness:.5}),st=M("#c8605a");const n=40;for(let i=0;i<n;i++){const y=1-2*(i+.5)/n,r=Math.sqrt(1-y*y),a=i*2.39996;const d=V(Math.cos(a)*r,y,Math.sin(a)*r);
+      const g=grp(0,0,0);g.quaternion.setFromUnitVectors(V(0,1,0),d);g.position.copy(d.clone().multiplyScalar(R0*.98));
+      const stalk=new THREE.Mesh(new THREE.CylinderGeometry(.03,.05,.35,8),st);stalk.position.y=.17;g.add(stalk);
+      for(let k=0;k<3;k++){const a2=k/3*6.283;const lobe=sph(.1,sp,Math.cos(a2)*.06,.45,Math.sin(a2)*.06,1,1.5,1,g,14);}}
+    for(let i=0;i<55;i++){const d=V(rnd()-.5,rnd()-.5,rnd()-.5).normalize();sph(.045,M(i%5?"#c8a860":"#7a9ad8"),d.x*R0,d.y*R0,d.z*R0,1,1,1,null,8);}
+    const cut=new THREE.Mesh(new THREE.CircleGeometry(R0*.97,64),M("#8a7a90",{side:THREE.DoubleSide}));X.root.add(cut);cut.visible=false;
+    X.anims.push(t=>{X.root.rotation.y=t*.15;X.root.rotation.x=Math.sin(t*.2)*.2;});return 6;};
+  function build(type,p,ctx){if(!B[type])return null;X=ctx;const n0=ctx.root.children.length,a0=ctx.anims.length;try{return B[type](p);}catch(e){console.warn("MICROHQ",type,e);ctx.root.children.splice(n0);ctx.anims.length=a0;return null;}}
+  return {build,has:t=>!!B[t]};
+})();
+
 /* ---------- ⑦ ミクロの世界（生き物→細胞→微生物→ウイルス→分子→原子→原子核→クオーク） ---------- */
 const MICRO=(function(){
   const host=document.getElementById("mcscene");if(!host||typeof THREE==="undefined")return null;
@@ -6870,14 +7504,18 @@ const MICRO=(function(){
     let acc=0;host.addEventListener("wheel",e=>{e.preventDefault();const f=Math.exp(e.deltaY*.0012);const L=LEVELS[LV],mn=L.dist*.35,mx=L.dist*2.4;
       const g=cam.goal*f;if(g<mn&&f<1){acc+=1-f;if(acc>.5){acc=0;if(LV<LEVELS.length-1)go(LV+1,null,"in");}cam.goal=mn;return;}
       if(g>mx&&f>1){acc+=f-1;if(acc>.5){acc=0;if(LV>0)go(LV-1,null,"out");else if(window.toMapFromMicro)window.toMapFromMicro();}cam.goal=mx;return;}acc=0;cam.goal=g;},{passive:false});
-    lvBox.innerHTML=LEVELS.map((L,i)=>`<button class="chip" data-lv="${i}">${i+1}. ${L.name}</button>`).join("");
-    lvBox.addEventListener("click",e=>{const b=e.target.closest("button");if(b)go(+b.dataset.lv);});
+    drawNav();
     list.addEventListener("click",e=>{const b=e.target.closest("button[data-it]");if(b)build(b.dataset.it);});
     document.getElementById("mc-in").onclick=()=>LV<LEVELS.length-1&&go(LV+1,null,"in");
     document.getElementById("mc-out").onclick=()=>LV>0?go(LV-1,null,"out"):window.toMapFromMicro&&window.toMapFromMicro();}
   function resize(){if(!renderer)return;const w=host.clientWidth,h=host.clientHeight;if(!w)return;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
+  const MSHORT={life:"生き物",cell:"細胞",microbe:"微生物",virus:"ウイルス",mol:"分子",atom:"原子",nucleus:"原子核",quark:"クオーク",particle:"素粒子",quantum:"量子",string:"超ひも",dims:"次元"};
+  function drawNav(){if(!window.GITNAV)return;const n=(id,lane)=>{const i=LEVELS.findIndex(L=>L.id===id);return {id,lane,label:MSHORT[id]||LEVELS[i].name,num:i+1,col:i};};
+    GITNAV.render(lvBox,{cw:78,lanes:[{id:"main",name:"本線",color:"#7ee0b0"},{id:"org",name:"微生物・ウイルス",color:"#ffb36a",from:"cell",merge:"mol"},{id:"th",name:"理論（仮説）",color:"#c99cf2",from:"quantum",dash:1}],
+      nodes:[n("life","main"),n("cell","main"),n("microbe","org"),n("virus","org"),n("mol","main"),n("atom","main"),n("nucleus","main"),n("quark","main"),n("particle","main"),n("quantum","main"),{...n("string","th"),fic:1},{...n("dims","th"),fic:1}]},
+      LEVELS[LV]&&LEVELS[LV].id,id=>{const i=LEVELS.findIndex(L=>L.id===id);if(i>=0)go(i);});}
   let goTok=0;function go(i,item,dir){LV=i;const L=LEVELS[i];fade.classList.add("on");const tok=++goTok;
-    setTimeout(()=>{if(tok!==goTok)return;lvBox.querySelectorAll("button").forEach((b,k)=>b.setAttribute("aria-pressed",k===i));
+    setTimeout(()=>{if(tok!==goTok)return;drawNav();
       const its=L.items();list.innerHTML=its.map(x=>`<button data-it="${x.id}"><b>${x.name}</b><small>${x.sub||""}</small></button>`).join("");
       build(item||its[0].id,dir);fade.classList.remove("on");},inited?200:0);}
   function setup(bg){if(scene)scene.traverse(o=>{o.geometry&&o.geometry.dispose();});scene=new THREE.Scene();scene.background=C(bg);root=new THREE.Group();scene.add(root);anims=[];
@@ -7206,7 +7844,7 @@ const MICRO=(function(){
     const bg={life:"#0e1a24",cell:"#1a0e1e",microbe:"#0e1e1a",virus:"#1e0e14",mol:"#0a0f1f",atom:"#05070f",nucleus:"#05050a",quark:"#050308",particle:"#04030a",quantum:"#020208",string:"#050212",dims:"#04030c"}[L.id];setup(bg);root.position.set(0,0,0);root.rotation.set(0,0,0);
     let size=6,title="",desc="",meta="",orgTy=null;
     if(L.id==="life"){const o=ORGS.find(x=>x[0]===id);ground(o[6]==="whale"||o[6]==="fish"||o[6]==="octopus"||o[6]==="jelly"||o[6]==="starfish"||o[6]==="crab"||o[6]==="turtle"?"#1a3a5a":"#2a3a2a",8);const oc={root,anims,R,id:o[0]};const cs=window.CUTE&&CUTE.has(o[6])?CUTE.build(o[6],o[7],oc):null;if(cs){scene.traverse(l=>{if(l.isHemisphereLight){l.intensity=.62;l.color.set("#fff4ea");l.groundColor.set("#5a6078");}else if(l.isDirectionalLight)l.intensity=l===keyL?.62:.22;});}size=cs||(window.ORG3D&&ORG3D.has(o[6])?ORG3D.build(o[6],o[7],oc):null)||B[o[6]](o[7])||4;orgTy=oc.ty;shadows(size);title=o[1];meta=`<dl class="kdl"><dt>分類</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd><dt>すみか</dt><dd>${o[4]}</dd></dl>`;desc=o[5];}
-    else if(L.id==="cell"||L.id==="microbe"||L.id==="virus"){const o=MICROS.find(x=>x[0]===id);size=BM[o[5]](o[6])||8;title=o[1];meta=`<dl class="kdl"><dt>なかま</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd></dl>`;desc=o[4];}
+    else if(L.id==="cell"||L.id==="microbe"||L.id==="virus"){const o=MICROS.find(x=>x[0]===id);const hc={root,anims,R};const hq=window.MICROHQ&&MICROHQ.has(o[5])?MICROHQ.build(o[5],o[6],hc):null;size=hq||BM[o[5]](o[6])||8;if(hc.cam){cam.th=hc.cam.th;cam.ph=hc.cam.ph;}title=o[1];meta=`<dl class="kdl"><dt>なかま</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd></dl>`;desc=o[4];}
     else if(L.id==="mol"){const o=MOLS.find(x=>x[0]===id);size=molecule(id);title=o[1];meta=`<div class="num" style="font-size:18px;color:var(--accent)">${o[2]}</div>`;desc=o[3]+`<br><span class="clim">原子：${[...new Set(o[4].map(a=>a[0]))].map(e=>`<i class="adot" style="background:${ATOMCOL[e]}"></i>${e}`).join(" ")}</span>`;}
     else if(L.id==="atom"){const Z=+id;size=atom(Z);const el=ELEMENTS[Z-1];title=`${el.ja}（${el.sym}）`;meta=`<dl class="kdl"><dt>陽子</dt><dd>${Z}</dd><dt>電子</dt><dd>${Z}（殻ごとに ${shells(Z).join("・")}）</dd></dl>`;desc=(ENOTE[Z]||"")+" 電子の並び方（殻）が、その元素の化学的な性質を決める。";}
     else if(L.id==="nucleus"){const Z=+id;size=nucleus(Z);const el=ELEMENTS[Z-1];const N=Math.round(parseFloat(String(el.m).replace(/[\[\]]/g,"")))-Z;title=`${el.ja}の原子核`;meta=`<dl class="kdl"><dt>陽子（赤）</dt><dd>${Z}</dd><dt>中性子（灰）</dt><dd>${N}</dd></dl>`;desc=Z>82?"陽子が多すぎると反発が強くなり、原子核は不安定になって壊れる（放射性）。":Z===26?"鉄の原子核は最も安定。恒星の核融合は鉄で止まる。":"";}
@@ -7268,6 +7906,7 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
     place(id){goHash("world-map");later(()=>MAP_PICK_PLACE(id),220);},
     sp(i){goHash("space-map");later(()=>SP_PICK(i),320);},
     splv(i){goHash("space-map");later(()=>SPZ.go(i,null,"out"),320);},
+    brv(id){goHash("space-map");later(()=>SPZ.goBr(id),320);},
     micro(k,v){goHash("micro");later(()=>MICRO.open(k,v),220);},
     law(tab,sel,idx){goHash("laws");later(()=>{LAWS_TAB(tab);let el=null;if(sel)el=document.querySelector(sel);else if(idx)el=document.querySelectorAll(idx[0])[idx[1]];if(!el)return;if(sel)el.click();el.scrollIntoView({block:"center",behavior:"smooth"});flash(el);});},
     book(id){goHash("earth-book");later(()=>{const el=$("eb-"+id);if(el){el.scrollIntoView({behavior:"smooth"});flash(el);}},120);},
@@ -7281,7 +7920,7 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
   const fy=y=>typeof y!=="number"?"":y<=-10000?`約${Math.round(-y/1e4).toLocaleString()}万年前`:y<0?`紀元前${-y}年`:`${y}年`;
   function build(){IDX=[];const add=(k,t,s,txt,fn,y)=>{const nt=norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,""));IDX.push({k,t:String(t),s:s||"",nt,nb:norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,"").replace(/（.*?）|\(.*?\)/g,"")),h:norm((t||"")+" "+(s||"")+" "+(txt||"")),fn,y});};
     const T=(f)=>{try{f();}catch(e){console.warn("search index",e);}};
-    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（全分野）","16分野・約1,370要素の系譜（未来は5つの世界線）"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
+    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（分野別）","17分野・約1,400要素の系譜（分野ごとに独立。未来は5つの世界線＋SFノート）"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
     T(()=>{add("view","歴史シアター（3D）","年表の中の3D映像で通し再生","シアター 映像 再生",()=>{goHash("timeline");later(()=>{const d=$("thdock");if(d){d.open=true;d.scrollIntoView({behavior:"smooth"});}});});});
     T(()=>window.EBOOK&&EBOOK.chapters.forEach(c=>add("book",c.t,"地球大全の章",c.text,()=>go.book(c.id))));
     T(()=>[["t1","Type I 文明ガイド（惑星文明）"],["t2","Type II 文明ガイド（恒星文明）"],["t3","Type III 文明ガイド（銀河文明）"]].forEach(([k,t])=>add("view",t,"全体マップ・もしもの世界","タイプ カルダシェフ 文明",()=>go.tg(k))));
@@ -7294,6 +7933,7 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
     T(()=>MAP.pins.forEach(p=>add("place",p.name,`ランドマーク・${(CAT[p.cat]||["その他"])[0]}`,p.desc||"",()=>go.place(p.id))));
     T(()=>(window.SP_P||[]).forEach((q,i)=>{const L=SPZ.LEVELS.find(x=>x.id===q[2]);add("space",q[0],`${L?L.name:""}`,"",()=>go.sp(i));}));
     T(()=>SPZ.LEVELS.forEach((L,i)=>{const d=window.LVINFO&&LVINFO[L.id];add("space",L.name,`宇宙のスケール ${i+1}/${SPZ.LEVELS.length}`,L.desc+(d?" "+d.f.map(x=>x.join(" ")).join(" ")+" "+d.p.join(" "):""),()=>go.splv(i));}));
+    T(()=>(SPZ.ALL||[]).filter(L=>L.br).forEach(L=>add("space",L.name,"宇宙マップの分岐"+(L.fic||L.id==="mv"?"（空想）":""),L.desc||"",()=>go.brv(L.id))));
     T(()=>MICRO.LEVELS.forEach((L,i)=>{const d=window.LVINFO&&LVINFO[L.id];add("micro",L.name,`ミクロのスケール ${i+1}/${MICRO.LEVELS.length}・${L.scale}`,L.desc+(d?" "+d.f.map(x=>x.join(" ")).join(" ")+" "+d.p.join(" "):""),()=>go.micro(L.id));}));
     T(()=>ORGS.forEach(o=>add("life",o[1],`${o[2]}・${o[3]}`,`${o[4]} ${o[5]}`,()=>go.micro("life",o[0]))));
     T(()=>{const lv=c=>c==="細胞"?"cell":c==="ウイルス"?"virus":"microbe";MICROS.forEach(m=>add("life",m[1],`ミクロ・${m[2]}・${m[3]}`,m[4]||"",()=>go.micro(lv(m[2]),m[0])));});

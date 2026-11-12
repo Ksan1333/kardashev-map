@@ -15,7 +15,7 @@
   const STAT={alive:["現役","alive"],fade:["衰退中","fade"],dead:["消滅","dead"]};
   const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
 
-  const ORDER=["academia","culture","politics","nations","war","economy","work","medicine","food","agri","tools","energy","transport","info","space","ent"];
+  const ORDER=["academia","culture","politics","nations","war","economy","work","medicine","food","agri","tools","energy","transport","info","space","ent","intel"];
   const F=ORDER.map(k=>TREE.find(t=>t.key===k)).filter(Boolean).map(f=>({...f,nodes:f.nodes.map(([id,name,p,b,d,to,desc])=>({id,name,p,b,d,to,desc,fk:f.key}))}));
   const byKey=Object.fromEntries(F.map(f=>[f.key,f]));
   F.forEach(f=>{f.map=Object.fromEntries(f.nodes.map(n=>[n.id,n]));f.start=Math.min(...f.nodes.map(n=>n.b));f.color=f.color;});
@@ -28,13 +28,12 @@
   function ancestors(f,id){const a=[];let n=f.map[id];while(n){a.unshift(n);n=n.p?f.map[n.p]:null;}return a;}
 
   // レーンの構築
-  let showDead=true, lanes=[], laneOf={}, H0=0, only=new Set(), FV=F;
+  let showDead=true, lanes=[], laneOf={}, H0=0, only=new Set([(()=>{try{return localStorage.getItem("treeField")}catch(e){return null}})()||"academia"]), FV=F;
   function build(){
-    lanes=[{t:"trunk"}]; laneOf={}; FV=only.size?F.filter(f=>only.has(f.key)):F;
+    if(!only.size||![...only].every(k=>byKey[k]))only=new Set([F[0].key]);lanes=[]; laneOf={}; FV=F.filter(f=>only.has(f.key));
     F.forEach(f=>{f.lane=-1;f.last=-1;});
     FV=FV.filter(f=>f.nodes.some(n=>n.b<=EY));
     FV.forEach(f=>{
-      lanes.push({t:"gap"});
       f.lane=lanes.length; lanes.push({t:"field",f});
       order(f).forEach(n=>{ if(n.b>EY)return; if(!showDead&&typeof n.d==="number")return; laneOf[f.key+":"+n.id]=lanes.length; lanes.push({t:"node",f,n}); });
       f.last=lanes.length-1;
@@ -54,7 +53,7 @@
   function clamp(){kx=Math.min(Math.max(kx,fit.kx*.9),vw/3);ky=Math.min(Math.max(ky,fit.ky*.8),70/RH);
     const minTx=vw-(W0*kx)-140, maxTx=130; tx=Math.min(Math.max(tx,Math.min(minTx,maxTx)),Math.max(minTx,maxTx));
     const minTy=vh-AX-H0*ky-40, maxTy=40; ty=Math.min(Math.max(ty,Math.min(minTy,maxTy)),Math.max(minTy,maxTy));}
-  function fitAll(){if(measure()===false)return;ky=fit.ky;ty=0;viewRange(-3500,6000);clamp();draw();}
+  function fitAll(){if(measure()===false)return;ky=fit.ky;ty=0;const f=FV[0];if(!f){viewRange(-3500,6000);clamp();draw();return;}const bs=f.nodes.map(n=>n.b).sort((a,b)=>a-b);const lo=Math.max(Y0,bs[0]),hi=bs[Math.floor(bs.length*.97)];const span=Math.max(200,hi-lo);viewRange(lo-span*.03,hi+span*.08);clamp();draw();}
   function fitFull(){if(measure()===false)return;ky=fit.ky;ty=0;viewRange(Y0,EY);clamp();draw();}
   const draw=()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;render();});};
 
@@ -76,14 +75,14 @@
       g.push(`<rect x="0" y="${y1}" width="${vw}" height="${y2-y1}" fill="${f.color}" opacity="${i%2?.035:.06}"/>`);});
     const W=mode===0?1:mode===1?1.6:2.4, dim=sel?0.45:1;
     // 幹
-    const yT=syL(0);
-    if(vis(yT)) g.push(`<line x1="${sx(-300000)}" x2="${sx(EY)}" y1="${yT}" y2="${yT}" stroke="#dfe5f5" stroke-width="${W+1.5}"/>`);
+    const yT=syL(0),hasT=lanes[0]&&lanes[0].t==="trunk";
+    if(hasT&&vis(yT)) g.push(`<line x1="${sx(-300000)}" x2="${sx(EY)}" y1="${yT}" y2="${yT}" stroke="#dfe5f5" stroke-width="${W+1.5}"/>`);
     // レーン
     const lab=[];
     lanes.forEach((L,i)=>{
       if(L.t==="field"){
         const f=L.f,y=syL(i),x1=sx(f.start);
-        if(Math.min(y,yT)<vh&&Math.max(y,yT)>AX-10) con.push(curve(x1-18,yT,x1,y,f.color,W+.6));
+        if(hasT&&Math.min(y,yT)<vh&&Math.max(y,yT)>AX-10) con.push(curve(x1-18,yT,x1,y,f.color,W+.6));
         if(vis(y)){g.push(`<line x1="${x1}" x2="${sx(EY)}" y1="${y}" y2="${y}" stroke="${f.color}" stroke-width="${W+1}"/>`,
           `<circle cx="${x1}" cy="${y}" r="${mode?5:3}" fill="${f.color}" stroke="#0a0f1f" stroke-width="1.5"/>`);
           g.push(`<rect class="g-hit" data-field="${f.key}" x="${x1-6}" y="${y-Math.max(lp/2,5)}" width="${sx(EY)-x1+6}" height="${Math.max(lp,10)}" fill="transparent"/>`);}
@@ -214,16 +213,16 @@
   }
   // 分野チップ
   const chips=document.getElementById("gchips");
-  function renderChips(){chips.innerHTML=`<button class="chip" data-all="1" aria-pressed="${only.size===0}">すべて</button>`+F.map(f=>`<button class="chip" data-k="${f.key}" aria-pressed="${only.has(f.key)}"><span class="dot" style="background:${f.color}"></span>${f.name}</button>`).join("");}
+  function renderChips(){chips.innerHTML=F.map(f=>`<button class="chip" data-k="${f.key}" aria-pressed="${only.has(f.key)}"><span class="dot" style="background:${f.color}"></span>${f.name}</button>`).join("");}
   renderChips();
-  function setOnly(s){only=s;renderChips();if(sel&&only.size&&!only.has(sel.f)){sel=null;closePanel();}build();fitAll();if(only.size===1)fieldInfo([...only][0]);}
+  function setOnly(s){if(!s.size)return;only=s;try{localStorage.setItem("treeField",[...s][0]);}catch(e){}renderChips();if(sel&&only.size&&!only.has(sel.f)){sel=null;closePanel();}build();fitAll();if(only.size===1)fieldInfo([...only][0]);}
   function zoomField(key){const f=byKey[key];if(!f)return;measure();
     const n=f.last-f.lane+1; ky=Math.max((vh-AX-30)/(n*RH),14/RH); kx=Math.max(fit.kx,kx); clamp();
     ty=-(f.lane*RH)*ky+10; tx=110-X0(-300000)*kx; clamp(); fieldInfo(f.key); draw();}
   chips.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
-    if(b.dataset.all){setOnly(new Set());return;}const s=new Set(only);s.has(b.dataset.k)?s.delete(b.dataset.k):s.add(b.dataset.k);setOnly(s);});
+    if(b.dataset.k)setOnly(new Set([b.dataset.k]));});
   window.openTreeField=k=>{setOnly(new Set([k]));};
-  window.TREE_SELECT=(fk,id)=>{const f=byKey[fk];if(!f||!f.map||!f.map[id])return false;if(only.size&&!only.has(fk))setOnly(new Set());try{select(fk,id,true);}catch(e){console.warn(e);return false;}return true;};
+  window.TREE_SELECT=(fk,id)=>{const f=byKey[fk];if(!f||!f.map||!f.map[id])return false;if(!only.has(fk))setOnly(new Set([fk]));try{select(fk,id,true);}catch(e){console.warn(e);return false;}return true;};
 
   // 詳細パネル
   function plate(f,n){
@@ -232,7 +231,7 @@
     return `<div class="plate" style="background:linear-gradient(135deg,#0e1830,#1c2748)"><svg viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice">${rings}
       <text x="16" y="62" fill="${f.color}" font-family="Murecho,sans-serif" font-weight="900" font-size="30">${esc(n.name.replace(/（.*?）/,"").slice(0,10))}</text>
       <text x="16" y="88" fill="#ffffffaa" font-family="IBM Plex Mono,monospace" font-size="13">${fy(n.b)}〜${typeof n.d==="number"?fy(n.d):n.b>2026.5?"":"現在"}</text></svg>
-      <span class="cap">${n.b>2026.5?"想像の学問（もしも）":"図版（写真は下のリンクから）"}</span></div>`;
+      <span class="cap">${n.b>2026.5?((n.desc||"").startsWith("【SF】")?"SFノート（創作）":"想像（もしも）"):"図版（写真は下のリンクから）"}</span></div>`;
   }
   function openPanel(){panel.hidden=false;document.querySelector('.gwrap').classList.add('open');}
   function closePanel(){panel.hidden=true;document.querySelector('.gwrap').classList.remove('open');}
@@ -247,7 +246,7 @@
     const q=encodeURIComponent(n.name.replace(/（.*?）/g,""));
     const btn=(fkey,x)=>`<button data-f="${fkey}" data-id="${x.id}" class="${typeof x.d==="number"?"linkbtn dead":""}">${esc(x.name)}</button>`;
     panel.innerHTML=closeBtn+plate(f,n)+`
-      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">もしも（想像）</span>':""}${(n.desc||"").match(/^【(.+?)】/)?`<span class="pill wl wl-${(n.desc.match(/^【(.+?)】/)[1])}">世界線：${n.desc.match(/^【(.+?)】/)[1]}</span>`:""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
+      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">もしも（想像）</span>':""}${(n.desc||"").match(/^【(.+?)】/)?`<span class="pill wl wl-${(n.desc.match(/^【(.+?)】/)[1])}">${n.desc.match(/^【(.+?)】/)[1]==="SF"?"SFノート（創作）":"世界線："+n.desc.match(/^【(.+?)】/)[1]}</span>`:""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
       <h3>${esc(n.name)}</h3>
       <div class="meta num">${fy(n.b)} 〜 ${typeof n.d==="number"?fy(n.d)+"に消滅":n.d==="f"?"現在（衰退中）":n.b>2026.5?"（続く）":"現在"}</div>
       <p>${esc((n.desc||"").replace(/^【.+?】/,""))}</p>

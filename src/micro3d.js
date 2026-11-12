@@ -30,14 +30,18 @@ const MICRO=(function(){
     let acc=0;host.addEventListener("wheel",e=>{e.preventDefault();const f=Math.exp(e.deltaY*.0012);const L=LEVELS[LV],mn=L.dist*.35,mx=L.dist*2.4;
       const g=cam.goal*f;if(g<mn&&f<1){acc+=1-f;if(acc>.5){acc=0;if(LV<LEVELS.length-1)go(LV+1,null,"in");}cam.goal=mn;return;}
       if(g>mx&&f>1){acc+=f-1;if(acc>.5){acc=0;if(LV>0)go(LV-1,null,"out");else if(window.toMapFromMicro)window.toMapFromMicro();}cam.goal=mx;return;}acc=0;cam.goal=g;},{passive:false});
-    lvBox.innerHTML=LEVELS.map((L,i)=>`<button class="chip" data-lv="${i}">${i+1}. ${L.name}</button>`).join("");
-    lvBox.addEventListener("click",e=>{const b=e.target.closest("button");if(b)go(+b.dataset.lv);});
+    drawNav();
     list.addEventListener("click",e=>{const b=e.target.closest("button[data-it]");if(b)build(b.dataset.it);});
     document.getElementById("mc-in").onclick=()=>LV<LEVELS.length-1&&go(LV+1,null,"in");
     document.getElementById("mc-out").onclick=()=>LV>0?go(LV-1,null,"out"):window.toMapFromMicro&&window.toMapFromMicro();}
   function resize(){if(!renderer)return;const w=host.clientWidth,h=host.clientHeight;if(!w)return;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
+  const MSHORT={life:"生き物",cell:"細胞",microbe:"微生物",virus:"ウイルス",mol:"分子",atom:"原子",nucleus:"原子核",quark:"クオーク",particle:"素粒子",quantum:"量子",string:"超ひも",dims:"次元"};
+  function drawNav(){if(!window.GITNAV)return;const n=(id,lane)=>{const i=LEVELS.findIndex(L=>L.id===id);return {id,lane,label:MSHORT[id]||LEVELS[i].name,num:i+1,col:i};};
+    GITNAV.render(lvBox,{cw:78,lanes:[{id:"main",name:"本線",color:"#7ee0b0"},{id:"org",name:"微生物・ウイルス",color:"#ffb36a",from:"cell",merge:"mol"},{id:"th",name:"理論（仮説）",color:"#c99cf2",from:"quantum",dash:1}],
+      nodes:[n("life","main"),n("cell","main"),n("microbe","org"),n("virus","org"),n("mol","main"),n("atom","main"),n("nucleus","main"),n("quark","main"),n("particle","main"),n("quantum","main"),{...n("string","th"),fic:1},{...n("dims","th"),fic:1}]},
+      LEVELS[LV]&&LEVELS[LV].id,id=>{const i=LEVELS.findIndex(L=>L.id===id);if(i>=0)go(i);});}
   let goTok=0;function go(i,item,dir){LV=i;const L=LEVELS[i];fade.classList.add("on");const tok=++goTok;
-    setTimeout(()=>{if(tok!==goTok)return;lvBox.querySelectorAll("button").forEach((b,k)=>b.setAttribute("aria-pressed",k===i));
+    setTimeout(()=>{if(tok!==goTok)return;drawNav();
       const its=L.items();list.innerHTML=its.map(x=>`<button data-it="${x.id}"><b>${x.name}</b><small>${x.sub||""}</small></button>`).join("");
       build(item||its[0].id,dir);fade.classList.remove("on");},inited?200:0);}
   function setup(bg){if(scene)scene.traverse(o=>{o.geometry&&o.geometry.dispose();});scene=new THREE.Scene();scene.background=C(bg);root=new THREE.Group();scene.add(root);anims=[];
@@ -366,7 +370,7 @@ const MICRO=(function(){
     const bg={life:"#0e1a24",cell:"#1a0e1e",microbe:"#0e1e1a",virus:"#1e0e14",mol:"#0a0f1f",atom:"#05070f",nucleus:"#05050a",quark:"#050308",particle:"#04030a",quantum:"#020208",string:"#050212",dims:"#04030c"}[L.id];setup(bg);root.position.set(0,0,0);root.rotation.set(0,0,0);
     let size=6,title="",desc="",meta="",orgTy=null;
     if(L.id==="life"){const o=ORGS.find(x=>x[0]===id);ground(o[6]==="whale"||o[6]==="fish"||o[6]==="octopus"||o[6]==="jelly"||o[6]==="starfish"||o[6]==="crab"||o[6]==="turtle"?"#1a3a5a":"#2a3a2a",8);const oc={root,anims,R,id:o[0]};const cs=window.CUTE&&CUTE.has(o[6])?CUTE.build(o[6],o[7],oc):null;if(cs){scene.traverse(l=>{if(l.isHemisphereLight){l.intensity=.62;l.color.set("#fff4ea");l.groundColor.set("#5a6078");}else if(l.isDirectionalLight)l.intensity=l===keyL?.62:.22;});}size=cs||(window.ORG3D&&ORG3D.has(o[6])?ORG3D.build(o[6],o[7],oc):null)||B[o[6]](o[7])||4;orgTy=oc.ty;shadows(size);title=o[1];meta=`<dl class="kdl"><dt>分類</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd><dt>すみか</dt><dd>${o[4]}</dd></dl>`;desc=o[5];}
-    else if(L.id==="cell"||L.id==="microbe"||L.id==="virus"){const o=MICROS.find(x=>x[0]===id);size=BM[o[5]](o[6])||8;title=o[1];meta=`<dl class="kdl"><dt>なかま</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd></dl>`;desc=o[4];}
+    else if(L.id==="cell"||L.id==="microbe"||L.id==="virus"){const o=MICROS.find(x=>x[0]===id);const hc={root,anims,R};const hq=window.MICROHQ&&MICROHQ.has(o[5])?MICROHQ.build(o[5],o[6],hc):null;size=hq||BM[o[5]](o[6])||8;if(hc.cam){cam.th=hc.cam.th;cam.ph=hc.cam.ph;}title=o[1];meta=`<dl class="kdl"><dt>なかま</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd></dl>`;desc=o[4];}
     else if(L.id==="mol"){const o=MOLS.find(x=>x[0]===id);size=molecule(id);title=o[1];meta=`<div class="num" style="font-size:18px;color:var(--accent)">${o[2]}</div>`;desc=o[3]+`<br><span class="clim">原子：${[...new Set(o[4].map(a=>a[0]))].map(e=>`<i class="adot" style="background:${ATOMCOL[e]}"></i>${e}`).join(" ")}</span>`;}
     else if(L.id==="atom"){const Z=+id;size=atom(Z);const el=ELEMENTS[Z-1];title=`${el.ja}（${el.sym}）`;meta=`<dl class="kdl"><dt>陽子</dt><dd>${Z}</dd><dt>電子</dt><dd>${Z}（殻ごとに ${shells(Z).join("・")}）</dd></dl>`;desc=(ENOTE[Z]||"")+" 電子の並び方（殻）が、その元素の化学的な性質を決める。";}
     else if(L.id==="nucleus"){const Z=+id;size=nucleus(Z);const el=ELEMENTS[Z-1];const N=Math.round(parseFloat(String(el.m).replace(/[\[\]]/g,"")))-Z;title=`${el.ja}の原子核`;meta=`<dl class="kdl"><dt>陽子（赤）</dt><dd>${Z}</dd><dt>中性子（灰）</dt><dd>${N}</dd></dl>`;desc=Z>82?"陽子が多すぎると反発が強くなり、原子核は不安定になって壊れる（放射性）。":Z===26?"鉄の原子核は最も安定。恒星の核融合は鉄で止まる。":"";}

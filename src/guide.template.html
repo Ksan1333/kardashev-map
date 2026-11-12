@@ -49,6 +49,17 @@ body.t1 .whev[data-fut="1"]{border-style:dashed}
 .thpaleo{position:absolute;left:16px;top:44px;font-size:12px;color:#9fd8ff;pointer-events:none;text-shadow:0 1px 3px #000}
 .thcap{position:absolute;left:16px;bottom:16px;max-width:min(460px,70%);padding:14px 16px;border-radius:12px;background:rgba(8,12,24,.72);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);pointer-events:none}
 .thcap h3{margin:2px 0 6px;font-size:20px}.thcap p{margin:0;font-size:13.5px;line-height:1.65;color:#cfd7ea}.thy{color:var(--accent);font-size:13px}
+.wl-SF{color:#ffd27a!important;border-color:#c9a040!important;background:#ffd27a14}
+.sfnote{margin-top:16px;border-color:#5a4a20;background:linear-gradient(180deg,#1a1608,#0e1220)}
+.sfq{margin:6px 0 12px;color:#e9e2c8;font-size:14px;line-height:1.7}.sfq b{color:#ffd27a}
+.sfstages{display:flex;gap:6px;align-items:stretch;overflow-x:auto;padding-bottom:6px}.sfarr{align-self:center;color:#c9a040;font-size:20px}
+.sfst{min-width:200px;flex:1;background:#0b1020;border:1px solid #4a3f1a;border-radius:12px;padding:10px 12px;position:relative}
+.sfst h4{margin:0 0 2px;color:#ffd27a;font-size:15px}.sfk{font-size:11px;color:#c9b27a;margin-bottom:6px}.sfst p{font-size:12.5px;color:#d8dcea;margin:0 0 6px;line-height:1.6}
+.sfst dl{margin:0;font-size:12px;display:grid;grid-template-columns:auto 1fr;gap:2px 8px}.sfst dt{color:#9aa6c4}.sfst dd{margin:0;color:#e9edf7}
+.sfn{position:absolute;top:8px;right:10px;font:700 12px/1 var(--mono,monospace);color:#1a1204;background:#ffd27a;border-radius:99px;width:20px;height:20px;display:grid;place-items:center}
+.sfgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:12px}.sfgrid h5{margin:0 0 6px;color:#ffd27a;font-size:13px}
+.sft{border-collapse:collapse;font-size:12px}.sft th{color:#ffd27a;padding:3px 8px 3px 0;vertical-align:top}.sft td{color:#d8dcea;padding:3px 0}
+.sfol,.sful{margin:0;padding-left:20px;font-size:12.5px;color:#e9edf7;line-height:1.7}.sfs{font-size:12px;color:#b9c2da;line-height:1.7;margin:6px 0 0}.sfbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .thmeta{display:flex;gap:6px;margin-bottom:4px}.thmeta .pill{font-size:11px;padding:1px 8px;border-radius:99px;border:1px solid #ffffff40;color:#dfe6f5}.thmeta .pill.wl{border-style:dashed}.wl-協調{color:#7fe0b0!important;border-color:#4fae80!important}.wl-分断{color:#ff9a8a!important;border-color:#c0604f!important}.wl-加速{color:#7fc8ff!important;border-color:#4f8fc0!important}.wl-再建{color:#f4c870!important;border-color:#b08a3a!important}.wl-宇宙{color:#c9a8ff!important;border-color:#8a6ad0!important}
 .pill.fut{border-color:#7ee0ff;color:#7ee0ff}
 .thlog{position:absolute;right:14px;top:14px;width:250px;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;pointer-events:none}
@@ -561,6 +572,10 @@ svg.links circle{fill:var(--accent)}
 .spp.lv circle{stroke:#f4b942;stroke-width:2}
 .spp:focus{outline:none}.spp:focus-visible circle{stroke:#fff;stroke-width:2.5}
 #splevels .chip[aria-pressed="true"]{background:var(--accent);color:#1a1204;border-color:var(--accent)}
+.gitnav{overflow-x:auto;overflow-y:hidden;border:1px solid var(--line);border-radius:12px;background:#070b16;margin:4px 0 10px;scrollbar-width:thin}
+.gitnav svg{display:block}.gn-n{cursor:pointer}.gn-n:hover circle{filter:brightness(1.4)}.gn-n:focus{outline:none}.gn-n:focus-visible circle{stroke:#fff}
+.gn-num{font:700 11px/1 var(--mono,monospace);fill:#e8ecf6}.gn-lab{font-size:10.5px;fill:#9aa6c4}.gn-lab.on{fill:#fff;font-weight:700}.gn-tag{font-size:11.5px;font-weight:700}
+#splevels,#mclevels{display:block}
 @media (max-width:960px){.spwrap{grid-template-columns:1fr}.spinfo{height:auto;min-height:0}.loc{grid-template-columns:1fr}}
 
 /* 世界史年表（横向き） */
@@ -710,6 +725,7 @@ footer p{margin:0 0 6px;max-width:120ch}
     </div>
     <div class="panel tguide" id="tguide"><div class="gauge-head"><b>文明タイプ・ガイド（もしもの世界）</b><span>スライダーの位置に合わせて自動で切り替わります</span></div>
       <div class="ctabs"><button data-t="t1">Type I 惑星</button><button data-t="t2">Type II 恒星</button><button data-t="t3">Type III 銀河</button></div><div class="ctabbody tgbody"></div></div>
+    <div class="panel sfnote" id="sfnote"></div>
   </section>
 
   <!-- ② 年表 -->
@@ -798,7 +814,7 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ④ 宇宙マップ -->
   <section class="view space" id="v-space-map">
-    <div class="view-head"><h2>宇宙と地球</h2><p>宇宙の形（説）から大規模構造、地球まで12段階。名前や目盛りの点を押すとそこへ近づきます。地球に向かってズームインし続けると世界地図に降ります。</p></div>
+    <div class="view-head"><h2>宇宙と地球</h2><p>地球のまわりから宇宙の形まで12段階の「本線」と、そこから枝分かれする「惑星の中」「銀河の中」「マルチバース（空想）」。上の枝分かれ図から選ぶか、天体を選んでズームインし続けると中に入れます。地球に向かってズームインし続けると世界地図に降ります。</p></div>
     <div class="chips" id="splevels"></div>
     <div class="spwrap">
       <div id="spscene" class="spscene"><div id="splabels" class="splabels"></div><div id="spfade" class="spfade"></div>
@@ -810,7 +826,7 @@ footer p{margin:0 0 6px;max-width:120ch}
   </section>
 
   <section class="view space" id="v-micro">
-    <div class="view-head"><h2>ミクロの世界</h2><p>生き物から細胞、微生物、ウイルス、分子、原子、原子核、クオーク、素粒子、量子の世界、超ひも理論（仮説）まで11段階。左の一覧から選ぶと3Dで表示します。拡大し続けると次の小さな世界へ、縮小し続けると大きな世界（最後は世界地図）へ戻ります。</p></div>
+    <div class="view-head"><h2>ミクロの世界</h2><p>生き物から細胞、分子、原子、原子核、クオーク、素粒子、量子の世界までの「本線」と、そこから枝分かれする「微生物・ウイルス」「理論（仮説）：超ひも・1〜11次元」の全12段階。上の枝分かれ図か左の一覧から選ぶと3Dで表示します。拡大し続けると次の小さな世界へ移ります。</p></div>
     <div class="chips" id="mclevels"></div>
     <div class="spwrap mcwrap">
       <div class="mclist" id="mclist"></div>
@@ -823,7 +839,7 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ⑧ 系統樹 -->
   <section class="view" id="v-lineage">
-    <div class="view-head"><h2>系統樹（全分野）</h2><p>人類という幹から16分野・約1,370の要素が枝分かれしていく。2026年より先（点線）は「もしも」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線に分かれて並ぶ。時間軸は1年あたり同じ幅。消えた要素は後継に合流（マージ）する。上の分野を押すとON/OFFで絞り込めます（複数選択可）。</p></div>
+    <div class="view-head"><h2>系統樹（分野ごと）</h2><p>分野を1つ選ぶと、その分野だけの系統樹を独立した時間軸で表示する（分野どうしは混ぜない）。2026年より先（点線）は「もしも」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線と、SFノートの構想（【SF】）に分かれて並ぶ。消えた要素は後継に合流（マージ）する。</p></div>
     <div class="chips" id="gchips"></div>
     <div class="gwrap">
       <div class="gcanvas" id="gcanvas" tabindex="0" aria-label="系統樹のキャンバス。ホイールまたはピンチでズーム、ドラッグで移動">
@@ -900,6 +916,7 @@ __TYPE2__
 __TYPE3__
 __FUTACAD__
 __FUTTREE__
+__SFNOTE__
 const FIELD2TREE={history:'nations',politics:'politics',war:'war',tech:'info',energy:'energy',space:'space',medicine:'medicine',academia:'academia',agriculture:'agri',food:'food',culture:'culture',subculture:'ent'};
 
 /* ---------- データ ---------- */
@@ -1010,7 +1027,7 @@ const INV = [
 ];
 
 /* ---------- ビューの切り替え ---------- */
-const VIEWS = [["overview","全体マップ"],["timeline","年表（宇宙・地球・世界史）"],["space-map","宇宙・地球・ミクロ"],["lineage","系統樹（全分野）"],["laws","宇宙の法則"],["earth-book","地球大全"]];
+const VIEWS = [["overview","全体マップ"],["timeline","年表（宇宙・地球・世界史）"],["space-map","宇宙・地球・ミクロ"],["lineage","系統樹（分野別）"],["laws","宇宙の法則"],["earth-book","地球大全"]];
 const nav = document.getElementById("views");
 nav.innerHTML = VIEWS.map(([id,t],i)=>`<a href="#${id}" data-v="${id}"><span class="n">${String(i+1).padStart(2,"0")}</span>${t}</a>`).join("");
 function show(){
@@ -1069,6 +1086,7 @@ __HISTBRANCH__
 __BRANCH__
 
 __WORLDMAP__
+__GITNAV__
 __SPACEVIEW__
 
 __GRAPHJS__
@@ -1080,6 +1098,7 @@ __EARTHBOOK__
 __LVINFO__
 __ORG3D__
 __CUTE__
+__MICROHQ__
 __MICRO3D__
 __SEARCH__
 show();

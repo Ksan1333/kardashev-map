@@ -38,16 +38,20 @@
   document.getElementById("spb-all").onclick=()=>{lo=MIN;hi=MAX;render();};
   bar.addEventListener("keydown",e=>{if(e.key==="Enter"){const p=e.target.closest(".spp");if(p)pick(+p.dataset.i);}});
   if(typeof SPZ==="undefined"||!SPZ){document.getElementById("spscene").innerHTML=`<div class="noscene">3D表示を読み込めませんでした。</div>`;render();return;}
-  lv.innerHTML=SPZ.LEVELS.map((L2,i)=>`<button class="chip" data-l="${i}">${i+1}. ${L2.name}</button>`).join("");
+  const SHORT={leo:"地球周回",moon:"地球と月",inner:"内太陽系",outer:"外太陽系",helio:"太陽圏",stars:"近くの恒星",nebula:"星雲",galaxy:"天の川銀河",local:"局部銀河群",lania:"ラニアケア",web:"大規模構造",shape:"宇宙の形"};
+  function navSpec(){const lanes=[{id:"main",name:"本線",color:"#f4b942"}];const nodes=SPZ.LEVELS.map((L2,i)=>({id:L2.id,lane:"main",label:SHORT[L2.id]||L2.name,num:i+1,col:i}));const colOf={};nodes.forEach(n=>colOf[n.id]=n.col);
+    SPZ.LANES.forEach(l=>{const br=SPZ.ALL.filter(L2=>L2.br&&L2.lane===l.id);lanes.push({id:l.id,name:l.name,color:l.color,from:l.from,dash:l.id==="mv"||l.id==="uv"});br.forEach((L2,j)=>{const n={id:L2.id,lane:l.id,label:L2.short||L2.name,col:(colOf[l.from]??0)+.85+j*1.0,fic:!!(L2.fic||L2.id==="mv")};nodes.push(n);colOf[L2.id]=n.col;});});
+    return {lanes,nodes,cw:78};}
+  const drawNav=()=>GITNAV.render(lv,navSpec(),SPZ.levelId,id=>{const i=SPZ.ALL.findIndex(x=>x.id===id);if(i>=0)SPZ.go(i,null,"out");});
   SPZ.init(document.getElementById("spscene"),document.getElementById("splabels"),info,document.getElementById("spfade"));
   const pick=i=>{const [,,l,o]=P[i];SPZ.goId(l,o);};window.SP_P=P;window.SP_PICK=pick;
-  lv.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const i=+b.dataset.l;SPZ.go(i,null,i<SPZ.level?"in":"out");});
-  info.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.shape){window.UNI_SHAPE=b.dataset.shape;SPZ.go(SPZ.level);return;}if(b.dataset.unfocus)SPZ.unfocus();if(b.dataset.o2)SPZ.focusOn(b.dataset.o2);if(b.dataset.earth)toEarth();});
-  document.getElementById("sp-out").onclick=()=>SPZ.level<SPZ.LEVELS.length-1&&SPZ.go(SPZ.level+1,null,"out");
-  document.getElementById("sp-in").onclick=()=>SPZ.level>0?SPZ.go(SPZ.level-1,null,"in"):toEarth();
+
+  info.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.shape){window.UNI_SHAPE=b.dataset.shape;SPZ.go(SPZ.level);return;}if(b.dataset.unfocus)SPZ.unfocus();if(b.dataset.o2)SPZ.focusOn(b.dataset.o2);if(b.dataset.earth)toEarth();if(b.dataset.br)SPZ.goBr(b.dataset.br);if(b.dataset.back)SPZ.outward();});
+  document.getElementById("sp-out").onclick=()=>SPZ.outward();
+  document.getElementById("sp-in").onclick=()=>SPZ.inward();
   let curObj=null;
   function sync2(){const id=SPZ&&SPZ.LEVELS[SPZ.level]?.id;bar.querySelectorAll(".spp").forEach(p=>{const q=P[+p.dataset.i];p.classList.toggle("lv",q[2]===id);p.classList.toggle("sel",q[3]===curObj&&q[2]===id);});}
-  window.addEventListener("spz-level",e=>{lv.querySelectorAll("button").forEach((b,i)=>b.setAttribute("aria-pressed",i===e.detail));curObj=null;sync2();});
+  window.addEventListener("spz-level",e=>{drawNav();curObj=null;sync2();});drawNav();
   window.addEventListener("spz-obj",e=>{curObj=e.detail;sync2();});
   // 地球へ降りる／宇宙へ上がる
   const veil=document.getElementById("veil");
