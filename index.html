@@ -2212,27 +2212,79 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
     const h=new THREE.Object3D();h.position.set(0,S*.32,0);scene.add(h);label(key+"_all",G.name+"の全体",h,S*1.25,G.desc,G.dist);}
   lane("ga","天の川の伴銀河","galaxy","#cfe0ff");lane("gb","局部銀河群の銀河の中","local","#ffe2b8");lane("gc","遠くの銀河の中","lania","#ffb48a");
   Object.entries(GX).forEach(([k,G])=>addBr({id:"gx_"+k,lane:G.lane,parent:G.parent,pobj:k,name:G.name+"の中",short:G.name.replace(/（.*）/,""),unit:"銀河の内部（星の位置は模式的）",desc:G.desc,ph:G.ph,dist:G.size*1.3,min:G.size*.05,max:G.size*3,build(){buildGalaxy(k);}}));
-  // ---- マルチバース（空想） ----
+  // ---- マルチバース（空想）：泡宇宙と、その上の2つの層 ----
+  // [id, 名前, 色, 説明, 私たちの宇宙との違い, 見どころ[[id,名前,説明,[x,y,z],印の色]]]
   const UNI=[
-   ["home","私たちの宇宙","#f4b942","ここに戻ると「宇宙の形」へ。"],
-   ["mirror","鏡の宇宙","#7fe0ff","物質と反物質が入れ替わった宇宙。銀河の腕は逆巻きで、恒星は反陽子と陽電子でできている。見た目はほとんど同じだが、私たちの物質が触れると一瞬で光に変わる。"],
-   ["heavy","重力の強い宇宙","#ff7a5a","重力が今の10倍強い宇宙。星はすぐ燃え尽き、銀河は小さく密集し、ブラックホールだらけになる。生命が育つ時間がほとんどない。"],
-   ["thin","重力の弱い宇宙","#9a9ab0","重力が弱すぎて、ガスが集まらず星も銀河もできなかった宇宙。うすい水素の霧だけが、永遠に冷えながら広がり続ける。"],
-   ["slow","光の遅い宇宙","#c99cf2","光の速さが秒速30kmしかない宇宙。星の光の届く範囲（光の球）が見えるほど遅く、遠くの景色はいつも何万年も前の姿。"],
-   ["crystal","結晶の宇宙","#6fd2a0","誕生のときのゆらぎが完全に規則正しかった宇宙。銀河が結晶の原子のように等間隔に並ぶ。"],
-   ["crunch","つぶれゆく宇宙","#ff4a6a","膨張が止まって収縮に転じた宇宙。銀河どうしが次々に衝突し、宇宙背景放射は熱く青白くなっていく。最後は一点に戻る「ビッグクランチ」。"],
-   ["univita","ユニヴィータ宇宙（SFノート）","#ffd27a","SFノートの宇宙。生命と情報、物質の区別がなくなった知性（UOI）が、星々を光の網でつないでいる。超因果圏・高次存在領域へ続く入口がある。"]];
-  lane("mv","マルチバース（空想）","shape","#c99cf2");lane("uv","別の宇宙（空想）","mv","#ff9ad0");
-  addBr({id:"mv",lane:"mv",parent:"shape",pobj:"uni_shape",name:"マルチバース（空想）",short:"マルチバース",unit:"宇宙の外側（空想図）",desc:"ここから先は空想です。永久インフレーション説では、私たちの宇宙は無数の「泡宇宙」の一つかもしれない。泡ごとに物理定数が違えば、まったく違う宇宙になる。泡を選んで近づき、さらにズームインすると、その宇宙の中に入れます。",dist:900,min:60,max:2400,
-    build(){scene.add(new THREE.AmbientLight("#fff",1));const MVFS=`uniform vec3 uCol;uniform float uTime;varying vec3 vN;varying vec3 vW;varying vec2 vUv;${GLN}void main(){vec3 v=normalize(cameraPosition-vW);float f=pow(1.-abs(dot(normalize(vN),v)),2.5);float n=fbm(vUv*8.+uTime*.03);vec3 ir=.5+.5*cos(6.283*(f*1.5+n+vec3(0.,.33,.67)));gl_FragColor=vec4(mix(uCol,ir,.45)*(f*1.4+.05)+uCol*n*.08,f*.9+.06);
+   ["home","私たちの宇宙","#f4b942","ここに戻ると「宇宙の形」へ。","—",[]],
+   ["mirror","鏡の宇宙","#7fe0ff","物質と反物質が入れ替わった宇宙。銀河の腕は逆巻きで、恒星は反陽子と陽電子でできている。見た目はほとんど同じだが、私たちの物質が触れると一瞬で光に変わる。","物質↔反物質、左右も反転",
+     [["mi_gal","逆巻きの渦巻銀河","腕の巻き方が私たちの銀河と逆向き。",[0,10,0]],["mi_star","反物質の恒星","反陽子と陽電子でできた星。光は私たちの星と同じなので、見ただけでは区別できない。",[60,20,-40],"#c8f4ff"],["mi_flash","対消滅の閃光","物質の宇宙のかけらが紛れ込むと、ガンマ線の閃光になる。",[130,40,60],"#ffffff"],["mi_cloud","反水素の雲","反陽子1個と陽電子1個の反水素原子のガス。",[-260,-60,120],"#7fffd0"],["mi_earth","鏡の地球（空想）","左右が反転した大陸を持つかもしれない、もう一つの青い惑星。",[-120,30,-200],"#4f8fff"]]],
+   ["heavy","重力の強い宇宙","#ff7a5a","重力が今の10倍強い宇宙。星はすぐ燃え尽き、銀河は小さく密集し、ブラックホールだらけになる。生命が育つ時間がほとんどない。","重力定数Gが約10倍",
+     [["he_bh","ブラックホールの群れ","大きな星はすぐにつぶれてブラックホールになる。",[100,0,-80]],["he_blue","青い短命の巨星","寿命は数百万年ほど。",[-160,40,80],"#9fc8ff"],["he_sn","超新星の連鎖","次々に星が爆発し、空が明滅する。",[200,-60,120]],["he_dense","小さく密な銀河","直径は私たちの銀河の数十分の一。",[-60,-80,-200]],["he_life","生命の時計","星の寿命が短すぎて、生命が進化する時間がない。",[0,120,0]]]],
+   ["thin","重力の弱い宇宙","#9a9ab0","重力が弱すぎて、ガスが集まらず星も銀河もできなかった宇宙。うすい水素の霧だけが、永遠に冷えながら広がり続ける。","重力定数Gが約100分の1",
+     [["th_fog","永遠の水素の霧","ガスは集まらず、ただ広がり続ける。",[0,0,0]],["th_lone","まれに生まれた孤独な星","偶然濃くなった場所にだけ、小さな星がぽつんとある。",[300,40,-200],"#ffb070"],["th_cmb","冷えていく背景放射","温度は下がり続け、やがて何も見えなくなる。",[-400,100,200]],["th_none","構造のない空","銀河も星座もない、のっぺりとした空。",[0,250,0]]]],
+   ["slow","光の遅い宇宙","#c99cf2","光の速さが秒速30kmしかない宇宙。星の光の届く範囲（光の球）が見えるほど遅く、遠くの景色はいつも何万年も前の姿。","光速cが約1万分の1",
+     [["sl_sphere","光の球（因果の地平）","星の光が届いた範囲。球の外ではまだその星は「生まれていない」。",[0,0,0]],["sl_past","過去しか見えない空","となりの星の光でも、届くまで何年もかかる。",[200,80,-100]],["sl_time","時間の遅れが日常","秒速数kmで走るだけで時計が遅れる（相対性理論の効果）。",[-200,-40,150]],["sl_color","色の変わる星","近づく星は青く、遠ざかる星は赤く見える。",[100,-120,200],"#9fc8ff"]]],
+   ["crystal","結晶の宇宙","#6fd2a0","誕生のときのゆらぎが完全に規則正しかった宇宙。銀河が結晶の原子のように等間隔に並ぶ。","初期ゆらぎが完全に周期的",
+     [["cr_lat","格子に並ぶ銀河","銀河どうしの間隔がすべて同じ。",[0,0,0]],["cr_disl","格子のずれ（転位）","1か所だけ並びがずれた帯。",[300,150,0],"#ffd27a"],["cr_sound","宇宙の音（格子の振動）","銀河の並びが波のように揺れている。",[-300,-150,300]],["cr_sky","規則正しい星座","どの方向を見ても同じ模様の空。",[0,300,-300]]]],
+   ["crunch","つぶれゆく宇宙","#ff4a6a","膨張が止まって収縮に転じた宇宙。銀河どうしが次々に衝突し、宇宙背景放射は熱く青白くなっていく。最後は一点に戻る「ビッグクランチ」。","膨張→収縮（物質が多すぎた）",
+     [["cu_merge","衝突する銀河","距離が縮み、銀河どうしがぶつかり合う。",[80,20,40]],["cu_hot","熱くなる背景放射","空そのものが星より熱く光り始める。",[-300,100,-300]],["cu_point","最後の一点","すべてが一点に集まるビッグクランチ。",[0,0,0],"#ffffff"],["cu_bounce","次の宇宙の種（バウンス説）","つぶれた後に、また膨張が始まるかもしれない。",[0,-200,0],"#ff9ad0"]]],
+   ["flat","2次元の宇宙","#ffd27a","空間が平面しかない宇宙。重力は距離に反比例して弱まり、星や銀河は平面の上で回る。","空間が2次元",
+     [["fl_star","平面の恒星","光も熱も平面の中だけに広がる。",[0,0,0],"#fff2c0"],["fl_orbit","ゆらぐ軌道","重力の弱まり方が違うので、惑星の軌道は花びらのように回る。",[160,0,0]],["fl_life","2次元の生き物","口から肛門までの管があると体が2つに分かれてしまう（2次元生物の難問）。",[-200,0,120],"#7fe0b0"],["fl_wire","交差できない電線","平面では、線と線が交われない。",[100,0,-220]]]],
+   ["fourd","4次元空間の宇宙","#9fe8ff","空間が4次元ある宇宙。重力や電気の力が距離の3乗で弱まるため、惑星は安定して回れず、原子も形を保てない。","空間が4次元（力は距離の3乗に反比例）",
+     [["fo_star","惑星のない恒星","安定な軌道がないので、惑星は落ちるか飛び去る。",[0,0,0],"#fff2c0"],["fo_slice","超球の星","私たちには4次元の球の「断面」だけが見え、大きくなったり小さくなったりする。",[200,40,-80],"#9fe8ff"],["fo_atom","形を保てない原子","電子は原子核に落ちてしまう。化学も生命も成り立たない。",[-180,-40,120],"#c99cf2"],["fo_cube","超立方体の結晶","4次元の結晶は、3次元に影を落とすと形が変わり続ける。",[0,140,200]]]],
+   ["weakless","弱い力のない宇宙","#ffb36a","4つの力のうち「弱い力」がない宇宙。実際に2006年に物理学者が「それでも星も生命もできるかもしれない」と論文で示した、検討された仮説の宇宙。","弱い力がない（ほかの定数を調整）",
+     [["we_star","重水素を燃やす小さな星","水素ではなく重水素の核融合で輝く、少し暗い星。",[0,0,0],"#ffb070"],["we_sn","少ない超新星","弱い力がないので、超新星爆発の多くが起きない。",[220,60,-100]],["we_planet","鉄の少ない惑星","重い元素のばらまかれ方が違い、惑星の材料も変わる。",[-200,-30,150],"#c8a070"],["we_life","それでも生命は？","炭素や酸素はでき、生命が生まれる可能性は残る。",[0,150,0],"#7fe0b0"]]],
+   ["nocarbon","炭素が生まれない宇宙","#7fd0d0","炭素ができる原子核の反応（ホイル状態）がわずかにずれた宇宙。星の中で炭素がほとんど作られず、酸素とネオンの宇宙になる。","強い力の強さが数%違う",
+     [["nc_neb","酸素の星雲","青緑に光る、炭素のない星雲。",[0,0,0],"#7fffd0"],["nc_planet","炭素のない惑星","有機物がなく、岩と酸素の氷でできた星。",[200,40,-120],"#a0b0c0"],["nc_si","ケイ素の生き物（空想）","炭素の代わりにケイ素の結晶で体をつくる生命がいるかもしれない。",[-200,-20,160],"#cfe6ff"],["nc_why","なぜ私たちの宇宙には炭素がある？","物理定数がちょうどよい値になっている「微調整問題」の例として有名。",[0,160,0]]]],
+   ["rip","引き裂かれる宇宙（ビッグリップ）","#ff6a3a","膨張をうながす「ファントム・エネルギー」が強い宇宙。膨張がどんどん加速し、銀河団、銀河、恒星系、そして原子までもが最後には引き裂かれる。","ダークエネルギーの性質がw<−1",
+     [["ri_cl","ほどける銀河団","最初に銀河どうしのつながりが切れる。",[0,0,0]],["ri_sys","ほどける恒星系","最後の数か月で惑星が恒星から離れていく。",[200,40,-100],"#ffd27a"],["ri_atom","原子まで分解","最後の一瞬、原子さえも引き裂かれる。",[-180,-60,140],"#ffffff"],["ri_hor","迫る地平線","見える範囲がどんどん小さくなる。",[0,200,0],"#ff6a3a"]]],
+   ["cycle","時間が輪になった宇宙","#c8a0ff","時間が円のようにつながった宇宙。終わりがそのまま始まりに戻り、同じ出来事が永遠にくり返す。","時間が閉じている（閉じた時間的曲線）",
+     [["cy_ring","時間の輪","終わりとはじまりがつながっている。",[0,0,0]],["cy_twice","何度も見える銀河","同じ銀河が、時間の輪を回るたびに現れる。",[300,0,0],"#c8a0ff"],["cy_para","自分の過去と出会う","過去を変えると矛盾が起きる（タイムパラドックス）。",[-300,60,0],"#ff9ad0"],["cy_eternal","永劫回帰","ニーチェが考えた「同じ人生が永遠にくり返す」世界。",[0,200,0]]]],
+   ["quantum","量子が大きい宇宙","#7fb2ff","量子の効果（プランク定数）がとても大きい宇宙。ふだんの大きさのものまで「重ね合わせ」になり、惑星や銀河の位置がぼやけ、見たときに初めて決まる。","プランク定数hが巨大",
+     [["qu_pl","2つの場所にある惑星","見るまでは、どちらにあるとも決まっていない。",[0,0,0],"#7fb2ff"],["qu_int","干渉縞の銀河","銀河の光が波のように重なり、縞模様をつくる。",[200,40,-150]],["qu_obs","観測で決まる世界","誰かが見るたびに、世界の形が1つに定まる。",[-200,-30,150],"#ffffff"],["qu_tun","トンネル効果の星","星が壁をすり抜けるように、突然別の場所に現れる。",[0,180,0],"#ffd27a"]]],
+   ["alive","生命に満ちた宇宙","#7fe0b0","どの惑星にも生命があり、多くの銀河がType III文明に包まれた宇宙。銀河の星々はダイソン球に覆われて赤外線で光り、文明どうしの通信が空を満たしている。","生命の誕生がとても起きやすい",
+     [["al_dyson","ダイソン球に包まれた銀河","恒星の光を文明が使い尽くし、銀河は赤外線でしか光らない。",[0,0,0],"#ff7a5a"],["al_net","銀河間の通信網","文明どうしの光の通信が空を横切る。",[200,60,-100],"#7fe0b0"],["al_forest","森の惑星","どの惑星にも、それぞれ違う生命の森がある。",[-160,-40,120],"#4faa5a"],["al_fermi","フェルミのパラドックスがない世界","「みんなどこにいる？」という問いがそもそも生まれない。",[0,170,0]]]],
+   ["univita","ユニヴィータ宇宙（SFノート）","#ffd27a","SFノートの宇宙。生命と情報、物質の区別がなくなった知性（UOI）が、星々を光の網でつないでいる。超因果圏・高次存在領域へ続く入口がある。","生命・情報・物質の区別がない",[]]];
+  lane("mv","マルチバース（空想）","shape","#c99cf2");lane("uv","別の宇宙（空想）","mv","#ff9ad0");lane("up","上位の層（空想）","mv","#9fe8ff");
+  const MVFS=`uniform vec3 uCol;uniform float uTime;varying vec3 vN;varying vec3 vW;varying vec2 vUv;${GLN}void main(){vec3 v=normalize(cameraPosition-vW);float f=pow(1.-abs(dot(normalize(vN),v)),2.5);float n=fbm(vUv*8.+uTime*.03);vec3 ir=.5+.5*cos(6.283*(f*1.5+n+vec3(0.,.33,.67)));gl_FragColor=vec4(mix(uCol,ir,.45)*(f*1.4+.05)+uCol*n*.08,f*.9+.06);
       #include <tonemapping_fragment>
       #include <encodings_fragment>
     }`;
-      UNI.forEach(([id,nm,col,d],i)=>{const a=i/UNI.length*6.283,rr=i?420+R()*120:0;const r0=i?70+R()*40:110;const m=new THREE.ShaderMaterial({uniforms:{uCol:{value:C(col).convertSRGBToLinear()},uTime:{value:0}},vertexShader:VS,fragmentShader:MVFS,transparent:true,depthWrite:false});
-        const b=sphere(r0,m,48);b.position.set(Math.cos(a)*rr,(R()-.5)*260,Math.sin(a)*rr);scene.add(b);const inner=glowBB(col,r0*1.1,0);b.add(inner);const ps=[];for(let k=0;k<300;k++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(r0*.8*Math.cbrt(R()));ps.push(q.x,q.y,q.z);}b.add(points(ps,col,r0*.03,.9));
-        const s0=1+R()*.05;anims.push(t=>{m.uniforms.uTime.value=t;b.scale.setScalar(s0+Math.sin(t*.4+i)*.03);});label("u_"+id,nm,b,r0*3.2,d,id==="home"?"直径約930億光年（観測できる範囲）":"空想");});
-      const fil=[];for(let i=0;i<4000;i++){const q=V(R()-.5,R()-.5,R()-.5).multiplyScalar(2600);fil.push(q.x,q.y,q.z);}scene.add(points(fil,"#5a4a8a",3,.5));}});
+  function bubble(r0,col){const m=new THREE.ShaderMaterial({uniforms:{uCol:{value:C(col).convertSRGBToLinear()},uTime:{value:0}},vertexShader:VS,fragmentShader:MVFS,transparent:true,depthWrite:false});const b=sphere(r0,m,40);anims.push(t=>m.uniforms.uTime.value=t);return b;}
+  addBr({id:"mv",lane:"mv",parent:"shape",pobj:"uni_shape",up:"meta",downObj:"u_home",name:"マルチバース（空想）",short:"マルチバース",unit:"宇宙の外側（空想図）",desc:"ここから先は空想です。永久インフレーション説では、私たちの宇宙は無数の「泡宇宙」の一つかもしれない。泡ごとに物理定数が違えば、まったく違う宇宙になる。泡を選んで近づき、さらにズームインするとその宇宙の中へ。ズームアウトを続けると、さらに上の層（空想）へ。",dist:1100,min:60,max:2600,
+    build(){scene.add(new THREE.AmbientLight("#fff",1));
+      UNI.forEach(([id,nm,col,d,diff],i)=>{const a=i/UNI.length*6.283*2.0,rr=i?380+(i%3)*160:0;const r0=i?60+R()*35:110;const b=bubble(r0,col);b.position.set(Math.cos(a)*rr,i?((i%4)-1.5)*150:0,Math.sin(a)*rr);scene.add(b);b.add(glowBB(col,r0*1.1,0));
+        const ps=[];for(let k=0;k<260;k++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(r0*.8*Math.cbrt(R()));ps.push(q.x,q.y,q.z);}b.add(points(ps,col,r0*.03,.9));
+        const s0=1+R()*.05;anims.push(t=>b.scale.setScalar(s0+Math.sin(t*.4+i)*.03));label("u_"+id,nm,b,r0*3.2,d+(diff!=="—"?"（違い："+diff+"）":""),id==="home"?"直径約930億光年（観測できる範囲）":"空想");});
+      const fil=[];for(let i=0;i<4000;i++){const q=V(R()-.5,R()-.5,R()-.5).multiplyScalar(3000);fil.push(q.x,q.y,q.z);}scene.add(points(fil,"#5a4a8a",3,.5));}});
   BRMAP["mv:u_home"]="shape";
+  // 上位の層1：法則の海（メタバース）
+  addBr({id:"meta",lane:"up",parent:"mv",up:"omni",downObj:"m_ours",down:"mv",fic:1,name:"法則の海（メタバース・空想）",short:"法則の海",unit:"マルチバースのさらに外（空想）",desc:"空想の層。ここでは「物理法則の決まり方」そのものが場所ごとに違い、マルチバース（泡宇宙の群れ）が島のように浮かぶ。法則を記したような光の粒が海流のように流れている。金色の島が私たちのマルチバース。",dist:1400,min:80,max:3200,
+    build(){scene.add(new THREE.AmbientLight("#fff",1));const isl=[["m_ours","私たちのマルチバース","#f4b942",V(0,0,0),"泡宇宙の群れ。ここにズームインすると戻れる。"],["m_everett","量子の多世界の森（エヴェレット解釈）","#7fb2ff",V(620,120,-260),"量子の出来事のたびに世界が枝分かれするという解釈。枝が林のように広がる。"],["m_melt","法則が溶ける海峡","#ff9ad0",V(-560,-140,300),"ここでは物理定数がゆっくり変化し続け、泡宇宙が生まれては溶ける。"],["m_timeless","時間のないマルチバース","#9fe8ff",V(-200,260,-640),"時間という次元を持たない泡ばかりの群れ。変化も歴史もない。"],["m_made","文明が作ったマルチバース（SF）","#ffd27a",V(380,-280,560),"高度な文明（Type V）が、自分たちで宇宙を生み出して育てているという空想。SFノートのUOIの先かもしれない。"]];
+      isl.forEach(([id,nm,col,p,d],k)=>{const g=new THREE.Group();g.position.copy(p);scene.add(g);for(let i=0;i<26;i++){const b=bubble(12+R()*22,col);b.position.set((R()-.5)*220,(R()-.5)*140,(R()-.5)*220);g.add(b);}g.add(glowBB(col,360,0));
+        if(id==="m_everett"){const seg=[];const br=(o,dir,len,dp)=>{const e=o.clone().addScaledVector(dir,len);seg.push(o,e);if(dp<6){br(e,dir.clone().add(V(R()-.5,R()*.6,R()-.5)).normalize(),len*.75,dp+1);br(e,dir.clone().add(V(R()-.5,R()*.6,R()-.5)).normalize(),len*.75,dp+1);}};br(V(0,-120,0),V(0,1,0),70,0);g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(seg),new THREE.LineBasicMaterial({color:"#9fc8ff",transparent:true,opacity:.7})));}
+        anims.push(t=>{g.rotation.y=t*.02*(k%2?1:-1);});label(id,nm,g,700,d,"空想");});
+      const N=6000,pos=new Float32Array(N*3),ph=[];for(let i=0;i<N;i++){ph.push([R()*6.283,(R()-.5)*1400,900+R()*900,.02+R()*.04]);}const gg=new THREE.BufferGeometry();gg.setAttribute("position",new THREE.BufferAttribute(pos,3));const pts=new THREE.Points(gg,new THREE.PointsMaterial({color:"#9fe8ff",size:5,transparent:true,opacity:.55,blending:THREE.AdditiveBlending,depthWrite:false}));scene.add(pts);
+      anims.push(t=>{for(let i=0;i<N;i++){const [a,y,r,w]=ph[i];const q=a+t*w;pos[i*3]=Math.cos(q)*r;pos[i*3+1]=y+Math.sin(q*3+i)*40;pos[i*3+2]=Math.sin(q)*r*.7;}gg.attributes.position.needsUpdate=true;});
+      const h=new THREE.Object3D();h.position.set(0,700,0);scene.add(h);label("meta_all","法則の海（全体）",h,2400,"マルチバースのさらに外側を想像した層。どんな法則の宇宙が生まれうるか、その「法則の法則」が場所によって違う。","空想");}});
+  // 上位の層2：オムニバース（すべての可能性）
+  addBr({id:"omni",lane:"up",parent:"meta",top:1,downObj:"o_meta",down:"meta",fic:1,name:"オムニバース（すべての可能性・空想）",short:"オムニバース",unit:"考えうるすべての世界（空想）",desc:"想像できる最も外側の層。「数学的に矛盾なく書けるものは、すべてどこかに実在する」という考え（テグマークの数学的宇宙仮説＝レベルIV）を絵にした空想。立体・結び目・フラクタル・セル・オートマトンが、それぞれ別の世界の「設計図」として漂う。ここより外は描けない。",dist:1300,min:60,max:2000,
+    build(){scene.add(new THREE.AmbientLight("#fff",1));const wire=(geo,col,p,sp)=>{const m=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:col,wireframe:true,transparent:true,opacity:.6}));m.position.copy(p);scene.add(m);anims.push(t=>{m.rotation.x=t*sp;m.rotation.y=t*sp*.7;});return m;};
+      const cvTex=(f)=>{const c=document.createElement("canvas");c.width=c.height=256;const x=c.getContext("2d");f(x);return new THREE.CanvasTexture(c);};
+      const mand=cvTex(x=>{const im=x.createImageData(256,256);for(let j=0;j<256;j++)for(let i=0;i<256;i++){let cr=-2.2+i/256*3,ci=-1.5+j/256*3,zr=0,zi=0,k=0;while(k<60&&zr*zr+zi*zi<4){const t=zr*zr-zi*zi+cr;zi=2*zr*zi+ci;zr=t;k++;}const v=k===60?0:k/60;const o=(j*256+i)*4;im.data[o]=255*Math.sqrt(v);im.data[o+1]=120*v;im.data[o+2]=255*(1-v)*(k===60?0:1);im.data[o+3]=255;}x.putImageData(im,0,0);});
+      const ca=cvTex(x=>{x.fillStyle="#000";x.fillRect(0,0,256,256);let row=new Array(256).fill(0);row[255]=1;x.fillStyle="#7fe0b0";for(let y=0;y<256;y++){for(let i=0;i<256;i++)if(row[i])x.fillRect(i,y,1,1);const nr=row.map((_,i)=>{const l=row[(i+255)%256],c=row[i],r=row[(i+1)%256];return (110>>(l*4+c*2+r))&1;});row=nr;}});
+      const plane=(tex,p,nm,id,d)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(200,200),new THREE.MeshBasicMaterial({map:tex,side:THREE.DoubleSide,transparent:true,opacity:.9}));m.position.copy(p);scene.add(m);anims.push(t=>m.lookAt(camera.position));label(id,nm,m,520,d,"空想");};
+      const meta=new THREE.Group();scene.add(meta);for(let i=0;i<12;i++){const b=bubble(14+R()*16,"#9fe8ff");b.position.set((R()-.5)*120,(R()-.5)*80,(R()-.5)*120);meta.add(b);}meta.add(glowBB("#9fe8ff",260,0));label("o_meta","法則の海（ここから来た）",meta,600,"一つ下の層。ここにズームインすると戻れる。","空想");
+      label("o_math","数学的構造の宇宙（立体）",wire(new THREE.IcosahedronGeometry(110,0),"#ffd27a",V(520,120,-200),.1),560,"正多面体のような「形の決まり」だけで成り立つ世界。数学的宇宙仮説では、これも一つの宇宙。","空想");
+      label("o_knot","結び目の宇宙",wire(new THREE.TorusKnotGeometry(80,18,200,12,3,7),"#ff9ad0",V(-500,-80,260),.08),560,"ほどけない結び目の形そのものが、世界の法則になっている世界。","空想");
+      plane(mand,V(-160,260,-560),"フラクタルの宇宙（マンデルブロ集合）","o_frac","単純な式のくり返しから、無限に細かい形が生まれる世界。どこを拡大しても新しい模様が現れる。");
+      plane(ca,V(300,-260,520),"論理だけの世界（セル・オートマトン）","o_logic","「ルール110」のような単純な規則だけで、計算も複雑な模様も生まれる。規則そのものが物理法則の世界。");
+      const st=new THREE.Group();st.position.set(-560,200,-120);scene.add(st);for(let i=0;i<60;i++){const s=sphere(4+R()*6,new THREE.MeshBasicMaterial({color:["#ffd27a","#ff9ad0","#9fe8ff"][i%3]}),8);s.position.set((R()-.5)*160,(R()-.5)*160,(R()-.5)*160);st.add(s);}anims.push(t=>st.rotation.y=t*.05);
+      label("o_story","物語の宇宙（空想）","—"&&st,520,"「書かれた物語の世界も、どこかに実在するのでは？」という空想の島。数学的に矛盾がなければ、物語の宇宙もありうる。","空想");
+      const hy=wire(new THREE.TorusKnotGeometry(60,8,240,16,5,8),"#fff2c0",V(80,380,300),.15);label("o_hyper","高次存在領域（SFノート）",hy,460,"SFノートの最終段階。空間・時間・言語を超えた存在の領域を、この層に置いてみた。","空想");
+      const edge=sphere(1700,new THREE.MeshBasicMaterial({color:"#ffffff",side:THREE.BackSide,transparent:true,opacity:.04,depthWrite:false}),32);scene.add(edge);const en=new THREE.Object3D();en.position.set(0,0,1650);scene.add(en);label("o_edge","描けない果て","—"&&en,1600,"ここより外は、言葉でも図でも描けない。この地図の最も外側。","空想");
+      const pts=[];for(let i=0;i<5000;i++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(300+R()*1300);pts.push(q.x,q.y,q.z);}scene.add(points(pts,"#ffffff",3,.5));}});
+  BRMAP["meta:m_ours"]="mv";BRMAP["omni:o_meta"]="meta";
   const uniBuild={
     mirror(){const g1=galFX({type:"spiral",size:200,arms:2,pitch:-.3,c1:"#c8f4ff",c2:"#ffd8b0",c3:"#7fffd0",gain:1});scene.add(g1);scene.add(galStars({type:"spiral",size:200,arms:2,pitch:-.3,c1:"#c8f4ff",c2:"#ffd8b0",c3:"#7fffd0",n:20000}));
       for(let i=0;i<14;i++){const gg=galFX({type:R()<.5?"spiral":"elliptical",size:30+R()*30,arms:2,pitch:-.3,c1:"#c8f4ff",c2:"#ffd8b0",gain:.8,bb:R()<.3});gg.position.set((R()-.5)*1400,(R()-.5)*500,(R()-.5)*1400);gg.rotation.x+=R();scene.add(gg);}
@@ -2256,9 +2308,44 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
       const pk=[];for(let i=0;i<40;i++){const s=glowBB("#fff2c0",10,0);scene.add(s);pk.push([s,Math.floor(R()*seg.length/2),R()]);}anims.push(t=>{lm.opacity=.4+.2*Math.sin(t*1.5);pk.forEach(([s,k,o])=>{const a=seg[k*2],b=seg[k*2+1];s.position.copy(a).lerp(b,(t*.15+o)%1);});});
       const tc=new THREE.Object3D();tc.position.set(0,260,0);scene.add(tc);label("transcausal","超因果圏への入口（SFノート）",tc,300,"従来の因果律や時空の制約を超えて、知性どうしが交流できる段階（SFノートの第4段階）。","空想");
       const hy=new THREE.Mesh(new THREE.TorusKnotGeometry(60,8,200,16,3,5),new THREE.MeshBasicMaterial({color:"#ffd27a",wireframe:true,transparent:true,opacity:.35}));hy.position.set(0,-200,0);scene.add(hy);anims.push(t=>{hy.rotation.x=t*.2;hy.rotation.y=t*.13;});
-      label("hypermension","高次存在領域（SFノート）",hy,400,"空間・時間・言語といった概念そのものを超えた存在領域。UOIが現れる（SFノートの第5段階）。図は高次元の形を3次元に映した「影」のイメージ。","空想");return "光の網でつながる知性（UOI）";}};
-  UNI.slice(1).forEach(([id,nm,col,d])=>addBr({id:"uv_"+id,lane:"uv",parent:"mv",pobj:"u_"+id,name:nm,short:nm.replace(/（.*）/,""),unit:"別の宇宙（空想）",desc:d,dist:900,min:40,max:2200,fic:1,
-    build(){scene.add(new THREE.AmbientLight("#fff",1));const what=uniBuild[id]();const h=new THREE.Object3D();h.position.set(0,120,0);scene.add(h);label("uv_"+id+"_all",nm,h,900,d+"（すべて空想）",what);}}));
+      label("hypermension","高次存在領域（SFノート）",hy,400,"空間・時間・言語といった概念そのものを超えた存在領域。UOIが現れる（SFノートの第5段階）。図は高次元の形を3次元に映した「影」のイメージ。","空想");return "光の網でつながる知性（UOI）";},
+    flat(){const gr=new THREE.GridHelper(1400,56,"#5a4a20","#2a2410");scene.add(gr);const pl=new THREE.Mesh(new THREE.PlaneGeometry(1400,1400),new THREE.MeshBasicMaterial({color:"#2a2008",transparent:true,opacity:.35,side:THREE.DoubleSide,depthWrite:false}));pl.rotation.x=-Math.PI/2;scene.add(pl);
+      for(let i=0;i<10;i++){const g=galFX({type:"spiral",size:80+R()*60,arms:2,pitch:.3,c1:"#ffe2a0",c2:"#ffd27a",gain:1});g.position.set((R()-.5)*1100,.5,(R()-.5)*1100);scene.add(g);}
+      const s=new THREE.Mesh(new THREE.CircleGeometry(14,48),new THREE.MeshBasicMaterial({color:"#fff2c0"}));s.rotation.x=-Math.PI/2;s.position.y=1;scene.add(s);const ob=[];for(let k=0;k<3;k++){const p=new THREE.Mesh(new THREE.CircleGeometry(4,24),new THREE.MeshBasicMaterial({color:["#7fe0b0","#c8a070","#7fb2ff"][k]}));p.rotation.x=-Math.PI/2;p.position.y=1.2;scene.add(p);ob.push(p);}
+      const ros=[];for(let i=0;i<=600;i++){const a=i/600*6.283*5;const r=60+k2(a);ros.push(V(Math.cos(a)*r,1,Math.sin(a)*r));}function k2(a){return 70+40*Math.cos(a*1.6);}scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(ros),new THREE.LineBasicMaterial({color:"#ffd27a",transparent:true,opacity:.5})));
+      anims.push(t=>ob.forEach((p,k)=>{const a=t*(.6-k*.15)+k*2;const r=60+k*50+40*Math.cos(a*1.6);p.position.set(Math.cos(a)*r,1.2,Math.sin(a)*r);}));return "平面だけの銀河と、花びらのような軌道";},
+    fourd(){for(let i=0;i<16;i++){const p=V((R()-.5)*700,(R()-.5)*300,(R()-.5)*700);const st=star(4,["G","K","A","F"][i%4],8);st.position.copy(p);scene.add(st);const sl=sphere(1,new THREE.MeshBasicMaterial({color:"#9fe8ff",transparent:true,opacity:.18,depthWrite:false,blending:THREE.AdditiveBlending}),24);sl.position.copy(p);scene.add(sl);const o=R()*6;anims.push(t=>sl.scale.setScalar(6+Math.abs(Math.sin(t*.5+o))*22));}
+      const tg=new THREE.Group();tg.position.set(0,140,200);scene.add(tg);const v4=[];for(let a=0;a<16;a++)v4.push([a&1?1:-1,a&2?1:-1,a&4?1:-1,a&8?1:-1]);const ed=[];for(let a=0;a<16;a++)for(let k=0;k<4;k++){const b2=a^(1<<k);if(a<b2)ed.push([a,b2]);}
+      const pos=new Float32Array(ed.length*6);const lg=new THREE.BufferGeometry();lg.setAttribute("position",new THREE.BufferAttribute(pos,3));tg.add(new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:"#9fe8ff"})));
+      anims.push(t=>{const P=v4.map(v=>{let [x,y,z,w]=v;const c=Math.cos(t*.5),s2=Math.sin(t*.5);[x,w]=[x*c-w*s2,x*s2+w*c];const f=40/(3-w);return [x*f,y*f,z*f];});ed.forEach(([a,b2],i)=>{pos.set(P[a],i*6);pos.set(P[b2],i*6+3);});lg.attributes.position.needsUpdate=true;});
+      const fall=[];for(let i=0;i<8;i++){const p=sphere(2.5,new THREE.MeshBasicMaterial({color:"#c99cf2"}),10);scene.add(p);fall.push([p,R()*6]);}anims.push(t=>fall.forEach(([p,o])=>{const k=((t*.2+o)%1);const a=o*3+k*12;const r=90*(1-k);p.position.set(Math.cos(a)*r,0,Math.sin(a)*r);}));
+      return "惑星を持てない恒星と、超立方体の影";},
+    weakless(){for(let i=0;i<10;i++){const g=galFX({type:R()<.6?"spiral":"elliptical",size:60+R()*80,arms:2,pitch:.3,c1:"#ffc890",c2:"#ffb070",gain:.9,bb:R()<.3});g.position.set((R()-.5)*1200,(R()-.5)*400,(R()-.5)*1200);g.rotation.x+=R();scene.add(g);}
+      const s=star(10,"K",9);scene.add(s);for(let k=0;k<3;k++){const p=planetGPU(2.5,["mars","moon","venus"][k],V(0,0,0),24);scene.add(p);const r=40+k*22,o=k*2;anims.push(t=>p.position.set(Math.cos(t*.3/(k+1)+o)*r,0,Math.sin(t*.3/(k+1)+o)*r));}return "少し暗い星と、静かな銀河";},
+    nocarbon(){const n=nebFX("ring",300,"#3fd0c0","#bfffe8");scene.add(n);const n2=nebFX("orion",420,"#2fb0a0","#cffff0","#ffffff");n2.position.set(-300,80,-200);scene.add(n2);
+      const pl=planetGPU(16,"europa",V(0,200,300),48);pl.position.set(200,40,-120);scene.add(pl);const cr=new THREE.Group();cr.position.set(-200,-20,160);scene.add(cr);for(let i=0;i<14;i++){const c=new THREE.Mesh(new THREE.OctahedronGeometry(6+R()*8,0),new THREE.MeshStandardMaterial({color:"#cfe6ff",metalness:.6,roughness:.1,transparent:true,opacity:.85}));c.position.set((R()-.5)*60,(R()-.5)*40,(R()-.5)*60);c.rotation.set(R()*3,R()*3,R()*3);cr.add(c);}
+      scene.add(new THREE.PointLight("#cfffff",1.5,0,0));anims.push(t=>cr.rotation.y=t*.2);return "青緑の酸素の星雲と、ケイ素の結晶";},
+    rip(){const gs=[];for(let i=0;i<36;i++){const g=galFX({type:R()<.5?"spiral":"elliptical",size:30+R()*30,arms:2,c1:"#ffd0b0",c2:"#ffb080",gain:1,bb:R()<.4});const p=V((R()-.5)*600,(R()-.5)*300,(R()-.5)*600);g.position.copy(p);scene.add(g);gs.push([g,p,R()]);}
+      const sys=new THREE.Group();sys.position.set(200,40,-100);scene.add(sys);const st=star(6,"G",8);sys.add(st);const pls=[];for(let k=0;k<4;k++){const p=planetGPU(1.6,["mars","venus","neptune","moon"][k],V(0,0,0),20);sys.add(p);pls.push(p);}
+      const hor=sphere(1,new THREE.MeshBasicMaterial({color:"#ff6a3a",wireframe:true,transparent:true,opacity:.25}),24);scene.add(hor);
+      anims.push(t=>{const k=(t*.03)%1;const e=Math.exp(k*2.5);gs.forEach(([g,p,o])=>{g.position.copy(p).multiplyScalar(e);g.scale.setScalar(1+k*o*1.5);});pls.forEach((p,i)=>{const r=(12+i*7)*(1+k*k*6),a=t*.6/(i+1);p.position.set(Math.cos(a)*r,0,Math.sin(a)*r);});hor.scale.setScalar(900*(1-k*.85));});return "広がり続け、すべてが引き裂かれていく";},
+    cycle(){const N=40;const R0=320;for(let i=0;i<N;i++){const a=i/N*6.283;const g=galFX({type:"spiral",size:36,arms:2,c1:"#e0c8ff",c2:"#c8a0ff",gain:1,seed:i%5});g.position.set(Math.cos(a)*R0,Math.sin(a*3)*40,Math.sin(a)*R0);scene.add(g);}
+      const ring=new THREE.Mesh(new THREE.TorusGeometry(R0,4,8,200),new THREE.MeshBasicMaterial({color:"#c8a0ff",transparent:true,opacity:.4}));ring.rotation.x=Math.PI/2;scene.add(ring);const tk=glowBB("#ffffff",40,1);scene.add(tk);anims.push(t=>{const a=t*.15;tk.position.set(Math.cos(a)*R0,Math.sin(a*3)*40,Math.sin(a)*R0);});return "輪になって巡る時間";},
+    quantum(){const ghosts=[];for(let i=0;i<6;i++){const p=planetGPU(14,["jupiter","neptune","mars"][i%3],V(0,300,300),40);p.material.transparent=true;scene.add(p);ghosts.push([p,V((R()-.5)*120,(R()-.5)*60,(R()-.5)*120),R()*6]);}
+      anims.push(t=>ghosts.forEach(([p,o,ph],i)=>{const k=Math.sin(t*1.3+ph);p.position.copy(o).multiplyScalar(k);p.visible=Math.sin(t*7+ph*3)>-.3;}));
+      const ifm=new THREE.Mesh(new THREE.PlaneGeometry(500,300),new THREE.ShaderMaterial({uniforms:{uTime:{value:0}},vertexShader:"varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",fragmentShader:"uniform float uTime;varying vec2 vUv;void main(){vec2 p=vUv*2.-1.;float d1=length(p-vec2(-.3,0.)),d2=length(p-vec2(.3,0.));float I=pow(cos((d1-d2)*40.+uTime),2.)*exp(-dot(p,p)*1.5);gl_FragColor=vec4(vec3(.5,.7,1.)*I,I*.8);}",transparent:true,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending}));
+      ifm.position.set(200,40,-150);scene.add(ifm);anims.push(t=>{ifm.material.uniforms.uTime.value=t;ifm.lookAt(camera.position);});
+      const tn=star(5,"F",8);scene.add(tn);anims.push(t=>{const k=Math.floor(t/2.5);tn.position.set(Math.sin(k*7.1)*200,180+Math.cos(k*3.3)*40,Math.cos(k*5.3)*200);});return "ぼやけて重なり合う天体";},
+    alive(){for(let i=0;i<14;i++){const g=new THREE.Group();g.position.set((R()-.5)*1000,(R()-.5)*360,(R()-.5)*1000);scene.add(g);g.add(galFX({type:"spiral",size:70+R()*50,arms:2,c1:"#ff7a5a",c2:"#a0302a",gain:.8}));g.add(galStars({type:"spiral",size:80,arms:2,c1:"#ff5a3a",c2:"#ff8a5a",n:2500,ps:.7}));}
+      const seg=[];for(let i=0;i<40;i++){seg.push(V((R()-.5)*1000,(R()-.5)*360,(R()-.5)*1000),V((R()-.5)*1000,(R()-.5)*360,(R()-.5)*1000));}const lm=new THREE.LineBasicMaterial({color:"#7fe0b0",transparent:true,opacity:.35,blending:THREE.AdditiveBlending});scene.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(seg),lm));anims.push(t=>lm.opacity=.25+.15*Math.sin(t*2));
+      const ds=new THREE.Group();scene.add(ds);const sh=sphere(14,new THREE.MeshBasicMaterial({color:"#ff6a4a",wireframe:true,transparent:true,opacity:.5}),16);ds.add(sh);ds.add(glowBB("#ff5a3a",80,0));
+      const fp=planetGPU(10,"europa",V(0,0,0),40);fp.material.uniforms.uKind.value=PLK.mars;fp.position.set(-160,-40,120);scene.add(fp);const forest=sphere(10.3,new THREE.MeshStandardMaterial({color:"#2f8a3a",transparent:true,opacity:.75}),32);forest.position.copy(fp.position);scene.add(forest);scene.add(new THREE.PointLight("#ffffff",1.2,0,0));
+      return "赤外線で光る銀河と、文明の通信網";},
+  };
+  UNI.slice(1).forEach(([id,nm,col,d,diff,feats])=>{BRMAP["mv:u_"+id]="uv_"+id;addBr({id:"uv_"+id,lane:"uv",parent:"mv",pobj:"u_"+id,name:nm,short:nm.replace(/（.*）/,""),unit:"別の宇宙（空想）",ph:id==="flat"?.5:.95,desc:d+(diff!=="—"?"　私たちの宇宙との違い："+diff+"。":""),dist:900,min:40,max:2200,fic:1,
+    build(){scene.add(new THREE.AmbientLight("#fff",1));const what=uniBuild[id]();
+      (feats||[]).forEach(([fid,fn,fd,p,mk])=>{let n;if(mk){n=glowBB(mk,26,0);}else n=new THREE.Object3D();n.position.set(...p);scene.add(n);label(fid,fn,n,260,fd,"空想");});
+      const h=new THREE.Object3D();h.position.set(0,320,0);scene.add(h);label("uv_"+id+"_all",nm+"（全体）",h,1200,d+(diff!=="—"?"　私たちの宇宙との違い："+diff+"。":"")+"（すべて空想）",what);}});});
 
   // ---- 共通 ----
   function init(container,labels,infoEl,fadeEl){
@@ -2281,7 +2368,8 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
     if(ng<cam.min&&f<1){edge+=1-f;if(edge>.6){edge=0;inward(true);}cam.goal=cam.min;return;}
     edge=0;cam.goal=ng;}
   const idx=id=>ALL.findIndex(x=>x.id===id);
-  function outward(){const L=ALL[LV];if(L.br){const pi=idx(L.parent);if(pi>=0)go(pi,L.pobj,"out");return;}if(LV<LEVELS.length-1)go(LV+1,null,"out");else go(idx("mv"),null,"out");}
+  function outward(){const L=ALL[LV];if(L.up){const u=idx(L.up);if(u>=0)go(u,null,"out",ALL[u].downObj);return;}if(L.top)return;
+    if(L.br){const pi=idx(L.parent);if(pi>=0)go(pi,null,"out",L.pobj);return;}if(LV<LEVELS.length-1)go(LV+1,null,"out",GATE[LEVELS[LV+1].id]);else go(idx("mv"),null,"out","u_home");}
   // ズームインの行き先：注目中（またはカーソル付近）の天体を優先し、勝手に別の場所へ飛ばない
   const GATE={moon:"earth",inner:"earth",outer:"sun",helio:"sun",stars:"sun",nebula:"sun",galaxy:"sunpos",local:"mw",lania:"lg",web:"home",shape:"uni_shape"};
   let ptrW=null;
@@ -2289,7 +2377,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
     objs.forEach(o=>{if(!o.node.visible)return;o.node.getWorldPosition(p);p.project(camera);if(p.z>1||p.z<-1)return;const d=Math.hypot((p.x*.5+.5)*w-px,(-p.y*.5+.5)*h-py);if(d<bd){bd=d;best=o;}});return bd<Math.min(w,h)*.3?best:null;}
   function inward(fromZoom){const L=ALL[LV];const tgt=focus||pickNear();
     if(LV===0){if(!tgt||tgt.id==="earth"){window.dispatchEvent(new CustomEvent("spz-earth"));return;}if(!focus)focusOn(tgt.id);return;}
-    if(tgt){if(!L.br&&GATE[L.id]===tgt.id){go(LV-1,null,"in");return;}const k=BRMAP[L.id+":"+tgt.id];if(k&&focus===tgt){go(idx(k),null,"in");return;}if(!focus||focus!==tgt)focusOn(tgt.id);return;}
+    if(tgt){if(!L.br&&GATE[L.id]===tgt.id){go(LV-1,null,"in");return;}const k=BRMAP[L.id+":"+tgt.id];if(k&&focus===tgt){if(k.startsWith("in_"))window.SPZ_MAP=true;go(idx(k),null,"in",ALL[idx(k)]&&ALL[idx(k)].br?null:tgt.id);return;}if(!focus||focus!==tgt)focusOn(tgt.id);return;}
     if(!L.br&&LV>0){go(LV-1,null,"in");return;}
     if(L.id==="mv"){go(idx("shape"),null,"in");return;}}
   function resize(){if(!el||!renderer)return;const w=el.clientWidth,h=el.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);renderer.domElement.style.width=w+"px";renderer.domElement.style.height=h+"px";camera.aspect=w/h;camera.updateProjectionMatrix();}
@@ -2297,7 +2385,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
     const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.BufferAttribute(new Float32Array(p),3));g.setAttribute("color",new THREE.BufferAttribute(new Float32Array(c),3));
     return new THREE.Points(g,new THREE.PointsMaterial({size:1.6,sizeAttenuation:false,vertexColors:true,transparent:true,depthWrite:false}));}
   let starfield,hidN=0;
-  go.tok=0;function go(i,oid,dir){
+  go.tok=0;function go(i,oid,dir,fromId){
     if(!renderer||!ALL[i])return; const first=!scene;
     fade.classList.add("on");const tok=go.tok=(go.tok||0)+1;
     setTimeout(()=>{if(tok!==go.tok)return;
@@ -2306,9 +2394,10 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
       scene=new THREE.Scene();scene.background=C("#02030a");starfield=stars();scene.add(starfield);
       const L=ALL[i];L.build();hidN=0;
       if(typeof window.KYEAR==="number"&&window.SPZ_DISC){const Y=window.KYEAR,D=window.SPZ_DISC,A=window.SPZ_ART;objs=objs.filter(o=>{const d=D[o.id]??-1e12;const hide=Y< -300000?A.has(o.id):d>Y;if(hide){o.node.visible=false;hidN++;}return !hide;});}cam.min=L.min;cam.max=L.max;cam.goalT.set(...(L.center||[0,0,0]));cam.target.set(...(L.center||[0,0,0]));cam.goal=L.dist;
-      cam.dist=dir==="in"?L.dist*3:dir==="out"?L.dist*.25:L.dist;cam.auto=true;if(L.ph!=null)cam.ph=L.ph;if(L.th!=null){cam.th=L.th;cam.auto=false;}
+      cam.dist=dir==="in"?L.dist*3:dir==="out"?L.dist*.25:L.dist;cam.auto=true;cam.ph=L.ph!=null?L.ph:1.1;if(L.th!=null){cam.th=L.th;cam.auto=false;}
       lab.innerHTML=objs.map(o=>`<button class="splab" data-o="${o.id}"><i></i>${o.name}</button>`).join("");objs.forEach(o=>o.el=lab.querySelector(`[data-o="${o.id}"]`));
       renderInfo(); window.dispatchEvent(new CustomEvent("spz-level",{detail:i}));
+      if(fromId){const fo=objs.find(x=>x.id===fromId);if(fo){const p=new THREE.Vector3();fo.node.getWorldPosition(p);cam.target.copy(p);cam.dist=Math.max(fo.view*.6,L.min*1.5);}}
       if(oid)setTimeout(()=>focusOn(oid),dir?500:50);
       fade.classList.remove("on");
     },first?0:220);
@@ -2329,7 +2418,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
     const w=el.clientWidth,h=el.clientHeight,p=new THREE.Vector3();
     objs.forEach(o=>{o.node.getWorldPosition(p);p.project(camera);const vis=p.z<1&&p.z>-1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05&&o.node.visible;o.el.style.display=vis?"":"none";if(vis)o.el.style.transform=`translate(${(p.x*.5+.5)*w}px,${(-p.y*.5+.5)*h}px)`;o.el.classList.toggle("on",focus===o);});
   }
-  return {LEVELS,ALL,LANES,BRMAP,outward,inward,goBr(id){const i=idx(id);if(i>=0)go(i,null,i<LEVELS.length&&i<LV?"in":"in");},get levelId(){return ALL[LV]&&ALL[LV].id;},goId(id,o,dir){const i=ALL.findIndex(L=>L.id===id);if(i>=0){if(i===LV&&o)focusOn(o);else go(i,o,dir||(i<LV?"in":"out"));}},init,go,focusOn,unfocus(){focus=null;isolate(null);cam.goal=ALL[LV].dist;cam.min=ALL[LV].min;renderInfo();},get level(){return LV;},
+  return {LEVELS,ALL,LANES,BRMAP,outward,inward,goBr(id){const i=idx(id);if(i>=0)go(i,null,i<LEVELS.length&&i<LV?"in":"in");},get levelId(){return ALL[LV]&&ALL[LV].id;},goFrom(id,from){const i=idx(id);if(i>=0)go(i,null,"out",from);},goId(id,o,dir){const i=ALL.findIndex(L=>L.id===id);if(i>=0){if(i===LV&&o)focusOn(o);else go(i,o,dir||(i<LV?"in":"out"));}},init,go,focusOn,unfocus(){focus=null;isolate(null);cam.goal=ALL[LV].dist;cam.min=ALL[LV].min;renderInfo();},get level(){return LV;},
     start(){if(running||!renderer)return;running=true;last=performance.now();requestAnimationFrame(frame);},stop(){running=false;}};
 })();
 
@@ -5619,7 +5708,7 @@ window.GITNAV=(function(){
   const veil=document.getElementById("veil");
   function toEarth(){veil.textContent="地球へ降下中…";veil.classList.add("on");setTimeout(()=>{location.hash="world-map";setTimeout(()=>veil.classList.remove("on"),350);},450);}
   window.addEventListener("spz-earth",toEarth);
-  window.toSpace=()=>{veil.textContent="宇宙へ上昇中…";veil.classList.add("on");setTimeout(()=>{location.hash="space-map";SPZ.goId("leo","earth","out");setTimeout(()=>veil.classList.remove("on"),400);},450);};
+  window.toSpace=()=>{veil.textContent="宇宙へ上昇中…";veil.classList.add("on");setTimeout(()=>{location.hash="space-map";SPZ.goFrom("leo","earth");setTimeout(()=>veil.classList.remove("on"),400);},450);};
   let started=false;function sync(){if(location.hash==="#space-map"){if(!started){started=true;SPZ.go(0,null);}SPZ.start();render();}else SPZ.stop();}
   window.addEventListener("hashchange",sync);window.addEventListener("resize",()=>location.hash==="#space-map"&&render());render();sync();
 })();
