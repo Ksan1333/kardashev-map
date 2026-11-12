@@ -46,7 +46,7 @@
   SPZ.init(document.getElementById("spscene"),document.getElementById("splabels"),info,document.getElementById("spfade"));
   const pick=i=>{const [,,l,o]=P[i];SPZ.goId(l,o);};window.SP_P=P;window.SP_PICK=pick;
 
-  info.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.shape){window.UNI_SHAPE=b.dataset.shape;SPZ.go(SPZ.level);return;}if(b.dataset.unfocus)SPZ.unfocus();if(b.dataset.o2)SPZ.focusOn(b.dataset.o2);if(b.dataset.earth)toEarth();if(b.dataset.br)SPZ.goBr(b.dataset.br);if(b.dataset.back)SPZ.outward();});
+  info.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.shape){window.UNI_SHAPE=b.dataset.shape;SPZ.go(SPZ.level);return;}if(b.dataset.unfocus)SPZ.unfocus();if(b.dataset.o2)SPZ.focusOn(b.dataset.o2);if(b.dataset.earth)toEarth();if(b.dataset.map!==undefined){window.SPZ_MAP=b.dataset.map==="1";if(!b.dataset.br){SPZ.go(SPZ.level);return;}}if(b.dataset.br)SPZ.goBr(b.dataset.br);if(b.dataset.back)SPZ.outward();});
   document.getElementById("sp-out").onclick=()=>SPZ.outward();
   document.getElementById("sp-in").onclick=()=>SPZ.inward();
   let curObj=null;

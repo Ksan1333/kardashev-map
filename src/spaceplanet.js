@@ -104,3 +104,10 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
       const lm=new THREE.MeshBasicMaterial({color:"#000",transparent:true,opacity:.35,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2});const l1=new THREE.Mesh(new THREE.RingGeometry(ri*.996,ri*1.004,96,1,Math.PI/2,Math.PI),lm);g.add(l1);const l2=l1.clone();l2.rotation.y=-Math.PI/2;g.add(l2);
       prev=f;});
     return g;}
+
+  // 惑星の地図（正距円筒図法）：球と同じ模様の関数を平面に広げる
+  const MAP_FS="varying vec2 vUv;\n"+PL_FS.slice(0,PL_FS.indexOf("void main(){vec3 n=normalize(vN);"))+`void main(){float lo=(vUv.x-.5)*6.28318+uOff;float la=(vUv.y-.5)*3.14159;vec3 p=vec3(cos(la)*cos(lo),sin(la),-cos(la)*sin(lo));float atm;vec3 a=albedo(p,atm);gl_FragColor=vec4(pow(a,vec3(1.25))*.85,1.);
+ #include <tonemapping_fragment>
+ #include <encodings_fragment>
+}`;
+  function mapMat(kind,off=0){const m=new THREE.ShaderMaterial({uniforms:{uKind:{value:PLK[kind]},uOff:{value:off},uSun:{value:V(0,0,1)},uTime:{value:0}},vertexShader:"varying vec3 vP;varying vec3 vN;varying vec3 vW;varying vec2 vUv;void main(){vUv=uv;vP=vec3(1.,0.,0.);vN=vec3(0.,0.,1.);vW=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",fragmentShader:MAP_FS});anims.push(t=>m.uniforms.uTime.value=t);return m;}

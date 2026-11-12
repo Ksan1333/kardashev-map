@@ -408,7 +408,7 @@ __SPACEBR__
       if(pinch&&ptr.size===2){const [a,b]=[...ptr.values()],d=Math.hypot(a.x-b.x,a.y-b.y);zoom(pinch/d);pinch=d;return;}
       if(cam.drag){const dx=e.clientX-cam.drag.x,dy=e.clientY-cam.drag.y;cam.drag.m=Math.max(cam.drag.m,Math.abs(dx)+Math.abs(dy));cam.th=cam.drag.th-dx*.006;cam.ph=Math.min(3.0,Math.max(.12,cam.drag.ph-dy*.005));}});
     const up=e=>{ptr.delete(e.pointerId);if(ptr.size<2)pinch=null;cam.drag=null;};cv.addEventListener("pointerup",up);cv.addEventListener("pointercancel",up);
-    el.addEventListener("wheel",e=>{e.preventDefault();zoom(Math.exp(e.deltaY*.0012));},{passive:false});
+    el.addEventListener("wheel",e=>{e.preventDefault();const r=el.getBoundingClientRect();ptrW={x:e.clientX-r.left,y:e.clientY-r.top,t:performance.now()};zoom(Math.exp(e.deltaY*.0012));},{passive:false});
     lab.addEventListener("click",e=>{const b=e.target.closest("[data-o]");if(b)focusOn(b.dataset.o);});
     new ResizeObserver(resize).observe(el);resize();
   }
@@ -419,11 +419,16 @@ __SPACEBR__
     edge=0;cam.goal=ng;}
   const idx=id=>ALL.findIndex(x=>x.id===id);
   function outward(){const L=ALL[LV];if(L.br){const pi=idx(L.parent);if(pi>=0)go(pi,L.pobj,"out");return;}if(LV<LEVELS.length-1)go(LV+1,null,"out");else go(idx("mv"),null,"out");}
-  function inward(fromZoom){const L=ALL[LV];
-    if(focus){const k=BRMAP[L.id+":"+focus.id];if(k){go(idx(k),null,"in");return;}}
-    if(LV===0&&(!focus||focus.id==="earth")){window.dispatchEvent(new CustomEvent("spz-earth"));return;}
-    if(!focus&&!L.br&&LV>0){go(LV-1,null,"in");return;}
-    if(!focus&&L.id==="mv"){go(idx("shape"),null,"in");return;}}
+  // ズームインの行き先：注目中（またはカーソル付近）の天体を優先し、勝手に別の場所へ飛ばない
+  const GATE={moon:"earth",inner:"earth",outer:"sun",helio:"sun",stars:"sun",nebula:"sun",galaxy:"sunpos",local:"mw",lania:"lg",web:"home",shape:"uni_shape"};
+  let ptrW=null;
+  function pickNear(){const w=el.clientWidth,h=el.clientHeight;const fresh=ptrW&&performance.now()-ptrW.t<1500;const px=fresh?ptrW.x:w/2,py=fresh?ptrW.y:h/2;let best=null,bd=1e9;const p=new THREE.Vector3();
+    objs.forEach(o=>{if(!o.node.visible)return;o.node.getWorldPosition(p);p.project(camera);if(p.z>1||p.z<-1)return;const d=Math.hypot((p.x*.5+.5)*w-px,(-p.y*.5+.5)*h-py);if(d<bd){bd=d;best=o;}});return bd<Math.min(w,h)*.3?best:null;}
+  function inward(fromZoom){const L=ALL[LV];const tgt=focus||pickNear();
+    if(LV===0){if(!tgt||tgt.id==="earth"){window.dispatchEvent(new CustomEvent("spz-earth"));return;}if(!focus)focusOn(tgt.id);return;}
+    if(tgt){if(!L.br&&GATE[L.id]===tgt.id){go(LV-1,null,"in");return;}const k=BRMAP[L.id+":"+tgt.id];if(k&&focus===tgt){go(idx(k),null,"in");return;}if(!focus||focus!==tgt)focusOn(tgt.id);return;}
+    if(!L.br&&LV>0){go(LV-1,null,"in");return;}
+    if(L.id==="mv"){go(idx("shape"),null,"in");return;}}
   function resize(){if(!el||!renderer)return;const w=el.clientWidth,h=el.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);renderer.domElement.style.width=w+"px";renderer.domElement.style.height=h+"px";camera.aspect=w/h;camera.updateProjectionMatrix();}
   function stars(){const p=[],c=[];for(let i=0;i<5000;i++){const u=R()*2-1,a=R()*6.283,q=Math.sqrt(1-u*u);p.push(Math.cos(a)*q*9e4,u*9e4,Math.sin(a)*q*9e4);const t=R();const cc=t<.15?C("#ffb38a"):t<.35?C("#bcd2ff"):C("#ffffff");const b=.4+R()*.6;c.push(cc.r*b,cc.g*b,cc.b*b);}
     const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.BufferAttribute(new Float32Array(p),3));g.setAttribute("color",new THREE.BufferAttribute(new Float32Array(c),3));
@@ -449,7 +454,7 @@ __SPACEBR__
   function focusOn(id){const o=objs.find(x=>x.id===id);if(!o)return;focus=o;isolate(o);cam.goal=o.view;cam.min=Math.min(ALL[LV].min,o.view*.25);cam.auto=true;renderInfo();window.dispatchEvent(new CustomEvent("spz-obj",{detail:id}));}
   function renderInfo(){const L=ALL[LV];const bk=focus&&BRMAP[L.id+":"+focus.id];const ln=L.br?(LANES.find(x=>x.id===L.lane)||{}).name:"";const par=L.br?ALL[idx(L.parent)]:null;const SHP=L.id==="shape"?`<div class="spshape">${[["flat","平坦"],["sphere","閉じた（球）"],["saddle","開いた（双曲）"],["torus","トーラス"],["multi","多元宇宙"]].map(([k,n])=>`<button class="chip" data-shape="${k}" aria-pressed="${(window.UNI_SHAPE||"flat")===k}">${n}</button>`).join("")}</div><p class="spshd">${L.desc2||""}</p>`:"";
     info.innerHTML=(L.br?`<div class="splv">分岐：${ln}</div>`:`<div class="splv">スケール ${LV+1} / ${LEVELS.length}</div>`)+`<h3>${L.name}</h3><div class="spunit">${L.unit}</div><p>${L.desc}</p>`+(window.lvMore?window.lvMore(L.id):"")+SHP+(typeof window.KYEAR==="number"&&window.KYEAR< -300000?`<p class="sphid">この時代にはまだ人類がいません。自然の天体だけを表示しています。</p>`:hidN?`<p class="sphid">${window.KERA?window.KERA.when:""}の時点では、まだ知られていない天体・存在しない人工物 ${hidN}件を隠しています。</p>`:"")+
-      (LV===0?`<button class="chip spearth" data-earth="1">🌏 地球に降りる（世界地図へ）</button>`:"")+(L.br?`<button class="chip" data-back="1">◀ ${par?par.name:"戻る"}へ戻る</button>`:"")+((L.fic||L.id==="mv")?`<p class="sphid">ここから先は空想（SF）です。実在する天体ではありません。</p>`:"")+(bk?`<button class="chip spearth" data-br="${bk}">🔍 ${focus.name}の中をのぞく</button>`:"")+(focus?`<div class="spobj"><h4>${focus.name}</h4>${focus.dist?`<div class="spdist num">${focus.dist}</div>`:""}<p>${focus.desc||""}</p><button class="chip" data-unfocus="1">全体に戻る</button></div>`:`<p class="sphint">名前を押すとそこへ近づきます。ズームアウトを続けると1つ外のスケールへ、ズームインを続けると1つ内側へ移ります。</p>`)+
+      (LV===0?`<button class="chip spearth" data-earth="1">🌏 地球に降りる（世界地図へ）</button>`:"")+(L.br?`<button class="chip" data-back="1">◀ ${par?par.name:"戻る"}へ戻る</button>`:"")+((L.fic||L.id==="mv")?`<p class="sphid">ここから先は空想（SF）です。実在する天体ではありません。</p>`:"")+(bk?`<button class="chip spearth" data-map="0" data-br="${bk}">🔍 ${focus.name}の中をのぞく</button>`:"")+(bk&&bk.startsWith("in_")?`<button class="chip" data-map="1" data-br="${bk}">🗺 ${focus.name}の地図</button>`:"")+(L.id.startsWith("in_")?`<button class="chip spearth" data-map="${window.SPZ_MAP?0:1}">${window.SPZ_MAP?"🌐 球と断面で見る":"🗺 地図（全面）で見る"}</button>`:"")+(focus?`<div class="spobj"><h4>${focus.name}</h4>${focus.dist?`<div class="spdist num">${focus.dist}</div>`:""}<p>${focus.desc||""}</p><button class="chip" data-unfocus="1">全体に戻る</button></div>`:`<p class="sphint">名前を押すとそこへ近づきます。ズームアウトを続けると1つ外のスケールへ、ズームインを続けると1つ内側へ移ります。</p>`)+
       `<div class="spobjs">${objs.map(o=>`<button class="chip" data-o2="${o.id}" aria-pressed="${focus&&focus.id===o.id}">${o.name}</button>`).join("")}</div>`;}
   function frame(now){if(!running)return;requestAnimationFrame(frame);const t=(now-t0)/1000,dt=Math.min(.05,(now-last)/1000||0);last=now;if(!scene)return;
     anims.forEach(f=>f(t));
