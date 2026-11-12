@@ -62,7 +62,8 @@
     T(()=>SPZ.LEVELS.forEach((L,i)=>{const d=window.LVINFO&&LVINFO[L.id];add("space",L.name,`宇宙のスケール ${i+1}/${SPZ.LEVELS.length}`,L.desc+(d?" "+d.f.map(x=>x.join(" ")).join(" ")+" "+d.p.join(" "):""),()=>go.splv(i));}));
     T(()=>Object.entries(SPZ.BODY||{}).forEach(([k,B])=>{if(k==="earth")return;(B.feat||[]).forEach(([fid,nm,la,lo,d])=>add("space",nm,`${B.name}の地名（地図）`,d||"",()=>window.toPlanetMap&&window.toPlanetMap(k,fid)));add("space",B.name+"の地図",`世界地図のページ・${(B.feat||[]).length}地名`,B.desc||"",()=>window.toPlanetMap&&window.toPlanetMap(k));}));
     T(()=>(SPZ.ALL||[]).filter(L=>L.br).forEach(L=>add("space",L.name,"宇宙マップの分岐"+(L.fic||L.id==="mv"?"（空想）":""),L.desc||"",()=>go.brv(L.id))));
-    T(()=>MICRO.LEVELS.forEach((L,i)=>{const d=window.LVINFO&&LVINFO[L.id];add("micro",L.name,`ミクロのスケール ${i+1}/${MICRO.LEVELS.length}・${L.scale}`,L.desc+(d?" "+d.f.map(x=>x.join(" ")).join(" ")+" "+d.p.join(" "):""),()=>go.micro(L.id));}));
+    T(()=>MICRO.LEVELS.forEach((L,i)=>{const d=window.LVINFO&&LVINFO[L.id];add("micro",L.name,`ミクロの段階・${L.scale}`,L.desc+(d?" "+d.f.map(x=>x.join(" ")).join(" ")+" "+d.p.join(" "):""),()=>go.micro(L.id));}));
+    T(()=>MICRO.LEVELS.filter(L=>["body","inc","biomol","matter","planck","bit","bottom"].includes(L.id)).forEach(L=>L.items().forEach(it=>add("micro",it.name,`ミクロ・${L.name}・${it.sub||""}`,"",()=>go.micro(L.id,it.id)))));
     T(()=>ORGS.forEach(o=>add("life",o[1],`${o[2]}・${o[3]}`,`${o[4]} ${o[5]}`,()=>go.micro("life",o[0]))));
     T(()=>{const lv=c=>c==="細胞"?"cell":c==="ウイルス"?"virus":"microbe";MICROS.forEach(m=>add("life",m[1],`ミクロ・${m[2]}・${m[3]}`,m[4]||"",()=>go.micro(lv(m[2]),m[0])));});
     T(()=>ELEMENTS.forEach(e=>add("law",`${e.ja}（${e.sym}）`,`元素・原子番号${e.Z}・${(ECAT[e.cat]||[""])[0]}`,`${e.sym} 元素${e.Z}`,()=>go.law("pt",`#ptable [data-z="${e.Z}"]`))));

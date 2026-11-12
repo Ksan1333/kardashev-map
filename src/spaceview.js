@@ -41,7 +41,7 @@
   const SHORT={leo:"地球周回",moon:"地球と月",inner:"内太陽系",outer:"外太陽系",helio:"太陽圏",stars:"近くの恒星",nebula:"星雲",galaxy:"天の川銀河",local:"局部銀河群",lania:"ラニアケア",web:"大規模構造",shape:"宇宙の形"};
   function navSpec(){const lanes=[{id:"main",name:"本線（実在の宇宙）",color:"#f4b942"}];const nodes=SPZ.LEVELS.map((L2,i)=>({id:L2.id,lane:"main",label:L2.short||SHORT[L2.id]||L2.name,num:i+1,col:i}));const colOf={};nodes.forEach(n=>colOf[n.id]=n.col);
     // 空想の上位層（マルチバース→法則の海→オムニバース）は本線の延長として点線で描く
-    const up=["mv","meta","omni"].map(id=>SPZ.ALL.find(x=>x.id===id)).filter(Boolean);const last=SPZ.LEVELS[SPZ.LEVELS.length-1].id;
+    const up=["mv","meta","omni","imposs","void"].map(id=>SPZ.ALL.find(x=>x.id===id)).filter(Boolean);const last=SPZ.LEVELS[SPZ.LEVELS.length-1].id;
     lanes.push({id:"upx",name:"ここから先は空想（さらに外側）",color:"#c99cf2",from:last,dash:1,inline:1});up.forEach((L2,j)=>{const n={id:L2.id,lane:"upx",label:L2.short||L2.name,num:SPZ.LEVELS.length+1+j,col:SPZ.LEVELS.length+j,fic:1};nodes.push(n);colOf[L2.id]=n.col;});
     const GRP={ga:"gx",gc:"gx"},seen={};
     SPZ.LANES.forEach(l=>{if(l.id==="mv")return;const gid=GRP[l.id]||l.id;const br=SPZ.ALL.filter(L2=>L2.br&&L2.lane===l.id);
@@ -64,6 +64,7 @@
   const veil=document.getElementById("veil");
   function toEarth(){veil.textContent="地球へ降下中…";veil.classList.add("on");setTimeout(()=>{location.hash="world-map";setTimeout(()=>veil.classList.remove("on"),350);},450);}
   window.addEventListener("spz-earth",toEarth);
+  window.addEventListener("spz-loop",()=>{veil.textContent="一周して、地球へ戻ります…";veil.classList.add("on");setTimeout(()=>{SPZ.home();setTimeout(()=>veil.classList.remove("on"),900);},1100);});
   window.toSpace=()=>{veil.textContent="宇宙へ上昇中…";veil.classList.add("on");setTimeout(()=>{location.hash="space-map";SPZ.goFrom("leo","earth");setTimeout(()=>veil.classList.remove("on"),400);},450);};
   let started=false;function sync(){if(location.hash==="#space-map"){if(!started){started=true;SPZ.go(0,null);}SPZ.start();render();}else SPZ.stop();}
   window.addEventListener("hashchange",sync);window.addEventListener("resize",()=>location.hash==="#space-map"&&render());render();sync();

@@ -6,6 +6,7 @@ const MICRO=(function(){
   const M=(c,o={})=>new THREE.MeshStandardMaterial({color:c,roughness:.6,metalness:.05,...o});
   const G=(c,o=.35)=>new THREE.MeshStandardMaterial({color:c,roughness:.2,metalness:.1,transparent:true,opacity:o,depthWrite:false,side:THREE.DoubleSide});
   let seed=3;const R=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};
+__MICROX__
   const LEVELS=[
    {id:"life",name:"生き物",scale:"約1cm〜30m",desc:"地球の生き物は、名前がついているだけで約200万種。まだ知られていない種を含めると数百万〜1億種ともいわれる。",dist:9,items:()=>ORGS.map(o=>({id:o[0],name:o[1],sub:o[2]}))},
    {id:"cell",name:"細胞",scale:"約1〜100μm",desc:"生き物の体を作る単位。大きさは髪の毛の太さ（約80μm）の数分の1ほど。",dist:9,items:()=>MICROS.filter(m=>m[2]==="細胞").map(m=>({id:m[0],name:m[1],sub:m[3]}))},
@@ -20,6 +21,17 @@ const MICRO=(function(){
    {id:"string",name:"超ひも理論（仮説）",scale:"プランク長（約10⁻³⁵m）",desc:"すべての素粒子は「点」ではなく、とても小さな振動する「ひも」だという仮説。ひもの振動のしかた（音の高さのようなもの）の違いが、電子・クオーク・光子・重力子などの違いになる。理論が成り立つには空間が9次元（時間を合わせて10次元、M理論では11次元）必要で、余分な次元は小さく丸まっていると考える。実験的な証拠はまだない。",dist:8,items:()=>[{id:"modes",name:"ひもの振動と粒子",sub:"振動の違い＝粒子の違い"},{id:"openclosed",name:"開いたひも・閉じたひも",sub:"端があるか輪か"},{id:"brane",name:"ブレーン（膜）と重力",sub:"なぜ重力だけ弱い？"},{id:"cy",name:"余剰次元（カラビ–ヤウ空間）",sub:"丸まった6次元"},{id:"compact",name:"次元が丸まるとは",sub:"ホースのたとえ"},{id:"m",name:"M理論と11次元",sub:"5つの理論をつなぐ"}]},
    {id:"dims",name:"次元（1〜11次元）",scale:"線（1次元）〜M理論（11次元）",desc:"次元とは「独立に動ける方向の数」。1〜3次元は空間、4次元目は時間。5次元目より先は、超ひも理論・M理論が考える「小さく丸まった余剰次元」で、まだ実験で確かめられていない仮説。",dist:9,items:()=>[["d1","1次元：線","前と後ろだけ"],["d2","2次元：面","平面の世界"],["d3","3次元：空間","たて・よこ・奥行き"],["d4","4次元：時間","時空・世界線・光円錐"],["d5","5次元","丸まった次元（カルツァ＝クライン）"],["d6","6次元","小さなドーナツ面"],["d7","7次元","出ると反対側から戻る箱"],["d8","8次元","超立方体の影"],["d9","9次元","5次元立方体の影"],["d10","10次元","超ひも理論・カラビ–ヤウ空間"],["d11","11次元","M理論・膜の宇宙"]].map(([id,name,sub])=>({id,name,sub}))},
   ];
+  {const at=(id,after)=>{const i=LEVELS.findIndex(L=>L.id===after);LEVELS.splice(i+1,0,XLV.find(x=>x.id===id));};
+   at("body","life");at("inc","cell");at("biomol","virus");at("matter","mol");at("planck","quantum");at("bit","planck");at("bottom","bit");
+   const LN={life:"main",cell:"main",microbe:"org",virus:"org",mol:"main",atom:"main",nucleus:"main",quark:"main",particle:"main",quantum:"main",string:"th",dims:"th"};LEVELS.forEach(L=>{if(!L.ln)L.ln=LN[L.id];});}
+  const MAINS=LEVELS.filter(L=>L.ln==="main").map(L=>L.id),DEEP=LEVELS.filter(L=>L.ln==="deep").map(L=>L.id);
+  const LANEN={org:"微生物・ウイルス",inc:"細胞の中",th:"理論（仮説）",deep:"プランク長より下（仮説→空想）"};
+  const lvNo=L=>{const m=MAINS.indexOf(L.id);if(m>=0)return `本線 ${m+1} / ${MAINS.length}`;const d=DEEP.indexOf(L.id);if(d>=0)return `本線の先 ${MAINS.length+d+1}（${LANEN.deep}）`;return `分岐：${LANEN[L.ln]||""}`;};
+  const DEFIN={life:"body",body:"cell",cell:"biomol",inc:"biomol",microbe:"virus",virus:"biomol",biomol:"mol",mol:"matter",matter:"atom",atom:"nucleus",nucleus:"quark",quark:"particle",particle:"quantum",quantum:"planck",planck:"bit",bit:"bottom",string:"dims",dims:"planck"};
+  const DEFOUT={body:"life",cell:"body",inc:"cell",microbe:"cell",virus:"microbe",biomol:"cell",mol:"biomol",matter:"mol",atom:"matter",nucleus:"atom",quark:"nucleus",particle:"quark",quantum:"particle",planck:"quantum",bit:"planck",bottom:"bit",string:"quantum",dims:"string"};
+  const back={};const lvI=id=>LEVELS.findIndex(L=>L.id===id);
+  function zin(){const L=LEVELS[LV];if(L.id==="bottom"){window.dispatchEvent(new CustomEvent("micro-loop"));return;}const t=INTO(L.id,cur)||[DEFIN[L.id],null];const i=lvI(t[0]);if(i<0)return;back[t[0]]={lv:LV,item:cur};go(i,t[1],"in");}
+  function zout(){const L=LEVELS[LV];const b=back[L.id];if(b){delete back[L.id];go(b.lv,b.item,"out");return;}const o=DEFOUT[L.id];if(o){go(lvI(o),null,"out");return;}if(window.toMapFromMicro)window.toMapFromMicro();}
   let renderer,scene,camera,root,anims=[],running=false,t0=performance.now(),last=0,LV=0,cur=null,inited=false;
   const cam={th:.6,ph:1.15,r:9,goal:9,drag:null,auto:true};
   let keyL=null;function init(){if(inited)return;inited=true;renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(2,devicePixelRatio));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;host.prepend(renderer.domElement);
@@ -28,17 +40,19 @@ const MICRO=(function(){
     host.addEventListener("pointermove",e=>{if(!cam.drag)return;cam.th-=(e.clientX-cam.drag.x)*.006;cam.ph=Math.max(.2,Math.min(2.9,cam.ph-(e.clientY-cam.drag.y)*.006));cam.drag={x:e.clientX,y:e.clientY};});
     host.addEventListener("pointerup",()=>{cam.drag=null;});
     let acc=0;host.addEventListener("wheel",e=>{e.preventDefault();const f=Math.exp(e.deltaY*.0012);const L=LEVELS[LV],mn=L.dist*.35,mx=L.dist*2.4;
-      const g=cam.goal*f;if(g<mn&&f<1){acc+=1-f;if(acc>.5){acc=0;if(LV<LEVELS.length-1)go(LV+1,null,"in");}cam.goal=mn;return;}
-      if(g>mx&&f>1){acc+=f-1;if(acc>.5){acc=0;if(LV>0)go(LV-1,null,"out");else if(window.toMapFromMicro)window.toMapFromMicro();}cam.goal=mx;return;}acc=0;cam.goal=g;},{passive:false});
+      const g=cam.goal*f;if(g<mn&&f<1){acc+=1-f;if(acc>.5){acc=0;zin();}cam.goal=mn;return;}
+      if(g>mx&&f>1){acc+=f-1;if(acc>.5){acc=0;zout();}cam.goal=mx;return;}acc=0;cam.goal=g;},{passive:false});
     drawNav();
     list.addEventListener("click",e=>{const b=e.target.closest("button[data-it]");if(b)build(b.dataset.it);});
-    document.getElementById("mc-in").onclick=()=>LV<LEVELS.length-1&&go(LV+1,null,"in");
-    document.getElementById("mc-out").onclick=()=>LV>0?go(LV-1,null,"out"):window.toMapFromMicro&&window.toMapFromMicro();}
+    document.getElementById("mc-in").onclick=zin;
+    document.getElementById("mc-out").onclick=zout;}
   function resize(){if(!renderer)return;const w=host.clientWidth,h=host.clientHeight;if(!w)return;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();}
   const MSHORT={life:"生き物",cell:"細胞",microbe:"微生物",virus:"ウイルス",mol:"分子",atom:"原子",nucleus:"原子核",quark:"クオーク",particle:"素粒子",quantum:"量子",string:"超ひも",dims:"次元"};
-  function drawNav(){if(!window.GITNAV)return;const n=(id,lane)=>{const i=LEVELS.findIndex(L=>L.id===id);return {id,lane,label:MSHORT[id]||LEVELS[i].name,num:i+1,col:i};};
-    GITNAV.render(lvBox,{cw:78,lanes:[{id:"main",name:"本線",color:"#7ee0b0"},{id:"org",name:"微生物・ウイルス",color:"#ffb36a",from:"cell",merge:"mol"},{id:"th",name:"理論（仮説）",color:"#c99cf2",from:"quantum",dash:1}],
-      nodes:[n("life","main"),n("cell","main"),n("microbe","org"),n("virus","org"),n("mol","main"),n("atom","main"),n("nucleus","main"),n("quark","main"),n("particle","main"),n("quantum","main"),{...n("string","th"),fic:1},{...n("dims","th"),fic:1}]},
+  function drawNav(){if(!window.GITNAV)return;const SH={...MSHORT,body:"体と器官",inc:"細胞の中",biomol:"生体分子",matter:"物質",planck:"プランク長",bit:"情報",bottom:"描けない底"};
+    const nodes=[];MAINS.forEach((id,i)=>nodes.push({id,lane:"main",label:SH[id],num:i+1,col:i}));DEEP.forEach((id,i)=>nodes.push({id,lane:"deep",label:SH[id],num:MAINS.length+i+1,col:MAINS.length+i,fic:1}));
+    const col=id=>MAINS.indexOf(id);nodes.push({id:"inc",lane:"inc",label:SH.inc,col:col("cell")+.8});nodes.push({id:"microbe",lane:"org",label:SH.microbe,col:col("cell")+.8},{id:"virus",lane:"org",label:SH.virus,col:col("cell")+1.7});
+    nodes.push({id:"string",lane:"th",label:SH.string,col:col("quantum")+.8,fic:1},{id:"dims",lane:"th",label:SH.dims,col:col("quantum")+1.7,fic:1});
+    GITNAV.render(lvBox,{cw:74,lanes:[{id:"main",name:"本線",color:"#7ee0b0"},{id:"deep",name:"プランク長より下（仮説→空想）",color:"#c99cf2",from:"quantum",dash:1,inline:1},{id:"inc",name:"細胞の中",color:"#ff9ad0",from:"cell",merge:"biomol"},{id:"org",name:"微生物・ウイルス",color:"#ffb36a",from:"cell",merge:"biomol"},{id:"th",name:"理論（仮説）",color:"#c99cf2",from:"quantum",dash:1}],nodes},
       LEVELS[LV]&&LEVELS[LV].id,id=>{const i=LEVELS.findIndex(L=>L.id===id);if(i>=0)go(i);});}
   let goTok=0;function go(i,item,dir){LV=i;const L=LEVELS[i];fade.classList.add("on");const tok=++goTok;
     setTimeout(()=>{if(tok!==goTok)return;drawNav();
@@ -367,9 +381,10 @@ const MICRO=(function(){
   function shadows(s){if(!keyL)return;keyL.castShadow=true;keyL.position.set(s*.9,s*1.8,s*1.1);keyL.target.position.set(0,s*.25,0);scene.add(keyL.target);const c=keyL.shadow.camera;c.left=-s*1.3;c.right=s*1.3;c.top=s*1.3;c.bottom=-s*1.3;c.near=.05;c.far=s*7;c.updateProjectionMatrix();
     keyL.shadow.mapSize.set(2048,2048);keyL.shadow.bias=-.0004;keyL.shadow.normalBias=.02;root.traverse(o=>{if(o.isMesh){const tn=o.material&&o.material.isMeshToonMaterial,bs=o.material&&o.material.isMeshBasicMaterial;o.castShadow=!(o.material&&o.material.transparent)&&!bs;o.receiveShadow=!tn;}});}
   function build(id,dir){const L=LEVELS[LV];cur=id;seed=7+[...String(id)].reduce((a,c)=>a+c.charCodeAt(0),0);
-    const bg={life:"#0e1a24",cell:"#1a0e1e",microbe:"#0e1e1a",virus:"#1e0e14",mol:"#0a0f1f",atom:"#05070f",nucleus:"#05050a",quark:"#050308",particle:"#04030a",quantum:"#020208",string:"#050212",dims:"#04030c"}[L.id];setup(bg);root.position.set(0,0,0);root.rotation.set(0,0,0);
+    const bg={life:"#0e1a24",cell:"#1a0e1e",microbe:"#0e1e1a",virus:"#1e0e14",mol:"#0a0f1f",atom:"#05070f",nucleus:"#05050a",quark:"#050308",particle:"#04030a",quantum:"#020208",string:"#050212",dims:"#04030c"}[L.id]||L.bg||"#05070f";setup(bg);root.position.set(0,0,0);root.rotation.set(0,0,0);
     let size=6,title="",desc="",meta="",orgTy=null;
-    if(L.id==="life"){const o=ORGS.find(x=>x[0]===id);ground(o[6]==="whale"||o[6]==="fish"||o[6]==="octopus"||o[6]==="jelly"||o[6]==="starfish"||o[6]==="crab"||o[6]==="turtle"?"#1a3a5a":"#2a3a2a",8);const oc={root,anims,R,id:o[0]};const cs=window.CUTE&&CUTE.has(o[6])?CUTE.build(o[6],o[7],oc):null;if(cs){scene.traverse(l=>{if(l.isHemisphereLight){l.intensity=.62;l.color.set("#fff4ea");l.groundColor.set("#5a6078");}else if(l.isDirectionalLight)l.intensity=l===keyL?.62:.22;});}size=cs||(window.ORG3D&&ORG3D.has(o[6])?ORG3D.build(o[6],o[7],oc):null)||B[o[6]](o[7])||4;orgTy=oc.ty;shadows(size);title=o[1];meta=`<dl class="kdl"><dt>分類</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd><dt>すみか</dt><dd>${o[4]}</dd></dl>`;desc=o[5];}
+    if(XB[L.id]){const r=XB[L.id](id);size=r[0];title=r[1];desc=r[2];meta=L.fic?`<p class="clim">※仮説・空想を含む段階です。</p>`:"";}
+    else if(L.id==="life"){const o=ORGS.find(x=>x[0]===id);ground(o[6]==="whale"||o[6]==="fish"||o[6]==="octopus"||o[6]==="jelly"||o[6]==="starfish"||o[6]==="crab"||o[6]==="turtle"?"#1a3a5a":"#2a3a2a",8);const oc={root,anims,R,id:o[0]};const cs=window.CUTE&&CUTE.has(o[6])?CUTE.build(o[6],o[7],oc):null;if(cs){scene.traverse(l=>{if(l.isHemisphereLight){l.intensity=.62;l.color.set("#fff4ea");l.groundColor.set("#5a6078");}else if(l.isDirectionalLight)l.intensity=l===keyL?.62:.22;});}size=cs||(window.ORG3D&&ORG3D.has(o[6])?ORG3D.build(o[6],o[7],oc):null)||B[o[6]](o[7])||4;orgTy=oc.ty;shadows(size);title=o[1];meta=`<dl class="kdl"><dt>分類</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd><dt>すみか</dt><dd>${o[4]}</dd></dl>`;desc=o[5];}
     else if(L.id==="cell"||L.id==="microbe"||L.id==="virus"){const o=MICROS.find(x=>x[0]===id);const hc={root,anims,R};const hq=window.MICROHQ&&MICROHQ.has(o[5])?MICROHQ.build(o[5],o[6],hc):null;size=hq||BM[o[5]](o[6])||8;if(hc.cam){cam.th=hc.cam.th;cam.ph=hc.cam.ph;}title=o[1];meta=`<dl class="kdl"><dt>なかま</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd></dl>`;desc=o[4];}
     else if(L.id==="mol"){const o=MOLS.find(x=>x[0]===id);size=molecule(id);title=o[1];meta=`<div class="num" style="font-size:18px;color:var(--accent)">${o[2]}</div>`;desc=o[3]+`<br><span class="clim">原子：${[...new Set(o[4].map(a=>a[0]))].map(e=>`<i class="adot" style="background:${ATOMCOL[e]}"></i>${e}`).join(" ")}</span>`;}
     else if(L.id==="atom"){const Z=+id;size=atom(Z);const el=ELEMENTS[Z-1];title=`${el.ja}（${el.sym}）`;meta=`<dl class="kdl"><dt>陽子</dt><dd>${Z}</dd><dt>電子</dt><dd>${Z}（殻ごとに ${shells(Z).join("・")}）</dd></dl>`;desc=(ENOTE[Z]||"")+" 電子の並び方（殻）が、その元素の化学的な性質を決める。";}
@@ -381,7 +396,7 @@ const MICRO=(function(){
     else{size=quarks(id);title=id==="p"?"陽子":"中性子";meta=`<dl class="kdl"><dt>クオーク</dt><dd>${id==="p"?"アップ2個＋ダウン1個":"アップ1個＋ダウン2個"}</dd><dt>電荷</dt><dd>${id==="p"?"+2/3+2/3−1/3 ＝ +1":"+2/3−1/3−1/3 ＝ 0"}</dd></dl>`;desc="陽子の質量のうち、クオーク自体の質量はわずか約1%。残りはクオークとグルーオンの運動と結合のエネルギー（E=mc²）から生まれている。";}
     L.dist=Math.max(4,size*(L.id==="life"?1.9:1.5));L.ty=L.id==="life"?(orgTy!=null?orgTy:Math.min(size*.38,8)):0;cam.goal=L.dist;cam.r=dir==="in"?L.dist*2.2:dir==="out"?L.dist*.4:L.dist;cam.auto=true;
     list.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.it===String(id)));
-    info.innerHTML=`<div class="splv">スケール ${LV+1} / ${LEVELS.length}　${L.scale}</div><h3>${L.name}</h3><p>${L.desc}</p>${window.lvMore?window.lvMore(L.id):""}<div class="spobj"><h4>${title}</h4>${meta}<p>${desc}</p></div><p class="sphint">ドラッグで回転、ホイールで拡大縮小。さらに拡大すると次の小さな世界へ、縮小すると大きな世界へ移ります。</p>`;}
+    info.innerHTML=`<div class="splv">${lvNo(L)}　${L.scale}</div><h3>${L.name}</h3><p>${L.desc}</p>${window.lvMore?window.lvMore(L.id):""}<div class="spobj"><h4>${title}</h4>${meta}<p>${desc}</p></div><p class="sphint">ドラッグで回転、ホイールで拡大縮小。さらに拡大すると、選んでいるものの「中」（次の小さな世界）へ、縮小すると来た場所へ戻ります。</p>`;}
   function frame(now){if(!running)return;requestAnimationFrame(frame);const t=(now-t0)/1000,dt=Math.min(.05,(now-last)/1000||0);last=now;if(!scene)return;
     anims.forEach(f=>f(t));if(cam.auto&&!cam.drag)cam.th+=dt*.15;cam.r+=(cam.goal-cam.r)*.08;
     const ty=LEVELS[LV].ty||0;camera.position.set(Math.sin(cam.th)*Math.sin(cam.ph)*cam.r,ty+Math.cos(cam.ph)*cam.r,Math.cos(cam.th)*Math.sin(cam.ph)*cam.r);camera.lookAt(0,ty,0);renderer.render(scene,camera);}
@@ -390,9 +405,10 @@ const MICRO=(function(){
   function stop(){running=false;}
   function open(kind,v){const i=LEVELS.findIndex(L=>L.id===kind);if(i<0)return;start();go(i,v);}
   window.addEventListener("hashchange",()=>{location.hash==="#micro"?start():stop();});if(location.hash==="#micro")start();
-  return {open,go,start,stop,LEVELS,get level(){return LV;}};
+  return {open,go,start,stop,LEVELS,zin,zout,get item(){return cur;},get level(){return LV;}};
 })();
 window.MICRO=MICRO;
 // 世界地図 ⇄ ミクロ
 window.toMicro=()=>{const v=document.getElementById("veil");v.textContent="ミクロの世界へ…";v.classList.add("on");setTimeout(()=>{location.hash="micro";MICRO&&MICRO.open("life");setTimeout(()=>v.classList.remove("on"),350);},450);};
+window.addEventListener("micro-loop",()=>{const v=document.getElementById("veil");v.textContent="一周して、宇宙のいちばん大きなスケールへ…";v.classList.add("on");setTimeout(()=>{location.hash="space-map";setTimeout(()=>{if(typeof SPZ!=="undefined"&&SPZ){const i=SPZ.ALL.findIndex(x=>x.id==="shape");if(i>=0)SPZ.go(i,null,"out");}setTimeout(()=>v.classList.remove("on"),700);},300);},1100);});
 window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent="世界地図へ…";v.classList.add("on");setTimeout(()=>{location.hash="world-map";setTimeout(()=>v.classList.remove("on"),350);},450);};

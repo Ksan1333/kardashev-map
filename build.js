@@ -26,6 +26,7 @@ const r={
   "__CUTE__":"cute.js",
   "__MICROHQ__":"microhq.js",
   "__MICRO3D__":"micro3d.js",
+  "__MICROX__":"microx.js",
   "__MICRODATA__":"microdata.js",
   "__NEWVIEWS__":"newviews.js",
   "__BRANCHDATA__":"branchdata.js",

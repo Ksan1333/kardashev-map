@@ -435,7 +435,7 @@ __SPACEBR__
     if(ng<cam.min&&f<1){edge+=1-f;if(edge>.6){edge=0;inward(true);}cam.goal=cam.min;return;}
     edge=0;cam.goal=ng;}
   const idx=id=>ALL.findIndex(x=>x.id===id);
-  function outward(){const L=ALL[LV];if(L.up){const u=idx(L.up);if(u>=0)go(u,null,"out",ALL[u].downObj);return;}if(L.top)return;
+  function outward(){const L=ALL[LV];if(L.up){const u=idx(L.up);if(u>=0)go(u,null,"out",ALL[u].downObj);return;}if(L.top)return;if(L.loop){window.dispatchEvent(new CustomEvent("spz-loop"));return;}
     if(L.br){const pi=idx(L.parent);if(pi>=0)go(pi,null,"out",L.pobj);return;}if(LV<LEVELS.length-1)go(LV+1,null,"out",GATE[LEVELS[LV+1].id]);else go(idx("mv"),null,"out","u_home");}
   // ズームインの行き先：注目中（またはカーソル付近）の天体を優先し、勝手に別の場所へ飛ばない
   const GATE={em:"earth",solar:"earth",near:"sun",galaxy:"sunpos",lania:"lg",shape:"uni_shape"};
@@ -445,7 +445,7 @@ __SPACEBR__
   function inward(fromZoom){const L=ALL[LV];const tgt=focus||pickNear();
     if(LV===0){if(!tgt||tgt.id==="earth"){window.dispatchEvent(new CustomEvent("spz-earth"));return;}if(focus===tgt&&PLMAP.has(tgt.id)&&window.toPlanetMap){window.toPlanetMap(tgt.id);return;}focusOn(tgt.id);return;}
     if(tgt&&focus===tgt&&PLMAP.has(tgt.id)&&window.toPlanetMap&&!(!L.br&&GATE[L.id]===tgt.id)){window.toPlanetMap(tgt.id);return;}
-    if(tgt){if(!L.br&&GATE[L.id]===tgt.id){go(LV-1,null,"in",GATE[LEVELS[LV-1].id]);return;}const k=BRMAP[L.id+":"+tgt.id];if(k&&focus===tgt){if(k.startsWith("in_"))window.SPZ_MAP=true;{const K=ALL[idx(k)];go(idx(k),null,"in",K&&(K.downObj||(!K.br?GATE[K.id]:null)));}return;}if(!focus||focus!==tgt)focusOn(tgt.id);return;}
+    if(tgt){if(!L.br&&GATE[L.id]===tgt.id){go(LV-1,null,"in",GATE[LEVELS[LV-1].id]);return;}const k=BRMAP[L.id+":"+tgt.id];if(k&&focus===tgt){if(k.startsWith("in_"))window.SPZ_MAP=true;{const K=ALL[idx(k)];go(idx(k),null,"in",K&&(K.downObj||(!K.br?GATE[K.id]:null)));}return;}if(focus===tgt&&L.br){const dn=idx(L.down||L.parent);if(dn>=0){go(dn,null,"in",L.down?ALL[dn].downObj:L.pobj);return;}}if(!focus||focus!==tgt)focusOn(tgt.id);return;}
     if(!L.br&&LV>0){go(LV-1,null,"in",GATE[LEVELS[LV-1].id]);return;}
     if(L.id==="mv"){go(idx("shape"),null,"in","uni_shape");return;}}
   function resize(){if(!el||!renderer)return;const w=el.clientWidth,h=el.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);renderer.domElement.style.width=w+"px";renderer.domElement.style.height=h+"px";camera.aspect=w/h;camera.updateProjectionMatrix();}
@@ -460,7 +460,7 @@ __SPACEBR__
     setTimeout(()=>{if(tok!==go.tok)return;
       LV=i;seed=11+i*97;objs=[];anims=[];focus=null;
       if(scene)scene.traverse(o=>{o.geometry&&o.geometry.dispose();});
-      scene=new THREE.Scene();scene.background=C("#02030a");starfield=stars();scene.add(starfield);
+      scene=new THREE.Scene();scene.background=C(ALL[i].bg||"#02030a");starfield=stars();scene.add(starfield);starfield.visible=!ALL[i].nostars;
       const L=ALL[i];L.build();hidN=0;
       if(typeof window.KYEAR==="number"&&window.SPZ_DISC){const Y=window.KYEAR,D=window.SPZ_DISC,A=window.SPZ_ART;objs=objs.filter(o=>{const d=D[o.id]??-1e12;const hide=Y< -300000?A.has(o.id):d>Y;if(hide){o.node.visible=false;hidN++;}return !hide;});}cam.min=L.min;cam.max=L.max;cam.goalT.set(...(L.center||[0,0,0]));cam.target.set(...(L.center||[0,0,0]));cam.goal=L.dist;
       cam.dist=dir==="in"?L.dist*3:dir==="out"?L.dist*.25:L.dist;cam.auto=true;cam.ph=L.ph!=null?L.ph:1.1;if(L.th!=null){cam.th=L.th;cam.auto=false;}
@@ -487,6 +487,6 @@ __SPACEBR__
     const w=el.clientWidth,h=el.clientHeight,p=new THREE.Vector3();
     objs.forEach(o=>{o.node.getWorldPosition(p);p.project(camera);const vis=p.z<1&&p.z>-1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05&&o.node.visible;o.el.style.display=vis?"":"none";if(vis)o.el.style.transform=`translate(${(p.x*.5+.5)*w}px,${(-p.y*.5+.5)*h}px)`;o.el.classList.toggle("on",focus===o);});
   }
-  return {LEVELS,ALL,LANES,BRMAP,SUBMAP,BODY,planetMapURL,outward,inward,goBr(id){const i=idx(id);if(i>=0)go(i,null,i<LEVELS.length&&i<LV?"in":"in");},get levelId(){return ALL[LV]&&ALL[LV].id;},get focusId(){return focus&&focus.id;},get anchorId(){return anchor&&anchor.id;},goFrom(id,from){const i=idx(id);if(i>=0)go(i,null,"out",from);},home(){go(0,null,"in","earth");},goId(id,o,dir){id=SUBMAP[id]||id;const i=ALL.findIndex(L=>L.id===id);if(i>=0){if(i===LV&&o)focusOn(o);else go(i,o,dir||(i<LV?"in":"out"));}},init,go,focusOn,unfocus(){focus=null;isolate(null);cam.goal=ALL[LV].dist;cam.min=ALL[LV].min;renderInfo();},get level(){return LV;},
+  return {LEVELS,ALL,LANES,BRMAP,SUBMAP,BODY,planetMapURL,outward,inward,goBr(id){const i=idx(id);if(i>=0)go(i,null,"in",ALL[i].downObj||null);},get levelId(){return ALL[LV]&&ALL[LV].id;},get focusId(){return focus&&focus.id;},get anchorId(){return anchor&&anchor.id;},goFrom(id,from){const i=idx(id);if(i>=0)go(i,null,"out",from);},home(){go(0,null,"in","earth");},goId(id,o,dir){id=SUBMAP[id]||id;const i=ALL.findIndex(L=>L.id===id);if(i>=0){if(i===LV&&o)focusOn(o);else go(i,o,dir||(i<LV?"in":"out"));}},init,go,focusOn,unfocus(){focus=null;isolate(null);cam.goal=ALL[LV].dist;cam.min=ALL[LV].min;renderInfo();},get level(){return LV;},
     start(){if(running||!renderer)return;running=true;last=performance.now();requestAnimationFrame(frame);},stop(){running=false;}};
 })();

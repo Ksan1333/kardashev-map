@@ -154,7 +154,7 @@
       anims.push(t=>{for(let i=0;i<N;i++){const [a,y,r,w]=ph[i];const q=a+t*w;pos[i*3]=Math.cos(q)*r;pos[i*3+1]=y+Math.sin(q*3+i)*40;pos[i*3+2]=Math.sin(q)*r*.7;}gg.attributes.position.needsUpdate=true;});
       const h=new THREE.Object3D();h.position.set(0,700,0);scene.add(h);label("meta_all","法則の海（全体）",h,2400,"マルチバースのさらに外側を想像した層。どんな法則の宇宙が生まれうるか、その「法則の法則」が場所によって違う。","空想");}});
   // 上位の層2：オムニバース（すべての可能性）
-  addBr({id:"omni",lane:"mv",parent:"meta",top:1,downObj:"o_meta",down:"meta",fic:1,name:"オムニバース（すべての可能性・空想）",short:"オムニバース",unit:"考えうるすべての世界（空想）",desc:"想像できる最も外側の層。「数学的に矛盾なく書けるものは、すべてどこかに実在する」という考え（テグマークの数学的宇宙仮説＝レベルIV）を絵にした空想。立体・結び目・フラクタル・セル・オートマトンが、それぞれ別の世界の「設計図」として漂う。ここより外は描けない。それぞれの世界を選んでズームインすると中に入れる。",dist:1300,min:60,max:2000,
+  addBr({id:"omni",lane:"mv",parent:"meta",up:"imposs",downObj:"o_meta",down:"meta",fic:1,name:"オムニバース（すべての可能性・空想）",short:"オムニバース",unit:"考えうるすべての世界（空想）",desc:"想像できる最も外側の層。「数学的に矛盾なく書けるものは、すべてどこかに実在する」という考え（テグマークの数学的宇宙仮説＝レベルIV）を絵にした空想。立体・結び目・フラクタル・セル・オートマトンが、それぞれ別の世界の「設計図」として漂う。科学・哲学で考えられている外側の限界はここ。それぞれの世界を選んでズームインすると中に入れる。さらにズームアウトすると、矛盾まで許す空想の層へ。",dist:1300,min:60,max:2000,
     build(){scene.add(new THREE.AmbientLight("#fff",1));const wire=(geo,col,p,sp)=>{const m=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:col,wireframe:true,transparent:true,opacity:.6}));m.position.copy(p);scene.add(m);anims.push(t=>{m.rotation.x=t*sp;m.rotation.y=t*sp*.7;});return m;};
       const cvTex=(f)=>{const c=document.createElement("canvas");c.width=c.height=256;const x=c.getContext("2d");f(x);return new THREE.CanvasTexture(c);};
       const mand=cvTex(x=>{const im=x.createImageData(256,256);for(let j=0;j<256;j++)for(let i=0;i<256;i++){let cr=-2.2+i/256*3,ci=-1.5+j/256*3,zr=0,zi=0,k=0;while(k<60&&zr*zr+zi*zi<4){const t=zr*zr-zi*zi+cr;zi=2*zr*zi+ci;zr=t;k++;}const v=k===60?0:k/60;const o=(j*256+i)*4;im.data[o]=255*Math.sqrt(v);im.data[o+1]=120*v;im.data[o+2]=255*(1-v)*(k===60?0:1);im.data[o+3]=255;}x.putImageData(im,0,0);});
@@ -168,7 +168,7 @@
       const st=new THREE.Group();st.position.set(-560,200,-120);scene.add(st);for(let i=0;i<60;i++){const s=sphere(4+R()*6,new THREE.MeshBasicMaterial({color:["#ffd27a","#ff9ad0","#9fe8ff"][i%3]}),8);s.position.set((R()-.5)*160,(R()-.5)*160,(R()-.5)*160);st.add(s);}anims.push(t=>st.rotation.y=t*.05);
       label("o_story","物語の宇宙（空想）","—"&&st,520,"「書かれた物語の世界も、どこかに実在するのでは？」という空想の島。数学的に矛盾がなければ、物語の宇宙もありうる。","空想");
       const hy=wire(new THREE.TorusKnotGeometry(60,8,240,16,5,8),"#fff2c0",V(80,380,300),.15);label("o_hyper","高次存在領域（SFノート）",hy,460,"SFノートの最終段階。空間・時間・言語を超えた存在の領域を、この層に置いてみた。","空想");
-      const edge=sphere(1700,new THREE.MeshBasicMaterial({color:"#ffffff",side:THREE.BackSide,transparent:true,opacity:.04,depthWrite:false}),32);scene.add(edge);const en=new THREE.Object3D();en.position.set(0,0,1650);scene.add(en);label("o_edge","描けない果て","—"&&en,1600,"ここより外は、言葉でも図でも描けない。この地図の最も外側。","空想");
+      const edge=sphere(1700,new THREE.MeshBasicMaterial({color:"#ffffff",side:THREE.BackSide,transparent:true,opacity:.04,depthWrite:false}),32);scene.add(edge);const en=new THREE.Object3D();en.position.set(0,0,1650);scene.add(en);label("o_edge","「矛盾なく書けるもの」の果て","—"&&en,1600,"数学的に矛盾なく書けるものは、ここまでですべて。さらにズームアウトすると、矛盾したものまで許す「不可能世界の層」へ（もっと空想）。","空想");
       const pts=[];for(let i=0;i<5000;i++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(300+R()*1300);pts.push(q.x,q.y,q.z);}scene.add(points(pts,"#ffffff",3,.5));}});
   BRMAP["meta:m_ours"]="mv";BRMAP["omni:o_meta"]="meta";
   const uniBuild={
@@ -345,3 +345,39 @@
   SUBW.forEach(([ln,par,pobj,nm,col,d,fn])=>{const id=(ln==="mt"?"mt_":"om_")+pobj.slice(2);addBr({id,lane:ln,parent:par,pobj,name:nm,short:nm.replace(/（.*）/,""),unit:ln==="mt"?"法則の海の島（空想）":"オムニバースの世界（空想）",desc:d+"（すべて空想）",dist:1100,min:50,max:2400,ph:.95,fic:1,
     build(){scene.add(new THREE.AmbientLight("#fff",.15));const what=fn();const h=new THREE.Object3D();h.position.set(0,560,0);scene.add(h);label(id+"_all",nm.replace("（中）","").replace("（中・","（")+"（全体）",h,1600,d+"（すべて空想）",what);
       const bg=[];for(let i=0;i<3000;i++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(2500+R()*2000);bg.push(q.x,q.y,q.z);}scene.add(points(bg,col,4,.5));}});});
+
+  // オムニバースのさらに外：不可能世界の層 → 無 → 一周して地球へ（すべて空想）
+  const cvSprite=(text,col,h)=>{const c=document.createElement("canvas");const x=c.getContext("2d");x.font="bold 64px sans-serif";const w=Math.ceil(x.measureText(text).width)+40;c.width=w;c.height=96;x.font="bold 64px sans-serif";x.fillStyle=col;x.textBaseline="middle";x.fillText(text,20,50);const T=new THREE.CanvasTexture(c);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:T,transparent:true,depthWrite:false}));s.scale.set(h*w/96,h,1);return s;};
+  addBr({id:"imposs",lane:"mv",parent:"omni",up:"void",downObj:"i_omni",down:"omni",fic:1,name:"不可能世界の層（空想）",short:"不可能世界",unit:"矛盾まで許す世界（空想）",th:Math.PI/4,ph:.9553,
+    desc:"オムニバースは「矛盾なく書けるもの」の全部。その外に、矛盾したものまで成り立つ世界を置いた空想の層。哲学には「不可能世界」を本気で考える分野（矛盾を許す論理＝パラコンシステント論理）が実際にある。中央の三角形は、この角度から見ると閉じているが、ドラッグで回すと正体がわかる。",dist:3000,min:60,max:5000,
+    build(){scene.add(new THREE.AmbientLight("#fff",.35));const d=new THREE.DirectionalLight("#fff",1.2);d.position.set(400,700,200);scene.add(d);
+      const L=220,w=40,mat=new THREE.MeshStandardMaterial({color:"#d8c8ff",roughness:.45}),mat2=new THREE.MeshStandardMaterial({color:"#9fe8ff",roughness:.45}),mat3=new THREE.MeshStandardMaterial({color:"#ff9ad0",roughness:.45});
+      const tri=new THREE.Group();scene.add(tri);const beam=(a,b,m)=>{const dd=b.clone().sub(a);const bx=new THREE.Mesh(new THREE.BoxGeometry(Math.abs(dd.x)+w,Math.abs(dd.y)+w,Math.abs(dd.z)+w),m);bx.position.copy(a).add(b).multiplyScalar(.5);tri.add(bx);};
+      const P0=V(-L/2,-L/2,-L/2),P1=V(L/2,-L/2,-L/2),P2=V(L/2,L/2,-L/2),P3=V(L/2,L/2,L/2);beam(P0.clone().add(V(w*.0,0,0)),P1,mat);beam(P1,P2,mat2);beam(P2,P3.clone().add(V(0,0,-w*.0)),mat3);
+      const tl=new THREE.Object3D();tl.position.copy(P1);tri.add(tl);label("i_tri","ペンローズの三角形",tl,900,"3本の角材がつながって三角形に見えるが、実はつながっていない（ドラッグで回すとわかる）。1958年にペンローズ親子が発表した「ありえない図形」。この層では、これが本当に閉じている…という空想。","空想");
+      const kg=new THREE.BufferGeometry();const kp=[],ki=[];const NU=72,NV=24;for(let i=0;i<=NU;i++)for(let j=0;j<=NV;j++){const u=i/NU*Math.PI*2,v=j/NV*Math.PI*2;let x,y,z;const r=4*(1-Math.cos(u)/2);
+        if(u<Math.PI){x=6*Math.cos(u)*(1+Math.sin(u))+r*Math.cos(u)*Math.cos(v);y=16*Math.sin(u)+r*Math.sin(u)*Math.cos(v);}else{x=6*Math.cos(u)*(1+Math.sin(u))+r*Math.cos(v+Math.PI);y=16*Math.sin(u);}z=r*Math.sin(v);kp.push(x*9,y*9,z*9);}
+      for(let i=0;i<NU;i++)for(let j=0;j<NV;j++){const a=i*(NV+1)+j,b=a+NV+1;ki.push(a,b,a+1,b,b+1,a+1);}kg.setAttribute("position",new THREE.Float32BufferAttribute(kp,3));kg.setIndex(ki);kg.computeVertexNormals();
+      const klein=new THREE.Mesh(kg,new THREE.MeshStandardMaterial({color:"#7fe0b0",roughness:.3,transparent:true,opacity:.7,side:THREE.DoubleSide,depthWrite:false}));klein.position.set(-760,80,280);scene.add(klein);anims.push(t=>klein.rotation.y=t*.15);
+      label("i_klein","クラインの壺",klein,700,"内側と外側の区別がない「壺」。4次元なら自分自身を突き抜けずに作れるが、3次元ではどうしても自分を突き抜ける（ここで管が壁を通り抜けているように見える部分）。数学では実在する形。","空想");
+      const sq=new THREE.Group();sq.position.set(720,-120,-340);scene.add(sq);const ln=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:"#ffd27a"}));sq.add(ln);const cp=new Float32Array(129*3);ln.geometry.setAttribute("position",new THREE.BufferAttribute(cp,3));
+      anims.push(t=>{const k=(Math.sin(t*.8)+1)/2;for(let i=0;i<=128;i++){const a=i/128*Math.PI*2;const c=Math.cos(a),s2=Math.sin(a);const m=Math.max(Math.abs(c),Math.abs(s2));const x=c*(1-k)+c/m*k,y=s2*(1-k)+s2/m*k;cp.set([x*140,y*140,0],i*3);}ln.geometry.attributes.position.needsUpdate=true;sq.lookAt(camera.position);});
+      label("i_sq","丸い四角",sq,600,"「丸い四角」は言葉にはできるが、ふつうの論理では存在できない（矛盾）。ここでは丸と四角を行き来し続け、「両方である」ことになっている…という空想。","空想");
+      const lg=new THREE.Group();lg.position.set(-300,-420,600);scene.add(lg);[["A","#ffffff"],["かつ","#9fe8ff"],["Aでない","#ff9ad0"]].forEach(([t,c],i)=>{const sp=cvSprite(t,c,70);sp.position.set((i-1)*220,0,0);lg.add(sp);});
+      label("i_logic","矛盾を許す論理の島",lg,700,"ふつうの論理では「A かつ Aでない」が一つでもあると、何でも証明できてしまう（爆発律）。矛盾を許す論理（パラコンシステント論理）では、それを防いで矛盾を扱える。哲学者グレアム・プリーストらが研究している。","空想");
+      const om=glowBB("#ffd27a",420,0);om.position.set(-1200,-1200,-1200);scene.add(om);for(let i=0;i<10;i++){const b=bubble(30+R()*30,"#9fe8ff");b.position.set(om.position.x+(R()-.5)*400,(R()-.5)*300,om.position.z+(R()-.5)*300);scene.add(b);}
+      label("i_omni","オムニバース（ここから来た）",om,1400,"一つ下の層。ズームインすると戻れる。","空想");
+      const pts=[];for(let i=0;i<4000;i++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(1500+R()*1500);pts.push(q.x,q.y,q.z);}scene.add(points(pts,"#c99cf2",4,.45));
+      const h=new THREE.Object3D();h.position.set(0,700,0);scene.add(h);label("imposs_all","不可能世界の層（全体）",h,2600,"矛盾したものまで成り立つ世界を集めた、完全な空想の層。さらにズームアウトすると「無」へ。","空想");}});
+  BRMAP["imposs:i_omni"]="omni";
+  addBr({id:"void",lane:"mv",parent:"imposs",loop:1,nostars:1,bg:"#000000",downObj:"v_imposs",down:"imposs",fic:1,name:"無（空想）",short:"無",unit:"何もない（空想）",
+    desc:"すべての外側に「何もない」を置いた。ただし物理学の「真空」は無ではなく、量子のゆらぎで満ちている。本当の無とは何か、なぜ何もないのではなく何かがあるのか（ライプニッツの問い）は、今も答えが出ていない。ここからさらにズームアウトすると、一周して地球に戻る。",dist:1200,min:60,max:2600,
+    build(){const dot=glowBB("#ffffff",30,0);scene.add(dot);anims.push(t=>dot.material.uniforms.uSize.value=24+Math.sin(t*1.3)*8);label("v_dot","ひとつの点",dot,500,"何もない中に、ぽつんと一つの点。宇宙の始まりの象徴として置いた（実際のビッグバンは「一点から爆発した」のではなく、空間全体が同時に膨らみ始めたと考えられている）。","空想");
+      const N=600,pos=new Float32Array(N*3),ph=[];for(let i=0;i<N;i++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(300+R()*500);ph.push([q,R()*6.283,.6+R()*1.4]);pos.set([q.x,q.y,q.z],i*3);}
+      const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.BufferAttribute(pos,3));const sz=new Float32Array(N);g.setAttribute("aAlpha",new THREE.BufferAttribute(sz,1));
+      const pm=new THREE.PointsMaterial({color:"#9fb4ff",size:6,transparent:true,opacity:.6,blending:THREE.AdditiveBlending,depthWrite:false});const pp=new THREE.Points(g,pm);scene.add(pp);anims.push(t=>{for(let i=0;i<N;i++){const [q,a,w]=ph[i];const on=Math.sin(t*w+a)>.7;pos[i*3]=on?q.x:1e6;}g.attributes.position.needsUpdate=true;});
+      const vq=new THREE.Object3D();vq.position.set(520,0,0);scene.add(vq);label("v_vac","真空は「無」ではない",vq,600,"点滅する青い粒は、量子の真空で粒子が生まれては消える「ゆらぎ」のイメージ。物理学でいちばん何もない状態（真空）にも、エネルギーがある。","空想");
+      const q2=new THREE.Object3D();q2.position.set(-480,240,0);scene.add(q2);label("v_why","なぜ何もないのではなく、何かがあるのか",q2,600,"哲学者ライプニッツ（1714年）の問い。物理学も哲学も、まだ答えを出せていない。","空想");
+      const imp=glowBB("#c99cf2",220,0);imp.position.set(0,-200,-1100);scene.add(imp);label("v_imposs","不可能世界の層（ここから来た）",imp,1300,"一つ下の層。ズームインすると戻れる。","空想");
+      const lp=new THREE.Object3D();lp.position.set(0,600,0);scene.add(lp);label("v_loop","一周して地球へ（さらにズームアウト）",lp,2000,"物理学者グラショーが描いた「宇宙のウロボロス」では、いちばん大きな宇宙といちばん小さな素粒子の世界が、自分の尾をくわえた蛇のようにつながっている。この地図でも、いちばん外側からさらに外へ出ると、地球に戻ってくる。","空想");}});
+  BRMAP["void:v_imposs"]="imposs";
