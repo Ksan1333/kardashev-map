@@ -31,7 +31,7 @@ vec3 albedo(vec3 p,out float atm){float la=asin(clamp(p.y,-1.,1.));float lo=atan
   d+=spot(la,lo,-25.*D,-5.*D,.3,.1);d+=spot(la,lo,-27.*D,-85.*D,.07,.06);d+=spot(la,lo,10.*D,25.*D,.18,.08);
   d=smoothstep(.3,.95,d+(n2-.5)*.5);c=mix(c,vec3(.36,.22,.15),d*.75);
   c=mix(c,vec3(.95,.8,.62),spot(la,lo,-42.4*D,70.5*D,.22,.15)*.6);
-  float vm=exp(-pow((la+12.*D+sin(lo*3.)*.02)/(1.8*D),2.))*smoothstep(-110.*D,-90.*D,lo)*smoothstep(-35.*D,-55.*D,lo);c=mix(c,vec3(.3,.17,.12),vm*.85);
+  float vm=exp(-(((la+12.*D+sin(lo*3.)*.02)/(1.8*D))*((la+12.*D+sin(lo*3.)*.02)/(1.8*D))))*smoothstep(-110.*D,-90.*D,lo)*smoothstep(-35.*D,-55.*D,lo);c=mix(c,vec3(.3,.17,.12),vm*.85);
   float om=spot(la,lo,18.65*D,-133.8*D,.07,.07);c=mix(c,vec3(.55,.35,.25),om);c+=vec3(.12,.06,.03)*smoothstep(.55,.95,om);
   c=mix(c,vec3(.62,.38,.25),(spot(la,lo,1.5*D,-112.*D,.03,.03)+spot(la,lo,-9.*D,-121.*D,.03,.03)+spot(la,lo,12.*D,-104.*D,.03,.03))*.8);
   float cap=smoothstep(78.*D,84.*D,la+n2*.06)+smoothstep(-80.*D,-86.*D,la-n2*.06);c=mix(c,vec3(.97,.95,.93),cap);atm=.12;

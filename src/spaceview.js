@@ -49,6 +49,7 @@
   info.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.shape){window.UNI_SHAPE=b.dataset.shape;SPZ.go(SPZ.level);return;}if(b.dataset.unfocus)SPZ.unfocus();if(b.dataset.o2)SPZ.focusOn(b.dataset.o2);if(b.dataset.earth)toEarth();if(b.dataset.map!==undefined){window.SPZ_MAP=b.dataset.map==="1";if(!b.dataset.br){SPZ.go(SPZ.level);return;}}if(b.dataset.br)SPZ.goBr(b.dataset.br);if(b.dataset.back)SPZ.outward();});
   document.getElementById("sp-out").onclick=()=>SPZ.outward();
   document.getElementById("sp-in").onclick=()=>SPZ.inward();
+  document.getElementById("sp-home").onclick=()=>SPZ.home();
   let curObj=null;
   function sync2(){const id=SPZ&&SPZ.LEVELS[SPZ.level]?.id;bar.querySelectorAll(".spp").forEach(p=>{const q=P[+p.dataset.i];p.classList.toggle("lv",q[2]===id);p.classList.toggle("sel",q[3]===curObj&&q[2]===id);});}
   window.addEventListener("spz-level",e=>{drawNav();curObj=null;sync2();});drawNav();

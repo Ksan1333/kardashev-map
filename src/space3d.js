@@ -299,8 +299,11 @@ __SPACEPLANET__
        ["carina","カリーナ星雲",287,-1,85,"cloud",["#ff7a8a","#ffd27a","#7fb2ff"],9,"巨大な星形成領域。超巨星エータ・カリーナがある。"]];
       const NEBC={orion:[2.2,"#ff4f7a","#7fe8d8","#ffffff"],horsehead:[2.4,"#ff3a4a","#8fb8ff"],pleiades:[2.2,"#5f8fff","#cfe0ff"],helix:[2,"#ff4a3a","#6fd8ff","#ffc070"],ring:[2,"#ff5a4a","#6fc8ff"],catseye:[2,"#ff5a6a","#7fffd0","#ff6a5a"],crab:[2,"#ff6a3a","#8fb0ff","#ffd27a"],eagle:[2.2,"#ffb070","#2f8f9a","#d8c070"],carina:[2.2,"#ff5a4a","#ffb070","#7fd0ff"]};
       N.forEach(([id,nm,l,b,d,kind,cols,sz,info])=>{const p=gal(l,b).multiplyScalar(d);let o;
-        if(kind==="star"){o=star(sz*(id==="betelgeuse"?.12:.06),id==="betelgeuse"?"M":"F",id==="betelgeuse"?7:10,id==="betelgeuse"?.6:0);}else{const F=NEBC[id];o=new THREE.Group();o.add(nebFX(id,sz*F[0],F[1],F[2],F[3]));const pts=[];for(let k=0;k<160;k++){const a=R()*6.283,u=R()*2-1,rr=sz*.7*Math.cbrt(R());pts.push(Math.cos(a)*Math.sqrt(1-u*u)*rr,u*rr,Math.sin(a)*Math.sqrt(1-u*u)*rr);}o.add(points(pts.slice(0,240),"#e8f0ff",.035*sz,.85));}
-        o.position.copy(p);scene.add(o);anims.push(t=>o.lookAt&&kind!=="cloud"&&o.lookAt(camera.position));obj(id,nm,o,sz*3,info,(d*100).toLocaleString()+"光年");});
+        if(kind==="star"){o=star(sz*(id==="betelgeuse"?.12:.06),id==="betelgeuse"?"M":"F",id==="betelgeuse"?7:10,id==="betelgeuse"?.6:0);}else{const F=NEBC[id];o=new THREE.Group();const VS2=sz*F[0]*1.15;o.add(nebVol(id,VS2,F[1],F[2],F[3]));
+          if(id==="pleiades")[[.05,.02,0],[-.42,-.05,.1],[.38,.18,-.1],[.24,.34,.05],[.12,-.26,-.08],[.42,-.06,.12],[-.5,.02,-.05]].forEach(([x,y,z],k)=>{const st=star(VS2*(k?.012:.016),"B",9);st.position.set(x*VS2/2,y*VS2/2,z*VS2/2);o.add(st);});
+          if(id==="orion")for(let k=0;k<4;k++){const st=star(VS2*.006,"O",10);st.position.set((-.05+(k%2)*.03)*VS2/2,(.02+(k>>1)*.03)*VS2/2,-.15*VS2/2);o.add(st);}
+          if(id==="helix"||id==="ring"||id==="catseye"){const st=star(VS2*.006,"#cfe0ff",10);o.add(st);}if(id==="crab"){const st=star(VS2*.006,"#cfe0ff",14);o.add(st);}const pts=[];for(let k=0;k<160;k++){const a=R()*6.283,u=R()*2-1,rr=sz*.7*Math.cbrt(R());pts.push(Math.cos(a)*Math.sqrt(1-u*u)*rr,u*rr,Math.sin(a)*Math.sqrt(1-u*u)*rr);}o.add(points(pts.slice(0,240),"#e8f0ff",.035*sz,.85));}
+        o.position.copy(p);scene.add(o);obj(id,nm,o,sz*3,info,(d*100).toLocaleString()+"光年");});
       [["gaiabh1","ブラックホール Gaia BH1",22,19,15.6,"知られている中で地球に最も近いブラックホール。太陽の約10倍の質量。"],["cygx1","はくちょう座X-1（ブラックホール）",71,3,72,"1971年に確認された、最初のブラックホール候補。青い超巨星からガスを吸い込んでいる。"]].forEach(([id,nm,l,b,d,info])=>{
         const bh=blackHole(.4);bh.position.copy(gal(l,b).multiplyScalar(d));scene.add(bh);obj(id,nm,bh,4,info+"（模型は誇張）",(d*100).toLocaleString()+"光年");});
       [10,30,60,100].forEach(r=>scene.add(orbit(r,"#2a3558",.6)));
@@ -427,14 +430,15 @@ __SPACEBR__
     objs.forEach(o=>{if(!o.node.visible)return;o.node.getWorldPosition(p);p.project(camera);if(p.z>1||p.z<-1)return;const d=Math.hypot((p.x*.5+.5)*w-px,(-p.y*.5+.5)*h-py);if(d<bd){bd=d;best=o;}});return bd<Math.min(w,h)*.3?best:null;}
   function inward(fromZoom){const L=ALL[LV];const tgt=focus||pickNear();
     if(LV===0){if(!tgt||tgt.id==="earth"){window.dispatchEvent(new CustomEvent("spz-earth"));return;}if(!focus)focusOn(tgt.id);return;}
-    if(tgt){if(!L.br&&GATE[L.id]===tgt.id){go(LV-1,null,"in");return;}const k=BRMAP[L.id+":"+tgt.id];if(k&&focus===tgt){if(k.startsWith("in_"))window.SPZ_MAP=true;go(idx(k),null,"in",ALL[idx(k)]&&ALL[idx(k)].br?null:tgt.id);return;}if(!focus||focus!==tgt)focusOn(tgt.id);return;}
-    if(!L.br&&LV>0){go(LV-1,null,"in");return;}
-    if(L.id==="mv"){go(idx("shape"),null,"in");return;}}
+    if(tgt){if(!L.br&&GATE[L.id]===tgt.id){go(LV-1,null,"in",GATE[LEVELS[LV-1].id]);return;}const k=BRMAP[L.id+":"+tgt.id];if(k&&focus===tgt){if(k.startsWith("in_"))window.SPZ_MAP=true;{const K=ALL[idx(k)];go(idx(k),null,"in",K&&(K.downObj||(!K.br?GATE[K.id]:null)));}return;}if(!focus||focus!==tgt)focusOn(tgt.id);return;}
+    if(!L.br&&LV>0){go(LV-1,null,"in",GATE[LEVELS[LV-1].id]);return;}
+    if(L.id==="mv"){go(idx("shape"),null,"in","uni_shape");return;}}
   function resize(){if(!el||!renderer)return;const w=el.clientWidth,h=el.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);renderer.domElement.style.width=w+"px";renderer.domElement.style.height=h+"px";camera.aspect=w/h;camera.updateProjectionMatrix();}
   function stars(){const p=[],c=[];for(let i=0;i<5000;i++){const u=R()*2-1,a=R()*6.283,q=Math.sqrt(1-u*u);p.push(Math.cos(a)*q*9e4,u*9e4,Math.sin(a)*q*9e4);const t=R();const cc=t<.15?C("#ffb38a"):t<.35?C("#bcd2ff"):C("#ffffff");const b=.4+R()*.6;c.push(cc.r*b,cc.g*b,cc.b*b);}
     const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.BufferAttribute(new Float32Array(p),3));g.setAttribute("color",new THREE.BufferAttribute(new Float32Array(c),3));
     return new THREE.Points(g,new THREE.PointsMaterial({size:1.6,sizeAttenuation:false,vertexColors:true,transparent:true,depthWrite:false}));}
   let starfield,hidN=0;
+  let anchor=null;
   go.tok=0;function go(i,oid,dir,fromId){
     if(!renderer||!ALL[i])return; const first=!scene;
     fade.classList.add("on");const tok=go.tok=(go.tok||0)+1;
@@ -447,7 +451,7 @@ __SPACEBR__
       cam.dist=dir==="in"?L.dist*3:dir==="out"?L.dist*.25:L.dist;cam.auto=true;cam.ph=L.ph!=null?L.ph:1.1;if(L.th!=null){cam.th=L.th;cam.auto=false;}
       lab.innerHTML=objs.map(o=>`<button class="splab" data-o="${o.id}"><i></i>${o.name}</button>`).join("");objs.forEach(o=>o.el=lab.querySelector(`[data-o="${o.id}"]`));
       renderInfo(); window.dispatchEvent(new CustomEvent("spz-level",{detail:i}));
-      if(fromId){const fo=objs.find(x=>x.id===fromId);if(fo){const p=new THREE.Vector3();fo.node.getWorldPosition(p);cam.target.copy(p);cam.dist=Math.max(fo.view*.6,L.min*1.5);}}
+      anchor=null;if(fromId){const fo=objs.find(x=>x.id===fromId);if(fo){anchor=fo;const p=new THREE.Vector3();fo.node.getWorldPosition(p);cam.target.copy(p);cam.goalT.copy(p);if(dir==="out")cam.dist=Math.max(fo.view*.6,L.min*1.5);}}
       if(oid)setTimeout(()=>focusOn(oid),dir?500:50);
       fade.classList.remove("on");
     },first?0:220);
@@ -460,14 +464,14 @@ __SPACEBR__
       `<div class="spobjs">${objs.map(o=>`<button class="chip" data-o2="${o.id}" aria-pressed="${focus&&focus.id===o.id}">${o.name}</button>`).join("")}</div>`;}
   function frame(now){if(!running)return;requestAnimationFrame(frame);const t=(now-t0)/1000,dt=Math.min(.05,(now-last)/1000||0);last=now;if(!scene)return;
     anims.forEach(f=>f(t));
-    if(focus){const p=new THREE.Vector3();focus.node.getWorldPosition(p);cam.goalT.copy(p);}else cam.goalT.set(...(ALL[LV].center||[0,0,0]));
-    cam.target.lerp(cam.goalT,cam.target.distanceTo(cam.goalT)<cam.dist*.5?.35:.08);cam.dist+=(cam.goal-cam.dist)*.08;if(cam.auto&&!cam.drag)cam.th+=dt*.05;
+    if(focus||anchor){const p=new THREE.Vector3();(focus||anchor).node.getWorldPosition(p);cam.goalT.copy(p);}else cam.goalT.set(...(ALL[LV].center||[0,0,0]));
+    if(window.SPZ_SNAP){cam.target.copy(cam.goalT);cam.dist=cam.goal;}cam.target.lerp(cam.goalT,cam.target.distanceTo(cam.goalT)<cam.dist*.5?.35:.08);cam.dist+=(cam.goal-cam.dist)*.08;if(cam.auto&&!cam.drag)cam.th+=dt*.05;
     const d=cam.dist;camera.position.set(cam.target.x+Math.sin(cam.th)*Math.sin(cam.ph)*d,cam.target.y+Math.cos(cam.ph)*d,cam.target.z+Math.cos(cam.th)*Math.sin(cam.ph)*d);camera.lookAt(cam.target);
     camera.near=Math.max(.001,d*.01);camera.far=d*400+2e5;camera.updateProjectionMatrix();starfield.position.copy(camera.position);
     renderer.render(scene,camera);
     const w=el.clientWidth,h=el.clientHeight,p=new THREE.Vector3();
     objs.forEach(o=>{o.node.getWorldPosition(p);p.project(camera);const vis=p.z<1&&p.z>-1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05&&o.node.visible;o.el.style.display=vis?"":"none";if(vis)o.el.style.transform=`translate(${(p.x*.5+.5)*w}px,${(-p.y*.5+.5)*h}px)`;o.el.classList.toggle("on",focus===o);});
   }
-  return {LEVELS,ALL,LANES,BRMAP,outward,inward,goBr(id){const i=idx(id);if(i>=0)go(i,null,i<LEVELS.length&&i<LV?"in":"in");},get levelId(){return ALL[LV]&&ALL[LV].id;},goFrom(id,from){const i=idx(id);if(i>=0)go(i,null,"out",from);},goId(id,o,dir){const i=ALL.findIndex(L=>L.id===id);if(i>=0){if(i===LV&&o)focusOn(o);else go(i,o,dir||(i<LV?"in":"out"));}},init,go,focusOn,unfocus(){focus=null;isolate(null);cam.goal=ALL[LV].dist;cam.min=ALL[LV].min;renderInfo();},get level(){return LV;},
+  return {LEVELS,ALL,LANES,BRMAP,outward,inward,goBr(id){const i=idx(id);if(i>=0)go(i,null,i<LEVELS.length&&i<LV?"in":"in");},get levelId(){return ALL[LV]&&ALL[LV].id;},get focusId(){return focus&&focus.id;},get anchorId(){return anchor&&anchor.id;},goFrom(id,from){const i=idx(id);if(i>=0)go(i,null,"out",from);},home(){go(0,null,"in","earth");},goId(id,o,dir){const i=ALL.findIndex(L=>L.id===id);if(i>=0){if(i===LV&&o)focusOn(o);else go(i,o,dir||(i<LV?"in":"out"));}},init,go,focusOn,unfocus(){focus=null;isolate(null);cam.goal=ALL[LV].dist;cam.min=ALL[LV].min;renderInfo();},get level(){return LV;},
     start(){if(running||!renderer)return;running=true;last=performance.now();requestAnimationFrame(frame);},stop(){running=false;}};
 })();
