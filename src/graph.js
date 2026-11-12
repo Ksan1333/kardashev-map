@@ -102,11 +102,11 @@
       if(p&&typeof p.d==="number"&&p.d<n.b&&pi!==undefined){
         const xe=sx(p.d); con.push(`<line x1="${xe}" x2="${x1-18}" y1="${py}" y2="${py}" stroke="${col}" stroke-width="${ww*.7}" stroke-dasharray="3 3" opacity="${op}"/>`);
         con.push(curve(x1-18,py,x1,y,on?"var(--accent)":col,ww*.8,"3 3",op));
-      } else con.push(curve(Math.max(x1-18,sx(p?p.b:f.start)),py,x1,y,on?"var(--accent)":col,ww*.85,null,op));
+      } else con.push(curve(Math.max(x1-18,sx(p?p.b:f.start)),py,x1,y,on?"var(--accent)":col,ww*.85,n.b>2026.5?"5 4":null,op));
       if(!vis(y)&&!(typeof n.d==="number"&&n.to))return;
       // ブランチ本体
       if(st==="fade") g.push(`<line x1="${x1}" x2="${x2}" y1="${y}" y2="${y}" stroke="url(#gf-${f.key})" stroke-width="${ww}" opacity="${op}"/>`);
-      else g.push(`<line x1="${x1}" x2="${x2}" y1="${y}" y2="${y}" stroke="${col}" stroke-width="${ww}" opacity="${op}"/>`);
+      else g.push(`<line x1="${x1}" x2="${x2}" y1="${y}" y2="${y}" stroke="${col}" stroke-width="${ww}" opacity="${op}"${n.b>2026.5?' stroke-dasharray="8 5"':""}/>`);
       // 合流（置き換え先へ）
       if(st==="dead"&&n.to&&laneOf[f.key+":"+n.to]!==undefined){
         const ty2=syL(laneOf[f.key+":"+n.to]), xt=Math.max(sx(f.map[n.to].b),x2+14);
@@ -232,7 +232,7 @@
     return `<div class="plate" style="background:linear-gradient(135deg,#0e1830,#1c2748)"><svg viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice">${rings}
       <text x="16" y="62" fill="${f.color}" font-family="Murecho,sans-serif" font-weight="900" font-size="30">${esc(n.name.replace(/（.*?）/,"").slice(0,10))}</text>
       <text x="16" y="88" fill="#ffffffaa" font-family="IBM Plex Mono,monospace" font-size="13">${fy(n.b)}〜${typeof n.d==="number"?fy(n.d):"現在"}</text></svg>
-      <span class="cap">図版（写真は下のリンクから）</span></div>`;
+      <span class="cap">${n.b>2026.5?"想像の学問（もしも）":"図版（写真は下のリンクから）"}</span></div>`;
   }
   function openPanel(){panel.hidden=false;document.querySelector('.gwrap').classList.add('open');}
   function closePanel(){panel.hidden=true;document.querySelector('.gwrap').classList.remove('open');}
@@ -247,7 +247,7 @@
     const q=encodeURIComponent(n.name.replace(/（.*?）/g,""));
     const btn=(fkey,x)=>`<button data-f="${fkey}" data-id="${x.id}" class="${typeof x.d==="number"?"linkbtn dead":""}">${esc(x.name)}</button>`;
     panel.innerHTML=closeBtn+plate(f,n)+`
-      <div class="meta"><span class="pill ${sc}">${sl}</span><span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
+      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">もしも（想像）</span>':""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
       <h3>${esc(n.name)}</h3>
       <div class="meta num">${fy(n.b)} 〜 ${typeof n.d==="number"?fy(n.d)+"に消滅":n.d==="f"?"現在（衰退中）":"現在"}</div>
       <p>${esc(n.desc)}</p>
@@ -257,9 +257,9 @@
       <div><h4>系譜</h4><div class="lineage"><span style="color:var(--muted)">人類 → ${f.name} →</span>${anc.map((a,i)=>(i?"<span>→</span>":"")+btn(fk,a)).join("")}</div></div>
       ${kids.length?`<div><h4>ここから分かれた要素（${kids.length}）</h4><div class="lineage">${kids.map(k=>btn(fk,k)).join("")}</div></div>`:""}
       <div><h4>${fy(y)}ごろ、他の分野では</h4><div class="snap">${snap||"<div>この時代の記録はまだ少ない</div>"}</div></div>
-      <div><h4>写真を見る（外部サイト）</h4><div class="photo">
+      ${n.b>2026.5?`<p class="note">2026年より先の要素は、いまの学問・技術からの延長として想像した「もしも」です。点線で表示しています。</p>`:`<div><h4>写真を見る（外部サイト）</h4><div class="photo">
         <a href="https://ja.wikipedia.org/w/index.php?search=${q}" target="_blank" rel="noopener">Wikipediaで調べる</a>
-        <a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">画像検索</a></div></div>`;
+        <a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">画像検索</a></div></div>`}`;
     openPanel(); requestAnimationFrame(()=>panel.scrollTop=0);
     const li=laneOf[fk+":"+id]; if(center&&li!==undefined) focusLane(li,n.b); else draw();
   }

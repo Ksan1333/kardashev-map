@@ -224,6 +224,7 @@ body.sxopen{overflow:hidden}
   .navsearch{position:fixed;right:14px;bottom:18px;z-index:120;border-radius:99px;padding:12px 16px;box-shadow:0 8px 24px #000a;border-color:#f4b94288;background:#1b2647}
   nav.views{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(10,15,31,.97)}.navhelp{display:none}.ebbar{font-size:12px}.sx{padding:4vh 10px 10px}.sxbox{max-height:88vh}}
 
+.pill.fut{color:#c9b6ff;border-color:#8f7ad8;border-style:dashed}
 .levels{display:flex;gap:6px;flex-wrap:wrap}
 .levels button{font:500 13px var(--font-body);color:var(--muted);background:transparent;border:1px solid var(--line);
   border-radius:999px;padding:6px 14px;display:flex;gap:8px;align-items:center}
@@ -821,7 +822,7 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ⑧ 系統樹 -->
   <section class="view" id="v-lineage">
-    <div class="view-head"><h2>系統樹（全分野）</h2><p>人類という幹から16分野・約900の要素が枝分かれしていく。時間軸は1年あたり同じ幅（均等）。消えた要素は後継に合流（マージ）する。上の分野を押すとON/OFFで絞り込めます（複数選択可）。</p></div>
+    <div class="view-head"><h2>系統樹（全分野）</h2><p>人類という幹から16分野・約1,100の要素（2026年までの約920と、未来の「もしも」約210）が枝分かれしていく。時間軸は1年あたり同じ幅（均等）。消えた要素は後継に合流（マージ）する。上の分野を押すとON/OFFで絞り込めます（複数選択可）。</p></div>
     <div class="chips" id="gchips"></div>
     <div class="gwrap">
       <div class="gcanvas" id="gcanvas" tabindex="0" aria-label="系統樹のキャンバス。ホイールまたはピンチでズーム、ドラッグで移動">
@@ -3582,6 +3583,179 @@ medicine:[["divhuman","多様化した人類","lowg",15000,null,null,"別の環�
 TREE.forEach(t=>{const ids=new Set(t.nodes.map(x=>x[0]));(TREE_FUT3[t.key]||[]).forEach(n=>{if(!ids.has(n[2]))n=[...n.slice(0,2),null,...n.slice(3)];t.nodes.push(n);ids.add(n[0]);});});
 WH3_ERAS.forEach(e=>WH_ERAS.push(e));WH3.forEach(e=>WH.push(e));
 
+/* ---------- 系統樹「学問」：Type I・Type II 時代に生まれそうな学問 150（もしも） ----------
+   [id, 名前, 親id, 誕生年, 消滅年, 合流先id, 説明]
+   Type I（2026〜2300年）82件、Type II（2300〜6000年）68件。
+   いまある学問からの延長として「ありそうな」枝分かれを想像したもので、予測ではありません。 */
+const TREE_FUT_ACAD=[
+// ===== Type I：AI・知能 =====
+["fa_interp","機械解釈学","ml",2027,null,null,"AIの内部の回路を読み解き、なぜその答えを出したのかを説明する（もしも）。"],
+["fa_aieval","AI評価学","ml",2028,null,null,"AIの能力と危険性を測る試験を設計し、公開前に確かめる（もしも）。"],
+["fa_align","AIアライメント学","ai",2028,2125,"fa_intsafe","AIの目標や行動を、人間の価値に沿わせる方法を研究する（もしも）。"],
+["fa_aipsy","機械心理学","cognitive",2032,null,null,"大規模AIの「性格」や判断の癖を、心理学の方法で調べる（もしも）。"],
+["fa_learnsci","個別学習科学","cognitive",2032,null,null,"AIの家庭教師で、一人ひとりに合った学び方を研究する（もしも）。"],
+["fa_aimath","AI数学","math",2033,null,null,"AIが新しい定理を見つけ、証明を計算機で検証する（もしも）。"],
+["fa_aiwelfare","AI福祉学","ethics",2034,null,null,"AIに意識や苦しみがありうるかを考え、扱い方の基準をつくる（もしも）。"],
+["fa_hmling","人機言語学","linguistics",2035,null,null,"人とAI、AIどうしの間に生まれる新しい言葉と文法を研究する（もしも）。"],
+["fa_autosci","自律実験科学","agi_sci",2040,null,null,"ロボット実験室が24時間、仮説→実験→検証を自動で回す（もしも）。"],
+["fa_formal","形式数学","fa_aimath",2045,null,null,"数学の全分野を、計算機で検証できる形に書き直す（もしも）。"],
+["fa_aiphys","AI物理学","fa_autosci",2060,null,null,"観測データから、新しい物理法則をAIが見つけ出す（もしも）。"],
+["fa_machcons","機械意識学","fa_aipsy",2080,null,null,"意識の条件を理論にまとめ、AIや人工の脳で確かめる（もしも）。"],
+["fa_intsafe","知性安全学","fa_aiwelfare",2125,null,null,"人とAIを含む、すべての知性が安全に共存する方法を研究する（もしも）。"],
+// ===== Type I：計算・情報 =====
+["fa_synthmedia","合成メディア鑑識学","datasci",2028,2150,"fa_cogsec","本物の映像と、AIが作った偽物を見分ける技術と制度を研究する（もしも）。"],
+["fa_pqc","耐量子暗号学","cs",2029,2100,"fa_qnet","量子計算機でも破れない暗号を設計し、世界の通信を移し替える（もしも）。"],
+["fa_quantcomp","量子計算科学","quantum",2030,null,null,"誤り訂正つきの量子計算機で、分子や材料の性質を計算する（もしも）。"],
+["fa_socsim","社会シミュレーション学","sociology",2032,null,null,"数百万人の行動を再現した仮想社会で、政策の効果を前もって試す（もしも）。"],
+["fa_precmed","予知医学","datasci",2036,null,null,"ゲノムと生活の記録から、発病する前に病気を予測して防ぐ（もしも）。"],
+["fa_infoeco","情報生態学","infotheory",2040,null,null,"人とAIが生み出す情報の流れを生態系としてとらえ、健全さを測る（もしも）。"],
+["fa_qnet","量子ネットワーク工学","fa_quantcomp",2045,null,null,"量子もつれで遠くの量子計算機をつなぐ「量子インターネット」をつくる（もしも）。"],
+// ===== Type I：脳・心 =====
+["fa_connect","全脳コネクトミクス","neuro",2030,null,null,"脳の神経細胞の全配線図を描き、心の働きと結びつける（もしも）。"],
+["fa_bci","脳インターフェース学","neuro",2031,2500,"fa_hivemind","脳と機械を直接つなぎ、考えるだけで機器を動かす（もしも）。"],
+["fa_cogsec","認知安全保障学","psychology",2035,null,null,"偽情報やAIによる世論操作から、社会の判断力を守る（もしも）。"],
+["fa_wellbeing","幸福科学","psychology",2040,null,null,"何が人を長く幸せにするかを、大規模なデータで測る（もしも）。"],
+["fa_mindmed","精神回路医学","neuro",2042,null,null,"うつ病などを脳の回路の乱れとして測り、ピンポイントで治す（もしも）。"],
+["fa_neuroaug","認知拡張学","fa_bci",2065,null,null,"記憶や集中力を機械で補い、広げる方法とその倫理を研究する（もしも）。"],
+["fa_wbe","全脳エミュレーション学","fa_connect",2070,null,null,"脳の神経回路を丸ごと計算機の上に再現する（もしも）。"],
+// ===== Type I：生命・医療 =====
+["fa_protdesign","タンパク質設計学","biochem",2027,null,null,"AIで、望みの形と働きを持つタンパク質を設計する（もしも）。"],
+["fa_microbiome","共生微生物学","ecology",2030,null,null,"腸や土の微生物の群れを、一つの「臓器」や生態系として設計・管理する（もしも）。"],
+["fa_gdrive","遺伝子ドライブ生態学","ecology",2034,null,null,"遺伝子ドライブで蚊など特定の生物の数を管理する技術と、その影響を研究する（もしも）。"],
+["fa_genome","ゲノム設計学","molbio",2035,null,null,"生物のゲノムを一から設計・合成し、新しい働きを持たせる（もしも）。"],
+["fa_deext","脱絶滅生物学","genetics",2035,null,null,"絶滅した生物をゲノムから復元し、生態系に戻すべきかを研究する（もしも）。"],
+["fa_spacemed","長期宇宙医学","biology",2035,null,null,"低重力と宇宙放射線のもとで何年も暮らす人体の変化を研究する（もしも）。"],
+["fa_aging","老化制御学","molbio",2038,null,null,"老化を治療できる現象として扱い、原因の分子を測って遅らせる（もしも）。"],
+["fa_cellprog","細胞プログラミング学","fa_genome",2045,null,null,"細胞に論理回路を組み込み、病気を見つけて治す「生きた薬」をつくる（もしも）。"],
+["fa_virtcell","仮想細胞学","fa_protdesign",2045,null,null,"細胞1個の中のすべての分子の動きを、計算機で再現する（もしも）。"],
+["fa_organ","臓器工学","fa_cellprog",2050,null,null,"幹細胞と3Dプリントで、移植用の臓器をつくる（もしも）。"],
+["fa_longevity","寿命延伸医学","fa_aging",2070,null,null,"健康なまま120歳を超えて生きる治療を体系化する（もしも）。"],
+// ===== Type I：地球・気候 =====
+["fa_adapt","気候適応学","climate",2030,2200,"fa_earthsys","猛暑・洪水・干ばつに耐える都市と農業を設計する（もしも）。"],
+["fa_geoeng","気候工学","climate",2032,2400,"fa_planclim","太陽光の反射や二酸化炭素の回収で、地球の気温を意図的に調整する（もしも）。"],
+["fa_rewild","再野生化科学","ecology",2033,null,null,"失われた生態系を、大型動物の再導入などで大規模に回復させる（もしも）。"],
+["fa_carbon","炭素除去学","fa_geoeng",2035,null,null,"大気から年に数十億トンの二酸化炭素を取り除く方法を研究する（もしも）。"],
+["fa_ocean","海洋再生学","ecology",2040,null,null,"サンゴ礁や海藻の森を再生し、海の生産力を取り戻す（もしも）。"],
+["fa_earthsys","地球システム管理学","climatemodel",2045,null,null,"気候・海・生物・人間社会を一つのシステムとして予測し、運営する（もしも）。"],
+["fa_twin","地球デジタルツイン学","fa_earthsys",2055,null,null,"地球全体を細かく再現した仮想地球で、政策の結果を前もって試す（もしも）。"],
+// ===== Type I：エネルギー・物質 =====
+["fa_matai","物質探索AI学","chemistry",2028,null,null,"AIが数百万の候補から新しい材料を予測し、自動合成で確かめる（もしも）。"],
+["fa_fusion","核融合工学","nuclear_ph",2035,null,null,"核融合炉の運転・燃料・材料を一体で扱う工学（もしも）。"],
+["fa_metamat","メタマテリアル工学","em",2035,null,null,"光を曲げる・音を消すなど、自然にない性質を構造でつくる（もしも）。"],
+["fa_fusionmat","核融合材料学","fa_fusion",2045,null,null,"強い中性子に何十年も耐える炉の壁の材料を開発する（もしも）。"],
+["fa_grid","全球送電網学","em",2045,null,null,"大陸をまたぐ送電網で、昼の地域の電気を夜の地域へ送る（もしも）。"],
+["fa_spacesolar","宇宙太陽光発電学","em",2050,null,null,"宇宙で集めた太陽の光を、マイクロ波で地上へ送る（もしも）。"],
+["fa_roomsc","室温超伝導学","quantum",2060,null,null,"常温・常圧で電気抵抗がゼロになる物質を設計する（もしも）。"],
+["fa_nanoasm","分子組立工学","organic_c",2090,null,null,"原子や分子を一つずつ並べて、機械や材料を組み立てる（もしも）。"],
+["fa_progmat","プログラム物質学","fa_metamat",2120,null,null,"指令に応じて形や性質を変える物質を設計する（もしも）。"],
+// ===== Type I：物理・宇宙 =====
+["fa_planetdef","惑星防衛学","astronomy_mod",2030,null,null,"地球に衝突しそうな小惑星を見つけ、軌道を変える方法を研究する（もしも）。"],
+["fa_lunar","月面科学","geology",2032,null,null,"月の地質・氷・資源を、月面基地に住みながら研究する（もしも）。"],
+["fa_lisa","宇宙重力波天文学","astrophys",2037,null,null,"宇宙に浮かべた干渉計で、巨大ブラックホールどうしの合体を「聞く」（もしも）。"],
+["fa_spaceagri","宇宙農学","ecology",2038,null,null,"月や火星の閉ざされた施設で作物を育て、食料を自給する（もしも）。"],
+["fa_qgrav","量子重力実験学","relativity",2040,null,null,"重力が量子的にふるまうかを、机の上の精密実験で確かめる（もしも）。"],
+["fa_exoclim","系外惑星気候学","climatemodel",2040,null,null,"ほかの恒星を回る惑星の大気と気候を観測し、再現する（もしも）。"],
+["fa_dm","暗黒物質学","particle",2045,null,null,"ダークマターの正体を、地下実験と天体観測で突き止める（もしも）。"],
+["fa_mars","火星環境学","fa_lunar",2045,null,null,"火星の地下水・気候の歴史・資源を、現地で調べる（もしも）。"],
+["fa_spaceres","宇宙資源学","geology",2045,null,null,"月や小惑星の水と金属を見つけ、取り出す方法を研究する（もしも）。"],
+["fa_closedeco","閉鎖生態系学","fa_spaceagri",2050,null,null,"空気・水・食料を完全に循環させる、小さな生態系を設計する（もしも）。"],
+["fa_orbmanu","軌道上製造学","physics",2050,null,null,"無重量を生かし、地上では作れない結晶や素材を製造する（もしも）。"],
+["fa_spacearch","宇宙建築学","fa_orbmanu",2060,null,null,"月面基地や、回転で重力をつくる宇宙居住区を設計する（もしも）。"],
+["fa_biosig","生命痕跡学","xenobio",2065,null,null,"大気や岩石から、生命の証拠（バイオシグネチャー）を判定する（もしも）。"],
+["fa_terraform0","テラフォーミング初期学","fa_mars",2120,2350,"fa_terraform","火星の気候を、人が住める方向へ変える最初の実験を研究する（もしも）。"],
+// ===== Type I：社会・人文 =====
+["fa_ailaw","AI法学","law_s",2030,null,null,"AIの責任・権利・規制を体系化する（もしも）。"],
+["fa_longterm","長期主義倫理学","ethics",2035,null,null,"何千年も先の世代まで含めて、いまの選択の良し悪しを考える（もしも）。"],
+["fa_postwork","ポスト労働経済学","economics",2040,null,null,"AIとロボットが仕事の大半を担う社会で、所得と生きがいをどう配るかを研究する（もしも）。"],
+["fa_climgov","気候介入統治学","polsci",2040,null,null,"誰が地球の気温を決めてよいのか。気候工学の国際ルールを研究する（もしも）。"],
+["fa_digarch","デジタル考古学","history_s",2040,null,null,"消えていくSNS・ゲーム・ウェブの記録を発掘・保存し、歴史として読む（もしも）。"],
+["fa_futurelaw","未来世代法学","law_s",2045,null,null,"まだ生まれていない世代の権利を、法律でどう守るかを研究する（もしも）。"],
+["fa_climmig","気候移住学","sociology",2045,null,null,"気候変動で住む場所を移る数億人の移動と受け入れを研究する（もしも）。"],
+["fa_spacepsy","宇宙心理学","psychology",2045,2700,"fa_genship","閉ざされた基地や長い航行での、孤独・対立・心の健康を研究する（もしも）。"],
+["fa_spacegov","宇宙統治学","polsci",2050,null,null,"月や火星の基地の自治と、資源の所有を扱う政治学（もしも）。"],
+["fa_ubi","普遍所得学","fa_postwork",2055,2160,"fa_abundance","全員に最低限の収入を配る制度を設計し、効果を検証する（もしも）。"],
+["fa_spaceanthro","宇宙人類学","anthropology",2070,null,null,"月や火星で生まれ育つ人々の文化とアイデンティティを研究する（もしも）。"],
+["fa_digiper","デジタル人格法学","fa_ailaw",2080,null,null,"脳のコピーや高度なAIを、「人」として扱うかを決める（もしも）。"],
+["fa_planetgov","惑星統治学","polsci",2100,null,null,"地球全体を一つの単位として、気候・資源・安全を共同で管理する（もしも）。"],
+["fa_abundance","豊かさの経済学","fa_postwork",2160,null,null,"エネルギーともの作りがほぼ無料になった社会の、価値と分配を研究する（もしも）。"],
+// ===== Type II：恒星・エネルギー・巨大工学 =====
+["fa_stellar","恒星工学","astrophys",2320,null,null,"太陽の光と物質を、文明のために利用・制御する工学（もしも）。"],
+["fa_selfrep","自己複製工学","fa_nanoasm",2330,null,null,"自分の複製を作る工場機械を設計し、暴走しないよう管理する（もしも）。"],
+["fa_dyson","ダイソン群工学","fa_stellar",2350,null,null,"太陽を取り巻く数兆枚の発電衛星を設計・運用する（もしも）。"],
+["fa_megastruct","巨大構造工学","fa_spacearch",2380,null,null,"長さ数千kmの回転居住区や、惑星を囲む軌道リングを設計する（もしも）。"],
+["fa_antimatter","反物質工学","particle",2400,null,null,"反物質を大量に作って保存し、燃料として使う（もしも）。"],
+["fa_habitat","回転居住区学","fa_megastruct",2420,null,null,"回転で重力をつくる宇宙都市の、社会・環境・工学をまとめて扱う（もしも）。"],
+["fa_starlift","恒星リフティング学","fa_stellar",2600,null,null,"太陽から物質をくみ上げて資源にし、太陽の寿命も延ばす（もしも）。"],
+["fa_solarctl","太陽活動制御学","fa_stellar",2800,null,null,"太陽フレアを予測・抑制して、太陽系の文明を守る（もしも）。"],
+["fa_bheng","ブラックホール工学","astrophys",3000,null,null,"小さなブラックホールを作り、エネルギー源にする方法を研究する（もしも）。"],
+// ===== Type II：惑星・居住・生命 =====
+["fa_lowg","低重力生理学","fa_spacemed",2310,null,null,"月・火星・宇宙都市で、何世代も暮らす人体の変化を研究する（もしも）。"],
+["fa_regen","全身再生医学","fa_longevity",2320,null,null,"老いた組織を丸ごと若い組織に入れ替え、寿命の上限をなくす（もしも）。"],
+["fa_ecodesign","人工生態系設計学","fa_closedeco",2330,null,null,"何もない惑星に、微生物から森まで生態系を一から組み立てる（もしも）。"],
+["fa_terraform","惑星改造学","fa_mars",2350,null,null,"火星や金星を、人が外を歩ける惑星へ数百年かけて変える（もしも）。"],
+["fa_bodydesign","身体設計学","fa_organ",2350,null,null,"放射線や低重力に強い身体を、環境に合わせて設計し直す（もしも）。"],
+["fa_astrourban","天体都市学","fa_spacearch",2360,null,null,"月・火星・小惑星の都市を比べ、重力ごとに最適な街のかたちを探る（もしも）。"],
+["fa_planclim","惑星気候設計学","fa_earthsys",2400,null,null,"惑星ごとに目標の気候を決め、大気と海を設計する（もしも）。"],
+["fa_stasis","冬眠医学","fa_spacemed",2450,3200,"fa_upload","代謝を止めて、長い航行を眠って過ごす方法を研究する（もしも）。"],
+["fa_postbio","ポスト生物学","biology",2500,null,null,"炭素と水に限らない、設計された生命や人工生命をまとめて扱う（もしも）。"],
+["fa_divergence","人類分岐学","evolution",2600,null,null,"惑星ごとの環境と遺伝子の改変で、人類がいくつもの系統に分かれていく過程を研究する（もしも）。"],
+["fa_shipeco","世代船生態学","fa_ecodesign",2700,null,null,"何百年も閉じたまま保つ、船の中の生態系を設計する（もしも）。"],
+["fa_xenomed","異星環境医学","fa_lowg",2700,null,null,"ほかの恒星系の重力・光・微生物に、人体がどう反応するかを研究する（もしも）。"],
+["fa_exoeco","系外惑星生態学","fa_biosig",2800,null,null,"ほかの恒星系の惑星で見つかった生態系を、現地で調べる（もしも）。"],
+// ===== Type II：恒星間・探査 =====
+["fa_darkenergy","暗黒エネルギー物理学","cosmology",2300,null,null,"宇宙の膨張を加速させているものの正体を、太陽系規模の観測網で探る（もしも）。"],
+["fa_techsig","文明探査学","astronomy_mod",2350,null,null,"銀河の中に、廃熱や巨大構造など技術文明の痕跡を探す（もしも）。"],
+["fa_galmap","銀河地図学","astronomy_mod",2350,null,null,"太陽系の外縁に並べた望遠鏡で、銀河の星の動きを一つずつ記録する（もしも）。"],
+["fa_interstellar","恒星間航行学","relativity",2400,null,null,"光の速さの数%〜数十%で、隣の恒星へ向かう航行を研究する（もしも）。"],
+["fa_lightsail","光帆工学","fa_interstellar",2420,null,null,"強力なレーザーで薄い帆を押し、探査機を光速の20%まで加速する（もしも）。"],
+["fa_iscomm","恒星間通信学","infotheory",2500,null,null,"数光年の距離を越えて、少ない電力で確実に情報を届ける（もしも）。"],
+["fa_starchart","恒星間航路学","fa_interstellar",2800,null,null,"近くの恒星系の地形・資源・危険を記録した航路図をつくる（もしも）。"],
+["fa_contact","接触学","fa_techsig",3000,null,null,"異星の知性と出会ったときに、どう接し、どう伝えるかを準備する（もしも）。"],
+["fa_starmigr","恒星移住学","fa_interstellar",3200,null,null,"一つの恒星系から次の恒星系へ、人類の居住地を広げる方法を研究する（もしも）。"],
+["fa_xenoling","異星言語学","linguistics",3200,null,null,"人類とまったく違う知性と、意味を通わせる方法を研究する（もしも）。"],
+["fa_xenoarch","地球外考古学","history_s",3500,null,null,"ほかの星で見つかった遺物から、異星の文明の歴史を読み解く（もしも）。"],
+// ===== Type II：知性・心・ポストヒューマン =====
+["fa_upload","精神転送学","fa_wbe",2320,null,null,"人の心を計算機の上へ移し、そのまま生き続けられるかを研究する（もしも）。"],
+["fa_superint","超知能科学","fa_intsafe",2350,null,null,"人間をはるかに超える知性の性質と限界を、理論と観測で調べる（もしも）。"],
+["fa_digisoc","デジタル人格社会学","sociology",2380,null,null,"体を持つ人と、転送された心がともに暮らす社会を研究する（もしも）。"],
+["fa_forkethics","複製倫理学","ethics",2400,null,null,"同じ人の心のコピーが何人もいるとき、誰が「本人」かを考える（もしも）。"],
+["fa_identity","自己同一性学","philosophy",2420,null,null,"心の転送・複製・融合が当たり前の時代に、「わたし」とは何かを研究する（もしも）。"],
+["fa_mindarch","心の設計学","fa_machcons",2450,null,null,"新しい種類の心を、目的に合わせて設計する（もしも）。"],
+["fa_hivemind","集合知性学","cognitive",2500,null,null,"脳どうし、AIどうしをつないだ「群れの心」の働きを研究する（もしも）。"],
+["fa_multiethics","多種倫理学","ethics",2700,null,null,"人類から分かれた種、AI、異星の生命を含めた道徳の原則を研究する（もしも）。"],
+// ===== Type II：数学・計算・基礎物理 =====
+["fa_matbrain","惑星規模計算学","cs",2400,null,null,"恒星の周りに広がる巨大な計算機（マトリョーシカ脳）を設計する（もしも）。"],
+["fa_mathexp","自動数学探査学","fa_formal",2500,null,null,"AIが数学の未知の領域を切り開き、人が理解できる形にまとめる（もしも）。"],
+["fa_toeeng","統一理論工学","toe",2600,null,null,"万物の理論の予言を、実験と工学に応用する（もしも）。"],
+["fa_unisim","宇宙シミュレーション学","fa_matbrain",2800,null,null,"宇宙の誕生から現在までを、星一つずつの精度で計算し直す（もしも）。"],
+["fa_vacuum","真空工学","fa_toeeng",3000,null,null,"真空そのものの性質を測り、局所的に操作する（もしも）。"],
+["fa_limitcomp","物理限界計算学","fa_matbrain",3000,null,null,"エネルギーと熱の物理的な限界まで、計算の効率を高める（もしも）。"],
+["fa_spacetime","時空工学","fa_toeeng",3500,null,null,"重力場や時空の曲がりを、人工的につくり出す（もしも）。"],
+["fa_simtest","シミュレーション仮説検証学","fa_unisim",4000,null,null,"私たちの宇宙そのものが計算されたものかを、物理の痕跡から確かめる（もしも）。"],
+["fa_wormhole","ワームホール理論","fa_spacetime",4500,null,null,"時空の近道が実在できるかを、理論と実験で確かめる（もしも）。"],
+["fa_cosmoeng","宇宙論的工学","cosmology",5000,null,null,"宇宙の膨張や寿命に、文明がどこまで関われるかを考える（もしも）。"],
+// ===== Type II：社会・経済・法・文化 =====
+["fa_civmetric","文明計量学","economics",2300,null,null,"文明のエネルギー・情報・寿命を測り、カルダシェフ尺度を精密にする（もしも）。"],
+["fa_xrisk","文明存続学","fa_longterm",2300,null,null,"文明を何百万年も続けるために、絶滅の危険を減らす方法を研究する（もしも）。"],
+["fa_solarlaw","太陽系法学","fa_spacegov",2330,null,null,"惑星ごとの法律と、太陽系全体の共通ルールを調整する（もしも）。"],
+["fa_beltecon","小惑星帯経済学","economics",2340,null,null,"太陽系の資源と、何か月もかかる輸送を前提にした経済を研究する（もしも）。"],
+["fa_deeptime","超長期保存学","history_s",2350,null,null,"1万年後にも読める記録の素材・言語・置き場所を研究する（もしも）。"],
+["fa_logistics","太陽系物流学","fa_beltecon",2380,null,null,"重力と軌道を読み、惑星間の物資の流れを最適化する（もしも）。"],
+["fa_amortal","不老社会学","sociology",2400,null,null,"寿命がなくなった社会の、家族・仕事・世代交代を研究する（もしも）。"],
+["fa_civmem","文明記憶学","fa_digarch",2400,null,null,"何百もの居住地に分かれた人類の歴史を、一つの記憶として保つ（もしも）。"],
+["fa_dysonecon","恒星エネルギー経済学","fa_abundance",2400,null,null,"太陽の出力を分け合う経済のルールを研究する（もしも）。"],
+["fa_lightlag","光遅延経済学","fa_beltecon",2500,null,null,"通信に何時間もかかる世界での、市場・金融・契約のしくみを研究する（もしも）。"],
+["fa_spaceaes","宇宙美学","philosophy",2500,null,null,"重力も空もない環境で生まれる、芸術と美の感覚を研究する（もしも）。"],
+["fa_collgov","集合意思決定学","polsci",2550,null,null,"数百億の人とAIの意見を集めて、太陽系全体の決定を下すしくみを研究する（もしも）。"],
+["fa_genship","世代宇宙船社会学","sociology",2700,null,null,"何世代もかけて旅する宇宙船の、社会・教育・統治を研究する（もしも）。"],
+["fa_islaw","恒星間法学","fa_solarlaw",3000,null,null,"連絡に何年もかかる植民地どうしの、約束と争いを扱う（もしも）。"],
+["fa_plurality","複数文明史学","history_s",4000,null,null,"いくつもの恒星系で別々に歩んだ人類の歴史を比べ、共通点を探る（もしも）。"],
+["fa_deepfuture","深未来学","fa_xrisk",5000,null,null,"太陽の寿命（あと約50億年）や銀河の衝突まで見すえて、文明の行き先を考える（もしも）。"],
+["fa_galsoc","銀河社会学","sociology",5500,null,null,"光の速さでも何万年もかかる距離に広がった、人類どうしの社会を研究する（もしも）。"],
+];
+{const t=TREE.find(x=>x.key==="academia");if(t){const ids=new Set(t.nodes.map(x=>x[0]));
+  TREE_FUT_ACAD.slice().sort((a,b)=>a[3]-b[3]).forEach(n=>{if(ids.has(n[0]))return;if(n[2]&&!ids.has(n[2]))n=[n[0],n[1],null,...n.slice(3)];t.nodes.push(n);ids.add(n[0]);});}}
+
 const FIELD2TREE={history:'nations',politics:'politics',war:'war',tech:'info',energy:'energy',space:'space',medicine:'medicine',academia:'academia',agriculture:'agri',food:'food',culture:'culture',subculture:'ent'};
 
 /* ---------- データ ---------- */
@@ -4705,11 +4879,11 @@ function BranchGraph(host,D,panel){
       if(p&&typeof p.d==="number"&&p.d<n.b&&pi!==undefined){
         const xe=sx(p.d); con.push(`<line x1="${xe}" x2="${x1-18}" y1="${py}" y2="${py}" stroke="${col}" stroke-width="${ww*.7}" stroke-dasharray="3 3" opacity="${op}"/>`);
         con.push(curve(x1-18,py,x1,y,on?"var(--accent)":col,ww*.8,"3 3",op));
-      } else con.push(curve(Math.max(x1-18,sx(p?p.b:f.start)),py,x1,y,on?"var(--accent)":col,ww*.85,null,op));
+      } else con.push(curve(Math.max(x1-18,sx(p?p.b:f.start)),py,x1,y,on?"var(--accent)":col,ww*.85,n.b>2026.5?"5 4":null,op));
       if(!vis(y)&&!(typeof n.d==="number"&&n.to))return;
       // ブランチ本体
       if(st==="fade") g.push(`<line x1="${x1}" x2="${x2}" y1="${y}" y2="${y}" stroke="url(#gf-${f.key})" stroke-width="${ww}" opacity="${op}"/>`);
-      else g.push(`<line x1="${x1}" x2="${x2}" y1="${y}" y2="${y}" stroke="${col}" stroke-width="${ww}" opacity="${op}"/>`);
+      else g.push(`<line x1="${x1}" x2="${x2}" y1="${y}" y2="${y}" stroke="${col}" stroke-width="${ww}" opacity="${op}"${n.b>2026.5?' stroke-dasharray="8 5"':""}/>`);
       // 合流（置き換え先へ）
       if(st==="dead"&&n.to&&laneOf[f.key+":"+n.to]!==undefined){
         const ty2=syL(laneOf[f.key+":"+n.to]), xt=Math.max(sx(f.map[n.to].b),x2+14);
@@ -4835,7 +5009,7 @@ function BranchGraph(host,D,panel){
     return `<div class="plate" style="background:linear-gradient(135deg,#0e1830,#1c2748)"><svg viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice">${rings}
       <text x="16" y="62" fill="${f.color}" font-family="Murecho,sans-serif" font-weight="900" font-size="30">${esc(n.name.replace(/（.*?）/,"").slice(0,10))}</text>
       <text x="16" y="88" fill="#ffffffaa" font-family="IBM Plex Mono,monospace" font-size="13">${fy(n.b)}〜${typeof n.d==="number"?fy(n.d):"現在"}</text></svg>
-      <span class="cap">図版（写真は下のリンクから）</span></div>`;
+      <span class="cap">${n.b>2026.5?"想像の学問（もしも）":"図版（写真は下のリンクから）"}</span></div>`;
   }
   function openPanel(){panel.hidden=false;document.querySelector('.gwrap').classList.add('open');}
   function closePanel(){panel.hidden=true;document.querySelector('.gwrap').classList.remove('open');}
@@ -4850,7 +5024,7 @@ function BranchGraph(host,D,panel){
     const q=encodeURIComponent(n.name.replace(/（.*?）/g,""));
     const btn=(fkey,x)=>`<button data-f="${fkey}" data-id="${x.id}" class="${typeof x.d==="number"?"linkbtn dead":""}">${esc(x.name)}</button>`;
     panel.innerHTML=closeBtn+plate(f,n)+`
-      <div class="meta"><span class="pill ${sc}">${sl}</span><span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
+      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">もしも（想像）</span>':""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
       <h3>${esc(n.name)}</h3>
       <div class="meta num">${fy(n.b)} 〜 ${typeof n.d==="number"?fy(n.d)+"に消滅":n.d==="f"?"現在（衰退中）":"現在"}</div>
       <p>${esc(n.desc)}</p>
@@ -4860,9 +5034,9 @@ function BranchGraph(host,D,panel){
       <div><h4>系譜</h4><div class="lineage"><span style="color:var(--muted)">人類 → ${f.name} →</span>${anc.map((a,i)=>(i?"<span>→</span>":"")+btn(fk,a)).join("")}</div></div>
       ${kids.length?`<div><h4>ここから分かれた要素（${kids.length}）</h4><div class="lineage">${kids.map(k=>btn(fk,k)).join("")}</div></div>`:""}
       <div><h4>${fy(y)}ごろ、他の分野では</h4><div class="snap">${snap||"<div>この時代の記録はまだ少ない</div>"}</div></div>
-      <div><h4>写真を見る（外部サイト）</h4><div class="photo">
+      ${n.b>2026.5?`<p class="note">2026年より先の要素は、いまの学問・技術からの延長として想像した「もしも」です。点線で表示しています。</p>`:`<div><h4>写真を見る（外部サイト）</h4><div class="photo">
         <a href="https://ja.wikipedia.org/w/index.php?search=${q}" target="_blank" rel="noopener">Wikipediaで調べる</a>
-        <a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">画像検索</a></div></div>`;
+        <a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">画像検索</a></div></div>`}`;
     openPanel(); requestAnimationFrame(()=>panel.scrollTop=0);
     const li=laneOf[fk+":"+id]; if(center&&li!==undefined) focusLane(li,n.b); else draw();
   }
@@ -6490,7 +6664,7 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
   const fy=y=>typeof y!=="number"?"":y<=-10000?`約${Math.round(-y/1e4).toLocaleString()}万年前`:y<0?`紀元前${-y}年`:`${y}年`;
   function build(){IDX=[];const add=(k,t,s,txt,fn,y)=>{const nt=norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,""));IDX.push({k,t:String(t),s:s||"",nt,nb:norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,"").replace(/（.*?）|\(.*?\)/g,"")),h:norm((t||"")+" "+(s||"")+" "+(txt||"")),fn,y});};
     const T=(f)=>{try{f();}catch(e){console.warn("search index",e);}};
-    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（全分野）","16分野・約900要素の系譜"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
+    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（全分野）","16分野・約1,100要素の系譜"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
     T(()=>{add("view","歴史シアター（3D）","年表の中の3D映像で通し再生","シアター 映像 再生",()=>{goHash("timeline");later(()=>{const d=$("thdock");if(d){d.open=true;d.scrollIntoView({behavior:"smooth"});}});});});
     T(()=>window.EBOOK&&EBOOK.chapters.forEach(c=>add("book",c.t,"地球大全の章",c.text,()=>go.book(c.id))));
     T(()=>[["t1","Type I 文明ガイド（惑星文明）"],["t2","Type II 文明ガイド（恒星文明）"],["t3","Type III 文明ガイド（銀河文明）"]].forEach(([k,t])=>add("view",t,"全体マップ・もしもの世界","タイプ カルダシェフ 文明",()=>go.tg(k))));
@@ -6498,13 +6672,13 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
     T(()=>FIELDS.forEach(f=>add("field",f.t,`分野・${f.v}（${f.l}）`,f.lead+" "+f.pts.join(" "),()=>go.field(f.id))));
     T(()=>WH.forEach((w,i)=>add("hist",w[3],`${w[0]}・${w[2]}`,(w[4]||"")+" "+(w[5]||[]).join(" "),()=>go.wh(i),w[1])));
     T(()=>[["cosmos",COSMOS,"宇宙年表"],["earth",EARTH,"地球史年表"]].forEach(([m,D,lab])=>D.lanes.forEach(l=>{add("tl",l.name,`${lab}のブランチ`,l.desc||"",()=>go.tl(m,l.id));(l.ev||[]).forEach((e,j)=>add("tl",e[1],`${lab}・${l.name}`,e[2]||"",()=>go.tl(m,l.id,j)));})));
-    T(()=>TREE.forEach(f=>f.nodes.forEach(n=>add("tree",n[1],`系統樹・${f.name}・${fy(n[3])}〜`,n[6]||"",()=>go.tree(f.key,n[0],n[3]),n[3]))));
+    T(()=>TREE.forEach(f=>f.nodes.forEach(n=>add("tree",n[1],`${f.name}・${fy(n[3])}〜${n[3]>2026.5?"（もしも）":""}`,n[6]||"",()=>go.tree(f.key,n[0],n[3]),n[3]))));
     T(()=>COUNTRIES.list.forEach(c=>add("country",`${c.flag||""} ${c.ja}`,`${c.reg}・${c.sub}${c.cap?"・首都 "+c.cap:""}`,`${c.en} ${(c.lang||[]).join(" ")} ${(c.cur||[]).join(" ")}`,()=>go.country(c.c3))));
     T(()=>MAP.pins.forEach(p=>add("place",p.name,`ランドマーク・${(CAT[p.cat]||["その他"])[0]}`,p.desc||"",()=>go.place(p.id))));
-    T(()=>(window.SP_P||[]).forEach((q,i)=>{const L=SPZ.LEVELS.find(x=>x.id===q[2]);add("space",q[0],`宇宙・${L?L.name:""}`,"",()=>go.sp(i));}));
+    T(()=>(window.SP_P||[]).forEach((q,i)=>{const L=SPZ.LEVELS.find(x=>x.id===q[2]);add("space",q[0],`${L?L.name:""}`,"",()=>go.sp(i));}));
     T(()=>SPZ.LEVELS.forEach((L,i)=>{const d=window.LVINFO&&LVINFO[L.id];add("space",L.name,`宇宙のスケール ${i+1}/${SPZ.LEVELS.length}`,L.desc+(d?" "+d.f.map(x=>x.join(" ")).join(" ")+" "+d.p.join(" "):""),()=>go.splv(i));}));
     T(()=>MICRO.LEVELS.forEach((L,i)=>{const d=window.LVINFO&&LVINFO[L.id];add("micro",L.name,`ミクロのスケール ${i+1}/${MICRO.LEVELS.length}・${L.scale}`,L.desc+(d?" "+d.f.map(x=>x.join(" ")).join(" ")+" "+d.p.join(" "):""),()=>go.micro(L.id));}));
-    T(()=>ORGS.forEach(o=>add("life",o[1],`生き物・${o[2]}・${o[3]}`,`${o[4]} ${o[5]}`,()=>go.micro("life",o[0]))));
+    T(()=>ORGS.forEach(o=>add("life",o[1],`${o[2]}・${o[3]}`,`${o[4]} ${o[5]}`,()=>go.micro("life",o[0]))));
     T(()=>{const lv=c=>c==="細胞"?"cell":c==="ウイルス"?"virus":"microbe";MICROS.forEach(m=>add("life",m[1],`ミクロ・${m[2]}・${m[3]}`,m[4]||"",()=>go.micro(lv(m[2]),m[0])));});
     T(()=>ELEMENTS.forEach(e=>add("law",`${e.ja}（${e.sym}）`,`元素・原子番号${e.Z}・${(ECAT[e.cat]||[""])[0]}`,`${e.sym} 元素${e.Z}`,()=>go.law("pt",`#ptable [data-z="${e.Z}"]`))));
     T(()=>PARTICLES.forEach(p=>add("law",`${p[1]}（${p[0]}）`,`素粒子・${PCAT[p[2]][0]}・${p[4]}`,p[6],()=>go.law("parts",`#lparts [data-p="${p[0]}"]`))));

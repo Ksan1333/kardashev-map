@@ -39,6 +39,7 @@ const r={
   "__TYPE1__":"type1data.js",
   "__TYPE2__":"t2data.js",
   "__TYPE3__":"t3data.js",
+  "__FUTACAD__":"futacad.js",
   "__T1PINS__":"t1pins.json",
   "__ERA__":"era.js",
   "__WHC__":"whc.js",

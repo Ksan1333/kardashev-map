@@ -46,7 +46,7 @@
   const fy=y=>typeof y!=="number"?"":y<=-10000?`約${Math.round(-y/1e4).toLocaleString()}万年前`:y<0?`紀元前${-y}年`:`${y}年`;
   function build(){IDX=[];const add=(k,t,s,txt,fn,y)=>{const nt=norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,""));IDX.push({k,t:String(t),s:s||"",nt,nb:norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,"").replace(/（.*?）|\(.*?\)/g,"")),h:norm((t||"")+" "+(s||"")+" "+(txt||"")),fn,y});};
     const T=(f)=>{try{f();}catch(e){console.warn("search index",e);}};
-    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（全分野）","16分野・約900要素の系譜"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
+    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（全分野）","16分野・約1,100要素の系譜"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
     T(()=>{add("view","歴史シアター（3D）","年表の中の3D映像で通し再生","シアター 映像 再生",()=>{goHash("timeline");later(()=>{const d=$("thdock");if(d){d.open=true;d.scrollIntoView({behavior:"smooth"});}});});});
     T(()=>window.EBOOK&&EBOOK.chapters.forEach(c=>add("book",c.t,"地球大全の章",c.text,()=>go.book(c.id))));
     T(()=>[["t1","Type I 文明ガイド（惑星文明）"],["t2","Type II 文明ガイド（恒星文明）"],["t3","Type III 文明ガイド（銀河文明）"]].forEach(([k,t])=>add("view",t,"全体マップ・もしもの世界","タイプ カルダシェフ 文明",()=>go.tg(k))));
@@ -54,13 +54,13 @@
     T(()=>FIELDS.forEach(f=>add("field",f.t,`分野・${f.v}（${f.l}）`,f.lead+" "+f.pts.join(" "),()=>go.field(f.id))));
     T(()=>WH.forEach((w,i)=>add("hist",w[3],`${w[0]}・${w[2]}`,(w[4]||"")+" "+(w[5]||[]).join(" "),()=>go.wh(i),w[1])));
     T(()=>[["cosmos",COSMOS,"宇宙年表"],["earth",EARTH,"地球史年表"]].forEach(([m,D,lab])=>D.lanes.forEach(l=>{add("tl",l.name,`${lab}のブランチ`,l.desc||"",()=>go.tl(m,l.id));(l.ev||[]).forEach((e,j)=>add("tl",e[1],`${lab}・${l.name}`,e[2]||"",()=>go.tl(m,l.id,j)));})));
-    T(()=>TREE.forEach(f=>f.nodes.forEach(n=>add("tree",n[1],`系統樹・${f.name}・${fy(n[3])}〜`,n[6]||"",()=>go.tree(f.key,n[0],n[3]),n[3]))));
+    T(()=>TREE.forEach(f=>f.nodes.forEach(n=>add("tree",n[1],`${f.name}・${fy(n[3])}〜${n[3]>2026.5?"（もしも）":""}`,n[6]||"",()=>go.tree(f.key,n[0],n[3]),n[3]))));
     T(()=>COUNTRIES.list.forEach(c=>add("country",`${c.flag||""} ${c.ja}`,`${c.reg}・${c.sub}${c.cap?"・首都 "+c.cap:""}`,`${c.en} ${(c.lang||[]).join(" ")} ${(c.cur||[]).join(" ")}`,()=>go.country(c.c3))));
     T(()=>MAP.pins.forEach(p=>add("place",p.name,`ランドマーク・${(CAT[p.cat]||["その他"])[0]}`,p.desc||"",()=>go.place(p.id))));
-    T(()=>(window.SP_P||[]).forEach((q,i)=>{const L=SPZ.LEVELS.find(x=>x.id===q[2]);add("space",q[0],`宇宙・${L?L.name:""}`,"",()=>go.sp(i));}));
+    T(()=>(window.SP_P||[]).forEach((q,i)=>{const L=SPZ.LEVELS.find(x=>x.id===q[2]);add("space",q[0],`${L?L.name:""}`,"",()=>go.sp(i));}));
     T(()=>SPZ.LEVELS.forEach((L,i)=>{const d=window.LVINFO&&LVINFO[L.id];add("space",L.name,`宇宙のスケール ${i+1}/${SPZ.LEVELS.length}`,L.desc+(d?" "+d.f.map(x=>x.join(" ")).join(" ")+" "+d.p.join(" "):""),()=>go.splv(i));}));
     T(()=>MICRO.LEVELS.forEach((L,i)=>{const d=window.LVINFO&&LVINFO[L.id];add("micro",L.name,`ミクロのスケール ${i+1}/${MICRO.LEVELS.length}・${L.scale}`,L.desc+(d?" "+d.f.map(x=>x.join(" ")).join(" ")+" "+d.p.join(" "):""),()=>go.micro(L.id));}));
-    T(()=>ORGS.forEach(o=>add("life",o[1],`生き物・${o[2]}・${o[3]}`,`${o[4]} ${o[5]}`,()=>go.micro("life",o[0]))));
+    T(()=>ORGS.forEach(o=>add("life",o[1],`${o[2]}・${o[3]}`,`${o[4]} ${o[5]}`,()=>go.micro("life",o[0]))));
     T(()=>{const lv=c=>c==="細胞"?"cell":c==="ウイルス"?"virus":"microbe";MICROS.forEach(m=>add("life",m[1],`ミクロ・${m[2]}・${m[3]}`,m[4]||"",()=>go.micro(lv(m[2]),m[0])));});
     T(()=>ELEMENTS.forEach(e=>add("law",`${e.ja}（${e.sym}）`,`元素・原子番号${e.Z}・${(ECAT[e.cat]||[""])[0]}`,`${e.sym} 元素${e.Z}`,()=>go.law("pt",`#ptable [data-z="${e.Z}"]`))));
     T(()=>PARTICLES.forEach(p=>add("law",`${p[1]}（${p[0]}）`,`素粒子・${PCAT[p[2]][0]}・${p[4]}`,p[6],()=>go.law("parts",`#lparts [data-p="${p[0]}"]`))));

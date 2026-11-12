@@ -224,6 +224,7 @@ body.sxopen{overflow:hidden}
   .navsearch{position:fixed;right:14px;bottom:18px;z-index:120;border-radius:99px;padding:12px 16px;box-shadow:0 8px 24px #000a;border-color:#f4b94288;background:#1b2647}
   nav.views{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(10,15,31,.97)}.navhelp{display:none}.ebbar{font-size:12px}.sx{padding:4vh 10px 10px}.sxbox{max-height:88vh}}
 
+.pill.fut{color:#c9b6ff;border-color:#8f7ad8;border-style:dashed}
 .levels{display:flex;gap:6px;flex-wrap:wrap}
 .levels button{font:500 13px var(--font-body);color:var(--muted);background:transparent;border:1px solid var(--line);
   border-radius:999px;padding:6px 14px;display:flex;gap:8px;align-items:center}
@@ -821,7 +822,7 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ⑧ 系統樹 -->
   <section class="view" id="v-lineage">
-    <div class="view-head"><h2>系統樹（全分野）</h2><p>人類という幹から16分野・約900の要素が枝分かれしていく。時間軸は1年あたり同じ幅（均等）。消えた要素は後継に合流（マージ）する。上の分野を押すとON/OFFで絞り込めます（複数選択可）。</p></div>
+    <div class="view-head"><h2>系統樹（全分野）</h2><p>人類という幹から16分野・約1,100の要素（2026年までの約920と、未来の「もしも」約210）が枝分かれしていく。時間軸は1年あたり同じ幅（均等）。消えた要素は後継に合流（マージ）する。上の分野を押すとON/OFFで絞り込めます（複数選択可）。</p></div>
     <div class="chips" id="gchips"></div>
     <div class="gwrap">
       <div class="gcanvas" id="gcanvas" tabindex="0" aria-label="系統樹のキャンバス。ホイールまたはピンチでズーム、ドラッグで移動">
@@ -896,6 +897,7 @@ __MICRODATA__
 __TYPE1__
 __TYPE2__
 __TYPE3__
+__FUTACAD__
 const FIELD2TREE={history:'nations',politics:'politics',war:'war',tech:'info',energy:'energy',space:'space',medicine:'medicine',academia:'academia',agriculture:'agri',food:'food',culture:'culture',subculture:'ent'};
 
 /* ---------- データ ---------- */
