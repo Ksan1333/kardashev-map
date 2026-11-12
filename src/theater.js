@@ -63,7 +63,7 @@
   (typeof WH!=="undefined"?WH:[]).slice().sort((a,b)=>a[1]-b[1]).forEach(e=>{EV.push({lab:e[0],y:e[1],t:e[3],d:e[4],k:"hist",reg:e[2],tags:e[5],ll:null,w:1});});
   EV.sort((a,b)=>a.y-b.y);
   let acc=0;EV.forEach(e=>{e.p=acc;acc+=e.w;});const TOTAL_ALL=acc;let TOTAL=acc;
-  const calcLim=()=>{const Y=Math.max(2026.4,typeof window.KYEAR==="number"?window.KYEAR:2026.4);const i=EV.findIndex(e=>e.y>Y);TOTAL=i<0?TOTAL_ALL:EV[i].p;};calcLim();
+  const calcLim=()=>{TOTAL=TOTAL_ALL;};calcLim();
   const yearAt=p=>{let i=EV.findIndex(e=>e.p>p)-1;if(i<-1)i=EV.length-1;if(i<0)return [EV[0].y,0];const a=EV[i],b=EV[i+1];if(!b)return [a.y,i];return [a.y+(b.y-a.y)*((p-a.p)/a.w),i];};
   const posOfYear=y=>{const i=EV.findIndex(e=>e.y>=y);return i<0?TOTAL-0.01:EV[i].p;};
   // ---- UI ----

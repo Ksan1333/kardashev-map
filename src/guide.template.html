@@ -49,7 +49,8 @@ body.t1 .whev[data-fut="1"]{border-style:dashed}
 .thpaleo{position:absolute;left:16px;top:44px;font-size:12px;color:#9fd8ff;pointer-events:none;text-shadow:0 1px 3px #000}
 .thcap{position:absolute;left:16px;bottom:16px;max-width:min(460px,70%);padding:14px 16px;border-radius:12px;background:rgba(8,12,24,.72);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);pointer-events:none}
 .thcap h3{margin:2px 0 6px;font-size:20px}.thcap p{margin:0;font-size:13.5px;line-height:1.65;color:#cfd7ea}.thy{color:var(--accent);font-size:13px}
-.thmeta{display:flex;gap:6px;margin-bottom:4px}.thmeta .pill{font-size:11px;padding:1px 8px;border-radius:99px;border:1px solid #ffffff40;color:#dfe6f5}.thmeta .pill.fut{border-color:#7ee0ff;color:#7ee0ff}
+.thmeta{display:flex;gap:6px;margin-bottom:4px}.thmeta .pill{font-size:11px;padding:1px 8px;border-radius:99px;border:1px solid #ffffff40;color:#dfe6f5}.thmeta .pill.wl{border-style:dashed}.wl-協調{color:#7fe0b0!important;border-color:#4fae80!important}.wl-分断{color:#ff9a8a!important;border-color:#c0604f!important}.wl-加速{color:#7fc8ff!important;border-color:#4f8fc0!important}.wl-再建{color:#f4c870!important;border-color:#b08a3a!important}.wl-宇宙{color:#c9a8ff!important;border-color:#8a6ad0!important}
+.pill.fut{border-color:#7ee0ff;color:#7ee0ff}
 .thlog{position:absolute;right:14px;top:14px;width:250px;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;pointer-events:none}
 .thlog li{font-size:12px;padding:6px 9px;border-radius:8px;background:rgba(8,12,24,.6);color:#cbd3e6;border-left:3px solid var(--accent);animation:thin .5s ease}.thlog li:first-child{color:#fff;background:rgba(20,26,44,.85)}
 .thlog li.fut{border-left-color:#7ee0ff}.thlog li .num{display:block;font-size:10.5px;color:#9aa6c2}@keyframes thin{from{opacity:0;transform:translateX(12px)}}
@@ -822,7 +823,7 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ⑧ 系統樹 -->
   <section class="view" id="v-lineage">
-    <div class="view-head"><h2>系統樹（全分野）</h2><p>人類という幹から16分野・約1,100の要素（2026年までの約920と、未来の「もしも」約210）が枝分かれしていく。時間軸は1年あたり同じ幅（均等）。消えた要素は後継に合流（マージ）する。上の分野を押すとON/OFFで絞り込めます（複数選択可）。</p></div>
+    <div class="view-head"><h2>系統樹（全分野）</h2><p>人類という幹から16分野・約1,370の要素が枝分かれしていく。2026年より先（点線）は「もしも」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線に分かれて並ぶ。時間軸は1年あたり同じ幅。消えた要素は後継に合流（マージ）する。上の分野を押すとON/OFFで絞り込めます（複数選択可）。</p></div>
     <div class="chips" id="gchips"></div>
     <div class="gwrap">
       <div class="gcanvas" id="gcanvas" tabindex="0" aria-label="系統樹のキャンバス。ホイールまたはピンチでズーム、ドラッグで移動">
@@ -898,6 +899,7 @@ __TYPE1__
 __TYPE2__
 __TYPE3__
 __FUTACAD__
+__FUTTREE__
 const FIELD2TREE={history:'nations',politics:'politics',war:'war',tech:'info',energy:'energy',space:'space',medicine:'medicine',academia:'academia',agriculture:'agri',food:'food',culture:'culture',subculture:'ent'};
 
 /* ---------- データ ---------- */
@@ -1077,6 +1079,7 @@ __LAWS__
 __EARTHBOOK__
 __LVINFO__
 __ORG3D__
+__CUTE__
 __MICRO3D__
 __SEARCH__
 show();

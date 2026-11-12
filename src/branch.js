@@ -14,7 +14,8 @@ function BranchGraph(host,D,panel){
   host.innerHTML=`<div class="bgwrap"><svg class="bgsvg"></svg><div class="bgtools"><button data-z="in">＋</button><button data-z="out">−</button><button data-z="fit">全体</button></div></div>`;
   const wrap=host.firstChild,svg=wrap.querySelector("svg");
   let W0=1200,k=1,tx=0,sel=null;
-  const cut=()=>{const Y=window.KYEAR;if(typeof Y!=="number")return null;if(D.unit==="yr")return Y>=1e8?null:Y;if(D.unit==="ma"){if(Y>=2026)return null;return Y/1e6;}
+  const cut=()=>null;
+  const markY=()=>{const Y=window.KYEAR;if(typeof Y!=="number")return null;if(D.unit==="yr")return Y>=1e8?null:Y;if(D.unit==="ma"){if(Y>=2026)return null;return Y/1e6;}
     if(Y>=2026)return null;const sec=(Y+13.8e9)*3.156e7;return Math.log10(Math.max(1e-50,sec));};
   const sx=t=>LX+X01(t)*W0*k+tx;
   const star=(x,y,R,r)=>[...Array(10)].map((_,i)=>{const a=i*Math.PI/5-Math.PI/2,q=i%2?r:R;return (x+Math.cos(a)*q).toFixed(1)+","+(y+Math.sin(a)*q).toFixed(1);}).join(" ");
@@ -42,14 +43,14 @@ function BranchGraph(host,D,panel){
       let lastR=-1e9;(l.ev||[]).forEach((ev,i)=>{const [t,n,d]=ev;if(c!==null&&t>c)return;const x=sx(t);if(x<-20||x>w+20)return;if(ev.sp===undefined)ev.sp=specOf(l,ev);
         lines.push(ev.sp?`<polygon points="${star(x,y,8,3.6)}" fill="#f4d06a" stroke="#0a0f1f" stroke-width="1.2" class="bge" data-l="${l.id}" data-e="${i}"><title>★ ${n}（専用の3D映像あり）</title></polygon>`:`<circle cx="${x}" cy="${y}" r="5" fill="#0a0f1f" stroke="${l.col}" stroke-width="2.4" class="bge" data-l="${l.id}" data-e="${i}"><title>${n}</title></circle>`);
         if((k>=1.5||(l.ev.length<6))&&x>lastR){labs.push(`<text x="${x+7}" y="${y+16}" class="bgev" data-l="${l.id}" data-e="${i}">${n}</text>`);lastR=x+12+n.length*10.5;}});});
-    if(c!==null){const x=sx(c);g.push(`<rect x="${x}" y="0" width="${Math.max(0,w-x)}" height="${h}" fill="#05070f" opacity=".72"/><line x1="${x}" x2="${x}" y1="0" y2="${h}" stroke="#b48cff" stroke-width="2"/><text x="${x+8}" y="${TOP+14}" class="bgcut">◀ ${window.KERA?window.KERA.when:""}の時点（ここから先はまだ起きていない）</text>`);}
-    else{const x=sx(D.now);g.push(`<line x1="${x}" x2="${x}" y1="42" y2="${h}" stroke="#f4b942" stroke-width="1.6" stroke-dasharray="4 3"/>`);}
+    {const m=markY();if(m!==null&&m!==undefined){const x=sx(m);if(x>0&&x<w)g.push(`<line x1="${x}" x2="${x}" y1="0" y2="${h}" stroke="#b48cff" stroke-width="1.5" stroke-dasharray="4 4" opacity=".8"/><text x="${x+6}" y="${TOP+14}" class="bgcut">◀ スライダーの時代</text>`);}}
+    if(D.now!==undefined){const x=sx(D.now);g.push(`<line x1="${x}" x2="${x}" y1="42" y2="${h}" stroke="#f4b942" stroke-width="1.6" stroke-dasharray="4 3"/>`);}
     svg.innerHTML=g.join("")+con.join("")+lines.join("")+labs.join("");
   }
   function detail(l,ei){sel=l;render();const e=ei!=null?l.ev[ei]:null;
     const kidsL=(kids[l.id]||[]).map(x=>`<button class="linkbtn" data-l="${x.id}">${x.name}</button>`).join("");
     const T=e?e[0]:l.a,yrs=D.unit==="yr"?T:D.unit==="ma"?T*1e6:(T< -43?-13.8e9:Math.pow(10,T)/3.156e7-13.8e9);
-    panel.innerHTML=`<button class="gclose" data-close="1" aria-label="閉じる">×</button><div class="ev3d"></div>${yrs<=Math.max(2026,typeof window.KYEAR==="number"?window.KYEAR:2026)?`<button class="chip thgo" data-th="${yrs}"${D.unit==="yr"&&e?` data-tt="${e[1]}"`:""}>🎬 地球の映像で通し再生</button>`:""}
+    panel.innerHTML=`<button class="gclose" data-close="1" aria-label="閉じる">×</button><div class="ev3d"></div>${true?`<button class="chip thgo" data-th="${yrs}"${D.unit==="yr"&&e?` data-tt="${e[1]}"`:""}>🎬 地球の映像で通し再生</button>`:""}
       <div class="meta"><span class="pill" style="color:${l.col};border-color:${l.col}">${l.dash?"仮説・予測":"観測・定説"}</span></div>
       ${e?`<div class="whdy num">${fmt(e[0])}</div><h3>${e[1]}</h3>${e[2]?`<p>${e[2]}</p>`:""}<h4>所属するブランチ</h4>`:""}
       <h3 style="${e?"font-size:16px":""}">${l.name}</h3><div class="num" style="color:var(--muted);font-size:12px">${fmt(l.a)} 〜 ${l.b==null?"（つづく）":fmt(l.b)}</div><p>${l.desc||""}</p>

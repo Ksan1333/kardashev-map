@@ -41,7 +41,7 @@
     });
     H0=lanes.length*RH;
   }
-  function applyEra(){const Y=Math.min(END,typeof window.KYEAR==="number"?window.KYEAR:END);EY=Y;
+  function applyEra(){const Y=END;EY=Y;
     F.forEach(f=>{f.nodes.forEach(n=>{if(n.d0===undefined)n.d0=n.d;n.d=(typeof n.d0==="number"&&n.d0>Y)?null:n.d0;});const bs=f.nodes.filter(n=>n.b<=Y).map(n=>n.b);f.start=bs.length?Math.min(...bs):Y;});}
   applyEra();build();
 
@@ -54,7 +54,7 @@
   function clamp(){kx=Math.min(Math.max(kx,fit.kx*.9),vw/3);ky=Math.min(Math.max(ky,fit.ky*.8),70/RH);
     const minTx=vw-(W0*kx)-140, maxTx=130; tx=Math.min(Math.max(tx,Math.min(minTx,maxTx)),Math.max(minTx,maxTx));
     const minTy=vh-AX-H0*ky-40, maxTy=40; ty=Math.min(Math.max(ty,Math.min(minTy,maxTy)),Math.max(minTy,maxTy));}
-  function fitAll(){if(measure()===false)return;ky=fit.ky;ty=0;viewRange(-3500,Math.min(EY,6000));clamp();draw();}
+  function fitAll(){if(measure()===false)return;ky=fit.ky;ty=0;viewRange(-3500,6000);clamp();draw();}
   function fitFull(){if(measure()===false)return;ky=fit.ky;ty=0;viewRange(Y0,EY);clamp();draw();}
   const draw=()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;render();});};
 
@@ -231,7 +231,7 @@
     for(let i=0;i<6;i++){rings+=`<circle cx="${30+((seed*(i+7))%260)}" cy="${20+((seed*(i+11))%110)}" r="${20+((seed*(i+3))%70)}" fill="${f.color}" opacity="${.05+i*.025}"/>`;}
     return `<div class="plate" style="background:linear-gradient(135deg,#0e1830,#1c2748)"><svg viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice">${rings}
       <text x="16" y="62" fill="${f.color}" font-family="Murecho,sans-serif" font-weight="900" font-size="30">${esc(n.name.replace(/（.*?）/,"").slice(0,10))}</text>
-      <text x="16" y="88" fill="#ffffffaa" font-family="IBM Plex Mono,monospace" font-size="13">${fy(n.b)}〜${typeof n.d==="number"?fy(n.d):"現在"}</text></svg>
+      <text x="16" y="88" fill="#ffffffaa" font-family="IBM Plex Mono,monospace" font-size="13">${fy(n.b)}〜${typeof n.d==="number"?fy(n.d):n.b>2026.5?"":"現在"}</text></svg>
       <span class="cap">${n.b>2026.5?"想像の学問（もしも）":"図版（写真は下のリンクから）"}</span></div>`;
   }
   function openPanel(){panel.hidden=false;document.querySelector('.gwrap').classList.add('open');}
@@ -247,17 +247,17 @@
     const q=encodeURIComponent(n.name.replace(/（.*?）/g,""));
     const btn=(fkey,x)=>`<button data-f="${fkey}" data-id="${x.id}" class="${typeof x.d==="number"?"linkbtn dead":""}">${esc(x.name)}</button>`;
     panel.innerHTML=closeBtn+plate(f,n)+`
-      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">もしも（想像）</span>':""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
+      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">もしも（想像）</span>':""}${(n.desc||"").match(/^【(.+?)】/)?`<span class="pill wl wl-${(n.desc.match(/^【(.+?)】/)[1])}">世界線：${n.desc.match(/^【(.+?)】/)[1]}</span>`:""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
       <h3>${esc(n.name)}</h3>
-      <div class="meta num">${fy(n.b)} 〜 ${typeof n.d==="number"?fy(n.d)+"に消滅":n.d==="f"?"現在（衰退中）":"現在"}</div>
-      <p>${esc(n.desc)}</p>
+      <div class="meta num">${fy(n.b)} 〜 ${typeof n.d==="number"?fy(n.d)+"に消滅":n.d==="f"?"現在（衰退中）":n.b>2026.5?"（続く）":"現在"}</div>
+      <p>${esc((n.desc||"").replace(/^【.+?】/,""))}</p>
       ${INVD[fk+":"+id]?`<div class="invbox"><b>◆ 暮らしを変えた発明</b><p>${esc(INVD[fk+":"+id].d)}</p><p class="without"><span>なかったら</span>　${esc(INVD[fk+":"+id].w)}</p></div>`:""}
       ${to?`<div><h4>合流した先（後継）</h4><div class="lineage">${btn(fk,to)}</div></div>`:""}
       ${from.length?`<div><h4>ここに合流した要素</h4><div class="lineage">${from.map(x=>btn(fk,x)).join("")}</div></div>`:""}
       <div><h4>系譜</h4><div class="lineage"><span style="color:var(--muted)">人類 → ${f.name} →</span>${anc.map((a,i)=>(i?"<span>→</span>":"")+btn(fk,a)).join("")}</div></div>
       ${kids.length?`<div><h4>ここから分かれた要素（${kids.length}）</h4><div class="lineage">${kids.map(k=>btn(fk,k)).join("")}</div></div>`:""}
       <div><h4>${fy(y)}ごろ、他の分野では</h4><div class="snap">${snap||"<div>この時代の記録はまだ少ない</div>"}</div></div>
-      ${n.b>2026.5?`<p class="note">2026年より先の要素は、いまの学問・技術からの延長として想像した「もしも」です。点線で表示しています。</p>`:`<div><h4>写真を見る（外部サイト）</h4><div class="photo">
+      ${n.b>2026.5?`<p class="note">2026年より先の要素は、いまの社会・技術からの延長として想像した「もしも」です。点線で表示しています。世界線（協調・分断・加速・再建・宇宙）が違う枝は、同時に起きるとは限らない「ありうる未来の分岐」です。</p>`:`<div><h4>写真を見る（外部サイト）</h4><div class="photo">
         <a href="https://ja.wikipedia.org/w/index.php?search=${q}" target="_blank" rel="noopener">Wikipediaで調べる</a>
         <a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">画像検索</a></div></div>`}`;
     openPanel(); requestAnimationFrame(()=>panel.scrollTop=0);

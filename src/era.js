@@ -26,9 +26,9 @@
     MEX:[-13000,-1200],GTM:[-13000,-1000],BLZ:[-13000,-1000],HND:[-13000,-500],PER:[-14000,-2500],BOL:[-14000,500],ECU:[-14000,1460],GRL:[-2500,1953],USA:[-15000,1607],CAN:[-15000,1608],AUS:[-50000,1788],FJI:[-1000,1871],TON:[-800,950],WSM:[-800,1100],PNG:[-45000,1975],ZWE:[-300000,1100]};
   window.ERA_FOG=(c,Y)=>{const [inh,civ]=OV[c.c3]||SUB[c.sub]||[-1e5,1500];return Y<inh?2:Y<civ?1:0;};
   // 各ビューの上に「いつの時点か」の帯
-  const MSG={timeline:"その時代までに起きた出来事だけを表示しています。",lineage:"その時代までに生まれた要素だけを表示しています（その後に消えたものは、まだ現役として表示）。",
+  const MSG={
     "world-map":"もやの濃い地域＝まだ人類が住んでいない／薄い地域＝まだ国家や文明がない（国境は現在のもの）。その時代にまだないランドマークは隠しています。",
-    "space-map":"その時代に知られていなかった天体や、まだない人工衛星は隠しています。",laws:"その時代にまだ見つかっていない元素・素粒子は暗く表示しています。"};
+    "space-map":"その時代に知られていなかった天体や、まだない人工衛星は隠しています。"};
   const bars={};
   Object.keys(MSG).forEach(id=>{const sec=document.getElementById("v-"+id);if(!sec)return;const b=document.createElement("div");b.className="erabar";b.hidden=true;const h=sec.querySelector(".view-head");(h||sec.firstChild).after(b);bars[id]=b;});
   const yfmt=y=>y< -1e8?(-y/1e8).toFixed(1).replace(/\.0$/,"")+"億年前":y< -1e4?Math.round(-y/1e4).toLocaleString()+"万年前":y<0?"紀元前"+(-y).toLocaleString()+"年":y>1e8?"":y+"年";

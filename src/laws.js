@@ -1,7 +1,7 @@
 /* ---------- ⑥ 宇宙の法則（力・公式・定数・素粒子・周期表・分子） ---------- */
 (function(){
   const $=id=>document.getElementById(id);if(!$("v-laws"))return;
-  const KY=()=>typeof window.KYEAR==="number"?window.KYEAR:1e12;
+  const KY=()=>1e12;
   // 4つの力
   $("lforces").innerHTML=FORCES.map(([n,st,rg,car,d,col,bar],i)=>`<div class="lforce" style="--fc:${col}"><canvas class="c3d" data-k="force:${i}"></canvas><div class="lfh"><b>${n}</b><span class="num">相対的な強さ ${st}</span></div>
     <div class="lfbar"><i style="width:${bar*100}%"></i></div><dl><dt>届く範囲</dt><dd>${rg}</dd><dt>伝える粒子</dt><dd>${car}</dd></dl><p>${d}</p></div>`).join("");

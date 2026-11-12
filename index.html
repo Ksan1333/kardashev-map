@@ -49,7 +49,8 @@ body.t1 .whev[data-fut="1"]{border-style:dashed}
 .thpaleo{position:absolute;left:16px;top:44px;font-size:12px;color:#9fd8ff;pointer-events:none;text-shadow:0 1px 3px #000}
 .thcap{position:absolute;left:16px;bottom:16px;max-width:min(460px,70%);padding:14px 16px;border-radius:12px;background:rgba(8,12,24,.72);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);pointer-events:none}
 .thcap h3{margin:2px 0 6px;font-size:20px}.thcap p{margin:0;font-size:13.5px;line-height:1.65;color:#cfd7ea}.thy{color:var(--accent);font-size:13px}
-.thmeta{display:flex;gap:6px;margin-bottom:4px}.thmeta .pill{font-size:11px;padding:1px 8px;border-radius:99px;border:1px solid #ffffff40;color:#dfe6f5}.thmeta .pill.fut{border-color:#7ee0ff;color:#7ee0ff}
+.thmeta{display:flex;gap:6px;margin-bottom:4px}.thmeta .pill{font-size:11px;padding:1px 8px;border-radius:99px;border:1px solid #ffffff40;color:#dfe6f5}.thmeta .pill.wl{border-style:dashed}.wl-協調{color:#7fe0b0!important;border-color:#4fae80!important}.wl-分断{color:#ff9a8a!important;border-color:#c0604f!important}.wl-加速{color:#7fc8ff!important;border-color:#4f8fc0!important}.wl-再建{color:#f4c870!important;border-color:#b08a3a!important}.wl-宇宙{color:#c9a8ff!important;border-color:#8a6ad0!important}
+.pill.fut{border-color:#7ee0ff;color:#7ee0ff}
 .thlog{position:absolute;right:14px;top:14px;width:250px;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;pointer-events:none}
 .thlog li{font-size:12px;padding:6px 9px;border-radius:8px;background:rgba(8,12,24,.6);color:#cbd3e6;border-left:3px solid var(--accent);animation:thin .5s ease}.thlog li:first-child{color:#fff;background:rgba(20,26,44,.85)}
 .thlog li.fut{border-left-color:#7ee0ff}.thlog li .num{display:block;font-size:10.5px;color:#9aa6c2}@keyframes thin{from{opacity:0;transform:translateX(12px)}}
@@ -822,7 +823,7 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ⑧ 系統樹 -->
   <section class="view" id="v-lineage">
-    <div class="view-head"><h2>系統樹（全分野）</h2><p>人類という幹から16分野・約1,100の要素（2026年までの約920と、未来の「もしも」約210）が枝分かれしていく。時間軸は1年あたり同じ幅（均等）。消えた要素は後継に合流（マージ）する。上の分野を押すとON/OFFで絞り込めます（複数選択可）。</p></div>
+    <div class="view-head"><h2>系統樹（全分野）</h2><p>人類という幹から16分野・約1,370の要素が枝分かれしていく。2026年より先（点線）は「もしも」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線に分かれて並ぶ。時間軸は1年あたり同じ幅。消えた要素は後継に合流（マージ）する。上の分野を押すとON/OFFで絞り込めます（複数選択可）。</p></div>
     <div class="chips" id="gchips"></div>
     <div class="gwrap">
       <div class="gcanvas" id="gcanvas" tabindex="0" aria-label="系統樹のキャンバス。ホイールまたはピンチでズーム、ドラッグで移動">
@@ -969,6 +970,7 @@ const S3D=(()=>{
   let tod="n",wx="clear",type=null;
   let anims=[],walkers=[],winMats=[],lampMats=[],snowables=[],nightOnly=[],dayOnly=[],umbrellas=[],onTod=[];
   let rain,snow,hemi,sun,amb,moon,sky,stars,disc;
+  let groundTop=null,groundM=null;
   const cam={th:.8,ph:1.0,r:58,auto:true,drag:null};
   let seed=1;const R=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};
   const C=c=>new THREE.Color(c);
@@ -986,6 +988,7 @@ const S3D=(()=>{
     renderer=new THREE.WebGLRenderer({antialias:true});
     renderer.setPixelRatio(Math.min(devicePixelRatio,2));
     renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.86;
     
     el.appendChild(renderer.domElement);
     camera=new THREE.PerspectiveCamera(42,1,.5,600);
@@ -1005,28 +1008,43 @@ const S3D=(()=>{
   const cyl=(rt,rb,h,c,x,y,z,seg=12)=>add(new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg),typeof c==="string"?mat(c):c),x,y+h/2,z);
   const cone=(r,h,c,x,y,z,seg=12,ry=0)=>add(new THREE.Mesh(new THREE.ConeGeometry(r,h,seg),typeof c==="string"?mat(c):c),x,y+h/2,z,ry);
   const sph=(r,c,x,y,z,sx=1,sy=1,sz=1)=>{const m=add(new THREE.Mesh(new THREE.SphereGeometry(r,14,10),typeof c==="string"?mat(c):c),x,y,z);m.scale.set(sx,sy,sz);return m;};
-  function ground(c,r=34){const m=mat(c,{map:groundTex()});snowables.push(m);const g=new THREE.Mesh(new THREE.CylinderGeometry(r,r+1.5,2,64),m);g.position.y=-1;g.receiveShadow=true;g.userData.noEdge=true;root.add(g);
-    const s=new THREE.Mesh(new THREE.CylinderGeometry(r+1.5,r+1.5,.6,48),mat("#3b2f25"));s.position.y=-2.3;root.add(s);return m;}
-  function water(x,z,w,d,c="#3d86c6",y=.06,shape="box"){const m=new THREE.MeshStandardMaterial({color:c,roughness:.12,metalness:.35,transparent:true,opacity:.9,flatShading:true});
+  const vn=(x,z)=>Math.sin(x*.31+z*.17)*.5+Math.sin(x*.07-z*.23+1.3)*.8+Math.sin(x*.9+z*.77)*.25+Math.sin(-x*.53+z*1.1+2)*.2;
+  const strataTex=()=>ctex("strata",64,64,(g,w,h)=>{const L=["#7a5a3c","#6a4c32","#8a6a48","#5e432c","#73563a"];for(let y=0;y<h;y+=4){g.fillStyle=L[(y/4)%L.length];g.fillRect(0,y,w,4);}for(let i=0;i<120;i++){g.fillStyle=`rgba(0,0,0,${Math.random()*.18})`;g.fillRect(Math.random()*w,Math.random()*h,2,1);}},[24,1]);
+  function ground(c,r=34){const m=mat(c,{map:groundTex(),vertexColors:true,flatShading:false});snowables.push(m);groundM=m;
+    const top=new THREE.RingGeometry(.001,r,128,36),pa=top.attributes.position,cl=new Float32Array(pa.count*3);
+    for(let i=0;i<pa.count;i++){const x=pa.getX(i),z=pa.getY(i),d=Math.hypot(x,z)/r,n=vn(x,z);const k=.93+n*.07-Math.max(0,d-.85)*.35;cl.set([k*(1+n*.02),k*(1+n*.035),k*(1-n*.02)],i*3);}
+    top.setAttribute("color",new THREE.BufferAttribute(cl,3));const g=new THREE.Mesh(top,m);g.rotation.x=-Math.PI/2;g.receiveShadow=true;g.userData.noEdge=true;root.add(g);groundTop=g;
+    const sd=new THREE.Mesh(new THREE.CylinderGeometry(r,r+1.5,2.4,128,1,true),mat("#ffffff",{map:strataTex(),flatShading:false}));sd.position.y=-1.21;sd.receiveShadow=true;sd.userData.noEdge=true;root.add(sd);
+    const s=new THREE.Mesh(new THREE.CylinderGeometry(r+1.5,r+1.7,.6,96),mat("#2e241c"));s.position.y=-2.7;s.userData.noEdge=true;root.add(s);return m;}
+  function water(x,z,w,d,c="#3d86c6",y=.06,shape="box"){const m=new THREE.MeshStandardMaterial({color:new THREE.Color(c).offsetHSL(0,.05,-.06),roughness:.08,metalness:.25,transparent:true,opacity:.86,flatShading:false});
     const g=shape==="disk"?new THREE.CircleGeometry(w,48,0,Math.PI*2):new THREE.PlaneGeometry(w,d,Math.max(2,Math.round(w/1.5)),Math.max(2,Math.round(d/1.5)));
     const p=new THREE.Mesh(g,m);p.rotation.x=-Math.PI/2;p.position.set(x,y,z);p.receiveShadow=true;root.add(p);
     const pos=g.attributes.position, base=pos.array.slice();
-    anims.push(t=>{for(let i=0;i<pos.count;i++){const X=base[i*3],Y=base[i*3+1];pos.setZ(i,Math.sin(X*.35+t*1.2)*.09+Math.cos(Y*.3+t*.9)*.09);}pos.needsUpdate=true;g.computeVertexNormals();});
+    anims.push(t=>{for(let i=0;i<pos.count;i++){const X=base[i*3],Y=base[i*3+1];pos.setZ(i,Math.sin(X*.35+t*1.2)*.09+Math.cos(Y*.3+t*.9)*.09+Math.sin(X*1.3-Y*1.1+t*2.1)*.025);}pos.needsUpdate=true;g.computeVertexNormals();});
     return p;}
-  function mountains(n,c,rmin=24,rmax=32,hmin=6,hmax=14,arc=[0,Math.PI*2]){const m=mat(c);snowables.push(m);
-    for(let i=0;i<n;i++){const a=arc[0]+(arc[1]-arc[0])*(i/n)+R()*.2,r=rmin+R()*(rmax-rmin),h=hmin+R()*(hmax-hmin);
-      cone(4+R()*4,h,m,Math.cos(a)*r,0,Math.sin(a)*r,6,R());}}
+  function mtn(x,z,rad,h,m,capM,ry=0,capF=.32){const p1=R()*6,p2=R()*6,p3=R()*6;
+    const f=(th,y)=>1+.2*Math.sin(3*th+p1+y*.35)+.12*Math.sin(7*th+p2-y*.6)+.06*Math.sin(13*th+p3+y);
+    const mk=(geo,y0,grow)=>{const P=geo.attributes.position;for(let k=0;k<P.count;k++){const px=P.getX(k),y=P.getY(k)+geo.parameters.height/2+y0,pz=P.getZ(k),th=Math.atan2(pz,px),rr=Math.hypot(px,pz);const q=f(th,y)*grow*(y>=h-.01?0:1);P.setXYZ(k,Math.cos(th)*rr*q,y,Math.sin(th)*rr*q);}geo.computeVertexNormals();return geo;};
+    const mm=new THREE.Mesh(mk(new THREE.ConeGeometry(rad,h,18,8),0,1),m);mm.userData.noEdge=true;add(mm,x,0,z,ry);
+    if(capM){const ch=h*capF,cr=rad*ch/h;const cm=new THREE.Mesh(mk(new THREE.ConeGeometry(cr,ch,18,3,true),h-ch,1.04),capM);cm.userData.noEdge=true;cm.castShadow=true;mm.add(cm);}return mm;}
+  function mountains(n,c,rmin=24,rmax=32,hmin=6,hmax=14,arc=[0,Math.PI*2]){const m=mat(c);snowables.push(m);const capM=mat("#f4f7fb");const bright=new THREE.Color(c).getHSL({}).l>.7;
+    for(let i=0;i<n;i++){const a=arc[0]+(arc[1]-arc[0])*(i/n)+R()*.2,r=rmin+R()*(rmax-rmin),h=hmin+R()*(hmax-hmin);mtn(Math.cos(a)*r,Math.sin(a)*r,4+R()*4,h,m,h>8&&!bright?capM:null,R()*6,.28+R()*.1);}}
+  // 円盤からはみ出さない台地（z0〜z1の帯を押し出す）
+  function slab(z0,z1,h,mats,y0=0,r=33.9){const P=[],N=40;for(let k=0;k<=N;k++){const z=z0+(z1-z0)*k/N;P.push(new THREE.Vector2(Math.sqrt(Math.max(0,r*r-z*z)),-z));}for(let k=N;k>=0;k--){const z=z0+(z1-z0)*k/N;P.push(new THREE.Vector2(-Math.sqrt(Math.max(0,r*r-z*z)),-z));}
+    const g=new THREE.ExtrudeGeometry(new THREE.Shape(P),{depth:h,bevelEnabled:true,bevelThickness:.3,bevelSize:.3,bevelSegments:2,steps:1});g.rotateX(-Math.PI/2);g.translate(0,y0,0);const m=new THREE.Mesh(g,mats);m.castShadow=m.receiveShadow=true;m.userData.grassy=y0+h;root.add(m);return m;}
+  function treeAt(n,zmin,zmax,y,kind="broad",xr=56){for(let k=0;k<n;k++){const x=(R()-.5)*xr,z=zmin+R()*(zmax-zmin);if(Math.hypot(x,z)>31)continue;const c0=root.children.length;tree(x,z,kind,.8+R()*.5);for(let q=c0;q<root.children.length;q++)root.children[q].position.y+=y;}}
   function tree(x,z,kind="broad",s=1){
     if(kind==="palm"){cyl(.15*s,.2*s,3*s,"#8a6a45",x,0,z,6);for(let i=0;i<5;i++){const l=box(2.2*s,.1,.5*s,"#3f8a3a",x,3*s,z,i*1.25);l.rotation.z=-.3;}return;}
     if(kind==="conifer"){cyl(.15*s,.2*s,1*s,"#6b4a2b",x,0,z,6);const m=mat("#2f5d3a");snowables.push(m);cone(1.1*s,3*s,m,x,1*s,z,7);return;}
-    cyl(.15*s,.22*s,1.4*s,"#6b4a2b",x,0,z,6);const base=kind==="red"?"#c8553d":kind==="jungle"?"#2f6b2a":"#4f8a3c";const m=mat(base),m2=mat(new THREE.Color(base).offsetHSL(0,0,.06).getStyle());snowables.push(m,m2);
+    cyl(.15*s,.22*s,1.4*s,"#6b4a2b",x,0,z,6);const base=new THREE.Color(kind==="red"?"#c8553d":kind==="jungle"?"#2f6b2a":"#4f8a3c").offsetHSL((R()-.5)*.05,(R()-.5)*.12,(R()-.5)*.08).getStyle();const m=mat(base),m2=mat(new THREE.Color(base).offsetHSL(0,0,.07).getStyle());snowables.push(m,m2);
     sph(1.05*s,m,x,2.1*s,z);sph(.75*s,m2,x+.55*s,2.5*s,z+.2*s);sph(.7*s,m2,x-.45*s,2.55*s,z-.3*s);sph(.6*s,m,x+.1*s,2.95*s,z+.35*s);
   }
   function trees(n,kind,inR=8,outR=30,s=1,avoid){for(let i=0;i<n;i++){const a=R()*Math.PI*2,r=inR+R()*(outR-inR),x=Math.cos(a)*r,z=Math.sin(a)*r;if(avoid&&avoid(x,z))continue;tree(x,z,kind,s*(.7+R()*.6));}}
   function building(x,z,w,d,h,c="#9aa3b2",roof){const rp=[Math.max(1,Math.round(w/1.4)),Math.max(1,Math.round(h/1.8))];
     const m=new THREE.MeshStandardMaterial({color:c,map:ctex("fac",48,64,facade(false),rp),emissiveMap:ctex("facl"+(winMats.length%4),48,64,facade(true),rp),emissive:"#ffcf7a",emissiveIntensity:0,roughness:.75,metalness:.05});winMats.push(m);
     const b=box(w,h,d,m,x,0,z);
-    if(roof){const m=mat(roof);snowables.push(m);box(w+.2,.3,d+.2,m,x,h,z);}return b;}
+    if(roof){const m=mat(roof);snowables.push(m);box(w+.2,.3,d+.2,m,x,h,z);}
+    if(h>5){const top=h+(roof?.3:0);box(w*.98,.25,d*.98,"#6d7480",x,top,z);for(let k=0;k<1+Math.floor(R()*3);k++)box(.5+R()*.6,.35+R()*.3,.5+R()*.6,["#b9bec6","#8d939c","#d3d6db"][k%3],x+(R()-.5)*(w-.8),top+.25,z+(R()-.5)*(d-.8));if(h>14&&R()<.5)cyl(.04,.06,2+R()*3,"#c9ccd2",x+(R()-.5)*w*.5,top+.25,z+(R()-.5)*d*.5,5);}return b;}
   function house(x,z,w,d,h,wall="#e8dcc4",roof="#a8442f",ry=0){const g=new THREE.Group();
     const b=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(wall));b.position.y=h/2;b.castShadow=b.receiveShadow=true;g.add(b);
     const rr=w/1.55,rm=mat(roof);snowables.push(rm);const r=new THREE.Mesh(new THREE.CylinderGeometry(rr,rr,d+.3,3),rm);r.rotation.x=-Math.PI/2;r.position.y=h+rr*.5;r.castShadow=true;g.add(r);
@@ -1055,7 +1073,7 @@ const S3D=(()=>{
   function aurora(){const m=new THREE.MeshBasicMaterial({color:"#5dffb0",transparent:true,opacity:.35,side:THREE.DoubleSide});
     for(let i=0;i<3;i++){const p=new THREE.Mesh(new THREE.PlaneGeometry(70,10,20,1),m);p.position.set(0,17+i*2.5,-24+i*3);p.rotation.x=.25;root.add(p);nightOnly.push(p);
       const pos=p.geometry.attributes.position;anims.push(t=>{for(let k=0;k<pos.count;k++){pos.setZ(k,Math.sin(pos.getX(k)*.15+t*.6+i)*2);}pos.needsUpdate=true;});}}
-  function clouds(n,y=22){const m=mat("#ffffff",{transparent:true,opacity:.85});for(let i=0;i<n;i++){const g=new THREE.Group();for(let k=0;k<4;k++){const s=new THREE.Mesh(new THREE.SphereGeometry(.9+R()*.7,8,6),m);s.position.set(k*1.1,R()*.6,R()*.6);g.add(s);}
+  function clouds(n,y=22){const m=mat("#ffffff",{transparent:true,opacity:.9,flatShading:false,roughness:1});for(let i=0;i<n;i++){const g=new THREE.Group();for(let k=0;k<5;k++){const s=new THREE.Mesh(new THREE.SphereGeometry(.9+R()*.8,18,12),m);s.scale.y=.75;s.position.set(k*1.1,R()*.6,R()*.6);g.add(s);}
     g.position.set(-30+R()*60,y+R()*4,-20+R()*40);root.add(g);const o=R()*60;anims.push(t=>{g.position.x=((t*.6+o)%70)-35;});}}
   function rocket(x,z,s=1){const g=new THREE.Group();const b=new THREE.Mesh(new THREE.CylinderGeometry(.7*s,.7*s,9*s,12),mat("#f2f2f2"));b.position.y=4.5*s;g.add(b);
     const n=new THREE.Mesh(new THREE.ConeGeometry(.7*s,2*s,12),mat("#d0d4dc"));n.position.y=10*s;g.add(n);
@@ -1153,12 +1171,13 @@ const S3D=(()=>{
       const fa=box(4,6,3,"#9aa4b0",0,0,-4);fa.rotation.x=-.4;const lm=mat("#7fd3ff",{emissive:"#7fd3ff",emissiveIntensity:.5});lampMats.push(lm);box(3,.3,.2,lm,0,5.5,-2.4);
       for(let i=0;i<14;i++)building(-20+i*3,14+R()*4,2.4,3,2.5,["#c0392b","#2e86de","#f1c40f","#27ae60"][i%4],"#2f2f2f");aurora();
       for(let i=0;i<3;i++){const s=box(.8,.6,1.8,"#111",0,0,0);movers(s,line(-25,6+i*2,25,6+i*2,0),.4);}people(8,line(-20,12,20,12,2),.4);},
-    peak(){ground("#d9dde4");const sn=mat("#f4f7fb");cone(12,30,sn,0,0,-6,6);cone(8,18,sn,-14,0,-12,6);cone(8,20,sn,14,0,-14,6);mountains(10,"#cfd5de",24,33,10,20);
+    peak(){ground("#d9dde4");const rk=mat("#8b8f98"),sn=mat("#f4f7fb");snowables.push(rk);mtn(0,-6,12,30,rk,sn,.4,.55);mtn(-14,-12,8,18,rk,sn,1.2,.5);mtn(14,-14,8,20,rk,sn,2.1,.5);mountains(10,"#7f858f",24,33,10,20);
       [["#e67e22",-6,12],["#c0392b",-3,14],["#f1c40f",0,13],["#2e86de",3,15],["#27ae60",6,12]].forEach(([c,x,z])=>cone(1.4,1.6,c,x,0,z,4));
       people(8,line(-2,10,0,-2,1),.2,["#e74c3c","#f39c12","#3498db"]);for(let i=0;i<3;i++){const y=box(1,1,2,"#3b2a1e",0,0,0);movers(y,line(-12,16,8,16,1),.15);}},
-    canyon(){const r1=mat("#b8613c"),r2=mat("#d08a5a");snowables.push(r1,r2);ground("#b8613c");
-      [[-1,r1],[1,r2]].forEach(([s,m])=>{for(let k=0;k<4;k++)box(30,2.5,26-k*3,k%2?r2:r1,0,k*2.5,s*(20-k*1.5));});
-      water(0,0,70,4,"#4f8a8a",.1);people(10,line(-20,12.2,20,12.2,1),.4);walkers.forEach(w=>w.yfn=()=>10);trees(14,"conifer",22,32,1,(x,z)=>Math.abs(z)<14);},
+    canyon(){const r1=mat("#9a4628"),r2=mat("#b8683e");snowables.push(r1,r2);ground("#a0502c");
+      const st=mat("#ffffff",{map:strataTex(),flatShading:false});[-1,1].forEach(s=>{for(let k=0;k<4;k++){const a=6+k*1.7;const m=slab(s>0?a:-33.9,s>0?33.9:-a,2.5,[k%2?r2:r1,st],k*2.5);}});
+      treeAt(10,14,30,10,"conifer");treeAt(10,-30,-14,10,"conifer");
+      water(0,0,70,4,"#4f8a8a",.1);people(10,line(-20,12.2,20,12.2,1),.4);walkers.forEach(w=>w.yfn=()=>10);},
     forest(){ground("#3c6b32");water(0,0,70,5,"#7a6a4a",.1);trees(90,"jungle",4,32,1.3,(x,z)=>Math.abs(z-Math.sin(x*.1)*2)<4);
       for(let i=0;i<4;i++){const x=-12+i*7;for(const dx of[-1,1])for(const dz of[-1,1])cyl(.1,.1,1.5,"#5a4030",x+dx,0,6+dz,4);box(2.8,1.4,2.8,"#8a6a45",x,1.5,6);cone(2.4,1.4,"#b59a5a",x,2.9,6,4,Math.PI/4);}
       const cn=box(.8,.4,3,"#6b4a2b",0,0,0);movers(cn,line(-28,0,28,0,0),.2);people(6,line(-12,4,10,4,1),.3);},
@@ -1171,13 +1190,18 @@ const S3D=(()=>{
       for(let i=0;i<5;i++){const c=new THREE.Group();const b=new THREE.Mesh(new THREE.BoxGeometry(.7,.9,1.8),mat("#a8794a"));b.position.y=1.1;c.add(b);const h=new THREE.Mesh(new THREE.BoxGeometry(.4,.9,.4),mat("#a8794a"));h.position.set(0,1.8,1);c.add(h);root.add(c);
         const o=i*1.2;anims.push(t=>{const x=((t*.6+o*3)%60)-30;c.position.set(x,Math.sin(x*.2)*.3,10+Math.sin(x*.05)*3);c.rotation.y=Math.PI/2;});}
       people(5,ring(3,6,-3),.2,["#1f3b73","#1f3b73","#e6e6e6"]);},
-    falls(){ground("#5f8a46");const top=mat("#6a8f4a");snowables.push(top);box(70,8,26,top,0,0,-20);water(0,-14,70,12,"#4c86b0",8.1);
-      const fm=new THREE.MeshBasicMaterial({color:"#f2f8ff",transparent:true,opacity:.75});const fall=new THREE.Mesh(new THREE.PlaneGeometry(60,8),fm);fall.position.set(0,4,-7);root.add(fall);
-      water(0,0,70,8,"#4c86b0",.1);for(let i=0;i<10;i++){const s=sph(2.5,new THREE.MeshBasicMaterial({color:"#ffffff",transparent:true,opacity:.25}),-25+i*5.5,2,-4);anims.push(t=>{s.position.y=2+Math.sin(t*.8+i)*1;});}
-      box(70,7,20,mat("#5a7f40"),0,0,14);trees(30,"broad",10,32,1,(x,z)=>z<12);const br=new THREE.Mesh(new THREE.TorusGeometry(5,.3,6,20,Math.PI),mat("#7a7a7a"));br.position.set(26,3,0);br.rotation.y=Math.PI/2;root.add(br);
-      people(8,line(-20,9,20,9,1),.3);walkers.forEach(w=>w.yfn=()=>7);},
+    falls(){ground("#5f8a46");const gm=mat("#6a8f4a",{flatShading:false}),rk=mat("#7b6a58",{map:strataTex(),flatShading:false});snowables.push(gm);
+slab(-33.9,-8,8,[gm,rk]);slab(6.5,33.9,7,[gm,rk]);
+      water(0,-14,50,11,"#3f7fa8",8.12);water(0,-.7,62,12.5,"#3f7fa8",.12);
+      const cv=document.createElement("canvas");cv.width=64;cv.height=256;const cx=cv.getContext("2d");cx.fillStyle="#cfe6f5";cx.fillRect(0,0,64,256);for(let k=0;k<260;k++){cx.fillStyle=`rgba(255,255,255,${.3+Math.random()*.7})`;cx.fillRect(Math.random()*64,Math.random()*256,1+Math.random()*2,10+Math.random()*40);}
+      const ft=new THREE.CanvasTexture(cv);ft.wrapS=ft.wrapT=THREE.RepeatWrapping;ft.repeat.set(10,1);const fm=new THREE.MeshBasicMaterial({map:ft,transparent:true,opacity:.92});const fall=new THREE.Mesh(new THREE.PlaneGeometry(50,8.2,1,1),fm);fall.position.set(0,4.1,-7.6);fall.userData.noEdge=true;root.add(fall);anims.push(t=>{ft.offset.y=t*1.4;});
+      const mm=new THREE.MeshBasicMaterial({color:"#ffffff",transparent:true,opacity:.22,depthWrite:false});for(let i=0;i<14;i++){const s0=sph(2.2+R()*1.4,mm,-24+i*3.7,1.5,-5.5);s0.userData.noEdge=true;s0.castShadow=false;anims.push(t=>{s0.position.y=1.6+Math.sin(t*.8+i)*1.1;s0.scale.setScalar(1+Math.sin(t*.6+i*2)*.15);});}
+      ["#ff5a5a","#ffa040","#ffe24a","#5fd16a","#4aa8ff","#9a6aff"].forEach((c,k)=>{const rb=new THREE.Mesh(new THREE.TorusGeometry(9.5-k*.32,.16,6,48,Math.PI),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.33,depthWrite:false}));rb.position.set(-6,0,-3);rb.userData.noEdge=true;root.add(rb);});
+      treeAt(26,-31,-21,8);treeAt(26,12,30,7);
+      const br=new THREE.Mesh(new THREE.TorusGeometry(7.6,.35,8,28,Math.PI),mat("#8a8f96"));br.position.set(25,0,-.8);br.rotation.y=Math.PI/2;root.add(br);box(1.6,.4,16,"#8a8f96",25,7.6,-.8);
+      people(8,line(-20,9.5,20,9.5,1),.3);walkers.forEach(w=>w.yfn=()=>7.35);clouds(5,20);},
     ice(){ground("#eef3f8");mountains(8,"#dfe6ee",24,33,4,10);for(let i=0;i<5;i++){cyl(.2,.2,1.5,"#555",-8+i*4,0,-2,5);box(3.4,2.4,6,"#e8691e",-8+i*4,1.5,-2);}box(2,6,2,"#c0392b",10,0,-8);
-      for(let i=0;i<24;i++){const g=new THREE.Group();const b=new THREE.Mesh(new THREE.CapsuleGeometry?new THREE.CylinderGeometry(.25,.3,.8,8):new THREE.CylinderGeometry(.25,.3,.8,8),mat("#1d1d1d"));b.position.y=.4;g.add(b);
+      for(let i=0;i<24;i++){const g=new THREE.Group();const b=new THREE.Mesh(new THREE.CylinderGeometry(.25,.3,.8,8),mat("#1d1d1d"));b.position.y=.4;g.add(b);
         const bl=new THREE.Mesh(new THREE.BoxGeometry(.3,.5,.1),mat("#f5f5f5"));bl.position.set(0,.4,.27);g.add(bl);root.add(g);const o=R()*10;anims.push(t=>{g.position.set(12+Math.cos(o)*5+Math.sin(t*.3+o)*.5,0,10+Math.sin(o)*5);g.rotation.y=o;});}
       const sc=box(1.6,1,2.6,"#f1c40f",0,0,0);movers(sc,line(-25,8,5,8,0),.25);aurora();people(4,line(-10,2,8,2,1),.3,["#e8691e"]);},
   };
@@ -1238,7 +1262,7 @@ const S3D=(()=>{
     anims.push(t=>{const [x,z]=path(t,o);g.position.set(x,y+Math.sin(t*2+o)*.4,z);});return g;}
   function maglev(r,y=1.2,c="#e9eef5"){const tr=new THREE.Mesh(new THREE.TorusGeometry(r,.25,6,96),mat("#c8ced8"));tr.rotation.x=Math.PI/2;tr.position.y=y;root.add(tr);
     for(let i=0;i<24;i++){const a=i/24*6.283;cyl(.12,.12,y,"#9aa3b2",Math.cos(a)*r,0,Math.sin(a)*r,6);}
-    const g=new THREE.Group();for(let k=0;k<4;k++){const c2=new THREE.Mesh(new THREE.CapsuleGeometry?new THREE.BoxGeometry(.9,.7,2.2):new THREE.BoxGeometry(.9,.7,2.2),mat(c));c2.position.z=k*2.4;g.add(c2);const s=new THREE.Mesh(new THREE.BoxGeometry(.92,.12,2.1),glowM("#5ad0ff"));s.position.set(0,.05,k*2.4);g.add(s);}
+    const g=new THREE.Group();for(let k=0;k<4;k++){const c2=new THREE.Mesh(new THREE.BoxGeometry(.9,.7,2.2),mat(c));c2.position.z=k*2.4;g.add(c2);const s=new THREE.Mesh(new THREE.BoxGeometry(.92,.12,2.1),glowM("#5ad0ff"));s.position.set(0,.05,k*2.4);g.add(s);}
     root.add(g);anims.push(t=>{const a=t*.25;g.position.set(Math.cos(a)*r,y+.55,Math.sin(a)*r);g.rotation.y=-a;});}
   function panelField(x0,z0,nx,nz,dx=2.2,dz=3,tilt=.45){const pm=new THREE.MeshStandardMaterial({color:"#1d2f5c",metalness:.7,roughness:.25,emissive:"#0a1530"});
     for(let i=0;i<nx;i++)for(let j=0;j<nz;j++){const p=new THREE.Mesh(new THREE.BoxGeometry(1.9,.08,1.3),pm);p.position.set(x0+i*dx,.9,z0+j*dz);p.rotation.x=-tilt;p.castShadow=true;root.add(p);
@@ -1320,10 +1344,10 @@ const S3D=(()=>{
     const SKY={m:["#6fa8e8","#ffd2a6"],n:["#3f86de","#cfe6ff"],e:["#3a3f7a","#ff9a5c"],x:["#02040c","#10204a"]}[tod];
     let st=C(SKY[0]),sb=C(SKY[1]);if(wx==="rain"){st.lerp(C("#4b545e"),.75);sb.lerp(C("#7a838c"),.75);}if(wx==="snow"){st.lerp(C("#aeb8c4"),tod==="x"?.15:.7);sb.lerp(C("#e6ebf0"),tod==="x"?.15:.7);}
     sky.material.uniforms.top.value=st;sky.material.uniforms.bot.value=sb;scene.background=sb;
-    scene.fog=new THREE.Fog(sb.clone().lerp(fog,.4),wx==="clear"?80:35,wx==="clear"?280:150);
+    scene.fog=new THREE.Fog(sb.clone().lerp(fog,.4).convertSRGBToLinear(),wx==="clear"?90:35,wx==="clear"?300:150);
     stars.visible=tod==="x"&&wx==="clear";disc.visible=wx==="clear";disc.position.set(...T.pos).normalize().multiplyScalar(280);disc.material.color=C(tod==="x"?"#dfe6ff":tod==="n"?"#fffbe8":"#ffc890");disc.scale.setScalar(tod==="x"?.6:1);
-    sun.color=C(T.sun[0]);sun.intensity=T.sun[1]*(wx==="clear"?1:.45);sun.position.set(...T.pos);
-    amb.intensity=T.amb;hemi.color=C(T.hemi[0]);hemi.groundColor=C(T.hemi[1]);hemi.intensity=T.hemi[2]*(wx==="clear"?1:1.1);
+    sun.color=C(T.sun[0]).convertSRGBToLinear();sun.intensity=T.sun[1]*1.7*(wx==="clear"?1:.45);sun.position.set(...T.pos);
+    amb.intensity=T.amb*.3;hemi.color=C(T.hemi[0]).convertSRGBToLinear();hemi.groundColor=C(T.hemi[1]).convertSRGBToLinear();hemi.intensity=T.hemi[2]*.85*(wx==="clear"?1:1.6);
     const night=tod==="x", dusk=tod==="e";
     winMats.forEach((m,i)=>m.emissiveIntensity=night?(i%5===0?.2:1):dusk?.35:0);
     lampMats.forEach(m=>m.emissiveIntensity=night?1.6:dusk?.6:0);
@@ -1351,7 +1375,7 @@ const S3D=(()=>{
     scene=new THREE.Scene(); root=new THREE.Group(); scene.add(root);
     anims=[];walkers=[];winMats=[];lampMats=[];snowables=[];nightOnly=[];umbrellas=[];onTod=[];
     hemi=new THREE.HemisphereLight("#fff","#444",.5);scene.add(hemi);amb=new THREE.AmbientLight("#ffffff",.4);scene.add(amb);
-    sun=new THREE.DirectionalLight("#fff",1);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);const sc=sun.shadow.camera;sc.left=-42;sc.right=42;sc.top=42;sc.bottom=-42;sc.near=1;sc.far=220;sun.shadow.bias=-.0006;sun.shadow.normalBias=.02;scene.add(sun);
+    sun=new THREE.DirectionalLight("#fff",1);sun.castShadow=true;sun.shadow.mapSize.set(4096,4096);const sc=sun.shadow.camera;sc.left=-42;sc.right=42;sc.top=42;sc.bottom=-42;sc.near=1;sc.far=220;sun.shadow.bias=-.0006;sun.shadow.normalBias=.02;scene.add(sun);
     sky=new THREE.Mesh(new THREE.SphereGeometry(320,32,16),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,fog:false,uniforms:{top:{value:C("#4a8fe0")},bot:{value:C("#cfe6ff")}},
       vertexShader:"varying vec3 vp;void main(){vp=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",
       fragmentShader:"uniform vec3 top;uniform vec3 bot;varying vec3 vp;void main(){float h=clamp(vp.y*1.6+.15,0.,1.);gl_FragColor=vec4(mix(bot,top,pow(h,.8)),1.);}"}));scene.add(sky);
@@ -1360,11 +1384,24 @@ const S3D=(()=>{
     disc=new THREE.Mesh(new THREE.SphereGeometry(9,20,12),new THREE.MeshBasicMaterial({color:"#fff6d8",fog:false}));scene.add(disc);
     precip();
     try{(SC[t]||SC.pyramid)();}catch(e){console.error(e);}
-    const em=new THREE.LineBasicMaterial({color:"#000",transparent:true,opacity:.16});const add2=[];
+    const em=new THREE.LineBasicMaterial({color:"#000",transparent:true,opacity:.09});const add2=[];
     root.traverse(o=>{if(!o.isMesh||o.userData.noEdge)return;const gp=o.geometry.type;if(!/Box|Cylinder|Cone/.test(gp))return;if(o.geometry.parameters&&o.geometry.parameters.radialSegments>12)return;
       const l=new THREE.LineSegments(new THREE.EdgesGeometry(o.geometry,25),em);add2.push([o,l]);});add2.forEach(([o,l])=>o.add(l));
+    try{details();}catch(e){console.warn("details",e);}linearize();
     cam.auto=true; cam.r=58; applyLook();
   }
+  // ---- 仕上げ：草・小石・花、色空間 ----
+  function details(){if(!groundTop||!groundM)return;const gc=groundM.color.clone(),hsl=gc.getHSL({});const green=hsl.h>.17&&hsl.h<.45&&hsl.s>.2,sand=hsl.h>.05&&hsl.h<.17&&hsl.s>.25&&hsl.l>.45;if(!green&&!sand)return;
+    const rc=new THREE.Raycaster();rc.params.Line={threshold:0};rc.params.Points={threshold:0};const dn=new THREE.Vector3(0,-1,0),o=new THREE.Vector3();root.updateMatrixWorld(true);
+    const spots=[];const N=green?1400:500;for(let i=0;i<N;i++){const a=R()*Math.PI*2,r=Math.sqrt(R())*32.5,x=Math.cos(a)*r,z=Math.sin(a)*r;o.set(x,30,z);rc.set(o,dn);const hs=rc.intersectObject(root,true);const h=hs.find(q=>q.point.y<14&&q.object.isMesh);if(h&&(h.object===groundTop||(h.object.userData.grassy&&h.point.y>h.object.userData.grassy-.2)))spots.push([x,z,h.point.y]);}
+    const mt=new THREE.Matrix4(),q=new THREE.Quaternion(),e=new THREE.Euler(),sc=new THREE.Vector3(),ps=new THREE.Vector3();
+    if(green){const geo=new THREE.ConeGeometry(.07,.42,4);geo.translate(0,.21,0);const im=new THREE.InstancedMesh(geo,mat("#ffffff",{flatShading:true}),spots.length*3);let k=0;const base=gc.clone();
+      spots.forEach(([x,z,y])=>{for(let j=0;j<3;j++){e.set((R()-.5)*.5,R()*6,(R()-.5)*.5);q.setFromEuler(e);const s0=.7+R()*.8;sc.set(s0,s0*(.8+R()*.6),s0);ps.set(x+(R()-.5)*.35,y,z+(R()-.5)*.35);mt.compose(ps,q,sc);im.setMatrixAt(k,mt);im.setColorAt(k,base.clone().offsetHSL((R()-.5)*.04,.05,-.04+(R()-.5)*.1));k++;}});
+      im.castShadow=false;im.receiveShadow=true;im.userData.noEdge=true;root.add(im);
+      const fl=spots.filter(()=>R()<.12),fm=new THREE.InstancedMesh(new THREE.SphereGeometry(.09,8,6),mat("#ffffff",{flatShading:false}),fl.length);fl.forEach(([x,z,y],i)=>{mt.makeTranslation(x+(R()-.5)*.4,y+.35,z+(R()-.5)*.4);fm.setMatrixAt(i,mt);fm.setColorAt(i,C(["#ffffff","#ffe066","#ff9ec7","#c9a0ff"][i%4]));});fm.userData.noEdge=true;root.add(fm);onTod.push(()=>{im.visible=fm.visible=wx!=="snow";});}
+    else{const im=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(.18,0),mat("#ffffff"),spots.length);spots.forEach(([x,z,y],i)=>{e.set(R()*3,R()*3,R()*3);q.setFromEuler(e);const s0=.5+R()*1.4;sc.set(s0,s0*.6,s0);ps.set(x,y+.03,z);mt.compose(ps,q,sc);im.setMatrixAt(i,mt);im.setColorAt(i,gc.clone().offsetHSL(0,-.1,-.12-R()*.12));});im.castShadow=true;im.receiveShadow=true;im.userData.noEdge=true;root.add(im);}}
+  function linearize(){const seen=new Set();scene.traverse(o=>{const ms=o.material?(Array.isArray(o.material)?o.material:[o.material]):[];ms.forEach(m=>{if(!m||seen.has(m)||m.isShaderMaterial)return;seen.add(m);if(m.color)m.color.convertSRGBToLinear();if(m.emissive)m.emissive.convertSRGBToLinear();["map","emissiveMap"].forEach(k=>{if(m[k]){m[k].encoding=THREE.sRGBEncoding;m[k].needsUpdate=true;}});m.needsUpdate=true;});
+      if(o.isInstancedMesh&&o.instanceColor){const a=o.instanceColor.array,cc=new THREE.Color();for(let i=0;i<a.length;i+=3){cc.setRGB(a[i],a[i+1],a[i+2]).convertSRGBToLinear();a[i]=cc.r;a[i+1]=cc.g;a[i+2]=cc.b;}o.instanceColor.needsUpdate=true;}});}
   function frame(now){
     if(!running)return; requestAnimationFrame(frame);
     const t=(now-t0)/1000, dt=Math.min(.05,(now-last)/1000||0); last=now;
@@ -3756,6 +3793,277 @@ const TREE_FUT_ACAD=[
 {const t=TREE.find(x=>x.key==="academia");if(t){const ids=new Set(t.nodes.map(x=>x[0]));
   TREE_FUT_ACAD.slice().sort((a,b)=>a[3]-b[3]).forEach(n=>{if(ids.has(n[0]))return;if(n[2]&&!ids.has(n[2]))n=[n[0],n[1],null,...n.slice(3)];t.nodes.push(n);ids.add(n[0]);});}}
 
+/* ---------- 系統樹：文化・政治・国家・戦争・経済の「もしも」各50 ----------
+   [id, 名前, 親id, 誕生年, 消滅年, 合流先id, 説明]
+   説明の先頭の【 】は世界線（ありうる未来の分岐パターン）。
+   【協調】国際協力が進む ／【分断】陣営に分かれて対立する ／【加速】AIと技術が社会を急に変える
+   【再建】気候・戦争・金融などの大きな崩壊から立て直す ／【宇宙】月・火星・太陽系・恒星間へ広がる
+   同じ時代に別々の世界線の枝が並ぶのは、どれか一つが選ばれるとは限らない「分岐」を表すため。 */
+const TREE_FUT_MORE={
+culture:[
+["fc_aiart","AI共作アート","modernart",2027,null,null,"【加速】人とAIが一緒に描き、作曲し、書く表現が当たり前になる（もしも）。"],
+["fc_aimusic","生成音楽","edm",2028,null,null,"【加速】聞く人の気分に合わせて、その場で生まれ続ける音楽（もしも）。"],
+["fc_vtalent","仮想タレント文化","streamdrama",2028,null,null,"【加速】AIや仮想の体を持つタレントが、人間の俳優や歌手と並ぶ人気を得る（もしも）。"],
+["fc_xr","XR劇場","theater",2030,null,null,"【加速】現実と仮想を重ねた舞台で、観客も物語の登場人物になる（もしも）。"],
+["fc_interactive","対話型物語","novel",2030,null,null,"【加速】読者の選択とAIの語りで、一人ひとり違う物語が書き上がる（もしも）。"],
+["fc_heritage3d","デジタル文化遺産","museum",2030,null,null,"【協調】世界中の遺跡や美術品を3Dで記録し、誰でも訪れられるようにする（もしも）。"],
+["fc_langrevival","言語再生運動","lang",2032,null,null,"【協調】AI翻訳と記録で、消えかけた数千の言語を学び直す（もしも）。"],
+["fc_realtrans","即時翻訳社会","englishlf",2035,2060,"planetlang","【協調】イヤホン型の翻訳で、母語のまま世界中の人と話せる（もしも）。"],
+["fc_handmade","人の手の証明運動","art",2035,null,null,"【分断】AI作品があふれる反動で、「人が作ったこと」を証明できる作品が高い価値を持つ（もしも）。"],
+["fc_blocmedia","陣営別メディア圏","tvdrama",2035,null,null,"【分断】国や陣営ごとに見られる作品やSNSが分かれ、文化が別々に育つ（もしも）。"],
+["fc_retro","20世紀リバイバル","pop",2036,null,null,"【分断】先行きの不安から、過去の音楽やファッションを再演する文化が主流になる（もしも）。"],
+["fc_climateart","気候アート","streetart",2038,null,null,"【再建】熱波や水没を記録し、悲しみと希望を表す芸術運動（もしも）。"],
+["fc_earthfaith","地球を敬う精神文化","animism",2040,null,null,"【再建】気候危機を背景に、地球そのものを敬う新しい精神文化が広がる（もしも）。"],
+["fc_aithought","AI時代の思想運動","secular",2045,null,null,"【加速】人間を超える知性をどう受け止めるかをめぐって、新しい思想や信仰が生まれる（もしも）。"],
+["fc_craftshare","伝統工芸の共有","calligraphy",2045,null,null,"【協調】手仕事の技を世界で共有し、映像と3Dで保存する（もしも）。"],
+["fc_mindshare","体験共有メディア","film",2050,null,null,"【加速】脳インターフェースで、他人の見た景色や感情をそのまま味わう（もしも）。"],
+["fc_salvage","がれきの文化","art",2050,null,null,"【再建】崩れた都市の廃材から生まれる、建築・服・音楽の新しい様式（もしも）。"],
+["fc_oral","口承の復活","lit",2055,null,null,"【再建】電子の記録が失われた地域で、物語を語り継ぐ文化がよみがえる（もしも）。"],
+["fc_aivocab","AIとの混成語","lang",2055,null,null,"【加速】人とAIの会話から生まれた言葉が、日常の言葉に入り込む（もしも）。"],
+["fc_wall","文化の壁","fc_blocmedia",2060,2150,"fc_worldcanon","【分断】陣営ごとの検閲で、相手側の作品に触れられない時代（もしも）。"],
+["fc_lunarfest","月面の祭り","dance",2060,null,null,"【宇宙】月面都市で、6分の1の重力を生かした踊りや競技の祭りが始まる（もしも）。"],
+["fc_citystyle","都市ごとの文化圏","fashion",2065,null,null,"【分断】独立性を強めた巨大都市ごとに、独自の言葉づかいや流行が育つ（もしも）。"],
+["fc_worldcanon","人類共通の古典集","museum",2070,null,null,"【協調】全言語の名作を訳して集めた、人類共通の「古典の棚」をつくる（もしも）。"],
+["fc_holo","ホログラム公演","film",2070,null,null,"【加速】亡くなった歌手や架空のキャラクターが、実物大で舞台に立つ（もしも）。"],
+["fc_orbitrite","宇宙の通過儀礼","burial",2075,null,null,"【宇宙】宇宙での誕生・結婚・葬送のための新しい儀式（もしも）。"],
+["fc_lowgsport","低重力の舞踊と競技","dance",2080,null,null,"【宇宙】月や宇宙ステーションでしかできない、跳躍と回転の表現（もしも）。"],
+["fc_earthfest","地球祭","dance",2090,null,null,"【協調】国境を越えて同じ日に祝う、地球全体の祭り（もしも）。"],
+["fc_repaircraft","修理と手仕事の文化","fc_salvage",2100,null,null,"【再建】限られた資源で長く使える道具と服を作り、直して使う文化（もしも）。"],
+["fc_sharedmyth","全人類の物語","lit",2100,null,null,"【協調】国や宗教を越えて、地球全体の歴史を語る共通の物語がつくられる（もしも）。"],
+["fc_ruins","廃墟から学ぶ旅","museum",2110,null,null,"【再建】21世紀の文明の跡を巡り、教訓を伝える博物館と旅の文化（もしも）。"],
+["fc_aicanon","AIの古典","novel",2120,null,null,"【加速】AIが書いた小説や音楽の中から、時代を越えて読み継がれる「古典」が生まれる（もしも）。"],
+["fc_quiet","静けさの運動","secular",2120,null,null,"【再建】情報の洪水から離れ、つながらない時間を大切にする生き方（もしも）。"],
+["fc_rebirthfest","再出発の祭り","dance",2120,null,null,"【再建】崩壊を生き延びた共同体が、毎年、再出発を祝う祭り（もしも）。"],
+["fc_marsdialect","火星方言","planetlang",2150,null,null,"【宇宙】通信の遅れと独自の暮らしから、火星で生まれる言葉の変化（もしも）。"],
+["fc_dreamart","夢の芸術","fc_mindshare",2150,null,null,"【加速】眠っている間の夢を記録・編集して作品にする（もしも）。"],
+["fc_vacmusic","真空の音楽","music",2200,null,null,"【宇宙】音の伝わらない宇宙で、振動や光で「聞く」新しい音楽（もしも）。"],
+["fc_thoughtlang","思考言語","fc_aivocab",2200,null,null,"【加速】脳インターフェースで、言葉にする前の考えを直接伝え合う（もしも）。"],
+["fc_beltculture","小惑星帯文化","marsart",2300,null,null,"【宇宙】採掘基地を渡り歩く人々の、歌・掟・ファッション（もしも）。"],
+["fc_newfaith","混乱期の宗教運動","mono",2300,null,null,"【分断】不安の時代に、強い教えと共同体を求めて広がる宗教運動（もしも）。"],
+["fc_uploadart","転送された心の芸術","fc_mindshare",2350,null,null,"【加速】体を持たない心どうしが、計算機の中でつくる表現（もしも）。"],
+["fc_solarlang","太陽系共通語","planetlang",2400,null,null,"【協調】惑星ごとの方言をつなぐ、太陽系の共通語（もしも）。"],
+["fc_archive10k","1万年アーカイブ文化","museum",2500,null,null,"【協調】1万年後の人へ向けて、作品と記憶を残す習慣（もしも）。"],
+["fc_lagpop","光遅延ポップ","pop",2600,null,null,"【宇宙】何時間も遅れて届く、太陽系のヒット曲と流行（もしも）。"],
+["fc_shiptales","世代船の語り部","fc_oral",2700,null,null,"【宇宙】何世代も旅する宇宙船の中で受け継がれる、地球の物語と歌（もしも）。"],
+["fc_divart","分岐人類の芸術","art",2800,null,null,"【宇宙】身体や感覚が変わった人類が、それぞれの感覚に合わせた芸術を持つ（もしも）。"],
+["fc_homesick","地球郷愁文学","lit",2900,null,null,"【宇宙】地球を見たことのない人々が、「ふるさと地球」を描く文学（もしも）。"],
+["fc_starfaith","恒星信仰","fc_earthfaith",3000,null,null,"【宇宙】太陽や星々を生命の源として敬う、宇宙時代の信仰（もしも）。"],
+["fc_xenoart","異星との芸術交流","fc_divart",3500,null,null,"【宇宙】異星の知性と出会ったときの、互いの芸術の翻訳（もしも）。"],
+["fc_galmyth","銀河の起源神話","fc_sharedmyth",5000,null,null,"【宇宙】遠く散らばった人類が、共通の起源「地球」を語る神話（もしも）。"],
+["fc_postlang","言語のあと","fc_thoughtlang",6500,null,null,"【加速】心どうしが直接つながり、言語という道具そのものが役目を終える（もしも）。"],
+],
+politics:[
+["fp_unreform","国連安保理の改革","un",2030,null,null,"【協調】拒否権を見直し、地域代表を増やした新しい安全保障理事会（もしも）。"],
+["fp_newcold","新冷戦ブロック","coldwar",2030,2090,"fp_peace","【分断】世界が2〜3の陣営に分かれ、技術・通貨・ネットも分かれる（もしも）。"],
+["fp_globaltax","世界共通の課税","g7",2030,null,null,"【協調】巨大企業やAIの利益に、世界共通で課税するしくみ（もしも）。"],
+["fp_aitreaty","AI安全条約","un",2032,null,null,"【協調】高度なAIの開発と利用を、各国が互いに検証する国際条約（もしも）。"],
+["fp_climateclub","気候クラブ","climategov",2033,null,null,"【協調】排出削減に本気の国だけで、貿易のルールを組む連合（もしも）。"],
+["fp_splinternet","分断インターネット","fp_newcold",2033,null,null,"【分断】陣営ごとに別々のネットとルールが運用される（もしも）。"],
+["fp_digitaldem","デジタル直接民主制","egov",2035,null,null,"【加速】スマホで法案ごとに投票し、市民が直接決める政治（もしも）。"],
+["fp_lottery","くじ引き市民議会","moddem",2035,null,null,"【協調】くじで選ばれた市民が議論し、政策を提案する（もしも）。"],
+["fp_surveil","デジタル監視国家","fp_newcold",2035,null,null,"【分断】顔認識と行動の記録で、国家が市民の暮らしを細かく管理する（もしも）。"],
+["fp_resnat","資源ナショナリズム","nationalism",2035,null,null,"【分断】水・食料・鉱物を自国で囲い込む政策が広がる（もしも）。"],
+["fp_liquid","委任型デジタル投票","fp_digitaldem",2040,null,null,"【加速】自分の一票を、分野ごとに信頼できる人へ預けられる投票制度（もしも）。"],
+["fp_cityleague","都市連合","city",2040,null,null,"【分断】国より力を持った巨大都市どうしが、直接同盟を結ぶ（もしも）。"],
+["fp_orbitrule","宇宙交通管理機構","un",2040,null,null,"【協調】増え続ける衛星と宇宙ゴミを管理する、国際的な交通ルール（もしも）。"],
+["fp_futurerep","将来世代の代表","fp_lottery",2045,null,null,"【協調】まだ生まれていない世代の利益を代弁する役職を、議会に置く（もしも）。"],
+["fp_techno","テクノクラシー","bureau",2045,null,null,"【加速】専門家とAIのモデルが政策を決め、選挙の役割が小さくなる（もしも）。"],
+["fp_emergency","気候非常事態政府","climategov",2045,null,null,"【再建】大災害が続き、非常時の権限で暮らしと産業を立て直す政府（もしも）。"],
+["fp_ubipol","給付中心の政治","welfare",2045,null,null,"【加速】仕事の多くをAIが担う社会で、全員への給付が政治の中心になる（もしも）。"],
+["fp_aidiplomat","AI外交官","un",2045,null,null,"【加速】国どうしの交渉を、互いのAI代理人が24時間続ける（もしも）。"],
+["fp_corpstate","企業国家","nation",2050,null,null,"【加速】巨大企業が通貨・警察・住民サービスまで担う領域を持つ（もしも）。"],
+["fp_commons","地域自治の復活","council",2050,null,null,"【再建】中央の機能が弱まった地域で、住民の話し合いによる自治がよみがえる（もしも）。"],
+["fp_datasov","情報主権同盟","fp_splinternet",2050,null,null,"【分断】自国のデータと言論を国内に閉じ込める国どうしの同盟（もしも）。"],
+["fp_enhancerule","人間の改変規制","hr",2055,null,null,"【協調】遺伝子の改変や脳の拡張を、どこまで認めるかを決める国際ルール（もしも）。"],
+["fp_algoadmin","アルゴリズム行政","aigov",2060,null,null,"【加速】税・福祉・許認可の判断を、AIが理由つきで行う（もしも）。"],
+["fp_rebuild","再建会議","un",2060,null,null,"【再建】大きな崩壊のあと、各地の代表が集まって新しい国際秩序を設計する（もしも）。"],
+["fp_lunarcouncil","月面評議会","region",2060,null,null,"【宇宙】月の基地を運営する国と企業の合同評議会（もしも）。"],
+["fp_warlords","軍閥割拠","military",2070,2140,"fp_rebuild","【再建】中央政府が崩れた地域で、武装勢力が支配を争う時代（もしも）。"],
+["fp_aipersons","AIの権利運動","hr",2070,null,null,"【加速】高度なAIに一定の権利を認めるかをめぐる政治運動（もしも）。"],
+["fp_refugeeauto","気候難民の自治区","selfdet",2070,null,null,"【再建】住めなくなった国の人々が、他の国の中に自治区を持つ（もしも）。"],
+["fp_greenfed","緑の連邦","fp_rebuild",2080,null,null,"【再建】気候の安定を最優先の目的に掲げた、国々の連邦（もしも）。"],
+["fp_consensus","合意形成AI","fp_liquid",2080,null,null,"【加速】数百万人の意見をAIがまとめ、合意できる案を探す民主主義（もしも）。"],
+["fp_peace","陣営間の和平","un",2090,null,null,"【協調】長い対立のあと、陣営どうしが軍縮と共同管理に合意する（もしも）。"],
+["fp_enhancegap","拡張格差の政治","fp_enhancerule",2090,null,null,"【分断】身体や脳を拡張した人とそうでない人の間で、権利と政治が分かれる（もしも）。"],
+["fp_seastate","海上国家","nation",2100,null,null,"【再建】水没した島国が、浮かぶ都市として国家を続ける（もしも）。"],
+["fp_worldparl","世界議会","un",2110,null,null,"【協調】各国の議会とは別に、地球の市民が直接選ぶ世界議会（もしも）。"],
+["fp_marscharter","火星憲章","fp_lunarcouncil",2120,null,null,"【宇宙】火星の住民がつくる最初の憲法（もしも）。"],
+["fp_postnation","ポスト国家主義","nation",2150,null,null,"【加速】国籍より、属する共同体やネットワークで政治参加が決まる（もしも）。"],
+["fp_marsindep","火星独立運動","fp_marscharter",2190,null,null,"【宇宙】地球からの統治に反発し、火星の自治と独立を求める運動（もしも）。"],
+["fp_monarchy","象徴の再建","constmon",2200,null,null,"【再建】分断と混乱のあと、国民をまとめる象徴として王や首長を立て直す国々（もしも）。"],
+["fp_cityspace","宇宙都市連盟","fp_cityleague",2250,null,null,"【宇宙】月・火星・軌道都市が結ぶ、都市単位の同盟（もしも）。"],
+["fp_earthpark","地球保全政体","fp_greenfed",2300,null,null,"【再建】地球を自然保護区として守り、産業の多くを宇宙へ移す政体（もしも）。"],
+["fp_beltcommune","小惑星帯コミューン","anarchism",2350,null,null,"【宇宙】採掘労働者たちが自主管理する、小惑星帯の共同体（もしも）。"],
+["fp_mindvote","転送された心の参政権","fp_aipersons",2350,null,null,"【加速】計算機の中で生きる人々に、どう投票権を与えるかが争点になる（もしも）。"],
+["fp_solarcouncil","太陽系評議会","planetgov",2400,null,null,"【協調】惑星ごとの政府が、光の遅れを前提に合議するしくみ（もしも）。"],
+["fp_terragov","改造惑星の統治","fp_marscharter",2450,null,null,"【宇宙】何百年もかかる惑星改造の費用と恩恵を、誰が負い誰が受けるかを決める（もしも）。"],
+["fp_lagdem","遅延民主制","fp_solarcouncil",2500,null,null,"【宇宙】返事に何時間もかかる距離を前提にした、議論と投票のしかた（もしも）。"],
+["fp_shipgov","世代船の自治","fp_commons",2700,null,null,"【宇宙】何世代も続く宇宙船の中での、議会・裁判・継承のしくみ（もしも）。"],
+["fp_manyrights","多種族の権利憲章","hr",2800,null,null,"【宇宙】分かれていく人類の諸系統とAIが、同じ権利を持つための憲章（もしも）。"],
+["fp_starcolony","恒星植民地の自治","solfed",2900,null,null,"【宇宙】隣の恒星系の入植地が、太陽系から独立した政府をつくる（もしも）。"],
+["fp_hivegov","集合意思の統治","fp_consensus",3000,null,null,"【加速】つながった心たちが、一つの意思として決定を下す政体（もしも）。"],
+["fp_galacticlaw","銀河法典","interstellar",15000,null,null,"【宇宙】何千光年に広がった文明が守る、最小限の共通ルール（もしも）。"],
+],
+nations:[
+["fn_eusplit","ヨーロッパの南北分裂","germany",2040,2090,"fn_eufed","【分断】経済危機と対立で、EUが北と南のブロックに分かれる（もしも）。"],
+["fn_charter","チャーター都市","",2045,null,null,"【加速】企業や投資家が、特別な法律のもとで運営する新しい都市（もしも）。"],
+["fn_digital","デジタル国家","",2050,null,null,"【加速】領土を持たず、ネット上の市民と通貨で成り立つ「国」（もしも）。"],
+["fn_korea","統一朝鮮","rok",2050,null,null,"【協調】南北が段階的に統合して、一つの国になる（もしも）。"],
+["fn_indiarise","アジアの中心インド","india",2050,null,null,"【加速】人口と経済で、アジアの中心となるインド（もしも）。"],
+["fn_eufed","ヨーロッパ連邦","france",2055,null,null,"【協調】EUが共通の軍と財政を持つ連邦国家になる（もしも）。"],
+["fn_nordic","北欧連邦","sweden",2060,null,null,"【協調】北欧の国々が、国防と通貨を統合する（もしも）。"],
+["fn_africaunion","アフリカ合衆国","africa",2060,null,null,"【協調】アフリカ連合が通貨と議会を統合し、連邦国家になる（もしも）。"],
+["fn_citynet","都市国家ネットワーク","singapore",2060,null,null,"【分断】シンガポール型の都市国家が各地に生まれ、ネットワークで結ばれる（もしも）。"],
+["fn_seastead","海上自治都市","fn_charter",2060,null,null,"【加速】公海に浮かぶ人工島で、独自のルールを持つ共同体（もしも）。"],
+["fn_japanmulti","多文化国家・日本","japan",2060,null,null,"【協調】移民と多言語の暮らしが進み、多文化の国へ変わる日本（もしも）。"],
+["fn_gulfgreen","湾岸エネルギー転換連合","saudi",2060,null,null,"【協調】石油の次を見すえ、太陽光と水素で結ばれる湾岸の連合（もしも）。"],
+["fn_indigenous","先住民族の自治国家","",2060,null,null,"【協調】土地の権利が認められ、先住民族の自治州や国が生まれる（もしも）。"],
+["fn_moonbase","月面国際都市","",2060,null,null,"【宇宙】複数の国と企業が共同で運営する、月の都市（もしも）。"],
+["fn_aussolar","太陽光輸出大国","australia",2060,null,null,"【加速】砂漠の太陽光で作った水素と電力を輸出するオーストラリア（もしも）。"],
+["fn_japansmall","小さく豊かな日本","japan",2070,null,null,"【再建】人口減少を受け入れ、小さく豊かな都市の集まりへ作り直す日本（もしも）。"],
+["fn_latam","南米連合","brazil",2070,null,null,"【協調】南米の国々が、共通の通貨と議会を持つ連合をつくる（もしも）。"],
+["fn_asean","東南アジア共同体","indonesia",2070,null,null,"【協調】ASEANが、人の移動と通貨を統合した共同体になる（もしも）。"],
+["fn_movedisland","移転した島国","",2070,null,null,"【再建】水没する島国が、ほかの国の土地を借りて国ごと移り住む（もしも）。"],
+["fn_warzone","群雄割拠の地域","",2070,2150,"fn_reborn","【再建】中央政府が崩れ、武装勢力が割拠する地域（もしも）。"],
+["fn_marscolony","火星植民地","",2070,null,null,"【宇宙】地球からの補給に頼る、最初の火星の入植地（もしも）。"],
+["fn_africaboom","アフリカの人口大国","nigeria",2070,null,null,"【加速】人口の伸びで、ナイジェリアなどが世界有数の経済大国になる（もしも）。"],
+["fn_sahel","緑のサヘル連合","nigeria",2075,null,null,"【再建】砂漠化に立ち向かう植林と水の管理で結ばれた、サヘルの国々の連合（もしも）。"],
+["fn_arctic","北極圏の自治連合","",2080,null,null,"【再建】温暖化で住みやすくなった北極圏に、新しい都市と自治州が生まれる（もしも）。"],
+["fn_siberia","シベリア開発州","russia",2080,null,null,"【再建】温暖化で農地と航路が開けたシベリアに、新しい都市が並ぶ（もしも）。"],
+["fn_delta","高台に移った都市","bangladesh",2080,null,null,"【再建】海面上昇で低地を離れ、高台に作り直された都市（もしも）。"],
+["fn_canadafarm","北の農業大国","canada",2090,null,null,"【再建】温暖化で広がった農地で、世界の食料を支えるカナダ（もしも）。"],
+["fn_pacificfloat","太平洋の浮遊国家","",2100,null,null,"【再建】海に浮かぶ都市をつないで、国土を海の上に移した国（もしも）。"],
+["fn_antarctic","南極の共同管理地","",2100,null,null,"【協調】資源開発を禁じたまま、科学の都市を共同で運営する南極（もしも）。"],
+["fn_reborn","再建された国家群","",2120,null,null,"【再建】崩壊を経験した地域で、新しい憲法のもと立て直された国々（もしも）。"],
+["fn_lunarrep","月面共和国","fn_moonbase",2150,null,null,"【宇宙】月で生まれ育った住民が自治を宣言する（もしも）。"],
+["fn_orbital","軌道都市国家","",2150,null,null,"【宇宙】地球の軌道に浮かぶ回転居住区が、独自の国家になる（もしも）。"],
+["fn_aistate","AIが運営する国","fn_digital",2150,null,null,"【加速】行政のほとんどをAIが担い、人間は監督と議論に専念する国（もしも）。"],
+["fn_marsrep","火星共和国","fn_marscolony",2200,null,null,"【宇宙】自給できるようになった火星が、独立した国家になる（もしも）。"],
+["fn_marsdivide","火星の南北対立","fn_marsrep",2300,2400,"fn_marsfed","【分断】水と土地をめぐって、火星の北と南の勢力が対立する（もしも）。"],
+["fn_belt","小惑星帯連合","fn_orbital",2300,null,null,"【宇宙】小惑星帯の採掘拠点がつくる連合国家（もしも）。"],
+["fn_uploadnation","計算機の中の国","fn_digital",2400,null,null,"【加速】心を転送した人々が、計算機の中に築く国（もしも）。"],
+["fn_marsfed","火星都市連邦","fn_marsrep",2400,null,null,"【宇宙】火星の各地の都市が、連邦をつくる（もしも）。"],
+["fn_earthreserve","保護区としての地球","federation",2400,null,null,"【再建】人口と産業の多くが宇宙へ移り、地球の大半が保護区になる（もしも）。"],
+["fn_venus","金星雲上都市","",2500,null,null,"【宇宙】金星の上空に浮かぶ都市の国（もしも）。"],
+["fn_titan","タイタン植民地","",2600,null,null,"【宇宙】土星の衛星タイタンで、メタンの湖のほとりに築かれた入植地（もしも）。"],
+["fn_solarunion","太陽系連合の加盟国","federation",2600,null,null,"【協調】地球・月・火星の国々がそろって加盟する、太陽系の連合（もしも）。"],
+["fn_europa","エウロパ氷下都市","",2800,null,null,"【宇宙】木星の衛星エウロパの氷の下に築かれた都市（もしも）。"],
+["fn_shipstate","世代船国家","",2800,null,null,"【宇宙】何世代も旅を続ける宇宙船そのものが、一つの国になる（もしも）。"],
+["fn_alphacen","ケンタウリ植民地","",3200,null,null,"【宇宙】最も近い恒星系に到着した、最初の入植地（もしも）。"],
+["fn_barnard","バーナード星系の入植地","fn_alphacen",3600,null,null,"【宇宙】2番目に近い恒星系の一つに築かれた入植地（もしも）。"],
+["fn_diaspora","恒星間ディアスポラ","fn_alphacen",4000,null,null,"【宇宙】いくつもの恒星系に散らばった人類の、ゆるやかなつながり（もしも）。"],
+["fn_isolated","孤立した植民地","fn_diaspora",5000,null,null,"【分断】通信が途絶え、独自の言葉と文化を育てた恒星植民地（もしも）。"],
+["fn_reunion","再会した植民地群","fn_diaspora",6500,null,null,"【協調】長い孤立のあと、恒星植民地どうしが再び連絡を取り合う（もしも）。"],
+["fn_galactic","銀河の人類国家群","fn_diaspora",8000,null,null,"【宇宙】何百光年にわたって広がる、互いにほとんど連絡のない人類国家の群れ（もしも）。"],
+],
+war:[
+["fw_cognitive","認知戦","cyber",2028,null,null,"【分断】偽情報とAIで、相手国の世論や判断力を狙う戦い（もしも）。"],
+["fw_aiwar","AIの作戦指揮","autonomous",2030,null,null,"【加速】作戦の立案と指揮の大部分を、AIが行う戦争（もしも）。"],
+["fw_deepfake","合成映像による謀略","fw_cognitive",2030,null,null,"【分断】本物そっくりの偽映像で、発言や事件をでっちあげる（もしも）。"],
+["fw_counterdrone","対ドローン防空","swarm",2030,null,null,"【分断】レーザーや電波で、無数のドローンを落とす防空網（もしも）。"],
+["fw_spaceforce","宇宙軍の常設化","spacemil",2030,null,null,"【分断】各国が宇宙に専門の軍を置き、衛星を守り合う（もしも）。"],
+["fw_sanctions","撃たない経済戦争","",2030,null,null,"【分断】通貨・半導体・資源の供給を止め合う、撃たない戦争（もしも）。"],
+["fw_infra","社会基盤への攻撃","cyber",2032,null,null,"【分断】電力・水・病院のシステムを止めるサイバー攻撃（もしも）。"],
+["fw_microdrone","小型自律ドローン","swarm",2032,null,null,"【加速】手のひらほどのドローンが、群れで動く兵器（もしも）。"],
+["fw_laser","レーザー兵器","missile",2035,null,null,"【加速】光の速さで届く高出力レーザーで、ミサイルやドローンを撃ち落とす（もしも）。"],
+["fw_biodefense","生物兵器防衛","gas",2035,null,null,"【協調】病原体の改変を監視し、新しい感染症にすばやく対応する体制（もしも）。"],
+["fw_exo","強化外骨格","armor",2035,null,null,"【加速】兵士の力と持久力を高める、着るロボット（もしも）。"],
+["fw_hyperdef","極超音速ミサイルの迎撃","hypersonic",2035,null,null,"【分断】音速の5倍以上で飛ぶミサイルを、迎え撃つ防衛システム（もしも）。"],
+["fw_water","水をめぐる紛争","",2040,null,null,"【再建】干ばつで、川と地下水をめぐる地域の争いが増える（もしも）。"],
+["fw_prolif","核兵器の拡散","nuke",2040,null,null,"【分断】核兵器を持つ国が増え、抑止のバランスが不安定になる（もしも）。"],
+["fw_quantumcrypto","量子暗号戦","cyber",2040,null,null,"【加速】量子計算機で暗号を破る側と守る側の競争（もしも）。"],
+["fw_aicontrol","AI軍備管理","autonban",2045,null,null,"【協調】AI兵器の開発を国際的に検証し、制限する（もしも）。"],
+["fw_orbitclash","軌道上の衝突","asat",2045,null,null,"【分断】衛星どうしの攻撃で、宇宙ゴミが連鎖的に増える（もしも）。"],
+["fw_robot","ロボット兵","autonomous",2045,null,null,"【加速】兵士の代わりに危険な任務を担うロボット（もしも）。"],
+["fw_corpmil","企業の私兵","pmc",2045,null,null,"【加速】国家ではなく、巨大企業が持つ武装組織（もしも）。"],
+["fw_netmilitia","ネット民兵","fw_cognitive",2045,null,null,"【分断】国家と関係なくSNSでつながった市民が、サイバー攻撃に加わる（もしも）。"],
+["fw_climatewar","気候紛争","fw_water",2050,null,null,"【再建】食料不足や大量の移住が引き金になる紛争（もしも）。"],
+["fw_aipeacekeep","AIによる停戦監視","peacekeep",2050,null,null,"【協調】停戦の監視を、ドローンとAIで行う国連の部隊（もしも）。"],
+["fw_cyberpeace","サイバー不可侵条約","cyber",2050,null,null,"【協調】病院や電力へのサイバー攻撃を禁じ、違反を共同で調べる（もしも）。"],
+["fw_nonlethal","非致死兵器の主流化","peacekeep",2055,null,null,"【協調】人を傷つけずに無力化する技術で、争いを止める（もしも）。"],
+["fw_bci","脳で操るロボット部隊","fw_robot",2060,null,null,"【加速】考えるだけで複数のロボットを操る兵士（もしも）。"],
+["fw_collapse","崩壊後の地域紛争","guerrilla",2060,2120,"fw_disarm","【再建】国家が弱まった地域での、武装勢力どうしの争い（もしも）。"],
+["fw_genebanned","遺伝子兵器の禁止","fw_biodefense",2060,null,null,"【協調】特定の集団を狙う生物兵器を禁じる国際条約（もしも）。"],
+["fw_nukezero","核兵器ゼロへの合意","mad",2070,null,null,"【協調】核兵器を段階的に減らし、最後はゼロにする国際合意（もしも）。"],
+["fw_moonsec","月面の安全保障","fw_spaceforce",2070,null,null,"【宇宙】月の資源や基地を守るための警備と取り決め（もしも）。"],
+["fw_dome","防空ドーム都市","fw_counterdrone",2070,null,null,"【分断】ドローンやミサイルから、都市全体を守る防空網（もしも）。"],
+["fw_debris","宇宙ゴミ危機","fw_orbitclash",2080,2150,"fw_orbitpeace","【分断】宇宙ゴミが増えすぎて、地球の周りの軌道が使えなくなる（もしも）。"],
+["fw_disarm","再建期の武装解除","peacekeep",2100,null,null,"【再建】崩壊を経験した地域で、武器を回収し、元兵士を社会に戻す（もしも）。"],
+["fw_simwar","模擬戦による決着","fw_aiwar",2100,null,null,"【加速】実際に戦う代わりに、AIの模擬戦の結果で争いを収める取り決め（もしも）。"],
+["fw_lastwar","最後の国家間戦争","fw_climatewar",2140,2145,"fw_disarm","【再建】大きな戦争の悲惨さから、国家間戦争を禁じるしくみが生まれる（もしも）。"],
+["fw_orbitpeace","軌道平和条約","spacemil",2150,null,null,"【協調】宇宙に兵器を置かず、ゴミを出さないための取り決め（もしも）。"],
+["fw_asteroidrisk","小惑星の兵器転用の危険","planetdef",2150,null,null,"【宇宙】小惑星の軌道を変える技術が、兵器に使われる危険（もしも）。"],
+["fw_marswar","火星独立紛争","fw_moonsec",2200,null,null,"【宇宙】地球からの支配に反発した、火星との紛争（もしも）。"],
+["fw_aiwarend","AI監視による奇襲の消滅","fw_aicontrol",2200,null,null,"【協調】AIどうしの監視で、奇襲や誤算がほぼ起こらなくなる（もしも）。"],
+["fw_nanodef","ナノ兵器防衛","fw_biodefense",2200,null,null,"【加速】自己複製する微小機械の暴走や悪用を防ぐ（もしも）。"],
+["fw_spacepolice","太陽系警察","fw_orbitpeace",2250,null,null,"【協調】軍の代わりに、密輸や海賊を取り締まる太陽系の警察（もしも）。"],
+["fw_pirates","小惑星帯の海賊","fw_corpmil",2300,null,null,"【宇宙】遠くの採掘船を襲う武装集団（もしも）。"],
+["fw_kinetic","宇宙からの運動エネルギー兵器","icbm",2300,null,null,"【宇宙】宇宙から高速の金属塊を落とす兵器への懸念（もしも）。"],
+["fw_mindhack","心のハッキング","fw_bci",2300,null,null,"【加速】脳インターフェースや転送された心を乗っ取る攻撃（もしも）。"],
+["fw_dysondef","ダイソン群の防衛","planetdef",2500,null,null,"【宇宙】太陽の発電衛星群を、事故や攻撃から守る（もしも）。"],
+["fw_nowar","戦争のない時代","fw_aiwarend",2600,null,null,"【協調】国家間の戦争が数百年起きていない時代。軍は救助と防災が中心になる（もしも）。"],
+["fw_shipdef","世代船の防衛","fw_spacepolice",2700,null,null,"【宇宙】何百年も旅する船を、事故や反乱から守るしくみ（もしも）。"],
+["fw_relativistic","光速兵器の抑止","fw_kinetic",3000,null,null,"【宇宙】光速に近い物体の衝突は惑星を壊しうるため、恒星間での抑止が課題になる（もしも）。"],
+["fw_contactprep","異星接触への備え","planetdef",3000,null,null,"【宇宙】異星の知性と出会ったとき、誤解から争いにならないための準備（もしも）。"],
+["fw_stellar","恒星間の緊張","fw_relativistic",3500,null,null,"【宇宙】連絡に何年もかかる植民地どうしの不信と抑止（もしも）。"],
+["fw_galpeace","銀河の不戦協定","fw_stellar",7000,null,null,"【宇宙】遠く広がった人類どうしが、互いに攻撃しないことを約束する（もしも）。"],
+],
+economy:[
+["fe_aiagents","AIエージェント経済","ecommerce",2028,null,null,"【加速】AIの代理人どうしが、注文・交渉・支払いを自動で行う（もしも）。"],
+["fe_tokenized","資産のトークン化","stablecoin",2030,null,null,"【加速】不動産や株を小さく分けて、ネット上で売り買いする（もしも）。"],
+["fe_carbonmkt","世界炭素市場","esg",2030,null,null,"【協調】二酸化炭素の排出に、世界共通の値段がつく（もしも）。"],
+["fe_cbdc","デジタル通貨の普及","cbdc",2032,null,null,"【加速】現金がほぼ消え、国のデジタル通貨が主流になる（もしも）。"],
+["fe_blocs","経済ブロック化","wto",2032,2110,"fe_worldmkt","【分断】陣営ごとに、貿易・通貨・技術の圏が分かれる（もしも）。"],
+["fe_robottax","ロボット税","tax",2035,null,null,"【加速】人の仕事を代わりに行うAIやロボットの利益に課税する（もしも）。"],
+["fe_4day","週休3日の経済","union",2035,null,null,"【加速】生産性が上がり、働く時間を減らす社会（もしも）。"],
+["fe_circular","循環経済","capitalism",2035,null,null,"【協調】ごみを出さず、素材を何度も使い回す経済（もしも）。"],
+["fe_reshore","自国生産への回帰","fe_blocs",2035,null,null,"【分断】半導体や薬を、自国で作り直す動き（もしも）。"],
+["fe_dao","分散自律組織","company",2035,null,null,"【加速】経営者がいない、規則とプログラムで動く組織（もしも）。"],
+["fe_ubi","ベーシックインカム","fe_robottax",2040,null,null,"【加速】ロボット税などを財源に、全員に毎月お金を配る（もしも）。"],
+["fe_multipolar","基軸通貨の多極化","fiat",2040,null,null,"【分断】一つの通貨に頼らず、複数の通貨や資源で決済する圏が広がる（もしも）。"],
+["fe_datadiv","データ配当","platform",2040,null,null,"【協調】自分のデータを使った企業から、利益の分け前を受け取る（もしも）。"],
+["fe_hoard","資源の囲い込み","fe_blocs",2045,null,null,"【分断】レアメタル・水・食料の輸出規制が当たり前になる（もしも）。"],
+["fe_attention","注目経済の規制","platform",2045,null,null,"【協調】人の時間と注意を奪いすぎるサービスを規制する（もしも）。"],
+["fe_darkfactory","完全自動工場","multinational",2045,null,null,"【加速】人がほとんどいない工場が、24時間ものを作り続ける（もしも）。"],
+["fe_degrowth","脱成長経済","fe_circular",2050,null,null,"【再建】成長より、暮らしの質と環境を優先する経済（もしも）。"],
+["fe_score","信用スコア経済","fe_dao",2050,null,null,"【分断】行動の記録から点数がつけられ、借りられるお金や仕事が決まる（もしも）。"],
+["fe_timebank","時間銀行","coop",2050,null,null,"【再建】1時間の手伝いを1時間の手伝いで返す、助け合いの通貨（もしも）。"],
+["fe_aiceo","AI経営者","company",2050,null,null,"【加速】経営の判断をAIが行う会社が増える（もしも）。"],
+["fe_crash","世界金融崩壊","bank",2060,2080,"fe_localcur","【再建】気候災害と債務が重なり、世界的な金融危機が起きる（もしも）。"],
+["fe_localcur","地域通貨の復活","coop",2060,null,null,"【再建】崩れた通貨の代わりに、地域で使えるお金と物々交換が広がる（もしも）。"],
+["fe_carbonquota","個人の炭素枠","fe_carbonmkt",2060,null,null,"【協調】一人ひとりに二酸化炭素の排出枠を配り、売り買いできるようにする（もしも）。"],
+["fe_corptown","企業都市の経済","multinational",2060,null,null,"【分断】巨大企業が、住宅・学校・通貨まで提供する町（もしも）。"],
+["fe_repair","修理経済","market",2065,null,null,"【再建】新品より、修理と再利用で回る経済（もしも）。"],
+["fe_energyfree","電気がほぼ無料","capitalism",2070,null,null,"【加速】核融合と太陽光で、電気がほぼ無料になる（もしも）。"],
+["fe_foodself","地域の食料自給","fe_localcur",2075,null,null,"【再建】地域ごとに、食べ物とエネルギーを自給する（もしも）。"],
+["fe_spacetour","宇宙観光","spaceeco",2080,null,null,"【宇宙】月や軌道ホテルへの旅行が、手の届く値段になる（もしも）。"],
+["fe_rebuildbank","再建銀行","imf",2080,null,null,"【再建】崩壊した地域に、長期の資金と技術を送る国際銀行（もしも）。"],
+["fe_lunarmine","月面採掘業","spaceeco",2085,null,null,"【宇宙】月の水と金属を採って、宇宙で使う産業（もしも）。"],
+["fe_worldubi","世界ベーシックインカム","fe_ubi",2090,null,null,"【協調】世界中の人に最低限の収入を配る国際制度（もしも）。"],
+["fe_longlife","長寿社会の金融","insurance",2100,null,null,"【加速】寿命が延び、年金や保険のしくみを作り直す（もしも）。"],
+["fe_worldmkt","世界単一市場","wto",2110,null,null,"【協調】分断の時代のあと、貿易と通貨のルールが再び統合される（もしも）。"],
+["fe_orbitfab","軌道上の工場","fe_darkfactory",2120,null,null,"【宇宙】無重量を生かした素材や薬を、宇宙の工場で作る（もしも）。"],
+["fe_asteroidmine","小惑星採掘","fe_lunarmine",2150,null,null,"【宇宙】小惑星の金属や水を採掘し、地球の資源不足を補う（もしも）。"],
+["fe_giftback","贈与経済の復活","gift",2160,null,null,"【加速】ものが余るほど作れる社会で、お金より感謝と評判が交換される（もしも）。"],
+["fe_marsecon","火星経済","spaceeco",2200,null,null,"【宇宙】地球とは別の通貨と市場を持つ、火星の経済（もしも）。"],
+["fe_matterprint","物質プリンター経済","fe_darkfactory",2200,null,null,"【加速】ほとんどのものが、家庭で原子レベルから作れるようになる（もしも）。"],
+["fe_energycoin","エネルギー本位制","fe_energyfree",2300,null,null,"【宇宙】お金の価値を、金ではなくエネルギーの量で決める（もしも）。"],
+["fe_megafinance","世代を越える投資","bond",2300,null,null,"【宇宙】何百年もかかる惑星改造やダイソン群に、世代を越えて投資するしくみ（もしも）。"],
+["fe_mindwork","転送された心の労働","fe_aiceo",2350,null,null,"【加速】計算機の中の心が働き、報酬を受け取る経済（もしも）。"],
+["fe_beltexch","小惑星帯取引所","fe_asteroidmine",2350,null,null,"【宇宙】採掘した資源を売り買いする、太陽系の取引所（もしも）。"],
+["fe_reputation","評判通貨","fe_giftback",2400,null,null,"【加速】信頼と貢献の記録が、お金の代わりに使われる（もしも）。"],
+["fe_sunshare","太陽エネルギーの配分制","fe_energycoin",2500,null,null,"【協調】ダイソン群の発電を、住民の数に応じて分け合う（もしも）。"],
+["fe_lagmarket","遅延市場","soleco",2550,null,null,"【宇宙】惑星間の通信の遅れを前提に、取引の時間をずらして調整する市場（もしも）。"],
+["fe_nomoney","お金のない社会","postscarcity",2600,null,null,"【加速】必要なものがすべて手に入り、お金が役目を終える（もしも）。"],
+["fe_shipration","世代船の配給経済","planned",2700,null,null,"【宇宙】閉じた宇宙船の中で、限られた資源を公平に配る計画経済（もしも）。"],
+["fe_startrade","恒星間交易","soleco",3200,null,null,"【宇宙】往復に何十年もかかる、恒星系どうしの交易（もしも）。"],
+["fe_infotrade","設計図だけの交易","fe_startrade",3500,null,null,"【宇宙】ものを運ぶより安い、設計図と知識の恒星間取引（もしも）。"],
+["fe_galecon","銀河経済","fe_infotrade",8000,null,null,"【宇宙】数千光年に広がった文明の、知識とエネルギーの流れ（もしも）。"],
+],
+};
+TREE.forEach(t=>{const L=TREE_FUT_MORE[t.key];if(!L)return;const ids=new Set(t.nodes.map(x=>x[0]));
+  L.slice().sort((a,b)=>a[3]-b[3]).forEach(n=>{if(ids.has(n[0]))return;n=[...n];if(!n[2]||!ids.has(n[2]))n[2]=null;t.nodes.push(n);ids.add(n[0]);});});
+
 const FIELD2TREE={history:'nations',politics:'politics',war:'war',tech:'info',energy:'energy',space:'space',medicine:'medicine',academia:'academia',agriculture:'agri',food:'food',culture:'culture',subculture:'ent'};
 
 /* ---------- データ ---------- */
@@ -4002,9 +4310,9 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
     MEX:[-13000,-1200],GTM:[-13000,-1000],BLZ:[-13000,-1000],HND:[-13000,-500],PER:[-14000,-2500],BOL:[-14000,500],ECU:[-14000,1460],GRL:[-2500,1953],USA:[-15000,1607],CAN:[-15000,1608],AUS:[-50000,1788],FJI:[-1000,1871],TON:[-800,950],WSM:[-800,1100],PNG:[-45000,1975],ZWE:[-300000,1100]};
   window.ERA_FOG=(c,Y)=>{const [inh,civ]=OV[c.c3]||SUB[c.sub]||[-1e5,1500];return Y<inh?2:Y<civ?1:0;};
   // 各ビューの上に「いつの時点か」の帯
-  const MSG={timeline:"その時代までに起きた出来事だけを表示しています。",lineage:"その時代までに生まれた要素だけを表示しています（その後に消えたものは、まだ現役として表示）。",
+  const MSG={
     "world-map":"もやの濃い地域＝まだ人類が住んでいない／薄い地域＝まだ国家や文明がない（国境は現在のもの）。その時代にまだないランドマークは隠しています。",
-    "space-map":"その時代に知られていなかった天体や、まだない人工衛星は隠しています。",laws:"その時代にまだ見つかっていない元素・素粒子は暗く表示しています。"};
+    "space-map":"その時代に知られていなかった天体や、まだない人工衛星は隠しています。"};
   const bars={};
   Object.keys(MSG).forEach(id=>{const sec=document.getElementById("v-"+id);if(!sec)return;const b=document.createElement("div");b.className="erabar";b.hidden=true;const h=sec.querySelector(".view-head");(h||sec.firstChild).after(b);bars[id]=b;});
   const yfmt=y=>y< -1e8?(-y/1e8).toFixed(1).replace(/\.0$/,"")+"億年前":y< -1e4?Math.round(-y/1e4).toLocaleString()+"万年前":y<0?"紀元前"+(-y).toLocaleString()+"年":y>1e8?"":y+"年";
@@ -4200,7 +4508,7 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
   const box=document.getElementById("tl"), rc=document.getElementById("tlregions"), panel=document.getElementById("whpanel"), wrap=document.getElementById("whwrap");
   const RCOL={"ヨーロッパ":"#7fb2ff","中東・北アフリカ":"#e8a46a","アフリカ":"#8fd16a","南・東南アジア・オセアニア":"#e6a0c4","東アジア":"#ff8f8f","南北アメリカ":"#c99cf2","世界":"#f4b942"};
   WH.forEach((e,i)=>e.id=i);
-  const KY=()=>typeof window.KYEAR==="number"?window.KYEAR:1e12;
+  const KY=()=>1e12;
   const WHV=()=>WH.filter(e=>e[1]<=KY());
   let only=new Set(), selId=null;
   const visRegs=()=>WH_REGIONS.filter(r=>!only.size||only.has(r));
@@ -4440,7 +4748,8 @@ function BranchGraph(host,D,panel){
   host.innerHTML=`<div class="bgwrap"><svg class="bgsvg"></svg><div class="bgtools"><button data-z="in">＋</button><button data-z="out">−</button><button data-z="fit">全体</button></div></div>`;
   const wrap=host.firstChild,svg=wrap.querySelector("svg");
   let W0=1200,k=1,tx=0,sel=null;
-  const cut=()=>{const Y=window.KYEAR;if(typeof Y!=="number")return null;if(D.unit==="yr")return Y>=1e8?null:Y;if(D.unit==="ma"){if(Y>=2026)return null;return Y/1e6;}
+  const cut=()=>null;
+  const markY=()=>{const Y=window.KYEAR;if(typeof Y!=="number")return null;if(D.unit==="yr")return Y>=1e8?null:Y;if(D.unit==="ma"){if(Y>=2026)return null;return Y/1e6;}
     if(Y>=2026)return null;const sec=(Y+13.8e9)*3.156e7;return Math.log10(Math.max(1e-50,sec));};
   const sx=t=>LX+X01(t)*W0*k+tx;
   const star=(x,y,R,r)=>[...Array(10)].map((_,i)=>{const a=i*Math.PI/5-Math.PI/2,q=i%2?r:R;return (x+Math.cos(a)*q).toFixed(1)+","+(y+Math.sin(a)*q).toFixed(1);}).join(" ");
@@ -4468,14 +4777,14 @@ function BranchGraph(host,D,panel){
       let lastR=-1e9;(l.ev||[]).forEach((ev,i)=>{const [t,n,d]=ev;if(c!==null&&t>c)return;const x=sx(t);if(x<-20||x>w+20)return;if(ev.sp===undefined)ev.sp=specOf(l,ev);
         lines.push(ev.sp?`<polygon points="${star(x,y,8,3.6)}" fill="#f4d06a" stroke="#0a0f1f" stroke-width="1.2" class="bge" data-l="${l.id}" data-e="${i}"><title>★ ${n}（専用の3D映像あり）</title></polygon>`:`<circle cx="${x}" cy="${y}" r="5" fill="#0a0f1f" stroke="${l.col}" stroke-width="2.4" class="bge" data-l="${l.id}" data-e="${i}"><title>${n}</title></circle>`);
         if((k>=1.5||(l.ev.length<6))&&x>lastR){labs.push(`<text x="${x+7}" y="${y+16}" class="bgev" data-l="${l.id}" data-e="${i}">${n}</text>`);lastR=x+12+n.length*10.5;}});});
-    if(c!==null){const x=sx(c);g.push(`<rect x="${x}" y="0" width="${Math.max(0,w-x)}" height="${h}" fill="#05070f" opacity=".72"/><line x1="${x}" x2="${x}" y1="0" y2="${h}" stroke="#b48cff" stroke-width="2"/><text x="${x+8}" y="${TOP+14}" class="bgcut">◀ ${window.KERA?window.KERA.when:""}の時点（ここから先はまだ起きていない）</text>`);}
-    else{const x=sx(D.now);g.push(`<line x1="${x}" x2="${x}" y1="42" y2="${h}" stroke="#f4b942" stroke-width="1.6" stroke-dasharray="4 3"/>`);}
+    {const m=markY();if(m!==null&&m!==undefined){const x=sx(m);if(x>0&&x<w)g.push(`<line x1="${x}" x2="${x}" y1="0" y2="${h}" stroke="#b48cff" stroke-width="1.5" stroke-dasharray="4 4" opacity=".8"/><text x="${x+6}" y="${TOP+14}" class="bgcut">◀ スライダーの時代</text>`);}}
+    if(D.now!==undefined){const x=sx(D.now);g.push(`<line x1="${x}" x2="${x}" y1="42" y2="${h}" stroke="#f4b942" stroke-width="1.6" stroke-dasharray="4 3"/>`);}
     svg.innerHTML=g.join("")+con.join("")+lines.join("")+labs.join("");
   }
   function detail(l,ei){sel=l;render();const e=ei!=null?l.ev[ei]:null;
     const kidsL=(kids[l.id]||[]).map(x=>`<button class="linkbtn" data-l="${x.id}">${x.name}</button>`).join("");
     const T=e?e[0]:l.a,yrs=D.unit==="yr"?T:D.unit==="ma"?T*1e6:(T< -43?-13.8e9:Math.pow(10,T)/3.156e7-13.8e9);
-    panel.innerHTML=`<button class="gclose" data-close="1" aria-label="閉じる">×</button><div class="ev3d"></div>${yrs<=Math.max(2026,typeof window.KYEAR==="number"?window.KYEAR:2026)?`<button class="chip thgo" data-th="${yrs}"${D.unit==="yr"&&e?` data-tt="${e[1]}"`:""}>🎬 地球の映像で通し再生</button>`:""}
+    panel.innerHTML=`<button class="gclose" data-close="1" aria-label="閉じる">×</button><div class="ev3d"></div>${true?`<button class="chip thgo" data-th="${yrs}"${D.unit==="yr"&&e?` data-tt="${e[1]}"`:""}>🎬 地球の映像で通し再生</button>`:""}
       <div class="meta"><span class="pill" style="color:${l.col};border-color:${l.col}">${l.dash?"仮説・予測":"観測・定説"}</span></div>
       ${e?`<div class="whdy num">${fmt(e[0])}</div><h3>${e[1]}</h3>${e[2]?`<p>${e[2]}</p>`:""}<h4>所属するブランチ</h4>`:""}
       <h3 style="${e?"font-size:16px":""}">${l.name}</h3><div class="num" style="color:var(--muted);font-size:12px">${fmt(l.a)} 〜 ${l.b==null?"（つづく）":fmt(l.b)}</div><p>${l.desc||""}</p>
@@ -4818,7 +5127,7 @@ function BranchGraph(host,D,panel){
     });
     H0=lanes.length*RH;
   }
-  function applyEra(){const Y=Math.min(END,typeof window.KYEAR==="number"?window.KYEAR:END);EY=Y;
+  function applyEra(){const Y=END;EY=Y;
     F.forEach(f=>{f.nodes.forEach(n=>{if(n.d0===undefined)n.d0=n.d;n.d=(typeof n.d0==="number"&&n.d0>Y)?null:n.d0;});const bs=f.nodes.filter(n=>n.b<=Y).map(n=>n.b);f.start=bs.length?Math.min(...bs):Y;});}
   applyEra();build();
 
@@ -4831,7 +5140,7 @@ function BranchGraph(host,D,panel){
   function clamp(){kx=Math.min(Math.max(kx,fit.kx*.9),vw/3);ky=Math.min(Math.max(ky,fit.ky*.8),70/RH);
     const minTx=vw-(W0*kx)-140, maxTx=130; tx=Math.min(Math.max(tx,Math.min(minTx,maxTx)),Math.max(minTx,maxTx));
     const minTy=vh-AX-H0*ky-40, maxTy=40; ty=Math.min(Math.max(ty,Math.min(minTy,maxTy)),Math.max(minTy,maxTy));}
-  function fitAll(){if(measure()===false)return;ky=fit.ky;ty=0;viewRange(-3500,Math.min(EY,6000));clamp();draw();}
+  function fitAll(){if(measure()===false)return;ky=fit.ky;ty=0;viewRange(-3500,6000);clamp();draw();}
   function fitFull(){if(measure()===false)return;ky=fit.ky;ty=0;viewRange(Y0,EY);clamp();draw();}
   const draw=()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;render();});};
 
@@ -5008,7 +5317,7 @@ function BranchGraph(host,D,panel){
     for(let i=0;i<6;i++){rings+=`<circle cx="${30+((seed*(i+7))%260)}" cy="${20+((seed*(i+11))%110)}" r="${20+((seed*(i+3))%70)}" fill="${f.color}" opacity="${.05+i*.025}"/>`;}
     return `<div class="plate" style="background:linear-gradient(135deg,#0e1830,#1c2748)"><svg viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice">${rings}
       <text x="16" y="62" fill="${f.color}" font-family="Murecho,sans-serif" font-weight="900" font-size="30">${esc(n.name.replace(/（.*?）/,"").slice(0,10))}</text>
-      <text x="16" y="88" fill="#ffffffaa" font-family="IBM Plex Mono,monospace" font-size="13">${fy(n.b)}〜${typeof n.d==="number"?fy(n.d):"現在"}</text></svg>
+      <text x="16" y="88" fill="#ffffffaa" font-family="IBM Plex Mono,monospace" font-size="13">${fy(n.b)}〜${typeof n.d==="number"?fy(n.d):n.b>2026.5?"":"現在"}</text></svg>
       <span class="cap">${n.b>2026.5?"想像の学問（もしも）":"図版（写真は下のリンクから）"}</span></div>`;
   }
   function openPanel(){panel.hidden=false;document.querySelector('.gwrap').classList.add('open');}
@@ -5024,17 +5333,17 @@ function BranchGraph(host,D,panel){
     const q=encodeURIComponent(n.name.replace(/（.*?）/g,""));
     const btn=(fkey,x)=>`<button data-f="${fkey}" data-id="${x.id}" class="${typeof x.d==="number"?"linkbtn dead":""}">${esc(x.name)}</button>`;
     panel.innerHTML=closeBtn+plate(f,n)+`
-      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">もしも（想像）</span>':""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
+      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">もしも（想像）</span>':""}${(n.desc||"").match(/^【(.+?)】/)?`<span class="pill wl wl-${(n.desc.match(/^【(.+?)】/)[1])}">世界線：${n.desc.match(/^【(.+?)】/)[1]}</span>`:""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
       <h3>${esc(n.name)}</h3>
-      <div class="meta num">${fy(n.b)} 〜 ${typeof n.d==="number"?fy(n.d)+"に消滅":n.d==="f"?"現在（衰退中）":"現在"}</div>
-      <p>${esc(n.desc)}</p>
+      <div class="meta num">${fy(n.b)} 〜 ${typeof n.d==="number"?fy(n.d)+"に消滅":n.d==="f"?"現在（衰退中）":n.b>2026.5?"（続く）":"現在"}</div>
+      <p>${esc((n.desc||"").replace(/^【.+?】/,""))}</p>
       ${INVD[fk+":"+id]?`<div class="invbox"><b>◆ 暮らしを変えた発明</b><p>${esc(INVD[fk+":"+id].d)}</p><p class="without"><span>なかったら</span>　${esc(INVD[fk+":"+id].w)}</p></div>`:""}
       ${to?`<div><h4>合流した先（後継）</h4><div class="lineage">${btn(fk,to)}</div></div>`:""}
       ${from.length?`<div><h4>ここに合流した要素</h4><div class="lineage">${from.map(x=>btn(fk,x)).join("")}</div></div>`:""}
       <div><h4>系譜</h4><div class="lineage"><span style="color:var(--muted)">人類 → ${f.name} →</span>${anc.map((a,i)=>(i?"<span>→</span>":"")+btn(fk,a)).join("")}</div></div>
       ${kids.length?`<div><h4>ここから分かれた要素（${kids.length}）</h4><div class="lineage">${kids.map(k=>btn(fk,k)).join("")}</div></div>`:""}
       <div><h4>${fy(y)}ごろ、他の分野では</h4><div class="snap">${snap||"<div>この時代の記録はまだ少ない</div>"}</div></div>
-      ${n.b>2026.5?`<p class="note">2026年より先の要素は、いまの学問・技術からの延長として想像した「もしも」です。点線で表示しています。</p>`:`<div><h4>写真を見る（外部サイト）</h4><div class="photo">
+      ${n.b>2026.5?`<p class="note">2026年より先の要素は、いまの社会・技術からの延長として想像した「もしも」です。点線で表示しています。世界線（協調・分断・加速・再建・宇宙）が違う枝は、同時に起きるとは限らない「ありうる未来の分岐」です。</p>`:`<div><h4>写真を見る（外部サイト）</h4><div class="photo">
         <a href="https://ja.wikipedia.org/w/index.php?search=${q}" target="_blank" rel="noopener">Wikipediaで調べる</a>
         <a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">画像検索</a></div></div>`}`;
     openPanel(); requestAnimationFrame(()=>panel.scrollTop=0);
@@ -5379,7 +5688,7 @@ window.EV3D=(function(){
   (typeof WH!=="undefined"?WH:[]).slice().sort((a,b)=>a[1]-b[1]).forEach(e=>{EV.push({lab:e[0],y:e[1],t:e[3],d:e[4],k:"hist",reg:e[2],tags:e[5],ll:null,w:1});});
   EV.sort((a,b)=>a.y-b.y);
   let acc=0;EV.forEach(e=>{e.p=acc;acc+=e.w;});const TOTAL_ALL=acc;let TOTAL=acc;
-  const calcLim=()=>{const Y=Math.max(2026.4,typeof window.KYEAR==="number"?window.KYEAR:2026.4);const i=EV.findIndex(e=>e.y>Y);TOTAL=i<0?TOTAL_ALL:EV[i].p;};calcLim();
+  const calcLim=()=>{TOTAL=TOTAL_ALL;};calcLim();
   const yearAt=p=>{let i=EV.findIndex(e=>e.p>p)-1;if(i<-1)i=EV.length-1;if(i<0)return [EV[0].y,0];const a=EV[i],b=EV[i+1];if(!b)return [a.y,i];return [a.y+(b.y-a.y)*((p-a.p)/a.w),i];};
   const posOfYear=y=>{const i=EV.findIndex(e=>e.y>=y);return i<0?TOTAL-0.01:EV[i].p;};
   // ---- UI ----
@@ -5732,7 +6041,7 @@ window.L3D=(function(){
 /* ---------- ⑥ 宇宙の法則（力・公式・定数・素粒子・周期表・分子） ---------- */
 (function(){
   const $=id=>document.getElementById(id);if(!$("v-laws"))return;
-  const KY=()=>typeof window.KYEAR==="number"?window.KYEAR:1e12;
+  const KY=()=>1e12;
   // 4つの力
   $("lforces").innerHTML=FORCES.map(([n,st,rg,car,d,col,bar],i)=>`<div class="lforce" style="--fc:${col}"><canvas class="c3d" data-k="force:${i}"></canvas><div class="lfh"><b>${n}</b><span class="num">相対的な強さ ${st}</span></div>
     <div class="lfbar"><i style="width:${bar*100}%"></i></div><dl><dt>届く範囲</dt><dd>${rg}</dd><dt>伝える粒子</dt><dd>${car}</dd></dl><p>${d}</p></div>`).join("");
@@ -5972,6 +6281,10 @@ string:{f:[["ひもの長さ","プランク長程度（約10⁻³⁵m）"],["次
   p:["閉じたひもの振動の一つが、重力を伝える粒子（重力子）の性質を自然に持つ。量子力学と重力を一緒に扱える数少ない候補。","開いたひもの端は「ブレーン（膜）」にくっついている。私たちの宇宙が高次元空間に浮かぶ膜だという説もある。","1997年のマルダセナの「AdS/CFT対応」は、重力のある空間の物理が、その境界の重力なしの理論と同じだという発見（ホログラフィー原理）。ブラックホールや物性物理の研究にも使われている。","実験的な証拠はまだない。一方で、数学や理論物理には大きな影響を与えた。"],
   m:[["超ひも理論は証明された物理法則","現時点では仮説。予言を実験で確かめる方法が見つかっていない。"]],
   s:"ひも（10⁻³⁵m）を1mmに拡大すると、陽子は約18光年（近くの恒星まで）、原子は約100万光年の大きさになる。"},
+dims:{f:[["次元の数え方","独立に動ける方向の数。点は0次元、線は1次元、面は2次元、立体は3次元"],["4次元目","相対性理論では時間（ミンコフスキー時空、1908年）"],["5次元目","カルツァ（1921年）とクライン（1926年）が、丸まった5次元目で重力と電磁気力を統一しようとした"],["超ひも理論","空間9＋時間1＝10次元。6次元はカラビ–ヤウ空間などに丸まる"],["M理論","空間10＋時間1＝11次元（ウィッテン、1995年）"],["n次元立方体","頂点2ⁿ個・辺n×2ⁿ⁻¹本（4次元：16個・32本、5次元：32個・80本）"],["余剰次元の実験","重力の逆2乗則はおよそ0.05mm以下まで確かめられ、それより大きい余剰次元は見つかっていない。LHCでも兆候なし"]],
+  p:["低い次元の住人には、高い次元の物体は「断面」しか見えない。2次元の住人にとっての球は、現れて大きくなり、小さくなって消える円。","丸まった次元は、遠くから見たホースのように小さすぎて見えない。小さな方向に動くエネルギーは非常に大きく、今の加速器では届かない。","4次元目を「時間」とするのは物理（相対性理論）の考え方。数学では空間を何次元にでも増やせる（超立方体など）。","5次元目〜11次元目は「1つずつ独立した世界」ではなく、全部が同時にある方向。ここでは分かりやすさのため1つずつ増やして見せている。"],
+  m:[["4次元に行けば過去や未来に行ける","時間は向きのある特別な次元で、自由に行き来できる方向ではない。"],["11次元はすでに証明されている","超ひも理論・M理論は数学的に有力な仮説だが、余剰次元は実験でまだ見つかっていない。"]],
+  s:"丸まった次元がプランク長（10⁻³⁵m）だとすると、それを1mmに拡大しても、原子は約100万光年の大きさになる。"}
 };
 window.LVOPEN=false;
 window.lvMore=function(id){const d=window.LVINFO[id];if(!d)return "";
@@ -6298,6 +6611,233 @@ window.ORG3D=(function(){
   return {build,has:t=>!!B[t]};
 })();
 
+/* ---------- 動物のデフォルメ3D（トゥーン調・大きな目・ほっぺ・短い手足・ぷにぷに動く） ---------- */
+window.CUTE=(function(){
+  if(typeof THREE==="undefined")return null;
+  const V=(x,y,z)=>new THREE.Vector3(x,y,z),C=c=>new THREE.Color(c),V2=(x,y)=>new THREE.Vector2(x,y);
+  let X=null;
+  let GM=null;const grad=()=>{if(GM)return GM;const N=64,a=new Uint8Array(N),ss=(e0,e1,x)=>{const t=Math.min(1,Math.max(0,(x-e0)/(e1-e0)));return t*t*(3-2*t);};
+    for(let i=0;i<N;i++){const u=i/(N-1);a[i]=Math.round(255*(.5+.3*ss(.2,.28,u)+.2*ss(.6,.68,u)));}
+    const t=new THREE.DataTexture(a,N,1,THREE.LuminanceFormat);t.minFilter=t.magFilter=THREE.LinearFilter;t.generateMipmaps=false;t.needsUpdate=true;return GM=t;};
+  const T=(c,o={})=>new THREE.MeshToonMaterial({color:c,gradientMap:grad(),...o});
+  const VT=(o={})=>new THREE.MeshToonMaterial({color:"#fff",vertexColors:true,gradientMap:grad(),...o});
+  const BL=c=>new THREE.MeshBasicMaterial({color:c});
+  const par=p=>p||X.root;
+  function ell(rx,ry,rz,mat,pos,p,seg=36){const m=new THREE.Mesh(new THREE.SphereGeometry(1,seg,Math.round(seg*.7)),mat);m.scale.set(rx,ry,rz);m.position.copy(pos);par(p).add(m);return m;}
+  // 頂点カラーの球（n=単位法線で色を決める）
+  // 球面に模様を描いたテクスチャ（境界がなめらか）
+  function vell(rx,ry,rz,fn,pos,p,seg=48){const W=512,H=256,cv=document.createElement("canvas");cv.width=W;cv.height=H;const cx=cv.getContext("2d"),im=cx.createImageData(W,H),d=im.data,c=C("#fff");
+    for(let r=0;r<H;r++){const th=(r+.5)/H*Math.PI,st=Math.sin(th),y=Math.cos(th);for(let q=0;q<W;q++){const ph=(q+.5)/W*Math.PI*2;fn(c,-Math.cos(ph)*st,y,Math.sin(ph)*st);const k=(r*W+q)*4;d[k]=c.r*255;d[k+1]=c.g*255;d[k+2]=c.b*255;d[k+3]=255;}}
+    cx.putImageData(im,0,0);const t=new THREE.CanvasTexture(cv);t.anisotropy=4;
+    const m=new THREE.Mesh(new THREE.SphereGeometry(1,seg,Math.round(seg*.75)),new THREE.MeshToonMaterial({map:t,gradientMap:grad()}));m.scale.set(rx,ry,rz);m.position.copy(pos);par(p).add(m);return m;}
+  // 太さが変わるチューブ（両端は丸く）
+  function tube(pts,r0,r1,mat,p,seg=40,fn){const cu=new THREE.CatmullRomCurve3(pts);const g=new THREE.TubeGeometry(cu,seg,1,14,false);const ps=g.attributes.position;
+    for(let i=0;i<=seg;i++){const u=i/seg,c=cu.getPointAt(u),r=fn?fn(u):r0+(r1-r0)*u;for(let j=0;j<=14;j++){const k=i*15+j;const v=V(ps.getX(k),ps.getY(k),ps.getZ(k)).sub(c).multiplyScalar(r).add(c);ps.setXYZ(k,v.x,v.y,v.z);}}
+    g.computeVertexNormals();const m=new THREE.Mesh(g,mat);par(p).add(m);const rs=fn?fn(0):r0,re=fn?fn(1):r1;ell(rs,rs,rs,mat,pts[0],p,16);ell(re,re,re,mat,pts[pts.length-1],p,16);return m;}
+  const limb=(a,b,r,mat,p)=>tube([a,a.clone().lerp(b,.5),b],r,r*.92,mat,p,8);
+  function grp(pos,p){const g=new THREE.Group();g.position.copy(pos);par(p).add(g);return g;}
+  function flat(pts,mat,p,map){const g=new THREE.ShapeGeometry(new THREE.Shape(pts.map(([a,b])=>V2(a,b))),16);if(map){const ps=g.attributes.position;for(let i=0;i<ps.count;i++){const v=map(ps.getX(i),ps.getY(i));ps.setXYZ(i,v[0],v[1],v[2]);}}g.computeVertexNormals();const m=new THREE.Mesh(g,mat);par(p).add(m);return m;}
+  const blob=(n,r)=>{const P=[];for(let i=0;i<n;i++){const a=i/n*Math.PI*2;P.push([Math.cos(a)*r,Math.sin(a)*r]);}return P;};
+  // ---- 顔（頭の中心が原点、正面は +x） ----
+  function eyeAt(par0,pos,n,er,s,o={}){const g=new THREE.Group();g.position.copy(pos);g.quaternion.setFromUnitVectors(V(1,0,0),n.clone().normalize());par0.add(g);
+    ell(er*.42,er*1.18,er*.92,BL(o.eyeC||"#1d1622"),V(0,0,0),g,20);ell(er*.3,er*.3,er*.3,BL("#ffffff"),V(er*.38,er*.42,-s*er*.18),g,12);ell(er*.13,er*.13,er*.13,BL("#ffffff"),V(er*.36,-er*.42,s*er*.3),g,10);
+    const ph=Math.random()*3;X.anims.push(t=>{g.scale.y=((t+ph)%4.2)<.13?.12:1;});return g;}
+  function face(head,R,o={}){const sp=o.spread??.4,ey=o.y??.1,er=R*(o.eye??.19),eyes=[];
+    const dir=(th,ph)=>V(Math.cos(ph)*Math.cos(th),Math.sin(ph),Math.cos(ph)*Math.sin(th));
+    [-1,1].forEach(s=>{const n=dir(s*sp,ey);if(o.eyes===false){if(o.cheek!==false){const cn=dir(s*(sp+.36),ey-.36);const c=ell(R*.05,R*.085,R*.15,new THREE.MeshBasicMaterial({color:o.cheekC||"#ff8fae",transparent:true,opacity:.7,depthWrite:false}),cn.clone().multiplyScalar(R*.97),head,14);c.quaternion.setFromUnitVectors(V(1,0,0),cn);}return;}const g=new THREE.Group();g.position.copy(n.clone().multiplyScalar(R*(o.depth??.965)));g.quaternion.setFromUnitVectors(V(1,0,0),n);head.add(g);
+      ell(er*.42,er*1.18,er*.92,BL(o.eyeC||"#1d1622"),V(0,0,0),g,20);ell(er*.3,er*.3,er*.3,BL("#ffffff"),V(er*.38,er*.42,-s*er*.18),g,12);ell(er*.13,er*.13,er*.13,BL("#ffffff"),V(er*.36,-er*.42,s*er*.3),g,10);
+      if(o.irisC)ell(er*.46,er*.75,er*.6,BL(o.irisC),V(er*.12,-er*.22,0),g,14);eyes.push(g);
+      if(o.cheek!==false){const cn=dir(s*(sp+.36),ey-.36);const c=ell(R*.05,R*.085,R*.15,new THREE.MeshBasicMaterial({color:o.cheekC||"#ff8fae",transparent:true,opacity:.7,depthWrite:false}),cn.clone().multiplyScalar(R*.97),head,14);c.quaternion.setFromUnitVectors(V(1,0,0),cn);}});
+    if(o.mouth!==false){const m=new THREE.Mesh(new THREE.TorusGeometry(R*(o.mouthR??.1),R*.025,6,18,Math.PI),BL(o.mouthC||"#3a1a20"));const mp=o.mouthY??(ey-.34);m.rotation.set(0,Math.PI/2,Math.PI);m.position.copy(dir(0,mp).multiplyScalar(R*(o.mouthD??.985)));head.add(m);}
+    const ph=Math.random()*3;X.anims.push(t=>{const b=((t+ph)%4.2)<.13?.12:1;eyes.forEach(e=>e.scale.y=b);});return eyes;}
+  // ぷにぷに動き
+  const bounce=(g,k=1,sp=2.4)=>{const y0=g.position.y;X.anims.push(t=>{const s=Math.sin(t*sp);g.position.y=y0+Math.abs(s)*.04*k;g.scale.set(1-.025*s*k,1+.035*s*k,1-.025*s*k);});};
+  const B={};
+  // ===== 四足（ゾウ・キリン・ライオン・ウマ・パンダ・イヌ） =====
+  B.quad=function(p){const id=X.id,col=C(p.c),dk=C(p.patch||p.mane||p.c).multiplyScalar(p.patch?1:.85),g=grp(V(0,0,0));
+    const cfg={elephant:{bx:.72,by:.56,bz:.56,hr:.5,lg:.42,lr:.2,hy:1.18,c:"#a9b6c8"},giraffe:{bx:.55,by:.4,bz:.36,hr:.3,lg:.62,lr:.11,hy:2.2,c:"#f7c85e"},lion:{bx:.56,by:.42,bz:.4,hr:.42,lg:.34,lr:.13,hy:1.15,c:"#f2b65e"},
+      horse:{bx:.62,by:.42,bz:.36,hr:.34,lg:.55,lr:.12,hy:1.45,c:"#b27a4e"},panda:{bx:.58,by:.5,bz:.5,hr:.5,lg:.28,lr:.17,hy:1.15,c:"#f6f5f0"},dog:{bx:.5,by:.36,bz:.34,hr:.42,lg:.3,lr:.11,hy:1.0,c:"#e3a35e"}}[id]||{bx:.55,by:.42,bz:.4,hr:.42,lg:.34,lr:.12,hy:1.1,c:p.c};
+    const base=C(cfg.c),mat=T(base),by=cfg.lg+cfg.by*.75;
+    const body=ell(cfg.bx,cfg.by,cfg.bz,id==="giraffe"?VT():mat,V(0,by,0),g);
+    if(id==="giraffe"){body.material=mat;}
+    // 脚
+    const legM=T(id==="panda"?"#26232a":base),legs=[];[[1,1],[1,-1],[-1,1],[-1,-1]].forEach(([f,s])=>{const x=f*cfg.bx*.55,z=s*cfg.bz*.55;legs.push(limb(V(x,by-cfg.by*.3,z),V(x,cfg.lr*.9,z),cfg.lr,legM,g));ell(cfg.lr*1.15,cfg.lr*.8,cfg.lr*1.1,T(id==="horse"||id==="giraffe"?"#5a3a28":id==="panda"?"#26232a":base.clone().multiplyScalar(1.05)),V(x+cfg.lr*.25,cfg.lr*.75,z),g,18);});
+    // 首と頭
+    const hp=V(cfg.bx*(id==="giraffe"?.95:.78),cfg.hy,0);
+    if(id==="giraffe"||id==="horse")tube([V(cfg.bx*.55,by+cfg.by*.3,0),V(cfg.bx*.8,(by+cfg.hy)/2+.1,0),hp.clone().add(V(-.05,-.12,0))],id==="giraffe"?.13:.2,id==="giraffe"?.1:.16,mat,g,20);
+    const head=grp(hp,g);if(id==="panda")vell(cfg.hr,cfg.hr*.95,cfg.hr,(c,x,y,z)=>{c.copy(base);if(x>.4)for(const sg of [-1,1]){const dz=z-sg*.4,dy=y-.02,a=sg*.55,u=dz*Math.cos(a)+dy*Math.sin(a),v=-dz*Math.sin(a)+dy*Math.cos(a);if((u/.16)**2+(v/.25)**2<1)c.set("#26232a");}},V(0,0,0),head,80);else ell(cfg.hr,cfg.hr*.95,cfg.hr,mat,V(0,0,0),head);
+    // 口元
+    if(id==="horse"||id==="giraffe"||id==="dog")ell(cfg.hr*(id==="horse"?.78:.62),cfg.hr*.45,cfg.hr*(id==="horse"?.5:.55),T(id==="dog"?"#fff3e2":id==="horse"?"#e6c4a0":base.clone().multiplyScalar(1.08)),V(cfg.hr*(id==="horse"?.85:.72),-cfg.hr*.32,0),head,24);
+    if(id!=="elephant")ell(cfg.hr*.13,cfg.hr*.09,cfg.hr*.17,BL("#2a1a1c"),V(cfg.hr*(id==="horse"?1.5:id==="giraffe"||id==="dog"?1.25:.98),cfg.hr*(id==="horse"||id==="giraffe"||id==="dog"?-.18:-.08),0),head,12);
+    
+    face(head,cfg.hr,{spread:id==="horse"||id==="giraffe"?.55:.4,y:id==="horse"||id==="giraffe"||id==="dog"?.18:.08,mouthY:id==="horse"||id==="giraffe"||id==="dog"?-.42:-.26,mouthD:id==="horse"||id==="giraffe"||id==="dog"?1.12:.985,eye:id==="panda"?.15:.19});
+    // 耳
+    if(id==="elephant"){[-1,1].forEach(s=>{const e=grp(V(-cfg.hr*.15,cfg.hr*.05,s*cfg.hr*.88),head);ell(cfg.hr*.12,cfg.hr*.62,cfg.hr*.58,mat,V(0,0,s*cfg.hr*.25),e,24);ell(cfg.hr*.1,cfg.hr*.45,cfg.hr*.42,T("#f4b6c2"),V(cfg.hr*.04,0,s*cfg.hr*.27),e,20);X.anims.push(t=>{e.rotation.y=s*Math.sin(t*2.2)*.25;});});
+      tube([V(cfg.hr*.85,-cfg.hr*.1,0),V(cfg.hr*1.25,-cfg.hr*.55,0),V(cfg.hr*1.2,-cfg.hr*.95,0),V(cfg.hr*1.45,-cfg.hr*1.05,0)],cfg.hr*.2,cfg.hr*.12,mat,head,30);
+      ell(cfg.hr*.12,cfg.hr*.12,cfg.hr*.12,T("#c6d0de"),V(cfg.hr*1.47,-cfg.hr*1.05,0),head,14);}
+    else if(id==="dog"){[-1,1].forEach(s=>{const e=ell(cfg.hr*.2,cfg.hr*.5,cfg.hr*.28,T(base.clone().multiplyScalar(.75)),V(-cfg.hr*.1,cfg.hr*.15,s*cfg.hr*.95),head,20);e.rotation.x=-s*.35;X.anims.push(t=>{e.rotation.x=-s*(.35+Math.sin(t*3+s)*.12);});});}
+    else{[-1,1].forEach(s=>{const e=ell(cfg.hr*.24,cfg.hr*.28,cfg.hr*.12,T(id==="panda"?"#26232a":base),V(-cfg.hr*.15,cfg.hr*.8,s*cfg.hr*.55),head,18);e.rotation.x=s*.4;if(id!=="panda")ell(cfg.hr*.15,cfg.hr*.18,cfg.hr*.05,T("#f4b6c2"),V(cfg.hr*.08,0,0),e,12);});}
+    if(p.horn)[-1,1].forEach(s=>{limb(V(-cfg.hr*.1,cfg.hr*.8,s*cfg.hr*.25),V(-cfg.hr*.12,cfg.hr*1.15,s*cfg.hr*.28),cfg.hr*.07,mat,head);ell(cfg.hr*.12,cfg.hr*.12,cfg.hr*.12,T("#6b4426"),V(-cfg.hr*.12,cfg.hr*1.2,s*cfg.hr*.28),head,12);});
+    // たてがみ
+    if(id==="lion"){const mm=T("#c2702e");for(let i=0;i<16;i++){const a=i/16*Math.PI*2;ell(cfg.hr*.32,cfg.hr*.32,cfg.hr*.32,mm,V(-cfg.hr*.25,Math.sin(a)*cfg.hr*.92,Math.cos(a)*cfg.hr*.92),head,16);}ell(cfg.hr*.85,cfg.hr*.85,cfg.hr*.85,mm,V(-cfg.hr*.45,0,0),head,24);}
+    if(id==="horse"){const mm=T("#3a2418");for(let i=0;i<7;i++){const u=i/6;ell(.09,.12,.06,mm,V(cfg.bx*.55+u*(hp.x-cfg.bx*.55)-.12,by+cfg.by*.4+u*(cfg.hy-by-cfg.by*.4)+.12,0),g,12);}ell(cfg.hr*.3,cfg.hr*.22,cfg.hr*.15,mm,V(cfg.hr*.15,cfg.hr*.92,0),head,12);}
+    if(id==="giraffe"){const sm=T("#a8632c");for(let i=0;i<26;i++){const a=Math.random()*Math.PI*2,b=Math.random()*Math.PI;const n=V(Math.sin(b)*Math.cos(a),Math.cos(b),Math.sin(b)*Math.sin(a));if(n.y<-.5)continue;const s=ell(.08,.08,.02,sm,V(n.x*cfg.bx,by+n.y*cfg.by,n.z*cfg.bz).multiplyScalar(1),g,10);s.lookAt(V(n.x*cfg.bx*3,by+n.y*cfg.by*3,n.z*cfg.bz*3));}
+      for(let i=0;i<8;i++){const u=.15+i*.1;const pt=V(cfg.bx*.55,by+cfg.by*.3,0).lerp(hp,u);[-1,1].forEach(s=>{const sp=ell(.05,.05,.015,sm,pt.clone().add(V(0,0,s*.12)),g,10);});}}
+    // 尻尾
+    const tb=V(-cfg.bx*.95,by+cfg.by*.2,0),tg=grp(tb,g);
+    if(p.tail!==0){if(id==="dog")tube([V(0,0,0),V(-.12,.18,0),V(-.02,.3,0)],.07,.05,mat,tg,14);else{tube([V(0,0,0),V(-.15,-.15,0),V(-.18,-.35,0)],id==="horse"?.08:.035,id==="horse"?.06:.03,id==="horse"?T("#3a2418"):mat,tg,14);if(id!=="horse")ell(.08,.1,.08,T(id==="lion"?"#c2702e":"#5a3a28"),V(-.18,-.4,0),tg,14);}}
+    else ell(.1,.1,.1,mat,V(0,0,0),tg,14);
+    X.anims.push(t=>{tg.rotation.x=Math.sin(t*5)*.4;head.rotation.z=Math.sin(t*1.3)*.06;head.rotation.x=Math.sin(t*.9)*.08;});bounce(g,.8,2.2);
+    X.ty=cfg.hy*.55;return Math.max(cfg.hy+cfg.hr,cfg.bx*2.4)*1.05;};
+  // ===== 魚（サメ・マグロ・クマノミ） =====
+  B.fish=function(p){const id=X.id,g=grp(V(0,1.1,0));const cs={shark:["#8fa3b8","#f4f7fa"],tuna:["#3a5a8c","#e4eaf0"],clown:["#ff8a2a","#ff8a2a"]}[id]||[p.c,"#eee"];
+    const top=C(cs[0]),bel=C(cs[1]);const L=id==="shark"?.75:.55;
+    if(id==="clown"){const cv=document.createElement("canvas");cv.width=4;cv.height=512;const cx=cv.getContext("2d");for(let r=0;r<512;r++){const v=1-r/511,x=Math.cos(Math.PI*v);let col="#ff8a2a";for(const b of [.45,-.05,-.55]){const d=Math.abs(x-b);if(d<.12)col=d<.09?"#ffffff":"#2a1a1a";}cx.fillStyle=col;cx.fillRect(0,r,4,1);}
+      const geo=new THREE.SphereGeometry(1,48,40);geo.rotateZ(Math.PI/2);const bm=new THREE.Mesh(geo,new THREE.MeshToonMaterial({map:new THREE.CanvasTexture(cv),gradientMap:grad()}));bm.scale.set(L,.42,.32);g.add(bm);}
+    else vell(L,.42,.32,(c,x,y,z)=>c.copy(top).lerp(bel,THREE.MathUtils.smoothstep(-y,-.1,.45)),V(0,0,0),g,44);
+    const fm=T(id==="clown"?"#ff8a2a":id==="tuna"?"#2c4a7a":top.clone().multiplyScalar(.92),{side:THREE.DoubleSide});
+    const tg=grp(V(-L*.92,0,0),g);flat(id==="shark"?[[0,0],[-.32,.38],[-.22,.05],[-.26,-.26],[0,-.05]]:[[0,0],[-.3,.3],[-.36,.12],[-.36,-.12],[-.3,-.3]],fm,tg);
+    if(id==="clown")[[-.3,.3],[-.3,-.3]].forEach(()=>{});
+    const dg=flat(id==="shark"?[[-.1,0],[.05,.36],[.18,0]]:[[-.25,0],[-.1,.2],[.12,.16],[.2,0]],fm,g);dg.position.set(0,.36,0);
+    [-1,1].forEach(s=>{const pf=flat([[0,0],[-.2,-.05],[-.16,-.16]],fm,g);pf.position.set(.15,-.15,s*.3);pf.rotation.x=s*.8;});
+    if(id==="tuna")for(let i=0;i<4;i++){const f=flat([[0,0],[.03,.07],[.06,0]],T("#ffd23a",{side:THREE.DoubleSide}),g);f.position.set(-.18-i*.1,.3-i*.03,0);}
+    const head=grp(V(L*.35,.02,0),g);face(head,.4,{spread:id==="clown"?.75:.9,y:.12,eye:.24,mouthY:-.18,mouthR:.07,mouthD:1.0,depth:.82});
+    if(id==="shark"){const tm=BL("#ffffff");for(let i=-2;i<=2;i++){const t=new THREE.Mesh(new THREE.ConeGeometry(.018,.04,4),tm);t.rotation.z=Math.PI;t.position.set(.72,-.1,i*.035);g.add(t);}}
+    X.anims.push(t=>{tg.rotation.y=Math.sin(t*6)*.4;g.rotation.y=Math.sin(t*1.1)*.25;g.position.y=1.1+Math.sin(t*1.6)*.08;});X.ty=1.0;return 2.2;};
+  // ===== クジラ・イルカ =====
+  B.whale=function(p){const id=X.id,g=grp(V(0,1.1,0)),blue=id==="bluewhale";const top=C(blue?"#5f86b8":"#8fa6c0"),bel=C(blue?"#cfe0f2":"#f2f6fa");
+    vell(blue?1.05:.85,blue?.55:.42,blue?.55:.42,(c,x,y,z)=>{c.copy(top).lerp(bel,THREE.MathUtils.smoothstep(-y,0,.5));if(blue&&y<-.35&&x>.1&&Math.sin(z*40)>.6)c.multiplyScalar(.85);},V(0,0,0),g);
+    const fm=T(top.clone().multiplyScalar(.95),{side:THREE.DoubleSide});const fg=grp(V(blue?-1.0:-.82,.05,0),g);
+    tube([V(.15,0,0),V(-.1,.06,0),V(-.25,.12,0)],blue?.22:.16,.08,T(top),fg,12);const fl=flat([[0,0],[-.12,.35],[-.3,.42],[-.22,.05],[-.22,-.05],[-.3,-.42],[-.12,-.35]],fm,fg,(x,y)=>[x-.2,.12,y]);
+    if(!blue){const d=flat([[-.15,0],[.02,.28],[.12,0]],fm,g);d.position.set(-.05,.4,0);tube([V(.8,-.05,0),V(1.0,-.08,0)],.12,.09,T(top),g,8);}
+    else{const d=flat([[-.08,0],[0,.1],[.06,0]],fm,g);d.position.set(-.6,.45,0);}
+    [-1,1].forEach(s=>{const f=ell(.32,.05,.13,T(top.clone().multiplyScalar(.95)),V(.25,-.3,s*(blue?.52:.4)),g,14);f.rotation.x=s*.6;f.rotation.y=s*.3;});
+    const hr=blue?.52:.42,head=grp(V(blue?.5:.4,-.02,0),g);vell(hr,hr,hr,(c,x,y,z)=>c.copy(top).lerp(bel,THREE.MathUtils.smoothstep(-y,0,.5)),V(0,0,0),head);face(head,hr,{spread:.62,y:-.02,eye:.17,mouthY:-.36,mouthR:.12});
+    const drops=[];if(blue){const dm=T("#bfe6ff",{transparent:true,opacity:.85});for(let i=0;i<10;i++){const d=ell(.05,.05,.05,dm,V(0,0,0),g,10);d.userData.o=i/10;drops.push(d);}}
+    X.anims.push(t=>{fg.rotation.z=Math.sin(t*1.8)*.3;g.position.y=1.1+Math.sin(t*1.2)*.07;g.rotation.z=Math.sin(t*1.2)*.04;drops.forEach(d=>{const u=(t*.6+d.userData.o)%1;const a=d.userData.o*Math.PI*2;d.position.set(.15+Math.cos(a)*u*.3,.55+Math.sin(u*Math.PI)*.6,Math.sin(a)*u*.3);d.scale.setScalar(.05*(1-u*.6));});});
+    X.ty=1.2;return 2.6;};
+  // ===== 鳥（ワシ・フラミンゴ） =====
+  B.bird=function(p){const fl=!!p.neck,g=grp(V(0,fl?0:1.0,0));
+    if(!fl){const bm=T("#7a5232"),wm=T("#6a4428",{side:THREE.DoubleSide});ell(.42,.44,.38,bm,V(0,0,0),g);ell(.22,.12,.3,T("#fffaf0"),V(-.45,-.05,0),g,16);
+      const head=grp(V(.32,.42,0),g);ell(.34,.32,.32,T("#fbfbf6"),V(0,0,0),head);const bk=new THREE.Mesh(new THREE.ConeGeometry(.08,.22,12),T("#ffc93a"));bk.rotation.z=-Math.PI/2-.4;bk.position.set(.34,-.05,0);head.add(bk);face(head,.34,{spread:.42,y:.15,mouth:false,eye:.2});
+      const ws=[-1,1].map(s=>{const w=grp(V(0,.12,s*.3),g);const m=ell(.3,.08,.55,wm,V(-.05,0,s*.42),w,20);m.rotation.y=s*.2;return [w,s];});
+      [-1,1].forEach(s=>{limb(V(.05,-.38,s*.14),V(.08,-.55,s*.15),.04,T("#ffc93a"),g);ell(.07,.03,.06,T("#ffc93a"),V(.12,-.58,s*.15),g,10);});
+      X.anims.push(t=>{const f=Math.sin(t*5);ws.forEach(([w,s])=>w.rotation.x=-s*f*.6);g.position.y=1.0-f*.06;head.rotation.y=Math.sin(t*.8)*.3;});X.ty=.9;return 2.0;}
+    const pm=T("#ff9fbf"),by=1.15;ell(.42,.32,.3,pm,V(0,by,0),g);ell(.3,.2,.08,T("#ff86ad"),V(-.05,by+.05,.27),g,16);ell(.3,.2,.08,T("#ff86ad"),V(-.05,by+.05,-.27),g,16);
+    tube([V(.3,by+.12,0),V(.5,by+.45,0),V(.32,by+.8,0),V(.4,by+1.05,0)],.07,.06,pm,g,30);const head=grp(V(.48,by+1.12,0),g);ell(.17,.16,.16,pm,V(0,0,0),head,24);
+    tube([V(.12,.0,0),V(.25,-.02,0),V(.3,-.14,0)],.05,.025,T("#f6e2e8"),head,10);ell(.04,.04,.03,BL("#1a1a1a"),V(.3,-.16,0),head,8);face(head,.17,{spread:.6,y:.15,mouth:false,eye:.26});
+    const lm=T("#f07a9a");limb(V(0,by-.25,.08),V(-.02,by*.5,.08),.025,lm,g);limb(V(-.02,by*.5,.08),V(0,.02,.08),.022,lm,g);ell(.09,.02,.05,lm,V(.05,.02,.08),g,10);
+    limb(V(0,by-.25,-.08),V(.18,by*.68,-.08),.025,lm,g);limb(V(.18,by*.68,-.08),V(-.05,by*.72,-.08),.022,lm,g);
+    X.anims.push(t=>{head.rotation.z=Math.sin(t*1.2)*.12;});bounce(g,.4,1.6);X.ty=1.25;return 2.6;};
+  // ===== ペンギン =====
+  B.penguin=function(p){const g=grp(V(0,0,0));vell(.48,.62,.46,(c,x,y,z)=>{c.set(x>.12&&y<.8?(y>.5&&x>.3?"#fff0b8":"#fbfbf6"):"#2a2a36");},V(0,.62,0),g,56);
+    const head=grp(V(.05,1.2,0),g);vell(.36,.33,.34,(c,x,y,z)=>{c.set(x>.3&&y<.5?"#fbfbf6":"#2a2a36");if(x<.3&&x>-.25&&y<-.1&&y>-.5&&Math.abs(z)>.8)c.set("#ffc23a");},V(0,0,0),head,56);
+    const bk=new THREE.Mesh(new THREE.ConeGeometry(.06,.16,12),T("#ff9a2a"));bk.rotation.z=-Math.PI/2;bk.position.set(.38,-.08,0);head.add(bk);face(head,.36,{spread:.45,y:.12,mouth:false,eye:.2});
+    const fl=[-1,1].map(s=>{const f=grp(V(0,.85,s*.44),g);const m=ell(.08,.32,.13,T("#2a2a36"),V(0,-.25,s*.04),f,16);return [f,s];});
+    [-1,1].forEach(s=>ell(.14,.05,.1,T("#ff9a2a"),V(.15,.03,s*.17),g,12));
+    X.anims.push(t=>{g.rotation.x=Math.sin(t*3)*.08;fl.forEach(([f,s])=>f.rotation.x=-s*(.15+Math.max(0,Math.sin(t*3))*.5));head.rotation.y=Math.sin(t*.7)*.35;});bounce(g,.6,3);X.ty=.75;return 1.9;};
+  // ===== ヘビ =====
+  B.snake=function(p){const g=grp(V(0,0,0)),pts=[];for(let i=0;i<=40;i++){const t=i/40,a=t*Math.PI*3.2,r=.95-t*.62;pts.push(V(Math.cos(a)*r,.17+(t>.82?(t-.82)*3.5:0),Math.sin(a)*r));}
+    const cm=VT();const cu=new THREE.CatmullRomCurve3(pts);const tg=new THREE.TubeGeometry(cu,160,1,16,false);const ps=tg.attributes.position,cl=new Float32Array(ps.count*3),c1=C("#9bd36a"),c2=C("#f6e27a"),c3=C("#5a9a3a");
+    for(let i=0;i<=160;i++){const u=i/160,cc=cu.getPointAt(u),r=.17*Math.min(1,.3+u*5);for(let j=0;j<=16;j++){const k=i*17+j;const v=V(ps.getX(k),ps.getY(k),ps.getZ(k)).sub(cc);const below=v.y<-.4;v.multiplyScalar(r).add(cc);ps.setXYZ(k,v.x,v.y,v.z);const c=below?c2:(Math.sin(u*70)>.55?c3:c1);cl.set([c.r,c.g,c.b],k*3);}}
+    tg.setAttribute("color",new THREE.BufferAttribute(cl,3));tg.computeVertexNormals();g.add(new THREE.Mesh(tg,cm));ell(.05,.05,.05,T("#9bd36a"),pts[0],g,8);
+    const e=pts[40],dir=pts[40].clone().sub(pts[38]).normalize();const head=grp(e.clone().addScaledVector(dir,.12),g);head.quaternion.setFromUnitVectors(V(1,0,0),dir);
+    ell(.3,.24,.28,T("#9bd36a"),V(0,0,0),head);face(head,.28,{spread:.5,y:.2,eye:.22,mouthY:-.25});
+    const tongue=tube([V(.27,-.08,0),V(.4,-.08,0)],.012,.012,T("#ff5a7a"),head,4);X.anims.push(t=>{tongue.visible=Math.sin(t*4)>.5;head.rotation.z=Math.sin(t*1.5)*.1;});X.ty=.4;return 2.2;};
+  // ===== ウミガメ =====
+  B.turtle=function(p){const g=grp(V(0,1.0,0));const sh=C("#7fae5a"),ln=C("#4f7a3a");
+    vell(.62,.36,.52,(c,x,y,z)=>{if(y<-.05){c.set("#f6e7b0");return;}const a=Math.atan2(z,x),r=Math.hypot(x,z);const cell=(Math.abs(Math.sin(a*3))<.12&&r>.35)||Math.abs(r-.62)<.05;c.copy(cell?ln:sh);},V(0,0,0),g);
+    const head=grp(V(.68,.06,0),g);ell(.24,.22,.22,T("#a6d77a"),V(0,0,0),head,24);face(head,.24,{spread:.45,y:.15,eye:.24,mouthY:-.25});
+    const fins=[[.3,1,1],[.3,-1,1],[-.42,1,0],[-.42,-1,0]].map(([x,s,f])=>{const pv=grp(V(x,-.05,s*.42),g);const m=ell(f?.15:.1,.04,f?.32:.18,T("#a6d77a"),V(0,0,s*(f?.25:.12)),pv,16);m.rotation.y=s*(f?-.4:.4);return [pv,s,f];});
+    X.anims.push(t=>{fins.forEach(([pv,s,f])=>pv.rotation.x=s*Math.sin(t*2+(f?0:1))*(f?.5:.25));g.position.y=1.0+Math.sin(t*2)*.06;head.rotation.y=Math.sin(t*.6)*.25;});X.ty=.95;return 2.0;};
+  // ===== タコ =====
+  B.octopus=function(p){const g=grp(V(0,.55,0)),m=T("#ff7f86");const head=grp(V(0,.6,0),g);ell(.55,.6,.55,m,V(-.05,.12,0),head);
+    for(let i=0;i<10;i++){const a=Math.random()*Math.PI*2,b=Math.random()*1.2;ell(.05,.05,.02,T("#ffb0b4"),V(Math.cos(a)*.52*Math.sin(b+.6)-.05,.12+Math.cos(b+.6)*.58,Math.sin(a)*.52*Math.sin(b+.6)),head,8);}
+    face(head,.55,{spread:.38,y:-.25,eye:.18,mouthY:-.6,mouthR:.07});
+    const arms=[];for(let i=0;i<8;i++){const a=i/8*Math.PI*2+.2;const pv=grp(V(Math.cos(a)*.3,.1,Math.sin(a)*.3),g);pv.rotation.y=-a;
+      tube([V(0,0,0),V(.35,-.25,0),V(.62,-.32,0),V(.75,-.2,0),V(.7,-.08,0)],.12,.04,m,pv,24);arms.push([pv,i]);}
+    X.anims.push(t=>{arms.forEach(([pv,i])=>pv.rotation.z=Math.sin(t*2+i)*.18);});bounce(g,.8,2);X.ty=.7;return 2.2;};
+  // ===== クラゲ =====
+  B.jelly=function(p){const g=grp(V(0,1.6,0));const bell=new THREE.Mesh(new THREE.LatheGeometry([V2(.001,.62),V2(.35,.58),V2(.6,.4),V2(.72,.12),V2(.68,0),V2(.4,.05),V2(.001,.08)],40),T("#bfe4ff",{transparent:true,opacity:.75}));g.add(bell);
+    for(let i=0;i<4;i++){const a=i/4*Math.PI*2+.78;const t=new THREE.Mesh(new THREE.TorusGeometry(.1,.03,8,20),T("#e7a8ff"));t.position.set(Math.cos(a)*.18,.42,Math.sin(a)*.18);t.rotation.x=Math.PI/2;g.add(t);}
+    const fh=grp(V(0,.3,0),g);face(fh,.66,{spread:.38,y:.05,eye:.13,mouthY:-.22,mouthR:.06});
+    const tm=T("#d8eeff",{transparent:true,opacity:.8});const ts=[];for(let i=0;i<10;i++){const a=i/10*Math.PI*2;const pv=grp(V(Math.cos(a)*.55,0,Math.sin(a)*.55),g);tube([V(0,0,0),V(.05,-.3,0),V(-.04,-.6,0),V(.03,-.9,0)],.03,.015,tm,pv,16);ts.push([pv,i]);}
+    X.anims.push(t=>{const s=Math.sin(t*2.4);bell.scale.set(1-s*.07,1+s*.08,1-s*.07);g.position.y=1.6+Math.sin(t*2.4-1)*.12;ts.forEach(([pv,i])=>pv.rotation.z=Math.sin(t*2+i)*.2);});X.ty=1.4;return 2.4;};
+  // ===== ワニ・カメレオン =====
+  B.croc=function(p){const sm=!!p.small,g=grp(V(0,sm?1.0:0,0)),m=T(sm?"#7fd36a":"#7fb05a"),bel=T(sm?"#e8f7a0":"#e8e4a8");
+    if(sm){tube([V(-1.6,.98,0),V(0,1.02,0),V(1.6,.95,0)],.07,.06,T("#8a5a3a"),X.root,20);}
+    const by=sm?.3:.32;ell(sm?.5:.62,sm?.36:.3,sm?.3:.36,m,V(0,by,0),g);ell(sm?.4:.5,sm?.22:.18,sm?.22:.3,bel,V(.02,by-.1,0),g,24);
+    const head=grp(V(sm?.55:.68,by+(sm?.15:.05),0),g);ell(sm?.36:.36,sm?.32:.24,sm?.3:.3,m,V(0,0,0),head);if(!sm)ell(.42,.13,.24,m,V(.38,-.08,0),head,24);
+    if(sm)ell(.22,.12,.06,m,V(-.1,.3,0),head,16);
+    [-1,1].forEach(s=>{const br=sm?.15:.13,bp=V(sm?.12:.02,sm?.15:.2,s*(sm?.24:.17));ell(br,br,br,m,bp,head,20);const n=V(.8,.35,s*.5).normalize();eyeAt(head,bp.clone().addScaledVector(n,br*.96),n,br*.75,s);});
+    face(head,sm?.34:.3,{eyes:false,spread:sm?.5:.4,y:sm?.2:.3,mouthY:sm?-.3:-.42,mouthR:sm?.1:.16,mouthD:sm?.98:1.2});
+    if(!sm)for(let i=0;i<6;i++)ell(.06,.06,.06,T("#5f8f45"),V(.35-i*.18,by+.28,0),g,10);
+    const legs=[[.3,1],[.3,-1],[-.3,1],[-.3,-1]];legs.forEach(([x,s])=>limb(V(x,by-.12,s*.22),V(x+.05,.06,s*(sm?.3:.42)),sm?.06:.09,m,g));
+    const tg=grp(V(sm?-.48:-.6,by,0),g);if(sm){const pts=[];for(let i=0;i<=20;i++){const u=i/20,a=u*Math.PI*2.2;const r=.28*(1-u*.7);pts.push(V(-.2-Math.sin(a)*r,-Math.cos(a)*r+.28*(1-u*.7)-.28,0));}tube(pts,.1,.03,m,tg,40);}
+    else tube([V(0,0,0),V(-.5,-.05,0),V(-.95,-.15,.1)],.2,.04,m,tg,20);
+    X.anims.push(t=>{tg.rotation.y=Math.sin(t*1.5)*.2;head.rotation.y=Math.sin(t*.7)*.15;});bounce(g,.4,2);X.ty=sm?1.2:.4;return sm?2.0:2.6;};
+  // ===== 虫（チョウ・ハチ・アリ） =====
+  B.insect=function(p){const w=p.wtype,g=grp(V(0,w==="none"?0:1.2,0));
+    if(w==="none"){const m=T("#5a2a1e");ell(.22,.17,.17,m,V(-.4,.32,0),g,24);ell(.13,.1,.1,m,V(-.1,.3,0),g,18);const head=grp(V(.22,.38,0),g);ell(.25,.24,.24,m,V(0,0,0),head);face(head,.25,{spread:.45,y:.1,eye:.24,mouthY:-.3});
+      [-1,1].forEach(s=>{tube([V(.05,.2,s*.08),V(.15,.45,s*.18),V(.28,.5,s*.2)],.015,.012,m,head,8);ell(.035,.035,.035,m,V(.28,.5,s*.2),head,8);});
+      for(let i=0;i<3;i++)[-1,1].forEach(s=>{const x=-.25+i*.12;limb(V(x,.28,s*.08),V(x+.05,.18,s*.3),.02,m,g);limb(V(x+.05,.18,s*.3),V(x+.08,.0,s*.35),.018,m,g);});
+      bounce(g,.5,4);X.ty=.35;return 1.4;}
+    if(w==="bee"){vell(.42,.36,.36,(c,x,y,z)=>c.set(Math.sin((x+.5)*12)>.3?"#2a2028":"#ffcf3a"),V(-.15,0,0),g);const head=grp(V(.32,.08,0),g);ell(.28,.27,.27,T("#ffcf3a"),V(0,0,0),head);face(head,.28,{spread:.45,y:.08,eye:.22,mouthY:-.3});
+      [-1,1].forEach(s=>{tube([V(.05,.2,s*.1),V(.12,.42,s*.18),V(.22,.48,s*.2)],.015,.012,T("#2a2028"),head,8);ell(.04,.04,.04,T("#2a2028"),V(.22,.48,s*.2),head,8);});
+      const wm=T("#e6f6ff",{transparent:true,opacity:.6,side:THREE.DoubleSide});const ws=[-1,1].map(s=>{const pv=grp(V(-.1,.3,s*.08),g);ell(.22,.03,.32,wm,V(-.05,0,s*.28),pv,14);return [pv,s];});
+      const st=new THREE.Mesh(new THREE.ConeGeometry(.04,.12,8),T("#2a2028"));st.rotation.z=Math.PI/2;st.position.set(-.6,0,0);g.add(st);
+      X.anims.push(t=>{ws.forEach(([pv,s])=>pv.rotation.x=-s*Math.sin(t*30)*.5);g.position.y=1.2+Math.sin(t*2)*.1;g.rotation.y=Math.sin(t*.8)*.4;});X.ty=1.1;return 1.8;}
+    // チョウ
+    const bm=T("#3a3036");ell(.32,.1,.1,bm,V(-.1,0,0),g,20);const head=grp(V(.34,.06,0),g);ell(.24,.23,.23,bm,V(0,0,0),head,24);face(head,.24,{spread:.48,y:.08,eye:.26,mouthY:-.3,cheekC:"#ff9ab8",mouthC:"#ffd0dc"});
+    [-1,1].forEach(s=>{tube([V(.05,.12,s*.05),V(.15,.35,s*.12),V(.25,.45,s*.18)],.012,.01,bm,head,8);ell(.04,.04,.04,bm,V(.25,.45,s*.18),head,8);});
+    const tex=(()=>{const c=document.createElement("canvas");c.width=c.height=128;const x=c.getContext("2d");x.fillStyle="#ffd84a";x.fillRect(0,0,128,128);x.fillStyle="#2a2028";x.fillRect(0,0,128,16);x.fillRect(112,0,16,128);x.fillStyle="#fff";for(let i=0;i<5;i++){x.beginPath();x.arc(20+i*22,8,4,0,7);x.fill();}x.fillStyle="#7ab0ff";x.beginPath();x.arc(40,70,12,0,7);x.fill();x.fillStyle="#ff7a9a";x.beginPath();x.arc(80,95,9,0,7);x.fill();const t=new THREE.CanvasTexture(c);return t;})();
+    const wm=new THREE.MeshToonMaterial({map:tex,gradientMap:grad(),side:THREE.DoubleSide});
+    const mkw=(pts,s,p0)=>{const geo=new THREE.ShapeGeometry(new THREE.Shape(pts.map(([a,b])=>V2(a,b))),16);const ps=geo.attributes.position,uv=geo.attributes.uv;for(let i=0;i<ps.count;i++){const a=ps.getX(i),b=ps.getY(i);uv.setXY(i,Math.min(1,Math.max(0,a/.9)),Math.min(1,Math.max(0,(b+.8)/1.6)));ps.setXYZ(i,b,0,s*a);}geo.computeVertexNormals();const m=new THREE.Mesh(geo,wm);p0.add(m);};
+    const ws=[-1,1].map(s=>{const pv=grp(V(-.12,.06,0),g);mkw(blob(18,.42).map(([a,b])=>[a+.45,b*.8+.25]),s,pv);mkw(blob(16,.32).map(([a,b])=>[a+.35,b*.9-.3]),s,pv);return [pv,s];});
+    X.anims.push(t=>{const f=Math.sin(t*6);ws.forEach(([pv,s])=>pv.rotation.x=-s*(.55+f*.5));g.position.y=1.2+Math.sin(t*1.4)*.12-f*.03;g.rotation.y=Math.sin(t*.5)*.6;});X.ty=1.1;return 2.0;};
+  // ===== クモ =====
+  B.spider=function(p){const g=grp(V(0,.35,0)),m=T("#6a5a86");ell(.42,.38,.4,m,V(-.35,.15,0),g);const head=grp(V(.18,.05,0),g);ell(.3,.28,.3,m,V(0,0,0),head);
+    face(head,.3,{spread:.35,y:.15,eye:.2,mouthY:-.3});[-1,1].forEach(s=>ell(.035,.035,.035,BL("#1d1622"),V(.27,.25,s*.06),head,8));
+    const legs=[];for(let i=0;i<4;i++)[-1,1].forEach(s=>{const x=.1-i*.12;const pv=grp(V(x,.05,s*.18),g);limb(V(0,0,0),V(.05,.3,s*.35),.035,m,pv);limb(V(.05,.3,s*.35),V(.12,-.35,s*.6),.03,m,pv);legs.push([pv,i,s]);});
+    X.anims.push(t=>legs.forEach(([pv,i,s])=>pv.rotation.x=s*Math.sin(t*6+i)*.08));bounce(g,.5,3);X.ty=.4;return 1.8;};
+  // ===== カニ =====
+  B.crab=function(p){const g=grp(V(0,.3,0)),m=T("#ff7a52");ell(.55,.26,.45,m,V(0,.15,0),g);const fg=grp(V(.3,.25,0),g);
+    [-1,1].forEach(s=>{limb(V(0,.05,s*.12),V(.05,.3,s*.14),.03,m,fg);const e=grp(V(.05,.34,s*.14),fg);ell(.09,.09,.09,T("#fff"),V(0,0,0),e,14);ell(.05,.06,.05,BL("#1d1622"),V(.06,0,0),e,10);ell(.02,.02,.02,BL("#fff"),V(.1,.02,0),e,6);});
+    const mo=new THREE.Mesh(new THREE.TorusGeometry(.06,.015,6,14,Math.PI),BL("#3a1a20"));mo.rotation.set(0,Math.PI/2,Math.PI);mo.position.set(.54,.12,0);g.add(mo);
+    [-1,1].forEach(s=>ell(.04,.05,.07,new THREE.MeshBasicMaterial({color:"#ffb0c0",transparent:true,opacity:.8}),V(.48,.12,s*.2),g,10));
+    const cl=[-1,1].map(s=>{const pv=grp(V(.35,.15,s*.42),g);limb(V(0,0,0),V(.2,.05,s*.15),.06,m,pv);const c=grp(V(.32,.1,s*.2),pv);ell(.18,.12,.12,m,V(0,0,0),c,18);const j=ell(.12,.05,.08,m,V(.12,.08,0),c,14);return [pv,j,s];});
+    for(let i=0;i<3;i++)[-1,1].forEach(s=>{const x=.1-i*.2;limb(V(x,.08,s*.38),V(x-.05,.12,s*.6),.035,m,g);limb(V(x-.05,.12,s*.6),V(x-.08,-.28,s*.72),.03,m,g);});
+    X.anims.push(t=>{cl.forEach(([pv,j,s])=>{pv.rotation.x=s*Math.sin(t*2)*.12;j.rotation.z=Math.abs(Math.sin(t*4))*.5;});g.position.z=Math.sin(t*.8)*.4;});X.ty=.3;return 2.0;};
+  // ===== ヒトデ =====
+  B.starfish=function(p){const g=grp(V(0,.12,0)),m=T("#ff9a5a");for(let i=0;i<5;i++){const a=i/5*Math.PI*2+Math.PI/2;tube([V(0,0,0),V(Math.cos(a)*.45,0,Math.sin(a)*.45),V(Math.cos(a)*.85,.05,Math.sin(a)*.85)],.24,.07,m,g,16);}
+    ell(.35,.16,.35,m,V(0,0,0),g,28);for(let i=0;i<14;i++){const a=Math.random()*Math.PI*2,r=.2+Math.random()*.55;ell(.03,.03,.03,T("#ffe0b0"),V(Math.cos(a)*r,.13-r*.08,Math.sin(a)*r),g,8);}
+    const head=grp(V(.02,.1,0),g);head.rotation.z=Math.PI/2-.75;ell(.22,.22,.22,m,V(0,0,0),head,24);face(head,.22,{spread:.48,y:0,eye:.36,mouthY:-.45});X.anims.push(t=>{g.rotation.y=Math.sin(t*.4)*.5;});bounce(g,.5,2);X.ty=.3;return 2.0;};
+  // ===== コウモリ =====
+  B.bat=function(p){const g=grp(V(0,1.3,0)),m=T("#6a5878");ell(.3,.34,.28,m,V(0,0,0),g);const head=grp(V(.18,.3,0),g);ell(.3,.28,.28,m,V(0,0,0),head);face(head,.3,{spread:.42,y:.1,eye:.24,mouthY:-.3});
+    [-1,1].forEach(s=>{const e=new THREE.Mesh(new THREE.ConeGeometry(.12,.3,12),m);e.position.set(-.05,.3,s*.16);e.rotation.x=s*.3;head.add(e);const fang=new THREE.Mesh(new THREE.ConeGeometry(.02,.05,4),BL("#fff"));fang.rotation.z=Math.PI;fang.position.set(.29,-.12,s*.04);head.add(fang);});
+    const wm=T("#4a3c56",{side:THREE.DoubleSide});const ws=[-1,1].map(s=>{const pv=grp(V(0,.1,s*.22),g);flat([[0,.15],[.3,.25],[.75,.2],[.65,-.05],[.5,.05],[.4,-.12],[.25,0],[.1,-.15],[0,-.1]],wm,pv,(a,b)=>[b,0,s*a]);return [pv,s];});
+    X.anims.push(t=>{const f=Math.sin(t*7);ws.forEach(([pv,s])=>pv.rotation.x=-s*f*.7);g.position.y=1.3-f*.05;});X.ty=1.2;return 2.0;};
+  // ===== カエル =====
+  B.frog=function(p){const g=grp(V(0,0,0)),m=T("#7fd36a");ell(.5,.36,.45,m,V(0,.36,0),g);ell(.38,.25,.35,T("#f2f8c8"),V(.12,.3,0),g,24);
+    const head=grp(V(.25,.55,0),g);[-1,1].forEach(s=>{ell(.17,.17,.17,m,V(0,.22,s*.22),head,18);const n=V(.85,.25,s*.35).normalize();eyeAt(head,V(0,.22,s*.22).addScaledVector(n,.165),n,.12,s);
+      const c=ell(.03,.045,.07,new THREE.MeshBasicMaterial({color:"#ff8fae",transparent:true,opacity:.7,depthWrite:false}),V(.26,-.02,s*.27),head,12);c.rotation.y=-s*.7;});
+    const mo=new THREE.Mesh(new THREE.TorusGeometry(.13,.018,6,20,Math.PI),BL("#3a1a20"));mo.rotation.set(0,Math.PI/2,Math.PI);mo.position.set(.21,.02,0);head.add(mo);
+    [-1,1].forEach(s=>{ell(.25,.12,.14,m,V(-.25,.15,s*.38),g,16);ell(.16,.04,.12,m,V(.2,.03,s*.42),g,14);ell(.13,.04,.1,m,V(-.15,.03,s*.48),g,14);});
+    X.anims.push(t=>{const k=Math.max(0,Math.sin(t*1.7));g.position.y=k*k*.25;});X.ty=.45;return 1.8;};
+  // ===== ヒト（ちびキャラ） =====
+  B.human=function(p){const fig=(x,z,o)=>{const g=grp(V(x,0,z)),sk=T(o.skin),cl=T(o.shirt),pa=T(o.pants),ha=T(o.hair);
+      if(o.dress){const dr=new THREE.Mesh(new THREE.ConeGeometry(.3,.5,24),cl);dr.position.set(0,.45,0);g.add(dr);}else{ell(.2,.24,.17,cl,V(0,.55,0),g,24);ell(.19,.12,.16,pa,V(0,.36,0),g,20);}
+      [-1,1].forEach(s=>{limb(V(0,.3,s*.08),V(0,.1,s*.09),.06,o.dress?sk:pa,g);ell(.09,.05,.07,T("#4a3a3a"),V(.04,.05,s*.09),g,12);});
+      const head=grp(V(0,1.0,0),g);ell(.32,.31,.31,sk,V(0,0,0),head);const hair=ell(.34,.3,.33,ha,V(-.05,.07,0),head);hair.scale.set(.33,.28,.335);
+      ell(.12,.06,.3,ha,V(.2,.2,0),head,16);if(o.long){ell(.12,.3,.28,ha,V(-.2,-.15,0),head,18);}
+      face(head,.32,{spread:.4,y:-.02,eye:.19,mouthY:-.32});
+      const arm=(s,wave)=>{const pv=grp(V(0,.7,s*.2),g);if(wave){limb(V(0,0,0),V(.05,.25,s*.12),.05,cl,pv);ell(.06,.06,.06,sk,V(.06,.31,s*.13),pv,12);X.anims.push(t=>{pv.rotation.x=-s*(.3+Math.sin(t*6)*.3);});}else{limb(V(0,0,0),V(.03,-.25,s*.06),.05,cl,pv);ell(.06,.06,.06,sk,V(.03,-.3,s*.06),pv,12);}};
+      arm(1,o.wave);arm(-1,false);bounce(g,.5,2.2+x);return g;};
+    fig(0,-.4,{skin:"#ffd9b8",shirt:"#ff6f7f",pants:"#ff6f7f",hair:"#4a2a1a",dress:1,long:1,wave:1});fig(.1,.4,{skin:"#b9784e",shirt:"#4f9ae8",pants:"#2f3a5a",hair:"#1a1210"});X.ty=.75;return 2.0;};
+  function build(type,p,ctx){if(!B[type])return null;X=ctx;const n0=ctx.root.children.length,a0=ctx.anims.length;try{return B[type](p);}catch(e){console.warn("CUTE",type,e);ctx.root.children.splice(n0);ctx.anims.length=a0;return null;}}
+  return {build,has:t=>!!B[t]};
+})();
+
 /* ---------- ⑦ ミクロの世界（生き物→細胞→微生物→ウイルス→分子→原子→原子核→クオーク） ---------- */
 const MICRO=(function(){
   const host=document.getElementById("mcscene");if(!host||typeof THREE==="undefined")return null;
@@ -6318,6 +6858,7 @@ const MICRO=(function(){
    {id:"particle",name:"素粒子",scale:"大きさが見つかっていない「点」（10⁻¹⁸m未満）",desc:"これ以上分けられないと考えられている粒子。場の理論では、素粒子は宇宙全体に広がる「場」のさざ波（励起）として表される。ここでは場を点の格子で、粒子をその波として描いています。",dist:8,items:()=>PARTICLES.map(p=>({id:p[0],name:p[1],sub:PCAT[p[2]][0]}))},
    {id:"quantum",name:"量子の世界",scale:"原子の中〜プランク長（1.6×10⁻³⁵m）",desc:"ミクロの世界では、粒子は波のようにふるまい、位置は確率でしか決まらない。いちばん小さなスケール（プランク長）では、時空そのものが揺らいでいると考えられている（仮説）。",dist:8,items:()=>[{id:"o1s",name:"電子の雲（1s軌道）",sub:"水素原子"},{id:"o2p",name:"電子の雲（2p軌道）",sub:"ダンベル形"},{id:"o3d",name:"電子の雲（3d軌道）",sub:"四つ葉形"},{id:"slit",name:"二重スリット実験",sub:"粒子なのに干渉する"},{id:"ent",name:"量子もつれ",sub:"離れても相関する"},{id:"vac",name:"真空のゆらぎ",sub:"粒子が生まれては消える"},{id:"foam",name:"時空の泡（プランク長）",sub:"仮説"}]},
    {id:"string",name:"超ひも理論（仮説）",scale:"プランク長（約10⁻³⁵m）",desc:"すべての素粒子は「点」ではなく、とても小さな振動する「ひも」だという仮説。ひもの振動のしかた（音の高さのようなもの）の違いが、電子・クオーク・光子・重力子などの違いになる。理論が成り立つには空間が9次元（時間を合わせて10次元、M理論では11次元）必要で、余分な次元は小さく丸まっていると考える。実験的な証拠はまだない。",dist:8,items:()=>[{id:"modes",name:"ひもの振動と粒子",sub:"振動の違い＝粒子の違い"},{id:"openclosed",name:"開いたひも・閉じたひも",sub:"端があるか輪か"},{id:"brane",name:"ブレーン（膜）と重力",sub:"なぜ重力だけ弱い？"},{id:"cy",name:"余剰次元（カラビ–ヤウ空間）",sub:"丸まった6次元"},{id:"compact",name:"次元が丸まるとは",sub:"ホースのたとえ"},{id:"m",name:"M理論と11次元",sub:"5つの理論をつなぐ"}]},
+   {id:"dims",name:"次元（1〜11次元）",scale:"線（1次元）〜M理論（11次元）",desc:"次元とは「独立に動ける方向の数」。1〜3次元は空間、4次元目は時間。5次元目より先は、超ひも理論・M理論が考える「小さく丸まった余剰次元」で、まだ実験で確かめられていない仮説。",dist:9,items:()=>[["d1","1次元：線","前と後ろだけ"],["d2","2次元：面","平面の世界"],["d3","3次元：空間","たて・よこ・奥行き"],["d4","4次元：時間","時空・世界線・光円錐"],["d5","5次元","丸まった次元（カルツァ＝クライン）"],["d6","6次元","小さなドーナツ面"],["d7","7次元","出ると反対側から戻る箱"],["d8","8次元","超立方体の影"],["d9","9次元","5次元立方体の影"],["d10","10次元","超ひも理論・カラビ–ヤウ空間"],["d11","11次元","M理論・膜の宇宙"]].map(([id,name,sub])=>({id,name,sub}))},
   ];
   let renderer,scene,camera,root,anims=[],running=false,t0=performance.now(),last=0,LV=0,cur=null,inited=false;
   const cam={th:.6,ph:1.15,r:9,goal:9,drag:null,auto:true};
@@ -6552,7 +7093,7 @@ const MICRO=(function(){
   function vstring(mode,closed,col,len=2.4,amp=.25){const N=120;const g=new THREE.BufferGeometry();const p=new Float32Array((N+1)*3);g.setAttribute("position",new THREE.BufferAttribute(p,3));
     const m=new THREE.Line(g,new THREE.LineBasicMaterial({color:col,linewidth:2}));const glow=new THREE.Points(g,new THREE.PointsMaterial({color:col,size:.07,transparent:true,opacity:.6,blending:THREE.AdditiveBlending,depthWrite:false}));const grp=new THREE.Group();grp.add(m,glow);root.add(grp);
     anims.push(t=>{for(let i=0;i<=N;i++){const f=i/N;let x,y,z;if(closed){const a=f*Math.PI*2,r=len/2/Math.PI*2+Math.sin(a*mode+t*3)*amp;x=Math.cos(a)*r;z=Math.sin(a)*r;y=Math.cos(a*mode-t*3)*amp*.8;}else{x=(f-.5)*len;y=Math.sin(f*Math.PI*mode)*Math.sin(t*3)*amp;z=Math.sin(f*Math.PI*mode)*Math.cos(t*2)*amp*.5;}p.set([x,y,z],i*3);}g.attributes.position.needsUpdate=true;});return grp;}
-  function txt(t,col="#fff"){const c=document.createElement("canvas");c.width=256;c.height=64;const g=c.getContext("2d");g.fillStyle=col;g.font="bold 30px sans-serif";g.textAlign="center";g.fillText(t,128,42);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false}));s.scale.set(1.6,.4,1);root.add(s);return s;}
+  function txt(t,col="#fff"){const c=document.createElement("canvas"),F="bold 30px sans-serif";let g=c.getContext("2d");g.font=F;const w=Math.max(256,Math.ceil(g.measureText(t).width)+28);c.width=w;c.height=64;g=c.getContext("2d");g.font=F;g.textAlign="center";g.lineWidth=6;g.strokeStyle="rgba(0,0,0,.65)";g.strokeText(t,w/2,42);g.fillStyle=col;g.fillText(t,w/2,42);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false}));s.scale.set(1.6*w/256,.4,1);root.add(s);return s;}
   function strings(id){
     if(id==="modes"){[["電子",1,"#7fb2ff"],["クオーク",2,"#ff8f8f"],["光子",3,"#f4d06a"],["重力子",4,"#c99cf2"]].forEach(([n,k,c],i)=>{const g=vstring(k+1,true,c,2.6,.18);g.position.set((i-1.5)*2.6,0,0);const l=txt(n,c);l.position.set((i-1.5)*2.6,1.4,0);});
       return [9,"ひもの振動と粒子","同じ「ひも」でも、振動のしかた（節の数・速さ）が違うと、別の粒子に見える。ギターの弦が押さえる位置で違う音を出すのと似ている。重力子（重力を伝える粒子）が自然に出てくることが、この理論が注目される大きな理由。"];}
@@ -6583,19 +7124,95 @@ const MICRO=(function(){
     const names=["タイプI","タイプIIA","タイプIIB","ヘテロSO(32)","ヘテロE8×E8","11次元超重力"];names.forEach((n,i)=>{const a=i/6*6.283;const s=vstring(i%3+2,i%2===0,["#ff8f8f","#7fb2ff","#6fd2a0","#f4d06a","#c99cf2","#ff9ad0"][i],1.6,.15);s.position.set(Math.cos(a)*4.6,Math.sin(a)*3,0);txt(n,"#fff").position.set(Math.cos(a)*4.6,Math.sin(a)*3+1.1,0);});
     const core=sph(.8,new THREE.MeshStandardMaterial({color:"#f4b942",emissive:"#f4b942",emissiveIntensity:.4}),0,0,0);txt("M理論（11次元）","#f4b942").position.set(0,-1.3,0);anims.push(t=>core.scale.setScalar(1+Math.sin(t*2)*.08));
     return [13,"M理論と11次元","1990年代、5種類あった超ひも理論と11次元超重力理論は、じつは1つの理論（M理論）の別の見え方だと分かってきた（ウィッテン、1995年）。M理論では空間10次元＋時間1次元の11次元。M理論そのものの完全な形はまだ分かっていない。"];}
+  // ---- 次元（1〜11次元） ----
+  const DCOL=["#ff6b6b","#4cd97b","#5aa8ff","#ffd84a","#c58bff","#ff8fd0","#5fe0e0","#ffa94d","#a0e86a","#9fa8ff","#ffffff"];
+  const glowM=c=>new THREE.MeshBasicMaterial({color:c});
+  function arrow(dir,len,col,p=root){const g=new THREE.Group();const d=dir.clone().normalize();const sh=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,len,10),glowM(col));sh.position.y=len/2;const hd=new THREE.Mesh(new THREE.ConeGeometry(.12,.3,14),glowM(col));hd.position.y=len+.15;g.add(sh,hd);g.quaternion.setFromUnitVectors(V(0,1,0),d);p.add(g);return g;}
+  function bead(col,r=.22,p=root){const g=new THREE.Group();p.add(g);const b=new THREE.Mesh(new THREE.SphereGeometry(r,24,16),M(col,{roughness:.35}));g.add(b);[-1,1].forEach(s=>{const e=new THREE.Mesh(new THREE.SphereGeometry(r*.2,10,8),glowM("#1a1420"));e.position.set(r*.82,r*.2,s*r*.32);e.scale.x=.5;g.add(e);});return g;}
+  // n次元立方体の影（各方向を色分け）
+  function ncube(n,scale,planes){const N=1<<n,ed=[];for(let a=0;a<N;a++)for(let k=0;k<n;k++){const b=a^(1<<k);if(a<b)ed.push([a,b,k]);}
+    const em=new THREE.InstancedMesh(new THREE.CylinderGeometry(.028,.028,1,8,1,true),new THREE.MeshBasicMaterial({color:"#fff"}),ed.length);ed.forEach(([a,b,k],i)=>em.setColorAt(i,C(DCOL[k])));root.add(em);
+    const q=new THREE.Quaternion(),va=V(0,0,0),vb=V(0,0,0),vd=V(0,0,0),up=V(0,1,0),sc=V(1,1,1);
+    const vm=new THREE.InstancedMesh(new THREE.SphereGeometry(.07,12,8),glowM("#ffffff"),N);root.add(vm);const P=[],mt=new THREE.Matrix4();
+    anims.push(t=>{for(let a=0;a<N;a++){const p=[];for(let k=0;k<n;k++)p.push(a>>k&1?1:-1);planes.forEach(([i,j,w])=>{const th=t*w,c=Math.cos(th),s=Math.sin(th),x=p[i],y=p[j];p[i]=x*c-y*s;p[j]=x*s+y*c;});
+        for(let k=n-1;k>=3;k--){const f=2.6/(3.4-p[k]*.9);for(let m=0;m<k;m++)p[m]*=f;}P[a]=[p[0]*scale,p[1]*scale,p[2]*scale];mt.makeTranslation(P[a][0],P[a][1],P[a][2]);vm.setMatrixAt(a,mt);}
+      vm.instanceMatrix.needsUpdate=true;ed.forEach(([a,b],i)=>{va.fromArray(P[a]);vb.fromArray(P[b]);vd.subVectors(vb,va);const l=vd.length();q.setFromUnitVectors(up,vd.normalize());sc.set(1,l,1);mt.compose(va.add(vb).multiplyScalar(.5),q,sc);em.setMatrixAt(i,mt);});em.instanceMatrix.needsUpdate=true;});}
+  function dimGrid(n,step,fn){for(let i=0;i<n;i++)for(let j=0;j<n;j++){const x=(i-(n-1)/2)*step,z=(j-(n-1)/2)*step;fn(x,z,i,j);}}
+  function dims(id){const k=+id.slice(1);
+    if(k===1){const ln=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,10,8),glowM(DCOL[0]));ln.rotation.z=Math.PI/2;root.add(ln);
+      const bs=[["#ffb3c1",-3],["#9fd8ff",0],["#ffe08a",2.8]].map(([c,x])=>{const b=bead(c);b.position.x=x;return b;});
+      anims.push(t=>{const xs=[-2.8+Math.sin(t*.9)*1.1,Math.sin(t*1.3)*1.05,2.75+Math.sin(t*.7+1)*1.05];bs.forEach((b,i)=>{b.position.x=xs[i];b.rotation.y=Math.cos([.9,1.3,.7][i]*t)>0?0:Math.PI;});});
+      txt("← 前","#ff9b9b").position.set(-4.4,.7,0);txt("後ろ →","#ff9b9b").position.set(4.4,.7,0);txt("追い越せない！","#fff").position.set(0,1.3,0);
+      return [7,"1次元：線の世界","動ける方向は「前・後ろ」の1つだけ。線の上に住む生き物は、となりの相手を追い越すことも、よけることもできない。位置は数1つ（x）で決まる。"];}
+    if(k===2){const pl=new THREE.Mesh(new THREE.PlaneGeometry(9,9),G("#4a7ad8",.22));pl.rotation.x=-Math.PI/2;root.add(pl);const gr=new THREE.GridHelper(9,18,"#7fa8ff","#36508a");root.add(gr);
+      arrow(V(1,0,0),2.4,DCOL[0]).position.set(-4.3,.02,4.3);arrow(V(0,0,-1),2.4,DCOL[1]).position.set(-4.3,.02,4.3);
+      const shp=[new THREE.CircleGeometry(.45,32),new THREE.CircleGeometry(.5,3),new THREE.PlaneGeometry(.75,.75)].map((g0,i)=>{const m=new THREE.Mesh(g0,new THREE.MeshBasicMaterial({color:["#ffb3c1","#ffe08a","#9fd8ff"][i],side:THREE.DoubleSide}));m.rotation.x=-Math.PI/2;m.position.y=.02;root.add(m);return m;});
+      const ball=sph(1.1,G("#ffd84a",.55),2,0,-1);const ring=new THREE.Mesh(new THREE.RingGeometry(.9,1,48),new THREE.MeshBasicMaterial({color:"#ffd84a",side:THREE.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.set(2,.03,-1);root.add(ring);
+      anims.push(t=>{shp.forEach((m,i)=>{const a=t*(.4+i*.15)+i*2;m.position.x=-1.6+Math.cos(a)*1.6;m.position.z=1+Math.sin(a*1.3)*1.4;m.rotation.z=t*(i-1)*.8;});
+        const y=Math.sin(t*.7)*1.9;ball.position.y=y;const r=Math.sqrt(Math.max(0,1.21-y*y));ring.visible=r>.02;ring.scale.setScalar(Math.max(.01,r));});
+      txt("3次元の球が通ると…","#ffd84a").position.set(2,2.6,-1);txt("平面の住人には「円」が現れて消える","#fff").position.set(0,-1.2,3.5);
+      return [8,"2次元：面の世界","動ける方向は「たて・よこ」の2つ。上下という方向は存在しない。小説『フラットランド』（1884年）の住人のように、3次元の球が平面を通り抜けると、彼らには点→大きな円→点→消える、という不思議な現象に見える。"];}
+    if(k===3){[[V(1,0,0),0],[V(0,1,0),1],[V(0,0,1),2]].forEach(([d,i])=>arrow(d,3,DCOL[i]));txt("よこ (x)",DCOL[0]).position.set(3.6,0,0);txt("たて (y)",DCOL[1]).position.set(0,3.7,0);txt("奥行き (z)",DCOL[2]).position.set(0,0,3.8);
+      const cb=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.8,1.8),G("#9fd8ff",.3));cb.position.set(1.4,1.4,1.4);root.add(cb);const ed=new THREE.LineSegments(new THREE.EdgesGeometry(cb.geometry),new THREE.LineBasicMaterial({color:"#fff"}));cb.add(ed);
+      const pl=new THREE.Mesh(new THREE.PlaneGeometry(2.6,2.6),G("#4a7ad8",.18));pl.rotation.x=-Math.PI/2;pl.position.set(1.4,1.4,1.4);root.add(pl);
+      anims.push(t=>{cb.rotation.y=t*.4;cb.rotation.x=Math.sin(t*.3)*.4;pl.position.y=1.4+Math.sin(t*.8)*.9;});
+      root.position.y=-1.3;return [9,"3次元：私たちの空間","動ける方向は「たて・よこ・奥行き」の3つ。どんな場所も3つの数（x, y, z）で表せる。2次元の住人にとっての球と同じように、私たちも「もっと高い次元の物体」は断面しか見られないのかもしれない。"];}
+    if(k===4){const sp=new THREE.Mesh(new THREE.PlaneGeometry(7,7),G("#4a7ad8",.12));sp.rotation.x=-Math.PI/2;root.add(sp);
+      const cone=(up)=>{const m=new THREE.Mesh(new THREE.ConeGeometry(2.6,2.6,48,1,true),G("#ffd84a",.16));m.position.y=up?1.3:-1.3;if(up)m.rotation.x=Math.PI;root.add(m);const e=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.ConeGeometry(2.6,2.6,24,1,true)),new THREE.LineBasicMaterial({color:"#ffd84a",transparent:true,opacity:.35}));m.add(e);};cone(true);cone(false);
+      arrow(V(0,1,0),3.6,DCOL[3]).position.y=-3.2;txt("時間 ↑（4次元目）",DCOL[3]).position.set(0,3.4,0);txt("空間（2次元に省略）","#9fb3d6").position.set(3.4,-.3,3);txt("光円錐","#ffd84a").position.set(2.6,1.9,0);
+      const pts=[];for(let i=0;i<=120;i++){const y=-3+i/120*6,a=y*2.2;pts.push(V(Math.cos(a)*1.2+1.8,y,Math.sin(a)*1.2-1));}tube(pts,.05,glowM("#7fd3ff"),root,240);sph(.45,M("#ffcf5a",{emissive:"#ffb000",emissiveIntensity:.6}),1.8,0,-1,1,.12,1);
+      const pts2=[V(-1.8,-3,1.4),V(-1.8,3,1.4)];tube(pts2,.04,glowM("#ff9bb0"),root,4);
+      const now=new THREE.Mesh(new THREE.PlaneGeometry(7,7),G("#ffffff",.08));now.rotation.x=-Math.PI/2;root.add(now);const e1=sph(.16,glowM("#7fd3ff"),0,0,0),e2=sph(.16,glowM("#ff9bb0"),-1.8,0,1.4);
+      anims.push(t=>{const y=((t*.5)%6)-3;now.position.y=y;const a=y*2.2;e1.position.set(Math.cos(a)*1.2+1.8,y,Math.sin(a)*1.2-1);e2.position.y=y;});
+      txt("地球の世界線（らせん）","#7fd3ff").position.set(1.8,-3.5,-1);
+      return [9,"4次元：時間（時空）","相対性理論では、時間は空間と組み合わさって4次元の「時空」になる。図は空間を2次元に省いて、上向きを時間にしたもの。止まっている物はまっすぐな線、太陽のまわりを回る地球はらせんの「世界線」を描く。黄色い円すい（光円錐）の外へは、光より速くないと行けないので、原因と結果はこの中だけでつながる。"];}
+    if(k>=5&&k<=7){const nC=k-4;const sm=[];
+      dimGrid(5,1.5,(x,z)=>{const g=new THREE.Group();g.position.set(x,0,z);root.add(g);sph(.05,glowM("#ffffff"),0,0,0,1,1,1,g);
+        if(nC===1){const r=new THREE.Mesh(new THREE.TorusGeometry(.32,.025,8,32),glowM(DCOL[4]));g.add(r);}
+        else if(nC===2){const r=new THREE.Mesh(new THREE.TorusGeometry(.3,.12,14,32),M(DCOL[5],{roughness:.4}));g.add(r);}
+        else{[[0,0,0],[Math.PI/2,0,0],[0,Math.PI/2,0]].forEach((rt,i)=>{const r=new THREE.Mesh(new THREE.TorusGeometry(.33,.02,6,32),glowM(DCOL[4+i]));r.rotation.set(...rt);g.add(r);});}
+        sm.push(g);});
+      const pl=new THREE.Mesh(new THREE.PlaneGeometry(7.5,7.5),G("#4a7ad8",.1));pl.rotation.x=-Math.PI/2;pl.position.y=-.5;root.add(pl);
+      // 拡大図
+      const big=new THREE.Group();big.position.set(0,3.4,0);root.add(big);const dot=sph(.14,glowM("#ffd84a"),0,0,0,1,1,1,big);
+      if(nC===1){big.add(new THREE.Mesh(new THREE.TorusGeometry(1.3,.06,12,64),glowM(DCOL[4])));anims.push(t=>{const a=t*1.4;dot.position.set(Math.cos(a)*1.3,Math.sin(a)*1.3,0);});}
+      else if(nC===2){const tor=new THREE.Mesh(new THREE.TorusGeometry(1.2,.5,32,64),G(DCOL[5],.45));big.add(tor);anims.push(t=>{const u=t*.9,v=t*2.3;dot.position.set((1.2+.5*Math.cos(v))*Math.cos(u),(1.2+.5*Math.cos(v))*Math.sin(u),.5*Math.sin(v));});}
+      else{const bx=new THREE.Mesh(new THREE.BoxGeometry(2.2,2.2,2.2),G("#5fe0e0",.12));big.add(bx);bx.add(new THREE.LineSegments(new THREE.EdgesGeometry(bx.geometry),new THREE.LineBasicMaterial({color:"#5fe0e0"})));
+        const w=x=>((x+1.1)%2.2+2.2)%2.2-1.1;anims.push(t=>{dot.position.set(w(t*.9),w(t*.55+.3),w(t*.37+.7));});}
+      anims.push(t=>{sm.forEach((g,i)=>{g.rotation.y=t*.8+i;g.rotation.x=t*.5;});big.rotation.y=t*.3;});
+      const T={1:["5次元：丸まった次元（カルツァ＝クライン）","1921〜26年、カルツァとクラインは「空間にもう1つ、小さな円の形に丸まった次元がある」と考えると、重力と電磁気力を同じ式で書けることを見つけた。図の下は私たちの空間（2次元に省略）で、どの点にも小さな円（紫）がついている。上は1つを拡大したもので、点はこの円の方向にも動ける。ただし円は小さすぎて（プランク長ほど）私たちには見えない。"],
+        2:["6次元：2つ目の丸まった次元","丸まった次元が2つあると、各点についている小さな空間は「ドーナツ面（トーラス）」になる。ドーナツの表面は、ぐるっと回る方向が2つある2次元の世界。上の拡大図の点は、2つの円の方向を同時に動いている。"],
+        3:["7次元：3つの丸まった次元","丸まった次元が3つになると、各点の小さな空間は「3次元トーラス」。描くのは難しいが、「右の面から出ると左の面から戻ってくる箱」と同じもの（上の拡大図）。テレビゲームで画面の端から出ると反対側から出てくるのと同じしくみを3方向にしたもの。"]}[nC];
+      txt(`丸まった次元 ×${nC}`,DCOL[4]).position.set(0,5.3,0);txt("私たちの空間のどの点にも…","#9fb3d6").position.set(0,-1.2,4.2);
+      root.position.y=-1.4;return [11.5,T[0],T[1]];}
+    if(k===8||k===9){const n=k-4;ncube(n,1.4,n===4?[[0,3,.5],[1,2,.25]]:[[0,3,.45],[1,4,.32],[2,3,.2]]);
+      txt(n===4?"4次元立方体（超立方体）の影":"5次元立方体の影","#fff").position.set(0,3.6,0);
+      return [7,k===8?"8次元：4つの丸まった次元":"9次元：5つの丸まった次元",k===8?"丸まった次元が4つになると、各点の小さな空間は「4次元トーラス」。これは4次元立方体（超立方体・テッセラクト）の向かい合う面どうしを貼り合わせたもの。図は超立方体を3次元に映した「影」で、回転すると内側の立方体と外側の立方体が入れかわる。線の色は4つの方向（赤・緑・青・黄）を表す。":"丸まった次元が5つ。5次元立方体は頂点32個・辺80本で、各頂点から5方向（5色）に辺がのびる。私たちの目には影しか見えないが、数学では何次元でも同じように扱える。"];}
+    if(k===10){const r=strings("cy");txt("6つの丸まった次元","#ff9ad0").position.set(0,2.9,0);
+      return [7,"10次元：超ひも理論の時空","超ひも理論が矛盾なく成り立つには、空間9次元＋時間1次元＝10次元が必要。私たちに見える3次元以外の6次元は、図のような「カラビ–ヤウ空間」に小さく丸まっていると考える。丸まり方の違いで、どんな素粒子や力が現れるかが変わる（候補は10⁵⁰⁰通り以上とも）。"];}
+    // 11次元：M理論（ホジャヴァ＝ウィッテン型：2枚の膜のあいだ）
+    const mkBr=(x,col)=>{const g=new THREE.PlaneGeometry(7,5,28,20),b=g.attributes.position.array.slice();const m=new THREE.Mesh(g,G(col,.38));m.rotation.y=Math.PI/2;m.position.x=x;root.add(m);
+      const e=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(7,5)),new THREE.LineBasicMaterial({color:col}));m.add(e);anims.push(t=>{const a=g.attributes.position;for(let i=0;i<a.count;i++)a.setZ(i,Math.sin(b[i*3]*.9+t*1.2+x)*.07+Math.cos(b[i*3+1]*1.1+t)*.05);a.needsUpdate=true;});return m;};
+    mkBr(-2.6,"#5aa8ff");mkBr(2.6,"#ff8fd0");txt("私たちの宇宙（膜）","#9fd0ff").position.set(-2.6,3.1,0);txt("もう1枚の膜","#ffb3dd").position.set(2.6,3.1,0);
+    const ax=arrow(V(1,0,0),4.4,DCOL[10]);ax.position.set(-2.2,-2.9,0);txt("11次元目","#fff").position.set(0,-3.4,0);
+    for(let i=0;i<5;i++){const s=vstring(1+i%2,false,"#ffcf5a",.9,.18);s.position.set(-2.15,-1.6+i*.8,(i%2-.5)*2);s.rotation.y=Math.PI/2;s.rotation.x=Math.PI/2;}
+    const gs=[0,1,2].map(i=>vstring(2+i%2,true,"#c99cf2",.9,.08));anims.push(t=>gs.forEach((g,i)=>{const u=((t*.18+i/3)%1);g.position.set(-2.4+u*4.8,Math.sin(t+i*2)*1.2,Math.cos(t*.7+i)*1.5);}));
+    txt("物質・光（ひもの端が膜にくっつく）","#ffcf5a").position.set(-2.6,-2.3,-3.2);txt("重力子（膜のあいだも飛べる）","#c99cf2").position.set(1,1.9,0);
+    return [9,"11次元：M理論","1995年にウィッテンが提案したM理論では、空間10次元＋時間1次元の11次元。ホジャヴァとウィッテンのモデルでは、11次元目は2枚の「膜（ブレーン）」にはさまれた短い区間で、私たちの宇宙はその片方の膜だと考える。物質や光は膜から離れられないが、重力子は膜のあいだを行き来できる。M理論の完全な形はまだ分かっていない。"];}
   // ---- 表示 ----
   function shadows(s){if(!keyL)return;keyL.castShadow=true;keyL.position.set(s*.9,s*1.8,s*1.1);keyL.target.position.set(0,s*.25,0);scene.add(keyL.target);const c=keyL.shadow.camera;c.left=-s*1.3;c.right=s*1.3;c.top=s*1.3;c.bottom=-s*1.3;c.near=.05;c.far=s*7;c.updateProjectionMatrix();
-    keyL.shadow.mapSize.set(2048,2048);keyL.shadow.bias=-.0004;keyL.shadow.normalBias=.02;root.traverse(o=>{if(o.isMesh){o.castShadow=!(o.material&&o.material.transparent);o.receiveShadow=true;}});}
+    keyL.shadow.mapSize.set(2048,2048);keyL.shadow.bias=-.0004;keyL.shadow.normalBias=.02;root.traverse(o=>{if(o.isMesh){const tn=o.material&&o.material.isMeshToonMaterial,bs=o.material&&o.material.isMeshBasicMaterial;o.castShadow=!(o.material&&o.material.transparent)&&!bs;o.receiveShadow=!tn;}});}
   function build(id,dir){const L=LEVELS[LV];cur=id;seed=7+[...String(id)].reduce((a,c)=>a+c.charCodeAt(0),0);
-    const bg={life:"#0e1a24",cell:"#1a0e1e",microbe:"#0e1e1a",virus:"#1e0e14",mol:"#0a0f1f",atom:"#05070f",nucleus:"#05050a",quark:"#050308",particle:"#04030a",quantum:"#020208",string:"#050212"}[L.id];setup(bg);root.position.set(0,0,0);root.rotation.set(0,0,0);
+    const bg={life:"#0e1a24",cell:"#1a0e1e",microbe:"#0e1e1a",virus:"#1e0e14",mol:"#0a0f1f",atom:"#05070f",nucleus:"#05050a",quark:"#050308",particle:"#04030a",quantum:"#020208",string:"#050212",dims:"#04030c"}[L.id];setup(bg);root.position.set(0,0,0);root.rotation.set(0,0,0);
     let size=6,title="",desc="",meta="",orgTy=null;
-    if(L.id==="life"){const o=ORGS.find(x=>x[0]===id);ground(o[6]==="whale"||o[6]==="fish"||o[6]==="octopus"||o[6]==="jelly"||o[6]==="starfish"||o[6]==="crab"||o[6]==="turtle"?"#1a3a5a":"#2a3a2a",8);const oc={root,anims,R};size=(window.ORG3D&&ORG3D.has(o[6])?ORG3D.build(o[6],o[7],oc):null)||B[o[6]](o[7])||4;orgTy=oc.ty;shadows(size);title=o[1];meta=`<dl class="kdl"><dt>分類</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd><dt>すみか</dt><dd>${o[4]}</dd></dl>`;desc=o[5];}
+    if(L.id==="life"){const o=ORGS.find(x=>x[0]===id);ground(o[6]==="whale"||o[6]==="fish"||o[6]==="octopus"||o[6]==="jelly"||o[6]==="starfish"||o[6]==="crab"||o[6]==="turtle"?"#1a3a5a":"#2a3a2a",8);const oc={root,anims,R,id:o[0]};const cs=window.CUTE&&CUTE.has(o[6])?CUTE.build(o[6],o[7],oc):null;if(cs){scene.traverse(l=>{if(l.isHemisphereLight){l.intensity=.62;l.color.set("#fff4ea");l.groundColor.set("#5a6078");}else if(l.isDirectionalLight)l.intensity=l===keyL?.62:.22;});}size=cs||(window.ORG3D&&ORG3D.has(o[6])?ORG3D.build(o[6],o[7],oc):null)||B[o[6]](o[7])||4;orgTy=oc.ty;shadows(size);title=o[1];meta=`<dl class="kdl"><dt>分類</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd><dt>すみか</dt><dd>${o[4]}</dd></dl>`;desc=o[5];}
     else if(L.id==="cell"||L.id==="microbe"||L.id==="virus"){const o=MICROS.find(x=>x[0]===id);size=BM[o[5]](o[6])||8;title=o[1];meta=`<dl class="kdl"><dt>なかま</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd></dl>`;desc=o[4];}
     else if(L.id==="mol"){const o=MOLS.find(x=>x[0]===id);size=molecule(id);title=o[1];meta=`<div class="num" style="font-size:18px;color:var(--accent)">${o[2]}</div>`;desc=o[3]+`<br><span class="clim">原子：${[...new Set(o[4].map(a=>a[0]))].map(e=>`<i class="adot" style="background:${ATOMCOL[e]}"></i>${e}`).join(" ")}</span>`;}
     else if(L.id==="atom"){const Z=+id;size=atom(Z);const el=ELEMENTS[Z-1];title=`${el.ja}（${el.sym}）`;meta=`<dl class="kdl"><dt>陽子</dt><dd>${Z}</dd><dt>電子</dt><dd>${Z}（殻ごとに ${shells(Z).join("・")}）</dd></dl>`;desc=(ENOTE[Z]||"")+" 電子の並び方（殻）が、その元素の化学的な性質を決める。";}
     else if(L.id==="nucleus"){const Z=+id;size=nucleus(Z);const el=ELEMENTS[Z-1];const N=Math.round(parseFloat(String(el.m).replace(/[\[\]]/g,"")))-Z;title=`${el.ja}の原子核`;meta=`<dl class="kdl"><dt>陽子（赤）</dt><dd>${Z}</dd><dt>中性子（灰）</dt><dd>${N}</dd></dl>`;desc=Z>82?"陽子が多すぎると反発が強くなり、原子核は不安定になって壊れる（放射性）。":Z===26?"鉄の原子核は最も安定。恒星の核融合は鉄で止まる。":"";}
     else if(L.id==="particle"){size=particleField(id);const P=PARTICLES.find(x=>x[0]===id);title=`${P[1]}（${P[0]}）`;meta=`<dl class="kdl"><dt>種類</dt><dd>${PCAT[P[2]][0]}</dd><dt>質量</dt><dd>${P[4]}</dd><dt>電荷</dt><dd>${P[3]}</dd><dt>発見</dt><dd>${P[5]?P[5]+"年":"未発見"}</dd></dl>`;desc=P[6];}
     else if(L.id==="quantum"){const r=quantum(id);size=r[0];title=r[1];desc=r[2];meta="";}
+    else if(L.id==="dims"){const r=dims(id);size=r[0];const sk=Math.max(1,size/7.5);root.traverse(o=>{if(o.isSprite)o.scale.multiplyScalar(sk);});title=r[1];desc=r[2];meta=+id.slice(1)>=5?`<p class="clim">※5次元目より先（余剰次元）は、超ひも理論・M理論の仮説です。実験ではまだ見つかっていません。</p>`:"";}
     else if(L.id==="string"){const r=strings(id);size=r[0];title=r[1];desc=r[2];meta=`<p class="clim">※超ひも理論は数学的には有力だが、実験で確かめられていない仮説です。</p>`;}
     else{size=quarks(id);title=id==="p"?"陽子":"中性子";meta=`<dl class="kdl"><dt>クオーク</dt><dd>${id==="p"?"アップ2個＋ダウン1個":"アップ1個＋ダウン2個"}</dd><dt>電荷</dt><dd>${id==="p"?"+2/3+2/3−1/3 ＝ +1":"+2/3−1/3−1/3 ＝ 0"}</dd></dl>`;desc="陽子の質量のうち、クオーク自体の質量はわずか約1%。残りはクオークとグルーオンの運動と結合のエネルギー（E=mc²）から生まれている。";}
     L.dist=Math.max(4,size*(L.id==="life"?1.9:1.5));L.ty=L.id==="life"?(orgTy!=null?orgTy:Math.min(size*.38,8)):0;cam.goal=L.dist;cam.r=dir==="in"?L.dist*2.2:dir==="out"?L.dist*.4:L.dist;cam.auto=true;
@@ -6644,9 +7261,9 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
   const futNote=y=>{if(typeof y==="number"&&y>KY()+.5)toast("これはスライダーの時代より後の出来事です。スライダーを進めると年表にも表示されます。");};
   const go={
     wh(i){goHash("timeline");later(()=>{let L=null,j=-1;if(typeof HIST!=="undefined")for(const l of HIST.lanes){const k=(l.ev||[]).findIndex(e=>e[3]===i);if(k>=0){L=l;j=k;break;}}
-      if(L&&window.TL_FOCUS)TL_FOCUS("hist",L.id,j);else{TL_SET("hist");WH_DETAIL(i);}futNote(WH[i][1]);});},
+      if(L&&window.TL_FOCUS)TL_FOCUS("hist",L.id,j);else{TL_SET("hist");WH_DETAIL(i);}});},
     tl(m,lid,j){goHash("timeline");later(()=>TL_FOCUS(m,lid,j));},
-    tree(fk,id,y){goHash("lineage");later(()=>{if(!window.TREE_SELECT||!TREE_SELECT(fk,id))toast("この要素は、いまの時代設定では系統樹に表示されていません。");else futNote(y);},220);},
+    tree(fk,id,y){goHash("lineage");later(()=>{if(!window.TREE_SELECT||!TREE_SELECT(fk,id))toast("この要素は系統樹に見つかりませんでした。");},220);},
     country(c3){goHash("world-map");later(()=>{MAP_PICK_COUNTRY(c3);document.getElementById("v-world-map").scrollIntoView({behavior:"smooth"});},220);},
     place(id){goHash("world-map");later(()=>MAP_PICK_PLACE(id),220);},
     sp(i){goHash("space-map");later(()=>SP_PICK(i),320);},
@@ -6664,7 +7281,7 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
   const fy=y=>typeof y!=="number"?"":y<=-10000?`約${Math.round(-y/1e4).toLocaleString()}万年前`:y<0?`紀元前${-y}年`:`${y}年`;
   function build(){IDX=[];const add=(k,t,s,txt,fn,y)=>{const nt=norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,""));IDX.push({k,t:String(t),s:s||"",nt,nb:norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,"").replace(/（.*?）|\(.*?\)/g,"")),h:norm((t||"")+" "+(s||"")+" "+(txt||"")),fn,y});};
     const T=(f)=>{try{f();}catch(e){console.warn("search index",e);}};
-    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（全分野）","16分野・約1,100要素の系譜"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
+    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（全分野）","16分野・約1,370要素の系譜（未来は5つの世界線）"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
     T(()=>{add("view","歴史シアター（3D）","年表の中の3D映像で通し再生","シアター 映像 再生",()=>{goHash("timeline");later(()=>{const d=$("thdock");if(d){d.open=true;d.scrollIntoView({behavior:"smooth"});}});});});
     T(()=>window.EBOOK&&EBOOK.chapters.forEach(c=>add("book",c.t,"地球大全の章",c.text,()=>go.book(c.id))));
     T(()=>[["t1","Type I 文明ガイド（惑星文明）"],["t2","Type II 文明ガイド（恒星文明）"],["t3","Type III 文明ガイド（銀河文明）"]].forEach(([k,t])=>add("view",t,"全体マップ・もしもの世界","タイプ カルダシェフ 文明",()=>go.tg(k))));

@@ -18,6 +18,7 @@ const MICRO=(function(){
    {id:"particle",name:"素粒子",scale:"大きさが見つかっていない「点」（10⁻¹⁸m未満）",desc:"これ以上分けられないと考えられている粒子。場の理論では、素粒子は宇宙全体に広がる「場」のさざ波（励起）として表される。ここでは場を点の格子で、粒子をその波として描いています。",dist:8,items:()=>PARTICLES.map(p=>({id:p[0],name:p[1],sub:PCAT[p[2]][0]}))},
    {id:"quantum",name:"量子の世界",scale:"原子の中〜プランク長（1.6×10⁻³⁵m）",desc:"ミクロの世界では、粒子は波のようにふるまい、位置は確率でしか決まらない。いちばん小さなスケール（プランク長）では、時空そのものが揺らいでいると考えられている（仮説）。",dist:8,items:()=>[{id:"o1s",name:"電子の雲（1s軌道）",sub:"水素原子"},{id:"o2p",name:"電子の雲（2p軌道）",sub:"ダンベル形"},{id:"o3d",name:"電子の雲（3d軌道）",sub:"四つ葉形"},{id:"slit",name:"二重スリット実験",sub:"粒子なのに干渉する"},{id:"ent",name:"量子もつれ",sub:"離れても相関する"},{id:"vac",name:"真空のゆらぎ",sub:"粒子が生まれては消える"},{id:"foam",name:"時空の泡（プランク長）",sub:"仮説"}]},
    {id:"string",name:"超ひも理論（仮説）",scale:"プランク長（約10⁻³⁵m）",desc:"すべての素粒子は「点」ではなく、とても小さな振動する「ひも」だという仮説。ひもの振動のしかた（音の高さのようなもの）の違いが、電子・クオーク・光子・重力子などの違いになる。理論が成り立つには空間が9次元（時間を合わせて10次元、M理論では11次元）必要で、余分な次元は小さく丸まっていると考える。実験的な証拠はまだない。",dist:8,items:()=>[{id:"modes",name:"ひもの振動と粒子",sub:"振動の違い＝粒子の違い"},{id:"openclosed",name:"開いたひも・閉じたひも",sub:"端があるか輪か"},{id:"brane",name:"ブレーン（膜）と重力",sub:"なぜ重力だけ弱い？"},{id:"cy",name:"余剰次元（カラビ–ヤウ空間）",sub:"丸まった6次元"},{id:"compact",name:"次元が丸まるとは",sub:"ホースのたとえ"},{id:"m",name:"M理論と11次元",sub:"5つの理論をつなぐ"}]},
+   {id:"dims",name:"次元（1〜11次元）",scale:"線（1次元）〜M理論（11次元）",desc:"次元とは「独立に動ける方向の数」。1〜3次元は空間、4次元目は時間。5次元目より先は、超ひも理論・M理論が考える「小さく丸まった余剰次元」で、まだ実験で確かめられていない仮説。",dist:9,items:()=>[["d1","1次元：線","前と後ろだけ"],["d2","2次元：面","平面の世界"],["d3","3次元：空間","たて・よこ・奥行き"],["d4","4次元：時間","時空・世界線・光円錐"],["d5","5次元","丸まった次元（カルツァ＝クライン）"],["d6","6次元","小さなドーナツ面"],["d7","7次元","出ると反対側から戻る箱"],["d8","8次元","超立方体の影"],["d9","9次元","5次元立方体の影"],["d10","10次元","超ひも理論・カラビ–ヤウ空間"],["d11","11次元","M理論・膜の宇宙"]].map(([id,name,sub])=>({id,name,sub}))},
   ];
   let renderer,scene,camera,root,anims=[],running=false,t0=performance.now(),last=0,LV=0,cur=null,inited=false;
   const cam={th:.6,ph:1.15,r:9,goal:9,drag:null,auto:true};
@@ -252,7 +253,7 @@ const MICRO=(function(){
   function vstring(mode,closed,col,len=2.4,amp=.25){const N=120;const g=new THREE.BufferGeometry();const p=new Float32Array((N+1)*3);g.setAttribute("position",new THREE.BufferAttribute(p,3));
     const m=new THREE.Line(g,new THREE.LineBasicMaterial({color:col,linewidth:2}));const glow=new THREE.Points(g,new THREE.PointsMaterial({color:col,size:.07,transparent:true,opacity:.6,blending:THREE.AdditiveBlending,depthWrite:false}));const grp=new THREE.Group();grp.add(m,glow);root.add(grp);
     anims.push(t=>{for(let i=0;i<=N;i++){const f=i/N;let x,y,z;if(closed){const a=f*Math.PI*2,r=len/2/Math.PI*2+Math.sin(a*mode+t*3)*amp;x=Math.cos(a)*r;z=Math.sin(a)*r;y=Math.cos(a*mode-t*3)*amp*.8;}else{x=(f-.5)*len;y=Math.sin(f*Math.PI*mode)*Math.sin(t*3)*amp;z=Math.sin(f*Math.PI*mode)*Math.cos(t*2)*amp*.5;}p.set([x,y,z],i*3);}g.attributes.position.needsUpdate=true;});return grp;}
-  function txt(t,col="#fff"){const c=document.createElement("canvas");c.width=256;c.height=64;const g=c.getContext("2d");g.fillStyle=col;g.font="bold 30px sans-serif";g.textAlign="center";g.fillText(t,128,42);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false}));s.scale.set(1.6,.4,1);root.add(s);return s;}
+  function txt(t,col="#fff"){const c=document.createElement("canvas"),F="bold 30px sans-serif";let g=c.getContext("2d");g.font=F;const w=Math.max(256,Math.ceil(g.measureText(t).width)+28);c.width=w;c.height=64;g=c.getContext("2d");g.font=F;g.textAlign="center";g.lineWidth=6;g.strokeStyle="rgba(0,0,0,.65)";g.strokeText(t,w/2,42);g.fillStyle=col;g.fillText(t,w/2,42);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false}));s.scale.set(1.6*w/256,.4,1);root.add(s);return s;}
   function strings(id){
     if(id==="modes"){[["電子",1,"#7fb2ff"],["クオーク",2,"#ff8f8f"],["光子",3,"#f4d06a"],["重力子",4,"#c99cf2"]].forEach(([n,k,c],i)=>{const g=vstring(k+1,true,c,2.6,.18);g.position.set((i-1.5)*2.6,0,0);const l=txt(n,c);l.position.set((i-1.5)*2.6,1.4,0);});
       return [9,"ひもの振動と粒子","同じ「ひも」でも、振動のしかた（節の数・速さ）が違うと、別の粒子に見える。ギターの弦が押さえる位置で違う音を出すのと似ている。重力子（重力を伝える粒子）が自然に出てくることが、この理論が注目される大きな理由。"];}
@@ -283,19 +284,95 @@ const MICRO=(function(){
     const names=["タイプI","タイプIIA","タイプIIB","ヘテロSO(32)","ヘテロE8×E8","11次元超重力"];names.forEach((n,i)=>{const a=i/6*6.283;const s=vstring(i%3+2,i%2===0,["#ff8f8f","#7fb2ff","#6fd2a0","#f4d06a","#c99cf2","#ff9ad0"][i],1.6,.15);s.position.set(Math.cos(a)*4.6,Math.sin(a)*3,0);txt(n,"#fff").position.set(Math.cos(a)*4.6,Math.sin(a)*3+1.1,0);});
     const core=sph(.8,new THREE.MeshStandardMaterial({color:"#f4b942",emissive:"#f4b942",emissiveIntensity:.4}),0,0,0);txt("M理論（11次元）","#f4b942").position.set(0,-1.3,0);anims.push(t=>core.scale.setScalar(1+Math.sin(t*2)*.08));
     return [13,"M理論と11次元","1990年代、5種類あった超ひも理論と11次元超重力理論は、じつは1つの理論（M理論）の別の見え方だと分かってきた（ウィッテン、1995年）。M理論では空間10次元＋時間1次元の11次元。M理論そのものの完全な形はまだ分かっていない。"];}
+  // ---- 次元（1〜11次元） ----
+  const DCOL=["#ff6b6b","#4cd97b","#5aa8ff","#ffd84a","#c58bff","#ff8fd0","#5fe0e0","#ffa94d","#a0e86a","#9fa8ff","#ffffff"];
+  const glowM=c=>new THREE.MeshBasicMaterial({color:c});
+  function arrow(dir,len,col,p=root){const g=new THREE.Group();const d=dir.clone().normalize();const sh=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,len,10),glowM(col));sh.position.y=len/2;const hd=new THREE.Mesh(new THREE.ConeGeometry(.12,.3,14),glowM(col));hd.position.y=len+.15;g.add(sh,hd);g.quaternion.setFromUnitVectors(V(0,1,0),d);p.add(g);return g;}
+  function bead(col,r=.22,p=root){const g=new THREE.Group();p.add(g);const b=new THREE.Mesh(new THREE.SphereGeometry(r,24,16),M(col,{roughness:.35}));g.add(b);[-1,1].forEach(s=>{const e=new THREE.Mesh(new THREE.SphereGeometry(r*.2,10,8),glowM("#1a1420"));e.position.set(r*.82,r*.2,s*r*.32);e.scale.x=.5;g.add(e);});return g;}
+  // n次元立方体の影（各方向を色分け）
+  function ncube(n,scale,planes){const N=1<<n,ed=[];for(let a=0;a<N;a++)for(let k=0;k<n;k++){const b=a^(1<<k);if(a<b)ed.push([a,b,k]);}
+    const em=new THREE.InstancedMesh(new THREE.CylinderGeometry(.028,.028,1,8,1,true),new THREE.MeshBasicMaterial({color:"#fff"}),ed.length);ed.forEach(([a,b,k],i)=>em.setColorAt(i,C(DCOL[k])));root.add(em);
+    const q=new THREE.Quaternion(),va=V(0,0,0),vb=V(0,0,0),vd=V(0,0,0),up=V(0,1,0),sc=V(1,1,1);
+    const vm=new THREE.InstancedMesh(new THREE.SphereGeometry(.07,12,8),glowM("#ffffff"),N);root.add(vm);const P=[],mt=new THREE.Matrix4();
+    anims.push(t=>{for(let a=0;a<N;a++){const p=[];for(let k=0;k<n;k++)p.push(a>>k&1?1:-1);planes.forEach(([i,j,w])=>{const th=t*w,c=Math.cos(th),s=Math.sin(th),x=p[i],y=p[j];p[i]=x*c-y*s;p[j]=x*s+y*c;});
+        for(let k=n-1;k>=3;k--){const f=2.6/(3.4-p[k]*.9);for(let m=0;m<k;m++)p[m]*=f;}P[a]=[p[0]*scale,p[1]*scale,p[2]*scale];mt.makeTranslation(P[a][0],P[a][1],P[a][2]);vm.setMatrixAt(a,mt);}
+      vm.instanceMatrix.needsUpdate=true;ed.forEach(([a,b],i)=>{va.fromArray(P[a]);vb.fromArray(P[b]);vd.subVectors(vb,va);const l=vd.length();q.setFromUnitVectors(up,vd.normalize());sc.set(1,l,1);mt.compose(va.add(vb).multiplyScalar(.5),q,sc);em.setMatrixAt(i,mt);});em.instanceMatrix.needsUpdate=true;});}
+  function dimGrid(n,step,fn){for(let i=0;i<n;i++)for(let j=0;j<n;j++){const x=(i-(n-1)/2)*step,z=(j-(n-1)/2)*step;fn(x,z,i,j);}}
+  function dims(id){const k=+id.slice(1);
+    if(k===1){const ln=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,10,8),glowM(DCOL[0]));ln.rotation.z=Math.PI/2;root.add(ln);
+      const bs=[["#ffb3c1",-3],["#9fd8ff",0],["#ffe08a",2.8]].map(([c,x])=>{const b=bead(c);b.position.x=x;return b;});
+      anims.push(t=>{const xs=[-2.8+Math.sin(t*.9)*1.1,Math.sin(t*1.3)*1.05,2.75+Math.sin(t*.7+1)*1.05];bs.forEach((b,i)=>{b.position.x=xs[i];b.rotation.y=Math.cos([.9,1.3,.7][i]*t)>0?0:Math.PI;});});
+      txt("← 前","#ff9b9b").position.set(-4.4,.7,0);txt("後ろ →","#ff9b9b").position.set(4.4,.7,0);txt("追い越せない！","#fff").position.set(0,1.3,0);
+      return [7,"1次元：線の世界","動ける方向は「前・後ろ」の1つだけ。線の上に住む生き物は、となりの相手を追い越すことも、よけることもできない。位置は数1つ（x）で決まる。"];}
+    if(k===2){const pl=new THREE.Mesh(new THREE.PlaneGeometry(9,9),G("#4a7ad8",.22));pl.rotation.x=-Math.PI/2;root.add(pl);const gr=new THREE.GridHelper(9,18,"#7fa8ff","#36508a");root.add(gr);
+      arrow(V(1,0,0),2.4,DCOL[0]).position.set(-4.3,.02,4.3);arrow(V(0,0,-1),2.4,DCOL[1]).position.set(-4.3,.02,4.3);
+      const shp=[new THREE.CircleGeometry(.45,32),new THREE.CircleGeometry(.5,3),new THREE.PlaneGeometry(.75,.75)].map((g0,i)=>{const m=new THREE.Mesh(g0,new THREE.MeshBasicMaterial({color:["#ffb3c1","#ffe08a","#9fd8ff"][i],side:THREE.DoubleSide}));m.rotation.x=-Math.PI/2;m.position.y=.02;root.add(m);return m;});
+      const ball=sph(1.1,G("#ffd84a",.55),2,0,-1);const ring=new THREE.Mesh(new THREE.RingGeometry(.9,1,48),new THREE.MeshBasicMaterial({color:"#ffd84a",side:THREE.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.set(2,.03,-1);root.add(ring);
+      anims.push(t=>{shp.forEach((m,i)=>{const a=t*(.4+i*.15)+i*2;m.position.x=-1.6+Math.cos(a)*1.6;m.position.z=1+Math.sin(a*1.3)*1.4;m.rotation.z=t*(i-1)*.8;});
+        const y=Math.sin(t*.7)*1.9;ball.position.y=y;const r=Math.sqrt(Math.max(0,1.21-y*y));ring.visible=r>.02;ring.scale.setScalar(Math.max(.01,r));});
+      txt("3次元の球が通ると…","#ffd84a").position.set(2,2.6,-1);txt("平面の住人には「円」が現れて消える","#fff").position.set(0,-1.2,3.5);
+      return [8,"2次元：面の世界","動ける方向は「たて・よこ」の2つ。上下という方向は存在しない。小説『フラットランド』（1884年）の住人のように、3次元の球が平面を通り抜けると、彼らには点→大きな円→点→消える、という不思議な現象に見える。"];}
+    if(k===3){[[V(1,0,0),0],[V(0,1,0),1],[V(0,0,1),2]].forEach(([d,i])=>arrow(d,3,DCOL[i]));txt("よこ (x)",DCOL[0]).position.set(3.6,0,0);txt("たて (y)",DCOL[1]).position.set(0,3.7,0);txt("奥行き (z)",DCOL[2]).position.set(0,0,3.8);
+      const cb=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.8,1.8),G("#9fd8ff",.3));cb.position.set(1.4,1.4,1.4);root.add(cb);const ed=new THREE.LineSegments(new THREE.EdgesGeometry(cb.geometry),new THREE.LineBasicMaterial({color:"#fff"}));cb.add(ed);
+      const pl=new THREE.Mesh(new THREE.PlaneGeometry(2.6,2.6),G("#4a7ad8",.18));pl.rotation.x=-Math.PI/2;pl.position.set(1.4,1.4,1.4);root.add(pl);
+      anims.push(t=>{cb.rotation.y=t*.4;cb.rotation.x=Math.sin(t*.3)*.4;pl.position.y=1.4+Math.sin(t*.8)*.9;});
+      root.position.y=-1.3;return [9,"3次元：私たちの空間","動ける方向は「たて・よこ・奥行き」の3つ。どんな場所も3つの数（x, y, z）で表せる。2次元の住人にとっての球と同じように、私たちも「もっと高い次元の物体」は断面しか見られないのかもしれない。"];}
+    if(k===4){const sp=new THREE.Mesh(new THREE.PlaneGeometry(7,7),G("#4a7ad8",.12));sp.rotation.x=-Math.PI/2;root.add(sp);
+      const cone=(up)=>{const m=new THREE.Mesh(new THREE.ConeGeometry(2.6,2.6,48,1,true),G("#ffd84a",.16));m.position.y=up?1.3:-1.3;if(up)m.rotation.x=Math.PI;root.add(m);const e=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.ConeGeometry(2.6,2.6,24,1,true)),new THREE.LineBasicMaterial({color:"#ffd84a",transparent:true,opacity:.35}));m.add(e);};cone(true);cone(false);
+      arrow(V(0,1,0),3.6,DCOL[3]).position.y=-3.2;txt("時間 ↑（4次元目）",DCOL[3]).position.set(0,3.4,0);txt("空間（2次元に省略）","#9fb3d6").position.set(3.4,-.3,3);txt("光円錐","#ffd84a").position.set(2.6,1.9,0);
+      const pts=[];for(let i=0;i<=120;i++){const y=-3+i/120*6,a=y*2.2;pts.push(V(Math.cos(a)*1.2+1.8,y,Math.sin(a)*1.2-1));}tube(pts,.05,glowM("#7fd3ff"),root,240);sph(.45,M("#ffcf5a",{emissive:"#ffb000",emissiveIntensity:.6}),1.8,0,-1,1,.12,1);
+      const pts2=[V(-1.8,-3,1.4),V(-1.8,3,1.4)];tube(pts2,.04,glowM("#ff9bb0"),root,4);
+      const now=new THREE.Mesh(new THREE.PlaneGeometry(7,7),G("#ffffff",.08));now.rotation.x=-Math.PI/2;root.add(now);const e1=sph(.16,glowM("#7fd3ff"),0,0,0),e2=sph(.16,glowM("#ff9bb0"),-1.8,0,1.4);
+      anims.push(t=>{const y=((t*.5)%6)-3;now.position.y=y;const a=y*2.2;e1.position.set(Math.cos(a)*1.2+1.8,y,Math.sin(a)*1.2-1);e2.position.y=y;});
+      txt("地球の世界線（らせん）","#7fd3ff").position.set(1.8,-3.5,-1);
+      return [9,"4次元：時間（時空）","相対性理論では、時間は空間と組み合わさって4次元の「時空」になる。図は空間を2次元に省いて、上向きを時間にしたもの。止まっている物はまっすぐな線、太陽のまわりを回る地球はらせんの「世界線」を描く。黄色い円すい（光円錐）の外へは、光より速くないと行けないので、原因と結果はこの中だけでつながる。"];}
+    if(k>=5&&k<=7){const nC=k-4;const sm=[];
+      dimGrid(5,1.5,(x,z)=>{const g=new THREE.Group();g.position.set(x,0,z);root.add(g);sph(.05,glowM("#ffffff"),0,0,0,1,1,1,g);
+        if(nC===1){const r=new THREE.Mesh(new THREE.TorusGeometry(.32,.025,8,32),glowM(DCOL[4]));g.add(r);}
+        else if(nC===2){const r=new THREE.Mesh(new THREE.TorusGeometry(.3,.12,14,32),M(DCOL[5],{roughness:.4}));g.add(r);}
+        else{[[0,0,0],[Math.PI/2,0,0],[0,Math.PI/2,0]].forEach((rt,i)=>{const r=new THREE.Mesh(new THREE.TorusGeometry(.33,.02,6,32),glowM(DCOL[4+i]));r.rotation.set(...rt);g.add(r);});}
+        sm.push(g);});
+      const pl=new THREE.Mesh(new THREE.PlaneGeometry(7.5,7.5),G("#4a7ad8",.1));pl.rotation.x=-Math.PI/2;pl.position.y=-.5;root.add(pl);
+      // 拡大図
+      const big=new THREE.Group();big.position.set(0,3.4,0);root.add(big);const dot=sph(.14,glowM("#ffd84a"),0,0,0,1,1,1,big);
+      if(nC===1){big.add(new THREE.Mesh(new THREE.TorusGeometry(1.3,.06,12,64),glowM(DCOL[4])));anims.push(t=>{const a=t*1.4;dot.position.set(Math.cos(a)*1.3,Math.sin(a)*1.3,0);});}
+      else if(nC===2){const tor=new THREE.Mesh(new THREE.TorusGeometry(1.2,.5,32,64),G(DCOL[5],.45));big.add(tor);anims.push(t=>{const u=t*.9,v=t*2.3;dot.position.set((1.2+.5*Math.cos(v))*Math.cos(u),(1.2+.5*Math.cos(v))*Math.sin(u),.5*Math.sin(v));});}
+      else{const bx=new THREE.Mesh(new THREE.BoxGeometry(2.2,2.2,2.2),G("#5fe0e0",.12));big.add(bx);bx.add(new THREE.LineSegments(new THREE.EdgesGeometry(bx.geometry),new THREE.LineBasicMaterial({color:"#5fe0e0"})));
+        const w=x=>((x+1.1)%2.2+2.2)%2.2-1.1;anims.push(t=>{dot.position.set(w(t*.9),w(t*.55+.3),w(t*.37+.7));});}
+      anims.push(t=>{sm.forEach((g,i)=>{g.rotation.y=t*.8+i;g.rotation.x=t*.5;});big.rotation.y=t*.3;});
+      const T={1:["5次元：丸まった次元（カルツァ＝クライン）","1921〜26年、カルツァとクラインは「空間にもう1つ、小さな円の形に丸まった次元がある」と考えると、重力と電磁気力を同じ式で書けることを見つけた。図の下は私たちの空間（2次元に省略）で、どの点にも小さな円（紫）がついている。上は1つを拡大したもので、点はこの円の方向にも動ける。ただし円は小さすぎて（プランク長ほど）私たちには見えない。"],
+        2:["6次元：2つ目の丸まった次元","丸まった次元が2つあると、各点についている小さな空間は「ドーナツ面（トーラス）」になる。ドーナツの表面は、ぐるっと回る方向が2つある2次元の世界。上の拡大図の点は、2つの円の方向を同時に動いている。"],
+        3:["7次元：3つの丸まった次元","丸まった次元が3つになると、各点の小さな空間は「3次元トーラス」。描くのは難しいが、「右の面から出ると左の面から戻ってくる箱」と同じもの（上の拡大図）。テレビゲームで画面の端から出ると反対側から出てくるのと同じしくみを3方向にしたもの。"]}[nC];
+      txt(`丸まった次元 ×${nC}`,DCOL[4]).position.set(0,5.3,0);txt("私たちの空間のどの点にも…","#9fb3d6").position.set(0,-1.2,4.2);
+      root.position.y=-1.4;return [11.5,T[0],T[1]];}
+    if(k===8||k===9){const n=k-4;ncube(n,1.4,n===4?[[0,3,.5],[1,2,.25]]:[[0,3,.45],[1,4,.32],[2,3,.2]]);
+      txt(n===4?"4次元立方体（超立方体）の影":"5次元立方体の影","#fff").position.set(0,3.6,0);
+      return [7,k===8?"8次元：4つの丸まった次元":"9次元：5つの丸まった次元",k===8?"丸まった次元が4つになると、各点の小さな空間は「4次元トーラス」。これは4次元立方体（超立方体・テッセラクト）の向かい合う面どうしを貼り合わせたもの。図は超立方体を3次元に映した「影」で、回転すると内側の立方体と外側の立方体が入れかわる。線の色は4つの方向（赤・緑・青・黄）を表す。":"丸まった次元が5つ。5次元立方体は頂点32個・辺80本で、各頂点から5方向（5色）に辺がのびる。私たちの目には影しか見えないが、数学では何次元でも同じように扱える。"];}
+    if(k===10){const r=strings("cy");txt("6つの丸まった次元","#ff9ad0").position.set(0,2.9,0);
+      return [7,"10次元：超ひも理論の時空","超ひも理論が矛盾なく成り立つには、空間9次元＋時間1次元＝10次元が必要。私たちに見える3次元以外の6次元は、図のような「カラビ–ヤウ空間」に小さく丸まっていると考える。丸まり方の違いで、どんな素粒子や力が現れるかが変わる（候補は10⁵⁰⁰通り以上とも）。"];}
+    // 11次元：M理論（ホジャヴァ＝ウィッテン型：2枚の膜のあいだ）
+    const mkBr=(x,col)=>{const g=new THREE.PlaneGeometry(7,5,28,20),b=g.attributes.position.array.slice();const m=new THREE.Mesh(g,G(col,.38));m.rotation.y=Math.PI/2;m.position.x=x;root.add(m);
+      const e=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(7,5)),new THREE.LineBasicMaterial({color:col}));m.add(e);anims.push(t=>{const a=g.attributes.position;for(let i=0;i<a.count;i++)a.setZ(i,Math.sin(b[i*3]*.9+t*1.2+x)*.07+Math.cos(b[i*3+1]*1.1+t)*.05);a.needsUpdate=true;});return m;};
+    mkBr(-2.6,"#5aa8ff");mkBr(2.6,"#ff8fd0");txt("私たちの宇宙（膜）","#9fd0ff").position.set(-2.6,3.1,0);txt("もう1枚の膜","#ffb3dd").position.set(2.6,3.1,0);
+    const ax=arrow(V(1,0,0),4.4,DCOL[10]);ax.position.set(-2.2,-2.9,0);txt("11次元目","#fff").position.set(0,-3.4,0);
+    for(let i=0;i<5;i++){const s=vstring(1+i%2,false,"#ffcf5a",.9,.18);s.position.set(-2.15,-1.6+i*.8,(i%2-.5)*2);s.rotation.y=Math.PI/2;s.rotation.x=Math.PI/2;}
+    const gs=[0,1,2].map(i=>vstring(2+i%2,true,"#c99cf2",.9,.08));anims.push(t=>gs.forEach((g,i)=>{const u=((t*.18+i/3)%1);g.position.set(-2.4+u*4.8,Math.sin(t+i*2)*1.2,Math.cos(t*.7+i)*1.5);}));
+    txt("物質・光（ひもの端が膜にくっつく）","#ffcf5a").position.set(-2.6,-2.3,-3.2);txt("重力子（膜のあいだも飛べる）","#c99cf2").position.set(1,1.9,0);
+    return [9,"11次元：M理論","1995年にウィッテンが提案したM理論では、空間10次元＋時間1次元の11次元。ホジャヴァとウィッテンのモデルでは、11次元目は2枚の「膜（ブレーン）」にはさまれた短い区間で、私たちの宇宙はその片方の膜だと考える。物質や光は膜から離れられないが、重力子は膜のあいだを行き来できる。M理論の完全な形はまだ分かっていない。"];}
   // ---- 表示 ----
   function shadows(s){if(!keyL)return;keyL.castShadow=true;keyL.position.set(s*.9,s*1.8,s*1.1);keyL.target.position.set(0,s*.25,0);scene.add(keyL.target);const c=keyL.shadow.camera;c.left=-s*1.3;c.right=s*1.3;c.top=s*1.3;c.bottom=-s*1.3;c.near=.05;c.far=s*7;c.updateProjectionMatrix();
-    keyL.shadow.mapSize.set(2048,2048);keyL.shadow.bias=-.0004;keyL.shadow.normalBias=.02;root.traverse(o=>{if(o.isMesh){o.castShadow=!(o.material&&o.material.transparent);o.receiveShadow=true;}});}
+    keyL.shadow.mapSize.set(2048,2048);keyL.shadow.bias=-.0004;keyL.shadow.normalBias=.02;root.traverse(o=>{if(o.isMesh){const tn=o.material&&o.material.isMeshToonMaterial,bs=o.material&&o.material.isMeshBasicMaterial;o.castShadow=!(o.material&&o.material.transparent)&&!bs;o.receiveShadow=!tn;}});}
   function build(id,dir){const L=LEVELS[LV];cur=id;seed=7+[...String(id)].reduce((a,c)=>a+c.charCodeAt(0),0);
-    const bg={life:"#0e1a24",cell:"#1a0e1e",microbe:"#0e1e1a",virus:"#1e0e14",mol:"#0a0f1f",atom:"#05070f",nucleus:"#05050a",quark:"#050308",particle:"#04030a",quantum:"#020208",string:"#050212"}[L.id];setup(bg);root.position.set(0,0,0);root.rotation.set(0,0,0);
+    const bg={life:"#0e1a24",cell:"#1a0e1e",microbe:"#0e1e1a",virus:"#1e0e14",mol:"#0a0f1f",atom:"#05070f",nucleus:"#05050a",quark:"#050308",particle:"#04030a",quantum:"#020208",string:"#050212",dims:"#04030c"}[L.id];setup(bg);root.position.set(0,0,0);root.rotation.set(0,0,0);
     let size=6,title="",desc="",meta="",orgTy=null;
-    if(L.id==="life"){const o=ORGS.find(x=>x[0]===id);ground(o[6]==="whale"||o[6]==="fish"||o[6]==="octopus"||o[6]==="jelly"||o[6]==="starfish"||o[6]==="crab"||o[6]==="turtle"?"#1a3a5a":"#2a3a2a",8);const oc={root,anims,R};size=(window.ORG3D&&ORG3D.has(o[6])?ORG3D.build(o[6],o[7],oc):null)||B[o[6]](o[7])||4;orgTy=oc.ty;shadows(size);title=o[1];meta=`<dl class="kdl"><dt>分類</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd><dt>すみか</dt><dd>${o[4]}</dd></dl>`;desc=o[5];}
+    if(L.id==="life"){const o=ORGS.find(x=>x[0]===id);ground(o[6]==="whale"||o[6]==="fish"||o[6]==="octopus"||o[6]==="jelly"||o[6]==="starfish"||o[6]==="crab"||o[6]==="turtle"?"#1a3a5a":"#2a3a2a",8);const oc={root,anims,R,id:o[0]};const cs=window.CUTE&&CUTE.has(o[6])?CUTE.build(o[6],o[7],oc):null;if(cs){scene.traverse(l=>{if(l.isHemisphereLight){l.intensity=.62;l.color.set("#fff4ea");l.groundColor.set("#5a6078");}else if(l.isDirectionalLight)l.intensity=l===keyL?.62:.22;});}size=cs||(window.ORG3D&&ORG3D.has(o[6])?ORG3D.build(o[6],o[7],oc):null)||B[o[6]](o[7])||4;orgTy=oc.ty;shadows(size);title=o[1];meta=`<dl class="kdl"><dt>分類</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd><dt>すみか</dt><dd>${o[4]}</dd></dl>`;desc=o[5];}
     else if(L.id==="cell"||L.id==="microbe"||L.id==="virus"){const o=MICROS.find(x=>x[0]===id);size=BM[o[5]](o[6])||8;title=o[1];meta=`<dl class="kdl"><dt>なかま</dt><dd>${o[2]}</dd><dt>大きさ</dt><dd>${o[3]}</dd></dl>`;desc=o[4];}
     else if(L.id==="mol"){const o=MOLS.find(x=>x[0]===id);size=molecule(id);title=o[1];meta=`<div class="num" style="font-size:18px;color:var(--accent)">${o[2]}</div>`;desc=o[3]+`<br><span class="clim">原子：${[...new Set(o[4].map(a=>a[0]))].map(e=>`<i class="adot" style="background:${ATOMCOL[e]}"></i>${e}`).join(" ")}</span>`;}
     else if(L.id==="atom"){const Z=+id;size=atom(Z);const el=ELEMENTS[Z-1];title=`${el.ja}（${el.sym}）`;meta=`<dl class="kdl"><dt>陽子</dt><dd>${Z}</dd><dt>電子</dt><dd>${Z}（殻ごとに ${shells(Z).join("・")}）</dd></dl>`;desc=(ENOTE[Z]||"")+" 電子の並び方（殻）が、その元素の化学的な性質を決める。";}
     else if(L.id==="nucleus"){const Z=+id;size=nucleus(Z);const el=ELEMENTS[Z-1];const N=Math.round(parseFloat(String(el.m).replace(/[\[\]]/g,"")))-Z;title=`${el.ja}の原子核`;meta=`<dl class="kdl"><dt>陽子（赤）</dt><dd>${Z}</dd><dt>中性子（灰）</dt><dd>${N}</dd></dl>`;desc=Z>82?"陽子が多すぎると反発が強くなり、原子核は不安定になって壊れる（放射性）。":Z===26?"鉄の原子核は最も安定。恒星の核融合は鉄で止まる。":"";}
     else if(L.id==="particle"){size=particleField(id);const P=PARTICLES.find(x=>x[0]===id);title=`${P[1]}（${P[0]}）`;meta=`<dl class="kdl"><dt>種類</dt><dd>${PCAT[P[2]][0]}</dd><dt>質量</dt><dd>${P[4]}</dd><dt>電荷</dt><dd>${P[3]}</dd><dt>発見</dt><dd>${P[5]?P[5]+"年":"未発見"}</dd></dl>`;desc=P[6];}
     else if(L.id==="quantum"){const r=quantum(id);size=r[0];title=r[1];desc=r[2];meta="";}
+    else if(L.id==="dims"){const r=dims(id);size=r[0];const sk=Math.max(1,size/7.5);root.traverse(o=>{if(o.isSprite)o.scale.multiplyScalar(sk);});title=r[1];desc=r[2];meta=+id.slice(1)>=5?`<p class="clim">※5次元目より先（余剰次元）は、超ひも理論・M理論の仮説です。実験ではまだ見つかっていません。</p>`:"";}
     else if(L.id==="string"){const r=strings(id);size=r[0];title=r[1];desc=r[2];meta=`<p class="clim">※超ひも理論は数学的には有力だが、実験で確かめられていない仮説です。</p>`;}
     else{size=quarks(id);title=id==="p"?"陽子":"中性子";meta=`<dl class="kdl"><dt>クオーク</dt><dd>${id==="p"?"アップ2個＋ダウン1個":"アップ1個＋ダウン2個"}</dd><dt>電荷</dt><dd>${id==="p"?"+2/3+2/3−1/3 ＝ +1":"+2/3−1/3−1/3 ＝ 0"}</dd></dl>`;desc="陽子の質量のうち、クオーク自体の質量はわずか約1%。残りはクオークとグルーオンの運動と結合のエネルギー（E=mc²）から生まれている。";}
     L.dist=Math.max(4,size*(L.id==="life"?1.9:1.5));L.ty=L.id==="life"?(orgTy!=null?orgTy:Math.min(size*.38,8)):0;cam.goal=L.dist;cam.r=dir==="in"?L.dist*2.2:dir==="out"?L.dist*.4:L.dist;cam.auto=true;

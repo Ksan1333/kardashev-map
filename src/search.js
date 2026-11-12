@@ -26,9 +26,9 @@
   const futNote=y=>{if(typeof y==="number"&&y>KY()+.5)toast("これはスライダーの時代より後の出来事です。スライダーを進めると年表にも表示されます。");};
   const go={
     wh(i){goHash("timeline");later(()=>{let L=null,j=-1;if(typeof HIST!=="undefined")for(const l of HIST.lanes){const k=(l.ev||[]).findIndex(e=>e[3]===i);if(k>=0){L=l;j=k;break;}}
-      if(L&&window.TL_FOCUS)TL_FOCUS("hist",L.id,j);else{TL_SET("hist");WH_DETAIL(i);}futNote(WH[i][1]);});},
+      if(L&&window.TL_FOCUS)TL_FOCUS("hist",L.id,j);else{TL_SET("hist");WH_DETAIL(i);}});},
     tl(m,lid,j){goHash("timeline");later(()=>TL_FOCUS(m,lid,j));},
-    tree(fk,id,y){goHash("lineage");later(()=>{if(!window.TREE_SELECT||!TREE_SELECT(fk,id))toast("この要素は、いまの時代設定では系統樹に表示されていません。");else futNote(y);},220);},
+    tree(fk,id,y){goHash("lineage");later(()=>{if(!window.TREE_SELECT||!TREE_SELECT(fk,id))toast("この要素は系統樹に見つかりませんでした。");},220);},
     country(c3){goHash("world-map");later(()=>{MAP_PICK_COUNTRY(c3);document.getElementById("v-world-map").scrollIntoView({behavior:"smooth"});},220);},
     place(id){goHash("world-map");later(()=>MAP_PICK_PLACE(id),220);},
     sp(i){goHash("space-map");later(()=>SP_PICK(i),320);},
@@ -46,7 +46,7 @@
   const fy=y=>typeof y!=="number"?"":y<=-10000?`約${Math.round(-y/1e4).toLocaleString()}万年前`:y<0?`紀元前${-y}年`:`${y}年`;
   function build(){IDX=[];const add=(k,t,s,txt,fn,y)=>{const nt=norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,""));IDX.push({k,t:String(t),s:s||"",nt,nb:norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,"").replace(/（.*?）|\(.*?\)/g,"")),h:norm((t||"")+" "+(s||"")+" "+(txt||"")),fn,y});};
     const T=(f)=>{try{f();}catch(e){console.warn("search index",e);}};
-    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（全分野）","16分野・約1,100要素の系譜"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
+    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（全分野）","16分野・約1,370要素の系譜（未来は5つの世界線）"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
     T(()=>{add("view","歴史シアター（3D）","年表の中の3D映像で通し再生","シアター 映像 再生",()=>{goHash("timeline");later(()=>{const d=$("thdock");if(d){d.open=true;d.scrollIntoView({behavior:"smooth"});}});});});
     T(()=>window.EBOOK&&EBOOK.chapters.forEach(c=>add("book",c.t,"地球大全の章",c.text,()=>go.book(c.id))));
     T(()=>[["t1","Type I 文明ガイド（惑星文明）"],["t2","Type II 文明ガイド（恒星文明）"],["t3","Type III 文明ガイド（銀河文明）"]].forEach(([k,t])=>add("view",t,"全体マップ・もしもの世界","タイプ カルダシェフ 文明",()=>go.tg(k))));

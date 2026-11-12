@@ -3,7 +3,7 @@
   const box=document.getElementById("tl"), rc=document.getElementById("tlregions"), panel=document.getElementById("whpanel"), wrap=document.getElementById("whwrap");
   const RCOL={"ヨーロッパ":"#7fb2ff","中東・北アフリカ":"#e8a46a","アフリカ":"#8fd16a","南・東南アジア・オセアニア":"#e6a0c4","東アジア":"#ff8f8f","南北アメリカ":"#c99cf2","世界":"#f4b942"};
   WH.forEach((e,i)=>e.id=i);
-  const KY=()=>typeof window.KYEAR==="number"?window.KYEAR:1e12;
+  const KY=()=>1e12;
   const WHV=()=>WH.filter(e=>e[1]<=KY());
   let only=new Set(), selId=null;
   const visRegs=()=>WH_REGIONS.filter(r=>!only.size||only.has(r));
