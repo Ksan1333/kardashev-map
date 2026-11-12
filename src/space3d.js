@@ -156,7 +156,7 @@ __SPACEPLANET__
     const pt=points(pos,null,1.8,.9,true,col);g.add(pt);const m=new THREE.Object3D();m.position.copy(sn.position).add(V(0,Math.min(r,2.5)+.5,0));g.add(m);
     obj("t3reach","人類の文明が広がった範囲（もしも）",m,Math.max(14,r*1.8),`この時代に人類が広がった範囲は半径約${Math.round(rly).toLocaleString()}光年。水色＝植民した恒星系、赤＝ダイソン構造に囲まれて赤外線で光る恒星。光速の10%前後で広がると考えると、銀河全体（直径約10万光年）に広がるには数十万〜100万年かかる。`,"太陽系を中心に");}
   // ---- スケール ----
-  const LEVELS=[
+  const SUB=[
    {id:"leo",name:"地球周回軌道",unit:"1目盛＝1000km",desc:"国際宇宙ステーション、衛星コンステレーション、GPS、静止衛星。人類が日常的に使っている宇宙。",dist:40,min:7.5,max:120,
     build(){sunLight(V(-60,10,30).multiplyScalar(20));
       const e=earthMesh(6.371,V(-60,10,30));scene.add(e);anims.push(t=>e.rotation.y=t*.02);scene.add(atmoMesh(6.371,V(-60,10,30)));
@@ -208,7 +208,7 @@ __SPACEPLANET__
       [[.35,4.5,1.6],[.25,6.5,.9]].forEach(([r,d,sp],i)=>{const m=sphere(r,smat({color:"#8a7a6a"}),8);PL.mars.add(m);anims.push(t=>m.position.set(Math.cos(t*sp+i)*d,0,Math.sin(t*sp+i)*d));});
       const om=new THREE.Object3D();om.position.set(0,1.2,2.3);PL.mars.add(om);obj("olympus","オリンポス山（火星）",om,10,"太陽系最大の火山。高さ約2万1900m、エベレストの約2.5倍。","火星");
       const ce=sphere(1.2,smat({color:"#8f8a84"}),12);ce.position.set(277,3,-40);scene.add(ce);obj("ceres","ケレス（準惑星）",ce,14,"小惑星帯で最大の天体。ドーンが探査した。","2.8天文単位");
-      const ZR=1500, Z=[
+      const ZR=window.__SPZ_ZR||1500, Z=[
        ["aries","おひつじ座",40,[[0,0],[3,1],[5,1.6],[6.5,1.2]],[[0,1],[1,2],[2,3]],"金の毛の羊。春分点は昔ここにあった。占いの期間は3/21〜4/19ごろ。"],
        ["taurus","おうし座",68,[[0,0],[-2,1.5],[-4,3],[2,1.5],[4,3],[-7,6],[6,6.5]],[[0,1],[1,2],[0,3],[3,4],[2,5],[4,6]],"赤い1等星アルデバランとすばる（プレアデス星団）。4/20〜5/20ごろ。"],
        ["gemini","ふたご座",102,[[0,0],[2,0],[0,-3],[2,-3],[-.5,-6],[2.5,-6]],[[0,2],[2,4],[1,3],[3,5],[0,1]],"兄弟星カストルとポルックス。5/21〜6/21ごろ。"],
@@ -298,8 +298,8 @@ __SPACEPLANET__
        ["eagle","わし星雲・創造の柱",17,1,57,"pillars",["#ffd27a","#7fd0a0","#ff8a5a"],8,"ハッブルが撮った「創造の柱」。ガスの柱の中で星が生まれている。"],
        ["carina","カリーナ星雲",287,-1,85,"cloud",["#ff7a8a","#ffd27a","#7fb2ff"],9,"巨大な星形成領域。超巨星エータ・カリーナがある。"]];
       const NEBC={orion:[2.2,"#ff4f7a","#7fe8d8","#ffffff"],horsehead:[2.4,"#ff3a4a","#8fb8ff"],pleiades:[2.2,"#5f8fff","#cfe0ff"],helix:[2,"#ff4a3a","#6fd8ff","#ffc070"],ring:[2,"#ff5a4a","#6fc8ff"],catseye:[2,"#ff5a6a","#7fffd0","#ff6a5a"],crab:[2,"#ff6a3a","#8fb0ff","#ffd27a"],eagle:[2.2,"#ffb070","#2f8f9a","#d8c070"],carina:[2.2,"#ff5a4a","#ffb070","#7fd0ff"]};
-      N.forEach(([id,nm,l,b,d,kind,cols,sz,info])=>{const p=gal(l,b).multiplyScalar(d);let o;
-        if(kind==="star"){o=star(sz*(id==="betelgeuse"?.12:.06),id==="betelgeuse"?"M":"F",id==="betelgeuse"?7:10,id==="betelgeuse"?.6:0);}else{const F=NEBC[id];o=new THREE.Group();const VS2=sz*F[0]*1.15;o.add(nebVol(id,VS2,F[1],F[2],F[3]));
+      N.forEach(([id,nm,l,b,d,kind,cols,sz,info])=>{sz*=window.__SPZ_NEBK||1;const p=gal(l,b).multiplyScalar(d);let o;
+        if(kind==="star"){o=star(sz*(id==="betelgeuse"?.12:.06),id==="betelgeuse"?"M":"F",id==="betelgeuse"?7:10,id==="betelgeuse"?.6:0);}else{const F=NEBC[id];o=new THREE.Group();const VS2=sz*F[0]*1.15;const vol=nebVol(id,VS2,F[1],F[2],F[3]);const bb=nebFX(id,sz*F[0],F[1],F[2],F[3]);o.add(vol,bb);{const wp=new THREE.Vector3();anims.push(()=>{o.getWorldPosition(wp);const sc=o.getWorldScale(new THREE.Vector3()).x;const near=camera.position.distanceTo(wp)<VS2*sc*2.2;vol.visible=near;bb.visible=!near;});}
           if(id==="pleiades")[[.05,.02,0],[-.42,-.05,.1],[.38,.18,-.1],[.24,.34,.05],[.12,-.26,-.08],[.42,-.06,.12],[-.5,.02,-.05]].forEach(([x,y,z],k)=>{const st=star(VS2*(k?.012:.016),"B",9);st.position.set(x*VS2/2,y*VS2/2,z*VS2/2);o.add(st);});
           if(id==="orion")for(let k=0;k<4;k++){const st=star(VS2*.006,"O",10);st.position.set((-.05+(k%2)*.03)*VS2/2,(.02+(k>>1)*.03)*VS2/2,-.15*VS2/2);o.add(st);}
           if(id==="helix"||id==="ring"||id==="catseye"){const st=star(VS2*.006,"#cfe0ff",10);o.add(st);}if(id==="crab"){const st=star(VS2*.006,"#cfe0ff",14);o.add(st);}const pts=[];for(let k=0;k<160;k++){const a=R()*6.283,u=R()*2-1,rr=sz*.7*Math.cbrt(R());pts.push(Math.cos(a)*Math.sqrt(1-u*u)*rr,u*rr,Math.sin(a)*Math.sqrt(1-u*u)*rr);}o.add(points(pts.slice(0,240),"#e8f0ff",.035*sz,.85));}
@@ -397,8 +397,22 @@ __SPACEPLANET__
         const s0=1+R()*.1;anims.push(t=>b.scale.setScalar(s0+Math.sin(t*.3+i)*.05));}
         D="多元宇宙（永久インフレーション）：インフレーションが場所によっては終わらずに続き、私たちの宇宙（金色）のような「泡宇宙」を次々に生み出しているという仮説。泡ごとに物理定数が違うかもしれない。ほかの泡は原理的に観測できない。";}
       obj("uni_shape","宇宙の形",here,700,D,"説："+({flat:"平坦",sphere:"閉じた（球）",saddle:"開いた（双曲）",torus:"トーラス",multi:"多元宇宙"})[sh]);
-      LEVELS[LEVELS.length-1].desc2=D;}},
+      (LEVELS.find(l=>l.id==="shape")||{}).desc2=D;}},
   ];
+  // ---- 画面遷移を減らすため、近いスケールをまとめた6段階（中身は元の各スケールを拡大縮小して1つの場面に重ねる） ----
+  const SUBI=Object.fromEntries(SUB.map(L=>[L.id,L]));
+  const MERGE=[
+   {id:"em",name:"地球と月",short:"地球と月",parts:[["leo",1],["moon",1]],unit:"1目盛＝1000km",dist:150,min:7.5,max:4000,desc:"地球のまわりの人工衛星から、約38万km先の月まで。"+SUBI.leo.desc+" "+SUBI.moon.desc},
+   {id:"solar",name:"太陽系",short:"太陽系",env:{__SPZ_ZR:40000},parts:[["inner",.1],["outer",1],["helio",1000]],unit:"1目盛＝1500万km（0.1天文単位）",dist:420,min:1.2,max:5e6,desc:"太陽と惑星、カイパーベルト、太陽圏、オールトの雲まで。"+SUBI.inner.desc+" "+SUBI.outer.desc+" ズームアウトを続けると太陽圏とオールトの雲（約1.6光年）まで広がる。惑星の大きさは誇張しています。"},
+   {id:"near",name:"近くの恒星と星雲",short:"恒星と星雲",env:{__SPZ_NEBK:.3},parts:[["stars",1],["nebula",1000]],unit:"1目盛＝0.1光年",dist:320,min:2,max:4.2e5,iso:1,desc:SUBI.stars.desc+" ズームアウトすると数千光年先の星雲まで。"+SUBI.nebula.desc},
+   {id:"galaxy",name:"天の川銀河と局部銀河群",short:"銀河",parts:[["galaxy",1],["local",10]],unit:"1目盛＝1000光年",dist:150,min:4,max:12000,desc:SUBI.galaxy.desc+" ズームアウトするとアンドロメダ銀河などの局部銀河群へ。"+SUBI.local.desc},
+   {id:"lania",name:"超銀河団と大規模構造",short:"大規模構造",hide:["home"],parts:[["lania",1],["web",100]],unit:"1目盛＝100万光年",dist:780,min:10,max:240000,desc:SUBI.lania.desc+" ズームアウトすると宇宙の大規模構造へ。"+SUBI.web.desc},
+   {id:"shape",name:SUBI.shape.name,short:"宇宙の形",parts:[["shape",1]],unit:SUBI.shape.unit,dist:SUBI.shape.dist,min:SUBI.shape.min,max:SUBI.shape.max,desc:SUBI.shape.desc}];
+  const SUBMAP={};MERGE.forEach(M=>M.parts.forEach(([id])=>SUBMAP[id]=M.id));
+  const LEVELS=MERGE.map(M=>({...M,build(){const root=scene;const seen=new Set(M.hide||[]);Object.assign(window,M.env||{});M.parts.forEach(([id,k])=>{const g=new THREE.Group();g.scale.setScalar(k);root.add(g);const n0=objs.length;scene=g;try{SUBI[id].build();}finally{scene=root;}
+      g.traverse(o=>{const m=o.material;if(!m)return;if(m.isPointsMaterial&&m.sizeAttenuation!==false)m.size*=k;if(m.uniforms&&m.uniforms.uSize)m.uniforms.uSize.value*=k;});
+      for(let i=n0;i<objs.length;i++){objs[i].view*=k;}});
+      Object.keys(M.env||{}).forEach(k=>{delete window[k];});objs=objs.filter(o=>{if(seen.has(o.id)){o.node.visible=false;return false;}seen.add(o.id);return true;});}}));
 __SPACEBR__
   // ---- 共通 ----
   function init(container,labels,infoEl,fadeEl){
@@ -424,12 +438,13 @@ __SPACEBR__
   function outward(){const L=ALL[LV];if(L.up){const u=idx(L.up);if(u>=0)go(u,null,"out",ALL[u].downObj);return;}if(L.top)return;
     if(L.br){const pi=idx(L.parent);if(pi>=0)go(pi,null,"out",L.pobj);return;}if(LV<LEVELS.length-1)go(LV+1,null,"out",GATE[LEVELS[LV+1].id]);else go(idx("mv"),null,"out","u_home");}
   // ズームインの行き先：注目中（またはカーソル付近）の天体を優先し、勝手に別の場所へ飛ばない
-  const GATE={moon:"earth",inner:"earth",outer:"sun",helio:"sun",stars:"sun",nebula:"sun",galaxy:"sunpos",local:"mw",lania:"lg",web:"home",shape:"uni_shape"};
-  let ptrW=null;
+  const GATE={em:"earth",solar:"earth",near:"sun",galaxy:"sunpos",lania:"lg",shape:"uni_shape"};
+  let ptrW=null;const PLMAP=new Set(["mercury","venus","mars","jupiter","saturn","uranus","neptune","pluto","moon"]);
   function pickNear(){const w=el.clientWidth,h=el.clientHeight;const fresh=ptrW&&performance.now()-ptrW.t<1500;const px=fresh?ptrW.x:w/2,py=fresh?ptrW.y:h/2;let best=null,bd=1e9;const p=new THREE.Vector3();
     objs.forEach(o=>{if(!o.node.visible)return;o.node.getWorldPosition(p);p.project(camera);if(p.z>1||p.z<-1)return;const d=Math.hypot((p.x*.5+.5)*w-px,(-p.y*.5+.5)*h-py);if(d<bd){bd=d;best=o;}});return bd<Math.min(w,h)*.3?best:null;}
   function inward(fromZoom){const L=ALL[LV];const tgt=focus||pickNear();
-    if(LV===0){if(!tgt||tgt.id==="earth"){window.dispatchEvent(new CustomEvent("spz-earth"));return;}if(!focus)focusOn(tgt.id);return;}
+    if(LV===0){if(!tgt||tgt.id==="earth"){window.dispatchEvent(new CustomEvent("spz-earth"));return;}if(focus===tgt&&PLMAP.has(tgt.id)&&window.toPlanetMap){window.toPlanetMap(tgt.id);return;}focusOn(tgt.id);return;}
+    if(tgt&&focus===tgt&&PLMAP.has(tgt.id)&&window.toPlanetMap&&!(!L.br&&GATE[L.id]===tgt.id)){window.toPlanetMap(tgt.id);return;}
     if(tgt){if(!L.br&&GATE[L.id]===tgt.id){go(LV-1,null,"in",GATE[LEVELS[LV-1].id]);return;}const k=BRMAP[L.id+":"+tgt.id];if(k&&focus===tgt){if(k.startsWith("in_"))window.SPZ_MAP=true;{const K=ALL[idx(k)];go(idx(k),null,"in",K&&(K.downObj||(!K.br?GATE[K.id]:null)));}return;}if(!focus||focus!==tgt)focusOn(tgt.id);return;}
     if(!L.br&&LV>0){go(LV-1,null,"in",GATE[LEVELS[LV-1].id]);return;}
     if(L.id==="mv"){go(idx("shape"),null,"in","uni_shape");return;}}
@@ -451,7 +466,7 @@ __SPACEBR__
       cam.dist=dir==="in"?L.dist*3:dir==="out"?L.dist*.25:L.dist;cam.auto=true;cam.ph=L.ph!=null?L.ph:1.1;if(L.th!=null){cam.th=L.th;cam.auto=false;}
       lab.innerHTML=objs.map(o=>`<button class="splab" data-o="${o.id}"><i></i>${o.name}</button>`).join("");objs.forEach(o=>o.el=lab.querySelector(`[data-o="${o.id}"]`));
       renderInfo(); window.dispatchEvent(new CustomEvent("spz-level",{detail:i}));
-      anchor=null;if(fromId){const fo=objs.find(x=>x.id===fromId);if(fo){anchor=fo;const p=new THREE.Vector3();fo.node.getWorldPosition(p);cam.target.copy(p);cam.goalT.copy(p);if(dir==="out")cam.dist=Math.max(fo.view*.6,L.min*1.5);}}
+      anchor=null;const DEFA={near:"sun",galaxy:"sunpos",lania:"lg"};if(!fromId&&!L.br&&DEFA[L.id])fromId=DEFA[L.id];if(fromId){const fo=objs.find(x=>x.id===fromId);if(fo){anchor=fo;const p=new THREE.Vector3();fo.node.getWorldPosition(p);cam.target.copy(p);cam.goalT.copy(p);if(dir==="out")cam.dist=Math.max(fo.view*.6,L.min*1.5);}}
       if(oid)setTimeout(()=>focusOn(oid),dir?500:50);
       fade.classList.remove("on");
     },first?0:220);
@@ -459,8 +474,8 @@ __SPACEBR__
   function isolate(o){const L=ALL[LV];if(!L||!L.iso)return;const p=new THREE.Vector3(),q=new THREE.Vector3();if(o)o.node.getWorldPosition(p);objs.forEach(x=>{if(x.hid0===undefined)x.hid0=x.node.visible;if(!o){x.node.visible=x.hid0;return;}x.node.getWorldPosition(q);x.node.visible=x===o||q.distanceTo(p)>o.view*2.2?x.hid0:false;});}
   function focusOn(id){const o=objs.find(x=>x.id===id);if(!o)return;focus=o;isolate(o);cam.goal=o.view;cam.min=Math.min(ALL[LV].min,o.view*.25);cam.auto=true;renderInfo();window.dispatchEvent(new CustomEvent("spz-obj",{detail:id}));}
   function renderInfo(){const L=ALL[LV];const bk=focus&&BRMAP[L.id+":"+focus.id];const ln=L.br?(LANES.find(x=>x.id===L.lane)||{}).name:"";const par=L.br?ALL[idx(L.parent)]:null;const SHP=L.id==="shape"?`<div class="spshape">${[["flat","平坦"],["sphere","閉じた（球）"],["saddle","開いた（双曲）"],["torus","トーラス"],["multi","多元宇宙"]].map(([k,n])=>`<button class="chip" data-shape="${k}" aria-pressed="${(window.UNI_SHAPE||"flat")===k}">${n}</button>`).join("")}</div><p class="spshd">${L.desc2||""}</p>`:"";
-    info.innerHTML=(L.br?`<div class="splv">分岐：${ln}</div>`:`<div class="splv">スケール ${LV+1} / ${LEVELS.length}</div>`)+`<h3>${L.name}</h3><div class="spunit">${L.unit}</div><p>${L.desc}</p>`+(window.lvMore?window.lvMore(L.id):"")+SHP+(typeof window.KYEAR==="number"&&window.KYEAR< -300000?`<p class="sphid">この時代にはまだ人類がいません。自然の天体だけを表示しています。</p>`:hidN?`<p class="sphid">${window.KERA?window.KERA.when:""}の時点では、まだ知られていない天体・存在しない人工物 ${hidN}件を隠しています。</p>`:"")+
-      (LV===0?`<button class="chip spearth" data-earth="1">🌏 地球に降りる（世界地図へ）</button>`:"")+(L.br?`<button class="chip" data-back="1">◀ ${par?par.name:"戻る"}へ戻る</button>`:"")+((L.fic||L.id==="mv")?`<p class="sphid">ここから先は空想（SF）です。実在する天体ではありません。</p>`:"")+(bk?`<button class="chip spearth" data-map="0" data-br="${bk}">🔍 ${focus.name}の中をのぞく</button>`:"")+(bk&&bk.startsWith("in_")?`<button class="chip" data-map="1" data-br="${bk}">🗺 ${focus.name}の地図</button>`:"")+(L.id.startsWith("in_")?`<button class="chip spearth" data-map="${window.SPZ_MAP?0:1}">${window.SPZ_MAP?"🌐 球と断面で見る":"🗺 地図（全面）で見る"}</button>`:"")+(focus?`<div class="spobj"><h4>${focus.name}</h4>${focus.dist?`<div class="spdist num">${focus.dist}</div>`:""}<p>${focus.desc||""}</p><button class="chip" data-unfocus="1">全体に戻る</button></div>`:`<p class="sphint">名前を押すとそこへ近づきます。ズームアウトを続けると1つ外のスケールへ、ズームインを続けると1つ内側へ移ります。</p>`)+
+    info.innerHTML=(L.br?`<div class="splv">分岐：${ln}</div>`:`<div class="splv">スケール ${LV+1} / ${LEVELS.length}</div>`)+`<h3>${L.name}</h3><div class="spunit">${L.unit}</div><p>${L.desc}</p>`+(window.lvMore?(L.parts?L.parts.map(([id])=>window.lvMore(id)).join(""):window.lvMore(L.id)):"")+SHP+(typeof window.KYEAR==="number"&&window.KYEAR< -300000?`<p class="sphid">この時代にはまだ人類がいません。自然の天体だけを表示しています。</p>`:hidN?`<p class="sphid">${window.KERA?window.KERA.when:""}の時点では、まだ知られていない天体・存在しない人工物 ${hidN}件を隠しています。</p>`:"")+
+      (LV===0?`<button class="chip spearth" data-earth="1">🌏 地球に降りる（世界地図へ）</button>`:"")+(L.br?`<button class="chip" data-back="1">◀ ${par?par.name:"戻る"}へ戻る</button>`:"")+((L.fic||L.id==="mv")?`<p class="sphid">ここから先は空想（SF）です。実在する天体ではありません。</p>`:"")+(bk?`<button class="chip spearth" data-map="0" data-br="${bk}">🔍 ${focus.name}の中をのぞく</button>`:"")+(focus&&PLMAP.has(focus.id)?`<button class="chip" data-pmap="${focus.id}">🗺 ${focus.name}の地図（世界地図のページ）</button>`:"")+(L.id.startsWith("in_")?`<button class="chip spearth" data-map="${window.SPZ_MAP?0:1}">${window.SPZ_MAP?"🌐 球と断面で見る":"🗺 地図（全面）で見る"}</button>`:"")+(L.id.startsWith("in_")&&PLMAP.has(L.id.slice(3))?`<button class="chip" data-pmap="${L.id.slice(3)}">🗺 世界地図のページで開く</button>`:"")+(focus?`<div class="spobj"><h4>${focus.name}</h4>${focus.dist?`<div class="spdist num">${focus.dist}</div>`:""}<p>${focus.desc||""}</p><button class="chip" data-unfocus="1">全体に戻る</button></div>`:`<p class="sphint">名前を押すとそこへ近づきます。ズームアウトを続けると1つ外のスケールへ、ズームインを続けると1つ内側へ移ります。</p>`)+
       `<div class="spobjs">${objs.map(o=>`<button class="chip" data-o2="${o.id}" aria-pressed="${focus&&focus.id===o.id}">${o.name}</button>`).join("")}</div>`;}
   function frame(now){if(!running)return;requestAnimationFrame(frame);const t=(now-t0)/1000,dt=Math.min(.05,(now-last)/1000||0);last=now;if(!scene)return;
     anims.forEach(f=>f(t));
@@ -472,6 +487,6 @@ __SPACEBR__
     const w=el.clientWidth,h=el.clientHeight,p=new THREE.Vector3();
     objs.forEach(o=>{o.node.getWorldPosition(p);p.project(camera);const vis=p.z<1&&p.z>-1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05&&o.node.visible;o.el.style.display=vis?"":"none";if(vis)o.el.style.transform=`translate(${(p.x*.5+.5)*w}px,${(-p.y*.5+.5)*h}px)`;o.el.classList.toggle("on",focus===o);});
   }
-  return {LEVELS,ALL,LANES,BRMAP,outward,inward,goBr(id){const i=idx(id);if(i>=0)go(i,null,i<LEVELS.length&&i<LV?"in":"in");},get levelId(){return ALL[LV]&&ALL[LV].id;},get focusId(){return focus&&focus.id;},get anchorId(){return anchor&&anchor.id;},goFrom(id,from){const i=idx(id);if(i>=0)go(i,null,"out",from);},home(){go(0,null,"in","earth");},goId(id,o,dir){const i=ALL.findIndex(L=>L.id===id);if(i>=0){if(i===LV&&o)focusOn(o);else go(i,o,dir||(i<LV?"in":"out"));}},init,go,focusOn,unfocus(){focus=null;isolate(null);cam.goal=ALL[LV].dist;cam.min=ALL[LV].min;renderInfo();},get level(){return LV;},
+  return {LEVELS,ALL,LANES,BRMAP,SUBMAP,BODY,planetMapURL,outward,inward,goBr(id){const i=idx(id);if(i>=0)go(i,null,i<LEVELS.length&&i<LV?"in":"in");},get levelId(){return ALL[LV]&&ALL[LV].id;},get focusId(){return focus&&focus.id;},get anchorId(){return anchor&&anchor.id;},goFrom(id,from){const i=idx(id);if(i>=0)go(i,null,"out",from);},home(){go(0,null,"in","earth");},goId(id,o,dir){id=SUBMAP[id]||id;const i=ALL.findIndex(L=>L.id===id);if(i>=0){if(i===LV&&o)focusOn(o);else go(i,o,dir||(i<LV?"in":"out"));}},init,go,focusOn,unfocus(){focus=null;isolate(null);cam.goal=ALL[LV].dist;cam.min=ALL[LV].min;renderInfo();},get level(){return LV;},
     start(){if(running||!renderer)return;running=true;last=performance.now();requestAnimationFrame(frame);},stop(){running=false;}};
 })();

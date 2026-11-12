@@ -1,7 +1,7 @@
   // ===== 分岐（GitHubの枝分かれのように、本線1〜12から横に伸びる） =====
   const ALL=LEVELS.slice();const BRMAP={};const LANES=[];
-  function lane(id,name,from,color){LANES.push({id,name,from,color});}
-  function addBr(L){L.br=1;ALL.push(L);if(L.pobj)BRMAP[L.parent+":"+L.pobj]=L.id;return L;}
+  function lane(id,name,from,color){LANES.push({id,name,from:SUBMAP[from]||from,color});}
+  function addBr(L){L.br=1;L.parent=SUBMAP[L.parent]||L.parent;ALL.push(L);if(L.pobj)BRMAP[L.parent+":"+L.pobj]=L.id;return L;}
   const SUNP=V(-420,260,-60);
   function lightsFor(){const d=new THREE.DirectionalLight("#fff6ea",1.9);d.position.copy(SUNP);scene.add(d);scene.add(new THREE.AmbientLight("#40506a",.55));}
   const label=(id,name,node,view,desc,dist)=>obj(id,name,node,view,desc,dist);
@@ -48,19 +48,23 @@
     let prev=0;B.layers.forEach(([f,nm],i)=>{const rm=r*(prev+f)/2;prev=f;const n=new THREE.Object3D();const a=(200+i*9)*Math.PI/180;n.position.set(Math.cos(a)*rm,Math.sin(a)*rm,.05);g.add(n);label(key+"_l"+i,nm,n,r*1.6,"断面の層（半径の"+Math.round(f*100)+"%まで）","");});
     (B.feat||[]).forEach(([id,nm,la,lo,d])=>{const L2=((lo+(B.off||0))%360+360)%360;if(L2>92&&L2<178)return;const n=new THREE.Object3D();n.position.copy(llpos(r*1.01,la,lo+(B.off||0)));g.add(n);label(id,nm,n,r*1.2,d,B.name);});
     const h=new THREE.Object3D();h.position.set(0,r*1.35,0);g.add(h);label(key+"_all",B.name+"の全体",h,r*3.2,B.desc,"半径 "+B.R);}
-  lane("pa","地球と月の中","moon","#6fb6ff");lane("pb","太陽・内惑星の中","inner","#ffb347");lane("pc","外惑星の中","outer","#c8a882");
-  [["earth","pa","moon"],["moon","pa","moon"],["sun","pb","inner"],["mercury","pb","inner"],["venus","pb","inner"],["mars","pb","inner"],["jupiter","pc","outer"],["saturn","pc","outer"],["uranus","pc","outer"],["neptune","pc","outer"],["pluto","pc","outer"]].forEach(([k,ln,par])=>{
+  const mapCache={};let mapR=null;
+  function planetMapURL(key){if(mapCache[key])return mapCache[key];const B=BODY[key];if(!B)return "";if(!mapR){mapR=new THREE.WebGLRenderer({preserveDrawingBuffer:true});mapR.setPixelRatio(1);mapR.setSize(2048,1024,false);mapR.outputEncoding=THREE.sRGBEncoding;mapR.toneMapping=THREE.ACESFilmicToneMapping;}
+    const sc=new THREE.Scene();const keep=anims;anims=[];let mat;if(B.shell==="star")mat=starMesh(1,"#fff0d0",48,.5).material;else if(B.shell==="earth")mat=new THREE.MeshBasicMaterial({map:T.earth()});else mat=mapMat(B.kind,(B.off||0)*Math.PI/180);anims=keep;
+    sc.add(new THREE.Mesh(new THREE.PlaneGeometry(2,1),mat));const cam=new THREE.OrthographicCamera(-1,1,.5,-.5,-1,1);mapR.render(sc,cam);return mapCache[key]=mapR.domElement.toDataURL("image/jpeg",.9);}
+  lane("pl","天体の中（断面）","solar","#ffb347");
+  [["sun"],["mercury"],["venus"],["earth"],["moon"],["mars"],["jupiter"],["saturn"],["uranus"],["neptune"],["pluto"]].map(([k])=>[k,"pl",k==="moon"||k==="earth"?"em":"solar"]).forEach(([k,ln,par])=>{
     const B=BODY[k];addBr({id:"in_"+k,lane:ln,parent:par,pobj:k,name:B.name+"の中",short:B.name,unit:"断面図（層の厚さは実際の比率）",desc:B.desc,dist:34,min:12,max:80,th:-2.35,ph:1.05,build(){buildBody(k);this.th=window.SPZ_MAP?0:-2.35;this.ph=window.SPZ_MAP?1.5708:1.05;this.dist=window.SPZ_MAP?32:34;}});});
-  BRMAP["inner:earth"]="in_earth";BRMAP["outer:sun"]="in_sun";
+  BRMAP["em:earth"]="in_earth";BRMAP["em:moon"]="in_moon";
   // ---- 銀河の中 ----
   const GX={
    lmc:{name:"大マゼラン雲",lane:"ga",parent:"galaxy",type:"irregular",size:120,c1:"#ffe8c8",c2:"#c8d8ff",c3:"#ff6a9a",bulge:.15,arms:2,tilt:.6,dist:"約16万光年",
      desc:"天の川銀河を回る伴銀河。直径約1万4000光年に約300億個の恒星。棒状の構造と、局部銀河群で最大の星形成領域タランチュラ星雲がある。",
      feat:[["tarantula","タランチュラ星雲（かじき座30）",-.38,.18,"局部銀河群で最も活発な星の誕生の場。太陽の300倍近い質量の星R136a1がある。","neb"],["sn1987a","超新星SN 1987A",-.3,.05,"1987年に肉眼で見えた超新星。約400年ぶりの肉眼超新星。","pt"],["lmcbar","中央の棒",0,0,"恒星が棒状に集まった構造。","pt"],["n11","N11（星形成領域）",.45,.35,"2番目に大きい星の誕生の場。","neb"]]},
-   andromeda:{name:"アンドロメダ銀河（M31）",lane:"gb",parent:"local",type:"spiral",size:140,arms:2,pitch:.15,bulge:.15,ring:.6,dust:1,c1:"#ffe2b8",c2:"#c8d4ff",c3:"#ff7aa0",tilt:1.35,dist:"約250万光年",
+   andromeda:{name:"アンドロメダ銀河（M31）",lane:"ga",parent:"local",type:"spiral",size:140,arms:2,pitch:.15,bulge:.15,ring:.6,dust:1,c1:"#ffe2b8",c2:"#c8d4ff",c3:"#ff7aa0",tilt:1.35,dist:"約250万光年",
      desc:"直径約22万光年、約1兆個の恒星。天の川銀河より大きい渦巻銀河。星形成は中心から約3万光年の「リング」に集中している。約45億年後に天の川銀河と衝突・合体する。",
      feat:[["m31core","中心核（二重に見える核）",0,0,"中心の星の集まりが2つあるように見える。太陽の約1億倍のブラックホールがある。","bh"],["ngc206","NGC 206（巨大な星の雲）",-.45,-.32,"若い青い星が数百個集まる、M31で最も明るい星の雲。","neb"],["ring10","星形成リング",.62,0,"中心から約3万光年の輪で、新しい星が生まれている。","pt"],["m32","M32（伴銀河）",.18,.22,"M31に近づきすぎて外側の星をはぎ取られた、小さな楕円銀河。","sat"],["m110","M110（伴銀河）",-.3,.6,"M31を回る矮小楕円銀河。","sat"],["g1","G1（巨大な球状星団）",.9,.55,"局部銀河群で最も明るい球状星団。中心にブラックホールがあるかもしれない。","pt"]]},
-   triangulum:{name:"さんかく座銀河（M33）",lane:"gb",parent:"local",type:"flocculent",size:110,arms:2,pitch:.35,bulge:.06,dust:.4,c1:"#ffe8d0",c2:"#bcd0ff",c3:"#ff6a9a",tilt:.95,dist:"約273万光年",
+   triangulum:{name:"さんかく座銀河（M33）",lane:"ga",parent:"local",type:"flocculent",size:110,arms:2,pitch:.35,bulge:.06,dust:.4,c1:"#ffe8d0",c2:"#bcd0ff",c3:"#ff6a9a",tilt:.95,dist:"約273万光年",
      desc:"局部銀河群で3番目に大きい渦巻銀河。はっきりした腕ではなく、綿のような腕がたくさんある（綿状渦巻銀河）。中心に大きなブラックホールが見つかっていない。",
      feat:[["ngc604","NGC 604（巨大なHII領域）",.42,.25,"直径約1500光年。オリオン大星雲の約6000倍明るい星の誕生の場。","neb"]]},
    m51:{name:"子持ち銀河（M51）",lane:"gc",parent:"lania",type:"spiral",size:120,arms:2,pitch:.28,bulge:.1,dust:1,c1:"#ffe2b8",c2:"#c0d0ff",c3:"#ff5a8a",tilt:.25,dist:"約2300万光年",
@@ -92,7 +96,7 @@
       if(key==="m87"&&id==="m87jet")pos.set(S*.18,S*.18,0);if(key==="cena"&&id==="cenalobe")pos.set(S*.15,S*.55,0);
       n.position.copy(pos);g.add(n);label(id,nm,n,kd==="bh"?S*.06:S*.25,d,G.name);});
     const h=new THREE.Object3D();h.position.set(0,S*.32,0);scene.add(h);label(key+"_all",G.name+"の全体",h,S*1.25,G.desc,G.dist);}
-  lane("ga","天の川の伴銀河","galaxy","#cfe0ff");lane("gb","局部銀河群の銀河の中","local","#ffe2b8");lane("gc","遠くの銀河の中","lania","#ffb48a");
+  lane("ga","近くの銀河の中","galaxy","#cfe0ff");lane("gc","遠くの銀河の中","lania","#ffb48a");
   Object.entries(GX).forEach(([k,G])=>addBr({id:"gx_"+k,lane:G.lane,parent:G.parent,pobj:k,name:G.name+"の中",short:G.name.replace(/（.*）/,""),unit:"銀河の内部（星の位置は模式的）",desc:G.desc,ph:G.ph,dist:G.size*1.3,min:G.size*.05,max:G.size*3,build(){buildGalaxy(k);}}));
   // ---- マルチバース（空想）：泡宇宙と、その上の2つの層 ----
   // [id, 名前, 色, 説明, 私たちの宇宙との違い, 見どころ[[id,名前,説明,[x,y,z],印の色]]]
@@ -127,7 +131,7 @@
    ["alive","生命に満ちた宇宙","#7fe0b0","どの惑星にも生命があり、多くの銀河がType III文明に包まれた宇宙。銀河の星々はダイソン球に覆われて赤外線で光り、文明どうしの通信が空を満たしている。","生命の誕生がとても起きやすい",
      [["al_dyson","ダイソン球に包まれた銀河","恒星の光を文明が使い尽くし、銀河は赤外線でしか光らない。",[0,0,0],"#ff7a5a"],["al_net","銀河間の通信網","文明どうしの光の通信が空を横切る。",[200,60,-100],"#7fe0b0"],["al_forest","森の惑星","どの惑星にも、それぞれ違う生命の森がある。",[-160,-40,120],"#4faa5a"],["al_fermi","フェルミのパラドックスがない世界","「みんなどこにいる？」という問いがそもそも生まれない。",[0,170,0]]]],
    ["univita","ユニヴィータ宇宙（SFノート）","#ffd27a","SFノートの宇宙。生命と情報、物質の区別がなくなった知性（UOI）が、星々を光の網でつないでいる。超因果圏・高次存在領域へ続く入口がある。","生命・情報・物質の区別がない",[]]];
-  lane("mv","マルチバース（空想）","shape","#c99cf2");lane("uv","別の宇宙（空想）","mv","#ff9ad0");lane("up","上位の層（空想）","mv","#9fe8ff");
+  lane("mv","マルチバース（空想）","shape","#c99cf2");lane("uv","別の宇宙（空想）","mv","#ff9ad0");
   const MVFS=`uniform vec3 uCol;uniform float uTime;varying vec3 vN;varying vec3 vW;varying vec2 vUv;${GLN}void main(){vec3 v=normalize(cameraPosition-vW);float f=pow(1.-abs(dot(normalize(vN),v)),2.5);float n=fbm(vUv*8.+uTime*.03);vec3 ir=.5+.5*cos(6.283*(f*1.5+n+vec3(0.,.33,.67)));gl_FragColor=vec4(mix(uCol,ir,.45)*(f*1.4+.05)+uCol*n*.08,f*.9+.06);
       #include <tonemapping_fragment>
       #include <encodings_fragment>
@@ -141,7 +145,7 @@
       const fil=[];for(let i=0;i<4000;i++){const q=V(R()-.5,R()-.5,R()-.5).multiplyScalar(3000);fil.push(q.x,q.y,q.z);}scene.add(points(fil,"#5a4a8a",3,.5));}});
   BRMAP["mv:u_home"]="shape";
   // 上位の層1：法則の海（メタバース）
-  addBr({id:"meta",lane:"up",parent:"mv",up:"omni",downObj:"m_ours",down:"mv",fic:1,name:"法則の海（メタバース・空想）",short:"法則の海",unit:"マルチバースのさらに外（空想）",desc:"空想の層。ここでは「物理法則の決まり方」そのものが場所ごとに違い、マルチバース（泡宇宙の群れ）が島のように浮かぶ。法則を記したような光の粒が海流のように流れている。金色の島が私たちのマルチバース。",dist:1400,min:80,max:3200,
+  addBr({id:"meta",lane:"mv",parent:"mv",up:"omni",downObj:"m_ours",down:"mv",fic:1,name:"法則の海（メタバース・空想）",short:"法則の海",unit:"マルチバースのさらに外（空想）",desc:"空想の層。ここでは「物理法則の決まり方」そのものが場所ごとに違い、マルチバース（泡宇宙の群れ）が島のように浮かぶ。法則を記したような光の粒が海流のように流れている。金色の島が私たちのマルチバース。ほかの島も、選んでズームインすると中に入れる。",dist:1400,min:80,max:3200,
     build(){scene.add(new THREE.AmbientLight("#fff",1));const isl=[["m_ours","私たちのマルチバース","#f4b942",V(0,0,0),"泡宇宙の群れ。ここにズームインすると戻れる。"],["m_everett","量子の多世界の森（エヴェレット解釈）","#7fb2ff",V(620,120,-260),"量子の出来事のたびに世界が枝分かれするという解釈。枝が林のように広がる。"],["m_melt","法則が溶ける海峡","#ff9ad0",V(-560,-140,300),"ここでは物理定数がゆっくり変化し続け、泡宇宙が生まれては溶ける。"],["m_timeless","時間のないマルチバース","#9fe8ff",V(-200,260,-640),"時間という次元を持たない泡ばかりの群れ。変化も歴史もない。"],["m_made","文明が作ったマルチバース（SF）","#ffd27a",V(380,-280,560),"高度な文明（Type V）が、自分たちで宇宙を生み出して育てているという空想。SFノートのUOIの先かもしれない。"]];
       isl.forEach(([id,nm,col,p,d],k)=>{const g=new THREE.Group();g.position.copy(p);scene.add(g);for(let i=0;i<26;i++){const b=bubble(12+R()*22,col);b.position.set((R()-.5)*220,(R()-.5)*140,(R()-.5)*220);g.add(b);}g.add(glowBB(col,360,0));
         if(id==="m_everett"){const seg=[];const br=(o,dir,len,dp)=>{const e=o.clone().addScaledVector(dir,len);seg.push(o,e);if(dp<6){br(e,dir.clone().add(V(R()-.5,R()*.6,R()-.5)).normalize(),len*.75,dp+1);br(e,dir.clone().add(V(R()-.5,R()*.6,R()-.5)).normalize(),len*.75,dp+1);}};br(V(0,-120,0),V(0,1,0),70,0);g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(seg),new THREE.LineBasicMaterial({color:"#9fc8ff",transparent:true,opacity:.7})));}
@@ -150,7 +154,7 @@
       anims.push(t=>{for(let i=0;i<N;i++){const [a,y,r,w]=ph[i];const q=a+t*w;pos[i*3]=Math.cos(q)*r;pos[i*3+1]=y+Math.sin(q*3+i)*40;pos[i*3+2]=Math.sin(q)*r*.7;}gg.attributes.position.needsUpdate=true;});
       const h=new THREE.Object3D();h.position.set(0,700,0);scene.add(h);label("meta_all","法則の海（全体）",h,2400,"マルチバースのさらに外側を想像した層。どんな法則の宇宙が生まれうるか、その「法則の法則」が場所によって違う。","空想");}});
   // 上位の層2：オムニバース（すべての可能性）
-  addBr({id:"omni",lane:"up",parent:"meta",top:1,downObj:"o_meta",down:"meta",fic:1,name:"オムニバース（すべての可能性・空想）",short:"オムニバース",unit:"考えうるすべての世界（空想）",desc:"想像できる最も外側の層。「数学的に矛盾なく書けるものは、すべてどこかに実在する」という考え（テグマークの数学的宇宙仮説＝レベルIV）を絵にした空想。立体・結び目・フラクタル・セル・オートマトンが、それぞれ別の世界の「設計図」として漂う。ここより外は描けない。",dist:1300,min:60,max:2000,
+  addBr({id:"omni",lane:"mv",parent:"meta",top:1,downObj:"o_meta",down:"meta",fic:1,name:"オムニバース（すべての可能性・空想）",short:"オムニバース",unit:"考えうるすべての世界（空想）",desc:"想像できる最も外側の層。「数学的に矛盾なく書けるものは、すべてどこかに実在する」という考え（テグマークの数学的宇宙仮説＝レベルIV）を絵にした空想。立体・結び目・フラクタル・セル・オートマトンが、それぞれ別の世界の「設計図」として漂う。ここより外は描けない。それぞれの世界を選んでズームインすると中に入れる。",dist:1300,min:60,max:2000,
     build(){scene.add(new THREE.AmbientLight("#fff",1));const wire=(geo,col,p,sp)=>{const m=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:col,wireframe:true,transparent:true,opacity:.6}));m.position.copy(p);scene.add(m);anims.push(t=>{m.rotation.x=t*sp;m.rotation.y=t*sp*.7;});return m;};
       const cvTex=(f)=>{const c=document.createElement("canvas");c.width=c.height=256;const x=c.getContext("2d");f(x);return new THREE.CanvasTexture(c);};
       const mand=cvTex(x=>{const im=x.createImageData(256,256);for(let j=0;j<256;j++)for(let i=0;i<256;i++){let cr=-2.2+i/256*3,ci=-1.5+j/256*3,zr=0,zi=0,k=0;while(k<60&&zr*zr+zi*zi<4){const t=zr*zr-zi*zi+cr;zi=2*zr*zi+ci;zr=t;k++;}const v=k===60?0:k/60;const o=(j*256+i)*4;im.data[o]=255*Math.sqrt(v);im.data[o+1]=120*v;im.data[o+2]=255*(1-v)*(k===60?0:1);im.data[o+3]=255;}x.putImageData(im,0,0);});
@@ -228,3 +232,116 @@
     build(){scene.add(new THREE.AmbientLight("#fff",1));const what=uniBuild[id]();
       (feats||[]).forEach(([fid,fn,fd,p,mk])=>{let n;if(mk){n=glowBB(mk,26,0);}else n=new THREE.Object3D();n.position.set(...p);scene.add(n);label(fid,fn,n,260,fd,"空想");});
       const h=new THREE.Object3D();h.position.set(0,320,0);scene.add(h);label("uv_"+id+"_all",nm+"（全体）",h,1200,d+(diff!=="—"?"　私たちの宇宙との違い："+diff+"。":"")+"（すべて空想）",what);}});});
+  // 上位層の中：法則の海の島 と オムニバースの世界（すべて空想）
+  lane("mt","法則の海の島（空想）","meta","#9fe8ff");lane("om","オムニバースの世界（空想）","omni","#ffd27a");
+  const segs=(arr,col,op=.8)=>new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(arr),new THREE.LineBasicMaterial({color:col,transparent:true,opacity:op}));
+  const mark=(id,nm,p,view,d,col)=>{const n=col?glowBB(col,view*.06,0):new THREE.Object3D();n.position.copy(p);scene.add(n);label(id,nm,n,view,d,"空想");return n;};
+  const SUBW=[
+   ["mt","meta","m_everett","量子の多世界の森（中）","#7fb2ff","量子の出来事が起きるたびに世界が枝分かれする、というエヴェレット解釈（多世界解釈）を一本の大樹として描いた空想。幹がビッグバン、枝先の一つ一つが「今この瞬間」の別々の世界。",()=>{
+      const seg=[],tips=[];const br=(o,dir,len,dp)=>{const e=o.clone().addScaledVector(dir,len);seg.push(o,e);if(dp<8){const n=dir.clone();br(e,n.clone().add(V(R()-.5,R()*.5,R()-.5).multiplyScalar(.9)).normalize(),len*.78,dp+1);br(e,n.clone().add(V(R()-.5,R()*.5,R()-.5).multiplyScalar(.9)).normalize(),len*.78,dp+1);}else tips.push(e);};
+      br(V(0,-420,0),V(0,1,0),190,0);scene.add(segs(seg,"#9fc8ff",.75));const tp=[];tips.forEach(p=>tp.push(p.x,p.y,p.z));scene.add(points(tp,"#ffffff",10,1));
+      const root=[];for(let i=0;i<40;i++){const a=R()*6.283;root.push(V(0,-420,0),V(Math.cos(a)*(80+R()*120),-470-R()*60,Math.sin(a)*(80+R()*120)));}scene.add(segs(root,"#4a6aa0",.6));
+      mark("ev_root","根元：ビッグバン",V(0,-420,0),500,"すべての枝はここから。量子の分岐はまだ1回も起きていない。","#ffd27a");
+      mark("ev_fork","分岐点（量子の出来事）",seg[2],420,"放射性原子が崩れた／崩れなかった、のような量子の出来事で、世界が2本に分かれる。どちらの枝も同じくらい「本物」。","#9fe8ff");
+      mark("ev_cat","猫が生きている枝・死んでいる枝",seg[6],420,"シュレーディンガーの猫の思考実験。多世界解釈では、箱を開けた瞬間に「生きている猫を見た自分」と「そうでない自分」の両方の世界ができる。","#ff9ad0");
+      mark("ev_tips","枝先：今この瞬間の無数の世界",tips[0],420,"枝先の白い点の一つ一つが別の世界。実際の分岐の数は天文学的で、この絵の"+tips.length+"本はごく一部の象徴。","#ffffff");
+      return "枝分かれし続ける世界の大樹";}],
+   ["mt","meta","m_melt","法則が溶ける海峡（中）","#ff9ad0","物理定数が場所と時間でゆっくり変わる海峡。泡宇宙が生まれ、法則が合わなくなると溶けて消える。色は「定数の値」を表す空想図。",()=>{
+      const B=[];for(let i=0;i<46;i++){const b=bubble(14+R()*40,"#ffffff");const ph=R()*6.283,sp=.15+R()*.25;b.position.set((R()-.5)*900,(R()-.5)*360,(R()-.5)*900);scene.add(b);B.push(b);const m=b.material;
+        anims.push(t=>{const k=(Math.sin(t*sp+ph)+1)/2;b.scale.setScalar(.15+k);m.uniforms.uCol.value.setHSL((t*.02+i*.07)%1,.7,.6);});}
+      const cur=[];for(let i=0;i<3000;i++){const x=(R()-.5)*1400;cur.push(x,Math.sin(x*.01)*80+(R()-.5)*40,(R()-.5)*240);}const cp=points(cur,"#ffb0e0",4,.5);scene.add(cp);anims.push(t=>cp.position.x=Math.sin(t*.1)*60);
+      const st=bubble(70,"#f4b942");st.position.set(-380,60,-300);scene.add(st);
+      mark("ml_new","生まれたての泡",B[1].position,360,"定数がたまたま安定した場所で、泡宇宙がふくらみ始める。","#ffffff");
+      mark("ml_dis","溶けかけの泡（定数が不安定）",B[3].position,360,"中の物理定数が変わり続けると、原子も星も形を保てなくなり、泡ごと溶ける…という空想。","#ff9ad0");
+      mark("ml_tide","定数の潮流",V(0,0,0),480,"光の帯は、定数の値がゆっくり流れていく様子のイメージ。現実の観測では、微細構造定数などの変化は今のところ見つかっていない。","#ffb0e0");
+      mark("ml_safe","安定な泡（私たちと同じ法則）",st.position,420,"潮流から外れた静かな場所。私たちの宇宙のように定数が長く変わらない泡はここで育つ。","#f4b942");
+      return "生まれては溶ける泡宇宙";}],
+   ["mt","meta","m_timeless","時間のないマルチバース（中）","#9fe8ff","時間という次元を持たない泡宇宙の群れ。すべてが結晶のように止まっている。動く絵が一つもないのがこの層の特徴。",()=>{
+      const geos=[new THREE.OctahedronGeometry(1,0),new THREE.IcosahedronGeometry(1,0),new THREE.TetrahedronGeometry(1,0)];
+      for(let x=-3;x<=3;x++)for(let y=-1;y<=1;y++)for(let z=-3;z<=3;z++){if(R()<.35)continue;const s=18+R()*30;const m=new THREE.Mesh(geos[(x+y+z+9)%3],new THREE.MeshStandardMaterial({color:"#bfefff",metalness:.2,roughness:.15,transparent:true,opacity:.55}));m.scale.setScalar(s);m.position.set(x*140+(R()-.5)*30,y*150,z*140+(R()-.5)*30);m.rotation.set(R()*3,R()*3,R()*3);scene.add(m);}
+      const lat=[];for(let x=-3;x<3;x++)for(let z=-3;z<=3;z++)lat.push(V(x*140,0,z*140),V(x*140+140,0,z*140));for(let z=-3;z<3;z++)for(let x=-3;x<=3;x++)lat.push(V(x*140,0,z*140),V(x*140,0,z*140+140));scene.add(segs(lat,"#9fe8ff",.25));
+      const d=new THREE.DirectionalLight("#ffffff",1.4);d.position.set(300,500,200);scene.add(d);
+      const ray=[];for(let i=0;i<30;i++){const a=V(R()-.5,R()-.5,R()-.5).multiplyScalar(900);ray.push(a,a.clone().add(V(60,0,0)));}scene.add(segs(ray,"#ffffff",.9));
+      mark("tl_frozen","凍った泡（時間の次元なし）",V(0,150,0),420,"時間がないので、何も起きず、何も変わらない。「始まり」も「終わり」もない宇宙。","#bfefff");
+      mark("tl_block","ブロック宇宙",V(-280,0,-280),480,"物理学の「ブロック宇宙」の考え方：過去・現在・未来がすべて同時に存在し、流れているように感じるのは私たちの側だけ、という見方を結晶で表した。","#9fe8ff");
+      mark("tl_light","止まった光",ray[0],360,"白い短い線は、飛んでいる途中のまま止まった光のイメージ。","#ffffff");
+      return "時間のない結晶の群れ";}],
+   ["mt","meta","m_made","文明が作ったマルチバース（中・SF）","#ffd27a","Type Vクラスの文明が宇宙を作り、育てているという空想。中心の保育リングで泡宇宙を生み、定数を調整して送り出す。",()=>{
+      const ring=new THREE.Mesh(new THREE.TorusGeometry(220,14,16,120),new THREE.MeshStandardMaterial({color:"#c8a050",metalness:.8,roughness:.3,emissive:"#3a2400"}));ring.rotation.x=Math.PI/2;scene.add(ring);anims.push(t=>ring.rotation.z=t*.05);
+      const d=new THREE.DirectionalLight("#fff3d0",1.6);d.position.set(400,400,300);scene.add(d);scene.add(new THREE.AmbientLight("#405070",.6));
+      const core=bubble(60,"#ffd27a");scene.add(core);core.add(glowBB("#ffd27a",260,1));
+      const pods=[];for(let i=0;i<12;i++){const a=i/12*6.283;const p=V(Math.cos(a)*420,(i%2?60:-60),Math.sin(a)*420);const shell=sphere(42,new THREE.MeshBasicMaterial({color:"#ffffff",wireframe:true,transparent:true,opacity:.18}),16);shell.position.copy(p);scene.add(shell);const b=bubble(14+i*2,["#ffd27a","#9fe8ff","#ff9ad0","#7fe0b0"][i%4]);b.position.copy(p);scene.add(b);pods.push(p);}
+      const pipe=[];pods.forEach(p=>pipe.push(V(p.x*.52,0,p.z*.52),p));scene.add(segs(pipe,"#ffd27a",.5));
+      const deb=[];for(let i=0;i<800;i++){deb.push(-700+(R()-.5)*200,(R()-.5)*120,300+(R()-.5)*200);}scene.add(points(deb,"#8a6a5a",5,.7));
+      const wh=new THREE.Mesh(new THREE.TorusGeometry(70,6,12,60),new THREE.MeshBasicMaterial({color:"#9fe8ff"}));wh.position.set(600,120,-300);wh.lookAt(0,0,0);scene.add(wh);wh.add(glowBB("#9fe8ff",200,0));
+      mark("mm_core","宇宙の保育リング",V(0,0,0),520,"中心で生まれた泡宇宙を、リングの力で安定させる（という空想）。物理学者リー・スモーリンの「宇宙の自然選択」説や、実験室で宇宙を作れるかという議論がヒント。","#ffd27a");
+      mark("mm_pod","設計中の宇宙（定数を調整中）",pods[0],420,"保育カプセルごとに、重力の強さや光の速さなどの定数を少しずつ変えて試している。","#9fe8ff");
+      mark("mm_junk","失敗した宇宙の残骸",V(-700,0,300),420,"定数の組み合わせがうまくいかず、星も原子もできなかった宇宙のかけら。","#8a6a5a");
+      mark("mm_gate","送り出しのワームホール",wh.position,420,"育った宇宙を、法則の海へ送り出す出口。","#9fe8ff");
+      return "宇宙を育てる文明の工房";}],
+   ["om","omni","o_math","数学的構造の宇宙（中）","#ffd27a","正多面体（プラトンの立体）だけでできた世界。3次元で「すべての面・辺・角が同じ」立体は5種類しかない。この「5つしかない」という決まりが、この世界の物理法則にあたる。",()=>{
+      const S=[["om_t","正四面体（面4）",new THREE.TetrahedronGeometry(80,0),"#ff9ad0"],["om_c","立方体（面6）",new THREE.BoxGeometry(110,110,110),"#9fe8ff"],["om_o","正八面体（面8）",new THREE.OctahedronGeometry(80,0),"#7fe0b0"],["om_d","正十二面体（面12）",new THREE.DodecahedronGeometry(80,0),"#ffd27a"],["om_i","正二十面体（面20）",new THREE.IcosahedronGeometry(80,0),"#c99cf2"]];
+      const d=new THREE.DirectionalLight("#fff",1.4);d.position.set(300,500,400);scene.add(d);scene.add(new THREE.AmbientLight("#506080",.7));
+      S.forEach(([id,nm,g,col],i)=>{const a=i/5*6.283;const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:col,transparent:true,opacity:.55,roughness:.3}));m.position.set(Math.cos(a)*360,0,Math.sin(a)*360);scene.add(m);m.add(new THREE.LineSegments(new THREE.EdgesGeometry(g),new THREE.LineBasicMaterial({color:"#ffffff"})));anims.push(t=>{m.rotation.y=t*.2+i;m.rotation.x=t*.13;});
+        const F={om_t:4,om_c:6,om_o:8,om_d:12,om_i:20}[id];label(id,nm,m,420,nm+"。頂点−辺＋面＝2（オイラーの式）がどの立体でも成り立つ。面の数は"+F+"。","空想");});
+      mark("om_why","なぜ5つだけ？",V(0,140,0),520,"1つの頂点に集まる正多角形の角度の合計が360°未満でないと立体が閉じないため。正三角形なら3・4・5枚、正方形は3枚、正五角形は3枚の5通りしかない。","#ffffff");
+      return "5つの正多面体の世界";}],
+   ["om","omni","o_knot","結び目の宇宙（中）","#ff9ad0","ほどけない結び目の形そのものが法則になっている世界。数学の「結び目理論」では、ハサミを使わずに変形して同じになるかどうかで結び目を分類する。",()=>{
+      const K=[["kn_tre","三つ葉結び目",2,3,"#ff9ad0","最も単純な「ほどけない」結び目。交点は3つ。"],["kn_cin","五葉結び目（(2,5)トーラス結び目）",2,5,"#ffd27a","ドーナツの表面に5回巻きつけてできる結び目。交点は5つ。"],["kn_big","複雑なトーラス結び目（(3,7)）",3,7,"#9fe8ff","巻き数を増やすと、いくらでも複雑な結び目が作れる。"]];
+      K.forEach(([id,nm,p,q,col,dd],i)=>{const g=new THREE.TorusKnotGeometry(90,14,300,16,p,q);const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:col,roughness:.35,metalness:.3}));m.position.set((i-1)*380,0,0);scene.add(m);anims.push(t=>{m.rotation.y=t*.15;m.rotation.x=t*.07*(i+1);});label(id,nm,m,460,dd,"空想");});
+      const un=new THREE.Mesh(new THREE.TorusGeometry(80,12,16,80),new THREE.MeshStandardMaterial({color:"#aaaaaa",roughness:.5}));un.position.set(0,-320,120);scene.add(un);label("kn_un","自明な結び目（ただの輪）",un,420,"結んでいない輪。結び目理論ではこれも「結び目」の一つとして数える。","空想");
+      const d=new THREE.DirectionalLight("#fff",1.5);d.position.set(200,500,500);scene.add(d);scene.add(new THREE.AmbientLight("#506080",.7));
+      return "ほどけない結び目の世界";}],
+   ["om","omni","o_frac","フラクタルの宇宙（中）","#c99cf2","単純な式のくり返しから無限に細かい形が生まれる世界。マンデルブロ集合の床の上に、3次元のシェルピンスキー四面体が浮かぶ。",()=>{
+      const tex=(cx,cy,sc,jul)=>{const c=document.createElement("canvas");c.width=c.height=384;const x=c.getContext("2d");const im=x.createImageData(384,384);for(let j=0;j<384;j++)for(let i=0;i<384;i++){let zr,zi,cr,ci;const u=cx+(i/384-.5)*sc,v=cy+(j/384-.5)*sc;if(jul){zr=u;zi=v;cr=-.8;ci=.156;}else{zr=0;zi=0;cr=u;ci=v;}let k=0;while(k<80&&zr*zr+zi*zi<4){const t=zr*zr-zi*zi+cr;zi=2*zr*zi+ci;zr=t;k++;}const o=(j*384+i)*4;const w=k===80?0:Math.pow(k/80,.55);im.data[o]=255*Math.min(1,9*(1-w)*w*w*w);im.data[o+1]=255*Math.min(1,15*(1-w)*(1-w)*w*w);im.data[o+2]=255*Math.min(1,8.5*(1-w)*(1-w)*(1-w)*w);im.data[o+3]=255;}x.putImageData(im,0,0);const T=new THREE.CanvasTexture(c);T.encoding=THREE.sRGBEncoding;return T;};
+      const fl=new THREE.Mesh(new THREE.PlaneGeometry(1000,1000),new THREE.MeshBasicMaterial({map:tex(-.6,0,3,false)}));fl.rotation.x=-Math.PI/2;fl.position.y=-200;scene.add(fl);
+      const ju=new THREE.Mesh(new THREE.PlaneGeometry(300,300),new THREE.MeshBasicMaterial({map:tex(0,0,3.2,true),side:THREE.DoubleSide}));ju.position.set(420,60,-260);scene.add(ju);anims.push(()=>ju.lookAt(camera.position));
+      const zm=new THREE.Mesh(new THREE.PlaneGeometry(260,260),new THREE.MeshBasicMaterial({map:tex(-.7435,.1314,.012,false),side:THREE.DoubleSide}));zm.position.set(-440,80,-200);scene.add(zm);anims.push(()=>zm.lookAt(camera.position));
+      const V4=[V(0,200,0),V(-180,-110,-104),V(180,-110,-104),V(0,-110,208)];const sp=[];let p=V(0,0,0);for(let i=0;i<30000;i++){p.lerp(V4[(R()*4)|0],.5);if(i>10)sp.push(p.x,p.y+60,p.z);}const sp3=points(sp,"#ffd27a",2.2,.9);scene.add(sp3);anims.push(t=>sp3.rotation.y=t*.1);
+      mark("fr_m","マンデルブロ集合の本体（床）",V(0,-200,0),520,"z → z²＋c をくり返して、無限に大きくならない c を黒く塗ったもの。式は1行なのに、ふちの形は無限に複雑。","#c99cf2");
+      mark("fr_zoom","ふちの拡大（タツノオトシゴの谷）",zm.position,420,"床のふちの一部を約250倍に拡大した図。拡大しても、新しい渦や小さなマンデルブロ集合が現れ続ける。","#9fe8ff");
+      mark("fr_j","ジュリア集合の島",ju.position,420,"同じ式で c を固定し、出発点 z を変えて塗ったもの。c ごとに違う形になる（ここでは c＝−0.8＋0.156i）。","#ff9ad0");
+      mark("fr_s","シェルピンスキー四面体",V(0,60,0),420,"四面体の真ん中をくり抜くことを無限にくり返した立体。体積は0に近づくのに、形は保たれる（フラクタル次元は2）。","#ffd27a");
+      return "くり返しから無限の形が生まれる世界";}],
+   ["om","omni","o_logic","論理だけの世界（中）","#7fe0b0","単純な規則だけで動く世界。ライフゲームの盤面が床一面に広がり、グライダーが走る。奥の壁はルール110。どちらも「規則だけで何でも計算できる（チューリング完全）」ことが証明されている。",()=>{
+      const N=96;let g=new Uint8Array(N*N);for(let i=0;i<N*N;i++)g[i]=R()<.22?1:0;const gl=(x,y)=>{[[1,0],[2,1],[0,2],[1,2],[2,2]].forEach(([a,b])=>g[(y+b)*N+x+a]=1);};for(let k=0;k<6;k++)gl(4+k*14,4);
+      const c=document.createElement("canvas");c.width=c.height=N;const x=c.getContext("2d");const im=x.createImageData(N,N);const T=new THREE.CanvasTexture(c);T.magFilter=THREE.NearestFilter;T.minFilter=THREE.NearestFilter;
+      const draw=()=>{for(let i=0;i<N*N;i++){const o=i*4,v=g[i];im.data[o]=v?127:6;im.data[o+1]=v?224:14;im.data[o+2]=v?176:20;im.data[o+3]=255;}x.putImageData(im,0,0);T.needsUpdate=true;};
+      const step=()=>{const n=new Uint8Array(N*N);for(let y=0;y<N;y++)for(let x2=0;x2<N;x2++){let s=0;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)if(dx||dy)s+=g[((y+dy+N)%N)*N+(x2+dx+N)%N];const a=g[y*N+x2];n[y*N+x2]=(s===3||(a&&s===2))?1:0;}g=n;draw();};draw();
+      let last=0;anims.push(t=>{if(t-last>.25){last=t;step();}});
+      const fl=new THREE.Mesh(new THREE.PlaneGeometry(900,900),new THREE.MeshBasicMaterial({map:T}));fl.rotation.x=-Math.PI/2;fl.position.y=-150;scene.add(fl);
+      const c2=document.createElement("canvas");c2.width=c2.height=256;const x2=c2.getContext("2d");x2.fillStyle="#04080a";x2.fillRect(0,0,256,256);let row=new Array(256).fill(0);row[255]=1;x2.fillStyle="#ffd27a";for(let y=0;y<256;y++){for(let i=0;i<256;i++)if(row[i])x2.fillRect(i,y,1,1);row=row.map((_,i)=>(110>>(row[(i+255)%256]*4+row[i]*2+row[(i+1)%256]))&1);}
+      const T2=new THREE.CanvasTexture(c2);T2.magFilter=THREE.NearestFilter;const wall=new THREE.Mesh(new THREE.PlaneGeometry(600,600),new THREE.MeshBasicMaterial({map:T2}));wall.position.set(0,150,-450);scene.add(wall);
+      mark("lg_board","ライフゲームの盤面",V(0,-150,0),520,"規則は2つだけ。①周りに生きたマスが3つあれば誕生 ②2つか3つなら生き残り、それ以外は消える。これだけで模様が動き続ける（0.25秒ごとに1世代）。","#7fe0b0");
+      mark("lg_glider","グライダー",V(-360,-150,-360),400,"5マスの形が4世代ごとに斜めに1マス進む「動く物体」。この世界の「粒子」にあたる。","#ffffff");
+      mark("lg_110","ルール110の壁",wall.position,460,"1列のマスに「左・自分・右」の8通りの組み合わせごとの規則を当てはめ、下の段へ書いていく。この単純な規則が、どんな計算でもできることが2004年に証明された。","#ffd27a");
+      return "規則だけで動く計算の世界";}],
+   ["om","omni","o_story","物語の宇宙（中）","#ff9ad0","「矛盾なく書かれた物語なら、どこかに実在するのでは？」という空想の群島。島ごとに違うジャンルの物語の法則が働いている。",()=>{
+      const d=new THREE.DirectionalLight("#fff3d8",1.1);d.position.set(300,600,300);scene.add(d);scene.add(new THREE.AmbientLight("#506080",.35));
+      const isl=(p,col,r)=>{const g=new THREE.Group();g.position.copy(p);scene.add(g);const top=new THREE.Mesh(new THREE.CylinderGeometry(r,r*.9,16,40),new THREE.MeshStandardMaterial({color:col,roughness:.9}));g.add(top);const rock=new THREE.Mesh(new THREE.ConeGeometry(r*.9,r*1.2,40),new THREE.MeshStandardMaterial({color:"#6a5848",roughness:1}));rock.rotation.x=Math.PI;rock.position.y=-r*.6-8;g.add(rock);const ph=R()*6;anims.push(t=>g.position.y=p.y+Math.sin(t*.4+ph)*10);return g;};
+      const M=(geo,col,par,pos)=>{const m=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:col,roughness:.6}));m.position.copy(pos);par.add(m);return m;};
+      const a=isl(V(-360,0,-120),"#4a8a3a",140);for(let i=0;i<4;i++)M(new THREE.CylinderGeometry(14,14,90,12),"#c8c0b0",a,V(-30+(i%2)*60,53,-30+(i>>1)*60));for(let i=0;i<4;i++)M(new THREE.ConeGeometry(20,40,12),"#7a3a8a",a,V(-30+(i%2)*60,118,-30+(i>>1)*60));M(new THREE.BoxGeometry(60,60,60),"#c8c0b0",a,V(0,38,0));a.add(glowBB("#c99cf2",120,0));
+      const b=isl(V(320,60,-200),"#5a6a7a",130);const ship=M(new THREE.ConeGeometry(18,90,16),"#dfe6f0",b,V(0,70,0));M(new THREE.CylinderGeometry(4,10,30,8),"#ff8a3a",b,V(0,10,0));for(let i=0;i<3;i++){const f=M(new THREE.BoxGeometry(4,30,26),"#9fb0c8",b,V(Math.cos(i*2.09)*16,30,Math.sin(i*2.09)*16));f.rotation.y=-i*2.09;}
+      const c=isl(V(40,-60,320),"#6a9a4a",150);for(let i=0;i<14;i++){M(new THREE.ConeGeometry(14,50,8),"#2f6a2a",c,V((R()-.5)*200,33,(R()-.5)*200));}M(new THREE.BoxGeometry(44,30,40),"#a87a4a",c,V(0,23,0));M(new THREE.ConeGeometry(36,30,4),"#7a4a2a",c,V(0,53,0));
+      const fog=[];for(let i=0;i<2500;i++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(80+R()*90);fog.push(q.x-80,q.y+260,q.z+360);}scene.add(points(fog,"#ffffff",6,.35));
+      mark("st_fan","剣と魔法の島",V(-360,140,-120),460,"魔法が「物理法則」として働く物語の世界。塔の城は魔法使いの国のイメージ。","#c99cf2");
+      mark("st_sf","宇宙SFの島",V(320,170,-200),460,"超光速航法のような、私たちの物理では難しい技術が成り立つ世界。","#9fe8ff");
+      mark("st_old","昔話の島",V(40,60,320),460,"森の中の小屋。動物が話し、約束を破ると罰が下る、という「昔話の決まり」が法則になっている。","#7fe0b0");
+      mark("st_fog","まだ書かれていない物語の霧",V(-80,260,360),420,"これから誰かが書く物語は、まだ形のない霧のまま漂っている…という空想。","#ffffff");
+      return "物語の法則が働く群島";}],
+   ["om","omni","o_hyper","高次存在領域（中・SFノート）","#fff2c0","SFノートの最終段階を置いた空想の領域。中心の立体は4次元の立方体（テッセラクト）を3次元に投影した「影」。4次元で回転させているので、内側と外側が入れ替わるように見える。",()=>{
+      const P4=[];for(let i=0;i<16;i++)P4.push([i&1?1:-1,i&2?1:-1,i&4?1:-1,i&8?1:-1]);const E=[];for(let i=0;i<16;i++)for(let j=i+1;j<16;j++){const x=i^j;if((x&(x-1))===0)E.push([i,j]);}
+      const pos=new Float32Array(E.length*6);const geo=new THREE.BufferGeometry();geo.setAttribute("position",new THREE.BufferAttribute(pos,3));const ln=new THREE.LineSegments(geo,new THREE.LineBasicMaterial({color:"#fff2c0"}));scene.add(ln);
+      const vg=new THREE.BufferGeometry();const vp=new Float32Array(48);vg.setAttribute("position",new THREE.BufferAttribute(vp,3));scene.add(new THREE.Points(vg,new THREE.PointsMaterial({color:"#ffd27a",size:14})));
+      anims.push(t=>{const a=t*.35,b=t*.22;const pr=P4.map(([x,y,z,w])=>{let x1=x*Math.cos(a)-w*Math.sin(a),w1=x*Math.sin(a)+w*Math.cos(a);let y1=y*Math.cos(b)-w1*Math.sin(b),w2=y*Math.sin(b)+w1*Math.cos(b);const k=180/(2.6-w2);return [x1*k,y1*k,z*k];});
+        E.forEach(([i,j],n)=>{pos.set(pr[i],n*6);pos.set(pr[j],n*6+3);});pr.forEach((p,i)=>vp.set(p,i*3));geo.attributes.position.needsUpdate=true;vg.attributes.position.needsUpdate=true;});
+      const flow=[];const N=3000,fp=new Float32Array(N*3),ph=[];for(let i=0;i<N;i++)ph.push([R()*6.283,R()*6.283,300+R()*500,.05+R()*.1]);const fg=new THREE.BufferGeometry();fg.setAttribute("position",new THREE.BufferAttribute(fp,3));scene.add(new THREE.Points(fg,new THREE.PointsMaterial({color:"#c99cf2",size:4,transparent:true,opacity:.6,blending:THREE.AdditiveBlending,depthWrite:false})));
+      anims.push(t=>{for(let i=0;i<N;i++){const [u,v,r,w]=ph[i];const q=u+t*w;fp[i*3]=Math.cos(q)*r;fp[i*3+1]=Math.sin(v+q*2)*r*.4;fp[i*3+2]=Math.sin(q)*r;}fg.attributes.position.needsUpdate=true;});
+      mark("hy_tess","テッセラクト（4次元立方体の影）",V(0,0,0),520,"頂点16・辺32。3次元の立方体の影が2次元で「四角の中に四角」に見えるのと同じで、4次元の立方体の影は「立方体の中に立方体」に見える。","#fff2c0");
+      mark("hy_flow","言葉を超えた情報の流れ",V(500,0,0),440,"SFノートの「空間・時間・言語を超えた存在」の象徴。紫の流れは、形を持たない情報そのもののイメージ。","#c99cf2");
+      mark("hy_beings","高次存在の領域（SFノート）",V(0,320,0),480,"SFノートの最終段階を置いた場所。何がいるのかは、この地図でも描けない。","#ffffff");
+      return "4次元の影と、形のない情報";}],
+  ];
+  SUBW.forEach(([ln,par,pobj,nm,col,d,fn])=>{const id=(ln==="mt"?"mt_":"om_")+pobj.slice(2);addBr({id,lane:ln,parent:par,pobj,name:nm,short:nm.replace(/（.*）/,""),unit:ln==="mt"?"法則の海の島（空想）":"オムニバースの世界（空想）",desc:d+"（すべて空想）",dist:1100,min:50,max:2400,ph:.95,fic:1,
+    build(){scene.add(new THREE.AmbientLight("#fff",.15));const what=fn();const h=new THREE.Object3D();h.position.set(0,560,0);scene.add(h);label(id+"_all",nm.replace("（中）","").replace("（中・","（")+"（全体）",h,1600,d+"（すべて空想）",what);
+      const bg=[];for(let i=0;i<3000;i++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(2500+R()*2000);bg.push(q.x,q.y,q.z);}scene.add(points(bg,col,4,.5));}});});

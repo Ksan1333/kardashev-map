@@ -39,19 +39,25 @@
   bar.addEventListener("keydown",e=>{if(e.key==="Enter"){const p=e.target.closest(".spp");if(p)pick(+p.dataset.i);}});
   if(typeof SPZ==="undefined"||!SPZ){document.getElementById("spscene").innerHTML=`<div class="noscene">3D表示を読み込めませんでした。</div>`;render();return;}
   const SHORT={leo:"地球周回",moon:"地球と月",inner:"内太陽系",outer:"外太陽系",helio:"太陽圏",stars:"近くの恒星",nebula:"星雲",galaxy:"天の川銀河",local:"局部銀河群",lania:"ラニアケア",web:"大規模構造",shape:"宇宙の形"};
-  function navSpec(){const lanes=[{id:"main",name:"本線",color:"#f4b942"}];const nodes=SPZ.LEVELS.map((L2,i)=>({id:L2.id,lane:"main",label:SHORT[L2.id]||L2.name,num:i+1,col:i}));const colOf={};nodes.forEach(n=>colOf[n.id]=n.col);
-    SPZ.LANES.forEach(l=>{const br=SPZ.ALL.filter(L2=>L2.br&&L2.lane===l.id);lanes.push({id:l.id,name:l.name,color:l.color,from:l.from,dash:l.id==="mv"||l.id==="uv"});br.forEach((L2,j)=>{const n={id:L2.id,lane:l.id,label:L2.short||L2.name,col:(colOf[l.from]??0)+.85+j*1.0,fic:!!(L2.fic||L2.id==="mv")};nodes.push(n);colOf[L2.id]=n.col;});});
-    return {lanes,nodes,cw:78};}
+  function navSpec(){const lanes=[{id:"main",name:"本線（実在の宇宙）",color:"#f4b942"}];const nodes=SPZ.LEVELS.map((L2,i)=>({id:L2.id,lane:"main",label:L2.short||SHORT[L2.id]||L2.name,num:i+1,col:i}));const colOf={};nodes.forEach(n=>colOf[n.id]=n.col);
+    // 空想の上位層（マルチバース→法則の海→オムニバース）は本線の延長として点線で描く
+    const up=["mv","meta","omni"].map(id=>SPZ.ALL.find(x=>x.id===id)).filter(Boolean);const last=SPZ.LEVELS[SPZ.LEVELS.length-1].id;
+    lanes.push({id:"upx",name:"ここから先は空想（さらに外側）",color:"#c99cf2",from:last,dash:1,inline:1});up.forEach((L2,j)=>{const n={id:L2.id,lane:"upx",label:L2.short||L2.name,num:SPZ.LEVELS.length+1+j,col:SPZ.LEVELS.length+j,fic:1};nodes.push(n);colOf[L2.id]=n.col;});
+    const GRP={ga:"gx",gc:"gx"},seen={};
+    SPZ.LANES.forEach(l=>{if(l.id==="mv")return;const gid=GRP[l.id]||l.id;const br=SPZ.ALL.filter(L2=>L2.br&&L2.lane===l.id);
+      if(!seen[gid]){seen[gid]=1;lanes.push({id:gid,name:gid==="gx"?"銀河の中（近く・遠く）":l.name,color:l.color,from:l.from,dash:["uv","mt","om"].includes(l.id)});}
+      const base=nodes.filter(n=>n.lane===gid).length;br.forEach((L2,j)=>{const n={id:L2.id,lane:gid,label:L2.short||L2.name,col:(colOf[l.from]??0)+.8+(base+j)*.9,fic:!!L2.fic};nodes.push(n);});});
+    return {lanes,nodes,cw:74};}
   const drawNav=()=>GITNAV.render(lv,navSpec(),SPZ.levelId,id=>{const i=SPZ.ALL.findIndex(x=>x.id===id);if(i>=0)SPZ.go(i,null,"out");});
   SPZ.init(document.getElementById("spscene"),document.getElementById("splabels"),info,document.getElementById("spfade"));
   const pick=i=>{const [,,l,o]=P[i];SPZ.goId(l,o);};window.SP_P=P;window.SP_PICK=pick;
 
-  info.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.shape){window.UNI_SHAPE=b.dataset.shape;SPZ.go(SPZ.level);return;}if(b.dataset.unfocus)SPZ.unfocus();if(b.dataset.o2)SPZ.focusOn(b.dataset.o2);if(b.dataset.earth)toEarth();if(b.dataset.map!==undefined){window.SPZ_MAP=b.dataset.map==="1";if(!b.dataset.br){SPZ.go(SPZ.level);return;}}if(b.dataset.br)SPZ.goBr(b.dataset.br);if(b.dataset.back)SPZ.outward();});
+  info.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.shape){window.UNI_SHAPE=b.dataset.shape;SPZ.go(SPZ.level);return;}if(b.dataset.unfocus)SPZ.unfocus();if(b.dataset.o2)SPZ.focusOn(b.dataset.o2);if(b.dataset.earth)toEarth();if(b.dataset.pmap){window.toPlanetMap&&window.toPlanetMap(b.dataset.pmap);return;}if(b.dataset.map!==undefined){window.SPZ_MAP=b.dataset.map==="1";if(!b.dataset.br){SPZ.go(SPZ.level);return;}}if(b.dataset.br)SPZ.goBr(b.dataset.br);if(b.dataset.back)SPZ.outward();});
   document.getElementById("sp-out").onclick=()=>SPZ.outward();
   document.getElementById("sp-in").onclick=()=>SPZ.inward();
   document.getElementById("sp-home").onclick=()=>SPZ.home();
   let curObj=null;
-  function sync2(){const id=SPZ&&SPZ.LEVELS[SPZ.level]?.id;bar.querySelectorAll(".spp").forEach(p=>{const q=P[+p.dataset.i];p.classList.toggle("lv",q[2]===id);p.classList.toggle("sel",q[3]===curObj&&q[2]===id);});}
+  function sync2(){const id=SPZ&&SPZ.LEVELS[SPZ.level]?.id;bar.querySelectorAll(".spp").forEach(p=>{const q=P[+p.dataset.i];const lq=SPZ.SUBMAP[q[2]]||q[2];p.classList.toggle("lv",lq===id);p.classList.toggle("sel",q[3]===curObj&&lq===id);});}
   window.addEventListener("spz-level",e=>{drawNav();curObj=null;sync2();});drawNav();
   window.addEventListener("spz-obj",e=>{curObj=e.detail;sync2();});
   // 地球へ降りる／宇宙へ上がる

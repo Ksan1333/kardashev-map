@@ -42,6 +42,7 @@ const r={
   "__WORLDMAP__":"worldmap.js",
   "__GITNAV__":"gitnav.js",
   "__SPACEVIEW__":"spaceview.js",
+  "__PLANETMAP__":"planetmap.js",
   "__TYPE1__":"type1data.js",
   "__TYPE2__":"t2data.js",
   "__TYPE3__":"t3data.js",

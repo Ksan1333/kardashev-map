@@ -58,8 +58,9 @@
     T(()=>TREE.forEach(f=>f.nodes.forEach(n=>add("tree",n[1],`${f.name}・${fy(n[3])}〜${n[3]>2026.5?"（もしも）":""}`,n[6]||"",()=>go.tree(f.key,n[0],n[3]),n[3]))));
     T(()=>COUNTRIES.list.forEach(c=>add("country",`${c.flag||""} ${c.ja}`,`${c.reg}・${c.sub}${c.cap?"・首都 "+c.cap:""}`,`${c.en} ${(c.lang||[]).join(" ")} ${(c.cur||[]).join(" ")}`,()=>go.country(c.c3))));
     T(()=>MAP.pins.forEach(p=>add("place",p.name,`ランドマーク・${(CAT[p.cat]||["その他"])[0]}`,p.desc||"",()=>go.place(p.id))));
-    T(()=>(window.SP_P||[]).forEach((q,i)=>{const L=SPZ.LEVELS.find(x=>x.id===q[2]);add("space",q[0],`${L?L.name:""}`,"",()=>go.sp(i));}));
+    T(()=>(window.SP_P||[]).forEach((q,i)=>{const L=SPZ.LEVELS.find(x=>x.id===(SPZ.SUBMAP[q[2]]||q[2]));add("space",q[0],`${L?L.name:""}`,"",()=>go.sp(i));}));
     T(()=>SPZ.LEVELS.forEach((L,i)=>{const d=window.LVINFO&&LVINFO[L.id];add("space",L.name,`宇宙のスケール ${i+1}/${SPZ.LEVELS.length}`,L.desc+(d?" "+d.f.map(x=>x.join(" ")).join(" ")+" "+d.p.join(" "):""),()=>go.splv(i));}));
+    T(()=>Object.entries(SPZ.BODY||{}).forEach(([k,B])=>{if(k==="earth")return;(B.feat||[]).forEach(([fid,nm,la,lo,d])=>add("space",nm,`${B.name}の地名（地図）`,d||"",()=>window.toPlanetMap&&window.toPlanetMap(k,fid)));add("space",B.name+"の地図",`世界地図のページ・${(B.feat||[]).length}地名`,B.desc||"",()=>window.toPlanetMap&&window.toPlanetMap(k));}));
     T(()=>(SPZ.ALL||[]).filter(L=>L.br).forEach(L=>add("space",L.name,"宇宙マップの分岐"+(L.fic||L.id==="mv"?"（空想）":""),L.desc||"",()=>go.brv(L.id))));
     T(()=>MICRO.LEVELS.forEach((L,i)=>{const d=window.LVINFO&&LVINFO[L.id];add("micro",L.name,`ミクロのスケール ${i+1}/${MICRO.LEVELS.length}・${L.scale}`,L.desc+(d?" "+d.f.map(x=>x.join(" ")).join(" ")+" "+d.p.join(" "):""),()=>go.micro(L.id));}));
     T(()=>ORGS.forEach(o=>add("life",o[1],`${o[2]}・${o[3]}`,`${o[4]} ${o[5]}`,()=>go.micro("life",o[0]))));
