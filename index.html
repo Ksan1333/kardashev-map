@@ -1874,7 +1874,9 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
 }`;
   function mapMat(kind,off=0){const m=new THREE.ShaderMaterial({uniforms:{uKind:{value:PLK[kind]},uOff:{value:off},uSun:{value:V(0,0,1)},uTime:{value:0}},vertexShader:"varying vec3 vP;varying vec3 vN;varying vec3 vW;varying vec2 vUv;void main(){vUv=uv;vP=vec3(1.,0.,0.);vN=vec3(0.,0.,1.);vW=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",fragmentShader:MAP_FS});anims.push(t=>m.uniforms.uTime.value=t);return m;}
 
-  const gal=(l,b)=>{l*=Math.PI/180;b*=Math.PI/180;return V(Math.cos(b)*Math.cos(l),Math.sin(b),Math.cos(b)*Math.sin(l));};
+  const gal=(l,b)=>{l*=Math.PI/180;b*=Math.PI/180;return V(Math.cos(b)*Math.cos(l),Math.sin(b),Math.cos(b)*Math.sin(l));};const gdir=gal;
+  // 赤経・赤緯（度）→ 銀経・銀緯（度）。J2000の銀河北極（赤経192.859°・赤緯27.128°）を使う
+  const eq2gal=(ra,dec)=>{const D=Math.PI/180,aG=192.85948*D,dG=27.12825*D,lN=122.93192*D;const a=ra*D,d=dec*D;const sb=Math.sin(d)*Math.sin(dG)+Math.cos(d)*Math.cos(dG)*Math.cos(a-aG);const b=Math.asin(sb);const y=Math.cos(d)*Math.sin(a-aG),x=Math.sin(d)*Math.cos(dG)-Math.cos(d)*Math.sin(dG)*Math.cos(a-aG);return [((lN-Math.atan2(y,x))/D+360)%360,b/D];};
   function diskTex(){return canvasTex("disk",256,256,(g,w,h)=>{const r=g.createRadialGradient(128,128,40,128,128,128);r.addColorStop(0,"rgba(0,0,0,0)");r.addColorStop(.32,"rgba(255,250,230,1)");r.addColorStop(.5,"rgba(255,170,60,.95)");r.addColorStop(.75,"rgba(200,70,20,.5)");r.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=r;g.fillRect(0,0,w,h);
     g.globalCompositeOperation="destination-out";for(let i=0;i<60;i++){g.globalAlpha=.25*R();g.beginPath();g.arc(128,128,50+R()*75,R()*6.3,R()*6.3+.6);g.lineWidth=1+R()*3;g.stroke();}});}
   function blackHole(r,name){return blackHoleFX(r*1.15);}
@@ -2073,7 +2075,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
         ["altair","アルタイル（彦星）",19.85,8.9,16.7,"#f2f6ff",1.3,"夏の大三角の一つ。七夕の彦星。"],["vega","ベガ（織姫星）",18.62,38.8,25,"#cfe0ff",1.5,"夏の大三角の一つ。七夕の織姫星。約1万2000年後には北極星になる。"],
         ["trappist","TRAPPIST-1",23.1,-5.0,40.7,"#ff6a4a",.6,"地球サイズの惑星が7つ見つかった赤色矮星。そのうち3つは液体の水が存在しうる位置にある。"]];
       if(T2(5000))t2Stars();
-      S.forEach(([id,nm,ra,dec,d,col,sz,ds])=>{const a=ra/24*6.283,b=dec*Math.PI/180;const p=V(Math.cos(b)*Math.cos(a),Math.sin(b),Math.cos(b)*Math.sin(a)).multiplyScalar(d*10);
+      S.forEach(([id,nm,ra,dec,d,col,sz,ds])=>{const [gl0,gb0]=eq2gal(ra*15,dec);const p=gal(gl0,gb0).multiplyScalar(d*10);
         const c=star(sz*.5,col,9);c.position.copy(p);scene.add(c);
         if(d>0){scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(p.x,0,p.z),p]),new THREE.LineBasicMaterial({color:"#4a5a80",transparent:true,opacity:.6})));}
         obj(id,nm,c,14,ds,d?d+"光年":"—");});
@@ -2107,25 +2109,26 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
     }},
    {id:"galaxy",name:"天の川銀河",unit:"1目盛＝1000光年",desc:"約1000億〜4000億個の恒星が直径約10万光年の円盤に集まる。太陽は中心から約2万6000光年、オリオン腕にある。",dist:150,min:4,max:500,
     build(){scene.add(new THREE.AmbientLight("#fff",1));const MW={type:"barred",size:110,arms:4,minor:1,pitch:.24,bulge:.11,dust:.9,c1:"#ffe0b0",c2:"#c8d6ff",c3:"#ff6a9a",seed:4};
-      const g=new THREE.Group();scene.add(g);g.add(galFX(MW));g.add(galStars({...MW,n:70000,ps:.32}));anims.push(t=>{g.rotation.y=t*.01;});
+      const SA=(Math.PI/2+.5*Math.PI/2)+Math.log((26/55)/.1)/MW.pitch,SUNP=V(Math.cos(SA)*26,0,-Math.sin(SA)*26),PHI=Math.atan2(-SUNP.z,-SUNP.x),YA=V(0,1,0),gl=(l,b)=>gal(l,b).applyAxisAngle(YA,-PHI),SUNW=SUNP.clone().applyAxisAngle(YA,PHI);
+      const g=new THREE.Group();g.rotation.y=PHI;scene.add(g);g.add(galFX(MW));g.add(galStars({...MW,n:70000,ps:.32*(window.__SPZ_GALPS||1)}));
       const core=glowBB("#ffd9a0",22,0);scene.add(core);
       const armAt=(k,rn)=>{const th=k*Math.PI/2+Math.log(rn/.1)/MW.pitch;return V(Math.cos(th)*rn*55,0,-Math.sin(th)*rn*55);};
       [["perseus","ペルセウス腕",0,.62,"太陽系の外側を通る大きな腕。"],["scutum","たて・ケンタウルス腕",2,.55,"銀河の中心をはさんで反対側を回る、もう1本の大きな腕。"],["sagitt","いて腕",1,.5,"太陽系の内側にある細い腕。"],["norma","じょうぎ腕",3,.4,"中心の棒の先から伸びる腕。"]].forEach(([id,nm,k,rn,d])=>{const n=new THREE.Object3D();n.position.copy(armAt(k,rn));g.add(n);obj(id,nm,n,40,d,"渦巻きの腕");});
       const bh=blackHole(.35);scene.add(bh);obj("sgra","ブラックホール いて座A*（銀河の中心）",bh,5,"太陽の約400万倍の質量の超大質量ブラックホール。2022年に撮影された。周りを回る星の動きから存在が確かめられ、2020年ノーベル物理学賞（模型は誇張）。","約2万6000光年");
-      const oc=[];const oc0=gal(309,15).multiplyScalar(17);for(let i=0;i<1500;i++){const r=Math.pow(R(),2)*.8,a=R()*6.28,u=R()*2-1;oc.push(oc0.x+Math.cos(a)*Math.sqrt(1-u*u)*r,oc0.y+u*r,oc0.z+Math.sin(a)*Math.sqrt(1-u*u)*r);}
+      const oc=[];const oc0=gl(309,15).multiplyScalar(17);for(let i=0;i<1500;i++){const r=Math.pow(R(),2)*.8,a=R()*6.28,u=R()*2-1;oc.push(oc0.x+Math.cos(a)*Math.sqrt(1-u*u)*r,oc0.y+u*r,oc0.z+Math.sin(a)*Math.sqrt(1-u*u)*r);}
       const sa=(Math.PI/2+.5*Math.PI/2)+Math.log((26/55)/.1)/MW.pitch;const sunP=V(Math.cos(sa)*26,0,-Math.sin(sa)*26);const ocg=points(oc,"#ffe9c4",.25,.9);ocg.position.copy(sunP);g.add(ocg);const ocn=new THREE.Object3D();ocn.position.copy(oc0).add(sunP);g.add(ocn);
       obj("omegacen","オメガ星団（球状星団）",ocn,6,"約1000万個の星が集まる、天の川銀河で最大の球状星団。","約1万7000光年");
       const sn=new THREE.Object3D();g.add(sn);sn.position.copy(sunP);const sm=sprite("#f4b942",3,1);sn.add(sm);obj("sunpos","太陽系の位置",sn,12,"オリオン腕の中。銀河を約2億3000万年かけて1周する。","中心から約2万6000光年");if(typeof window.KYEAR==="number"&&window.KYEAR>=6000)t3Galaxy(g,sn);
       const mw=new THREE.Object3D();mw.position.set(0,30,0);scene.add(mw);obj("mw","天の川銀河",mw,150,"夜空の天の川は、この円盤を内側から見た姿。","直径約10万光年");
-      [["lmc","大マゼラン雲",V(-30,-60,140),6],["smc","小マゼラン雲",V(-50,-80,175),4]].forEach(([id,nm,p,s])=>{const pts=[];for(let i=0;i<2500;i++)pts.push(p.x+(R()-.5)*s*2,p.y+(R()-.5)*s,p.z+(R()-.5)*s*2);scene.add(points(pts,"#cfe0ff",.6,.8));const n=new THREE.Object3D();n.position.copy(p);scene.add(n);obj(id,nm,n,40,"天の川銀河を回る小さな伴銀河。南半球で肉眼で見える。",id==="lmc"?"約16万光年":"約20万光年");});
+      [["lmc","大マゼラン雲",SUNW.clone().add(gal(280.5,-32.9).multiplyScalar(160)),6],["smc","小マゼラン雲",SUNW.clone().add(gal(302.8,-44.3).multiplyScalar(200)),4]].forEach(([id,nm,p,s])=>{const pts=[];for(let i=0;i<2500;i++)pts.push(p.x+(R()-.5)*s*2,p.y+(R()-.5)*s,p.z+(R()-.5)*s*2);scene.add(points(pts,"#cfe0ff",.6,.8));const n=new THREE.Object3D();n.position.copy(p);scene.add(n);obj(id,nm,n,40,"天の川銀河を回る小さな伴銀河。南半球で肉眼で見える。",id==="lmc"?"約16万光年":"約20万光年");});
     }},
    {id:"local",name:"局部銀河群",unit:"1目盛＝1万光年",desc:"天の川銀河とアンドロメダ銀河を中心とする、80以上の銀河の集まり。約45億年後、二つの銀河は衝突・合体すると予測されている。",dist:520,min:6,max:1200,
     build(){scene.add(new THREE.AmbientLight("#fff",1));const SPEC2={mw:{type:"barred",arms:4,minor:1,pitch:.24,bulge:.11,c1:"#ffe0b0",c2:"#c8d6ff",seed:4},an:{type:"spiral",arms:2,pitch:.22,bulge:.13,ring:.62,c1:"#ffe2b8",c2:"#c8d4ff",c3:"#ff7aa0"},tr:{type:"flocculent",arms:2,pitch:.35,bulge:.06,c1:"#ffe8d0",c2:"#bcd0ff"}};
       const gal=(cx,tilt,r,n,col,rot)=>{const sp=r===5?SPEC2.mw:r===11?SPEC2.an:SPEC2.tr;const g=new THREE.Group();g.add(galFX({...sp,size:r*2,gain:1.7,ring:0}));g.add(galStars({...sp,size:r*2,n:Math.round(n*.5),ps:r*.012}));g.position.copy(cx);g.rotation.set(tilt,0,rot);scene.add(g);return g;};
       const mw=gal(V(0,0,0),.2,5,8000,"#dfe8ff",0);obj("mw","天の川銀河",mw,30,"私たちの銀河。","—");
-      const an=gal(V(230,40,-90),1.1,11,16000,"#ffe7cf",.5);obj("andromeda","アンドロメダ銀河",an,60,"約1兆個の恒星。肉眼で見える最も遠い天体の一つ。秒速約110kmで近づいている。","約250万光年");if(typeof window.KYEAR==="number"&&window.KYEAR>=1000000){const pr=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),V(230,40,-90)]),new THREE.LineDashedMaterial({color:"#7ee0ff",dashSize:6,gapSize:4}));pr.computeLineDistances();scene.add(pr);const pd=sprite("#7ee0ff",6,1);scene.add(pd);anims.push(t=>pd.position.copy(V(230,40,-90).multiplyScalar((t*.01)%1)));const pm=new THREE.Object3D();pm.position.set(115,20,-45);scene.add(pm);obj("t3andro","アンドロメダへの探査（もしも）",pm,120,"Type III文明が隣の銀河へ送る探査機。約250万光年の旅で、光速に近くても数百万年かかる。","約250万光年");}
-      const tr=gal(V(250,-30,40),.6,3,4000,"#cfe2ff",1);obj("triangulum","さんかく座銀河",tr,24,"局部銀河群で3番目に大きい渦巻銀河。","約273万光年");
-      const dw=[];for(let i=0;i<70;i++){const c=R()<.5?V(0,0,0):V(230,40,-90);const a=R()*6.28,u=R()*2-1,r=10+R()*60;dw.push(c.x+Math.cos(a)*r*Math.sqrt(1-u*u),c.y+u*r,c.z+Math.sin(a)*r*Math.sqrt(1-u*u));}scene.add(points(dw,"#c9d6ff",2.4,.8));
+      const AP=gdir(121.2,-21.6).multiplyScalar(250);const an=gal(AP,1.1,11,16000,"#ffe7cf",.5);obj("andromeda","アンドロメダ銀河",an,60,"約1兆個の恒星。肉眼で見える最も遠い天体の一つ。秒速約110kmで近づいている。","約250万光年");if(typeof window.KYEAR==="number"&&window.KYEAR>=1000000){const pr=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),AP]),new THREE.LineDashedMaterial({color:"#7ee0ff",dashSize:6,gapSize:4}));pr.computeLineDistances();scene.add(pr);const pd=sprite("#7ee0ff",6,1);scene.add(pd);anims.push(t=>pd.position.copy(AP.multiplyScalar((t*.01)%1)));const pm=new THREE.Object3D();pm.position.copy(AP).multiplyScalar(.5);scene.add(pm);obj("t3andro","アンドロメダへの探査（もしも）",pm,120,"Type III文明が隣の銀河へ送る探査機。約250万光年の旅で、光速に近くても数百万年かかる。","約250万光年");}
+      const tr=gal(gdir(133.6,-31.3).multiplyScalar(273),.6,3,4000,"#cfe2ff",1);obj("triangulum","さんかく座銀河",tr,24,"局部銀河群で3番目に大きい渦巻銀河。","約273万光年");
+      const dw=[];for(let i=0;i<70;i++){const c=R()<.5?V(0,0,0):AP;const a=R()*6.28,u=R()*2-1,r=10+R()*60;dw.push(c.x+Math.cos(a)*r*Math.sqrt(1-u*u),c.y+u*r,c.z+Math.sin(a)*r*Math.sqrt(1-u*u));}scene.add(points(dw,"#c9d6ff",2.4,.8));
       const n=new THREE.Object3D();n.position.set(-80,60,80);scene.add(n);obj("dwarfs","矮小銀河たち",n,200,"数十個の小さな銀河が二大銀河の周りを回る。","");
     }},
    {id:"lania",name:"ラニアケア超銀河団",unit:"1目盛＝100万光年",desc:"約10万個の銀河が、重力に引かれて「グレート・アトラクター」の方向へ流れていく、直径約5億光年の構造。2014年に名付けられた（ハワイ語で「広大な天」）。",dist:780,min:10,max:1800,
@@ -2201,11 +2204,11 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
   const MERGE=[
    {id:"em",name:"地球と月",short:"地球と月",parts:[["leo",1],["moon",1]],unit:"1目盛＝1000km",dist:150,min:7.5,max:4000,desc:"地球のまわりの人工衛星から、約38万km先の月まで。"+SUBI.leo.desc+" "+SUBI.moon.desc},
    {id:"solar",name:"太陽系",short:"太陽系",env:{__SPZ_ZR:40000},parts:[["inner",.1],["outer",1],["helio",1000]],unit:"1目盛＝1500万km（0.1天文単位）",dist:420,min:1.2,max:5e6,desc:"太陽と惑星、カイパーベルト、太陽圏、オールトの雲まで。"+SUBI.inner.desc+" "+SUBI.outer.desc+" ズームアウトを続けると太陽圏とオールトの雲（約1.6光年）まで広がる。惑星の大きさは誇張しています。"},
-   {id:"galaxy",name:"近くの恒星から天の川銀河まで",short:"恒星と銀河",env:{__SPZ_NEBK:.3},shift:{anchor:"sunpos",parts:["galaxy","local"],minDist:1.2e5},nearParts:{parts:["stars","nebula"],maxDist:6e5},parts:[["stars",1],["nebula",1000],["galaxy",10000],["local",100000]],unit:"1目盛＝0.1光年",dist:320,min:2,max:1.2e8,iso:1,desc:SUBI.stars.desc+" ズームアウトすると数千光年先の星雲、さらに天の川銀河全体、局部銀河群まで続く。"+SUBI.nebula.desc+" "+SUBI.galaxy.desc+" "+SUBI.local.desc},
+   {id:"galaxy",name:"近くの恒星から天の川銀河まで",short:"恒星と銀河",env:{__SPZ_NEBK:.3,__SPZ_GALPS:.45},shift:{anchor:"sunpos",parts:["galaxy","local"],minDist:1.6e5},nearParts:{stars:1.6e5,nebula:6e5},parts:[["stars",1],["nebula",1000],["galaxy",10000],["local",100000]],unit:"1目盛＝0.1光年",dist:320,min:2,max:1.2e8,iso:1,desc:SUBI.stars.desc+" ズームアウトすると数千光年先の星雲、さらに天の川銀河全体、局部銀河群まで続く。"+SUBI.nebula.desc+" "+SUBI.galaxy.desc+" "+SUBI.local.desc},
    {id:"lania",name:"超銀河団と大規模構造",short:"大規模構造",hide:["home"],parts:[["lania",1],["web",100]],unit:"1目盛＝100万光年",dist:780,min:10,max:240000,desc:SUBI.lania.desc+" ズームアウトすると宇宙の大規模構造へ。"+SUBI.web.desc},
    {id:"shape",name:SUBI.shape.name,short:"宇宙の形",parts:[["shape",1]],unit:SUBI.shape.unit,dist:SUBI.shape.dist,min:SUBI.shape.min,max:SUBI.shape.max,desc:SUBI.shape.desc}];
   const SUBMAP={};MERGE.forEach(M=>M.parts.forEach(([id])=>SUBMAP[id]=M.id));
-  const LEVELS=MERGE.map(M=>({...M,build(){const root=scene;const seen=new Set(M.hide||[]);Object.assign(window,M.env||{});let sbox=null;if(M.shift){sbox=new THREE.Group();root.add(sbox);}M.parts.forEach(([id,k])=>{const g=new THREE.Group();g.scale.setScalar(k);(sbox&&M.shift.parts.includes(id)?sbox:root).add(g);if(M.nearParts&&M.nearParts.parts.includes(id)){const md=M.nearParts.maxDist;anims.push(()=>{g.visible=cam.dist<md;});}const n0=objs.length;scene=g;try{SUBI[id].build();}finally{scene=root;}
+  const LEVELS=MERGE.map(M=>({...M,build(){const root=scene;const seen=new Set(M.hide||[]);Object.assign(window,M.env||{});let sbox=null;if(M.shift){sbox=new THREE.Group();root.add(sbox);}M.parts.forEach(([id,k])=>{const g=new THREE.Group();g.scale.setScalar(k);(sbox&&M.shift.parts.includes(id)?sbox:root).add(g);if(M.nearParts&&M.nearParts[id]){const md=M.nearParts[id];anims.push(()=>{g.visible=cam.dist<md;});}const n0=objs.length;scene=g;try{SUBI[id].build();}finally{scene=root;}
       g.traverse(o=>{const m=o.material;if(!m)return;if(m.isPointsMaterial&&m.sizeAttenuation!==false)m.size*=k;if(m.uniforms&&m.uniforms.uSize)m.uniforms.uSize.value*=k;});
       for(let i=n0;i<objs.length;i++){objs[i].view*=k;}});
       if(sbox){root.updateMatrixWorld(true);const an=objs.find(o=>o.id===M.shift.anchor);if(an){const wp=new THREE.Vector3();an.node.getWorldPosition(wp);sbox.position.sub(wp);root.updateMatrixWorld(true);}}if(sbox&&M.shift.minDist){const bx=sbox,md=M.shift.minDist;anims.push(()=>{bx.visible=cam.dist>md;});}
@@ -2618,7 +2621,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
   function outward(){const L=ALL[LV];if(L.up){const u=idx(L.up);if(u>=0)go(u,null,"out",ALL[u].downObj);return;}if(L.top)return;if(L.loop){window.dispatchEvent(new CustomEvent("spz-loop"));return;}
     if(L.br){const pi=idx(L.parent);if(pi>=0)go(pi,null,"out",L.pobj);return;}if(LV<LEVELS.length-1)go(LV+1,null,"out",GATE[LEVELS[LV+1].id]);else go(idx("mv"),null,"out","u_home");}
   // ズームインの行き先：注目中（またはカーソル付近）の天体を優先し、勝手に別の場所へ飛ばない
-  const GATE={em:"earth",solar:"earth",galaxy:"sun",lania:"lg",shape:"uni_shape"};window.SPZ_SETDIST=d=>{cam.goal=d;cam.dist=d;};
+  const GATE={em:"earth",solar:"earth",galaxy:"sun",lania:"lg",shape:"uni_shape"};window.SPZ_SETDIST=d=>{cam.goal=d;cam.dist=d;};window.SPZ_DIRS=ids=>ids.map(id=>{const o=objs.find(x=>x.id===id);if(!o)return id+":-";const p=new THREE.Vector3();o.node.getWorldPosition(p);const l=(Math.atan2(p.z,p.x)*180/Math.PI+360)%360,b=Math.atan2(p.y,Math.hypot(p.x,p.z))*180/Math.PI;return `${id}: l=${l.toFixed(0)} b=${b.toFixed(0)} r=${p.length().toExponential(2)}`;}).join("\n");
   let ptrW=null;const PLMAP=new Set(["mercury","venus","mars","jupiter","saturn","uranus","neptune","pluto","moon"]);
   function pickNear(){const w=el.clientWidth,h=el.clientHeight;const fresh=ptrW&&performance.now()-ptrW.t<1500;const px=fresh?ptrW.x:w/2,py=fresh?ptrW.y:h/2;let best=null,bd=1e9;const p=new THREE.Vector3();
     objs.forEach(o=>{if(!o.node.visible)return;o.node.getWorldPosition(p);p.project(camera);if(p.z>1||p.z<-1)return;const d=Math.hypot((p.x*.5+.5)*w-px,(-p.y*.5+.5)*h-py);if(d<bd){bd=d;best=o;}});return bd<Math.min(w,h)*.3?best:null;}
