@@ -12,6 +12,7 @@ const r={
   "__TREEADD__":"treeadd.js",
   "__TREEADD2__":"treeadd2.js",
   "__TREEADD3__":"treeadd3.js",
+  "__LAYOUT__":"layout.js",
   "__GRAPHJS__":"graph.js",
   "__PALEO__":"paleo.js",
   "__PLATES__":"plates.json",
