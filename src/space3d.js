@@ -139,6 +139,69 @@ __SPACEPLANET__
     const md=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,1.74,0),V(0,30,0)]),new THREE.LineBasicMaterial({color:"#7ee0ff",transparent:true,opacity:.5}));m.add(md);
     const cn=new THREE.Object3D();cn.position.set(0,1.9,0);m.add(cn);obj("t1mooncity","月面都市と質量投射機（もしも）",cn,8,"南極の氷を水と燃料に変えて数万人が暮らす。電磁レールで月の資源を宇宙へ打ち出し、建設材料にする。","約384,400km");
   }
+
+  // ---- Type I（もしも）：地球と月のあいだ、太陽系、近くの恒星 ----
+  function t1Cis(m){const SUN=V(-1,.1,.4).normalize();
+    // 衛星の網（数十万基）
+    const cs=[];for(let i=0;i<4000;i++){const u=R()*2-1,a=R()*6.283,r=6.371+.45+R()*.8;cs.push(Math.cos(a)*Math.sqrt(1-u*u)*r,u*r*.9,Math.sin(a)*Math.sqrt(1-u*u)*r);}const cp=points(cs,"#9fe8ff",.06,.75);scene.add(cp);anims.push(t=>cp.rotation.y=t*.08);
+    const cn=new THREE.Object3D();cn.position.set(0,7.6,0);scene.add(cn);obj("t1const","地球を包む衛星の網（もしも）",cn,14,"通信・観測・測位の衛星が数十万基。2026年時点でも稼働中の衛星は1万基を超えている。ぶつかったときの破片が次の衝突を呼ぶ連鎖（ケスラー・シンドローム）を防ぐ管理が必須になる。","高度 約500〜1200km");
+    // ラグランジュ点L4・L5の宇宙植民地
+    [[1,"L4"],[-1,"L5"]].forEach(([sg,nm])=>{const g=new THREE.Group();g.position.set(384.4*Math.cos(Math.PI/3),0,sg*384.4*Math.sin(Math.PI/3));
+      const c=new THREE.Mesh(new THREE.CylinderGeometry(2.2,2.2,9,24,1,true),smat({color:"#e6ebf2",metalness:.4,roughness:.35,side:THREE.DoubleSide}));c.rotation.z=Math.PI/2;g.add(c);g.add(sprite("#ffe9a8",14,.35));
+      for(const k of[-1,1]){const w=new THREE.Mesh(new THREE.BoxGeometry(9,.05,3),smat({color:"#9fd8ff",emissive:"#3a7ab0",transparent:true,opacity:.75}));w.position.y=k*3;g.add(w);}
+      anims.push(t=>c.rotation.y=t*.5);scene.add(g);if(sg>0)obj("t1l45","L4・L5の宇宙植民地（もしも）",g,60,"地球と月の重力がつり合うラグランジュ点（月の軌道の60°前と後ろ）は、物が自然にとどまる安定した場所。1970年代にオニールが、ここに数万人が住む回転式の植民地を提案した。","地球から約38万km");});
+    // 地球〜月の定期便
+    const ships=[];for(let i=0;i<5;i++){const sh=sprite(i%2?"#ffd27a":"#7ee0ff",3,1);scene.add(sh);ships.push([sh,i/5,i%2]);}
+    const route=(k,back)=>{const a=V(7.5,0,0),b=V(382,0,0),c=V(195,back?-55:55,back?-40:40);const u=1-k;return a.clone().multiplyScalar(u*u).add(c.clone().multiplyScalar(2*u*k)).add(b.clone().multiplyScalar(k*k));};
+    anims.push(t=>ships.forEach(([sh,o,bk])=>{const k=(t*.03+o)%1;sh.position.copy(route(bk?1-k:k,bk));}));
+    const rn=new THREE.Object3D();rn.position.copy(route(.5,0));scene.add(rn);obj("t1shuttle","地球と月を結ぶ定期便（もしも）",rn,60,"地球の低軌道の燃料補給基地と月を、再使用できる宇宙船が数日で往復する。月の氷から作った燃料を使えば、地球から重い燃料を打ち上げずにすむ。","片道 約3日");
+    const dep=sphere(.6,smat({color:"#ffd27a",emissive:"#5a3a00"}),10);dep.position.set(8.2,1,2);scene.add(dep);obj("t1depot","低軌道の燃料補給基地（もしも）",dep,6,"宇宙で燃料を積み直す「ガソリンスタンド」。2020年代から軌道上での燃料移送の実験が始まっている。","高度 約400km");
+    // 月周回ステーション
+    const gw=new THREE.Group();const gb=new THREE.Mesh(new THREE.CylinderGeometry(.35,.35,1.8,12),smat({color:"#e6ebf2",metalness:.4}));gb.rotation.z=Math.PI/2;gw.add(gb);gw.add(sprite("#7ee0ff",4,.6));scene.add(gw);
+    anims.push(t=>{const a=t*.4;gw.position.set(384.4+Math.cos(a)*4.5,Math.sin(a)*7,Math.sin(a)*2);});obj("t1gateway","月周回ステーション（もしも）",gw,12,"月を細長い楕円軌道で回る中継基地。月面と地球、さらに火星への出発点になる（NASAなどのゲートウェイ計画の発展形）。","月の上空 約3000〜7万km");
+    // 月の裏側の電波望遠鏡
+    const ft=new THREE.Group();const dish=new THREE.Mesh(new THREE.SphereGeometry(.45,24,8,0,Math.PI*2,0,.9),smat({color:"#dfe6ee",metalness:.5,side:THREE.DoubleSide}));dish.rotation.x=Math.PI;ft.add(dish);ft.position.set(-1.78,.3,0);m.add(ft);
+    obj("t1farside","月の裏側の電波望遠鏡（もしも）",ft,4,"月の裏側は地球の電波がまったく届かない、太陽系で最も静かな場所。クレーターをそのまま巨大なお椀形のアンテナにする構想（NASAのLCRT）。宇宙の「暗黒時代」の弱い電波を聴く。","月の裏側");
+    // L1の日よけ
+    const sh=new THREE.Mesh(new THREE.CircleGeometry(30,48),new THREE.MeshBasicMaterial({color:"#c8d8ff",transparent:true,opacity:.35,side:THREE.DoubleSide}));sh.position.copy(SUN.clone().multiplyScalar(1500));sh.lookAt(0,0,0);scene.add(sh);
+    const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),sh.position.clone()]),new THREE.LineDashedMaterial({color:"#c8d8ff",dashSize:20,gapSize:20,transparent:true,opacity:.4}));ln.computeLineDistances();scene.add(ln);
+    obj("t1shade","L1の日よけ（気候工学・もしも）",sh,300,"太陽と地球の間のラグランジュ点L1に、薄い膜を大量に浮かべて日差しを約2%さえぎり、温暖化を打ち消す構想（2006年、ロジャー・エンジェルが提案）。止めると急に暑くなる危うさもある。","地球から約150万km（太陽の方向）");}
+  function t1Inner(PL,ce){
+    // 火星の都市
+    const mc=[];for(let c=0;c<6;c++){const la0=(R()-.5)*1.2,lo0=c/6*6.283;for(let i=0;i<60;i++){const la=la0+(R()-.5)*.25,lo=lo0+(R()-.5)*.3;mc.push(Math.cos(la)*Math.cos(lo)*2.64,Math.sin(la)*2.64,Math.cos(la)*Math.sin(lo)*2.64);}}const mp=points(mc,"#ffc860",.3,1);PL.mars.children[0].add(mp);
+    const mn=new THREE.Object3D();mn.position.set(0,3.2,0);PL.mars.add(mn);obj("t1mars","火星の都市（もしも）",mn,18,"人口100万人を目標とする構想。ドームや地下で暮らし、氷から水と酸素を、大気のCO₂からメタン燃料を作る。地球との行き来に適した時期は約2年2か月ごと。","火星");
+    const fb=new THREE.Object3D();fb.position.set(-4.5,.8,0);PL.mars.add(fb);obj("t1phobos","フォボスの宇宙港（もしも）",fb,8,"火星の衛星フォボスは重力が小さく、着陸も出発も楽。火星に降りる前の中継基地の候補。日本のMMX計画がフォボスの砂を持ち帰る予定。","火星の上空 約6000km");
+    // 金星の浮遊都市
+    const vc=new THREE.Group();PL.venus.add(vc);for(let i=0;i<6;i++){const a=i/6*6.283;const b=sprite("#ffe9c0",1.6,.9);b.position.set(Math.cos(a)*4.6,.6,Math.sin(a)*4.6);vc.add(b);}anims.push(t=>vc.rotation.y=t*.6);
+    const vn=new THREE.Object3D();vn.position.set(0,5,0);PL.venus.add(vn);obj("t1venus","金星の雲の上の浮遊都市（もしも）",vn,18,"地表は460℃でも、高度約50〜55kmの雲の上は気圧が約0.5〜1気圧、気温が約30〜70℃で、太陽系で最も地球に近い環境。呼吸できる空気は金星の大気より軽いので、空気そのものが浮き袋になる（NASAのHAVOC構想）。","金星の上空 約50km");
+    // 小惑星帯：ケレスの補給基地とプシケの採掘
+    const cn=new THREE.Object3D();cn.position.copy(ce.position).add(V(0,3,0));scene.add(cn);ce.add(sprite("#7ee0ff",8,.6));obj("t1ceres","ケレスの補給基地（もしも）",cn,14,"ケレスは水の氷を多く含むので、水と燃料を作る小惑星帯の「港」の候補。","2.8天文単位");
+    const ps=sphere(1,smat({color:"#a8a8b0",metalness:.7,roughness:.35}),10);ps.scale.set(1.3,.9,1);ps.position.set(-250,-2,150);scene.add(ps);
+    const mi=[];for(let i=0;i<3;i++){const sh=sprite("#ffd27a",1.6,1);scene.add(sh);mi.push([sh,i]);}anims.push(t=>mi.forEach(([sh,i])=>{const a=t*.8+i*2.1;sh.position.set(-250+Math.cos(a)*5,-2+Math.sin(a*1.3)*2,150+Math.sin(a)*5);}));
+    obj("t1psyche","金属の小惑星プシケの採掘（もしも）",ps,14,"鉄やニッケルが主成分とみられる、幅約220kmの金属の小惑星。NASAの探査機サイキが2029年に到着予定。宇宙で使う金属を、地球から打ち上げずに手に入れる。","約2.9天文単位");
+    // 地球〜火星の航路（惑星の動きに合わせて毎フレーム更新）
+    const N=60,rg=new THREE.BufferGeometry();rg.setAttribute("position",new THREE.BufferAttribute(new Float32Array(N*3),3));const rl=new THREE.Line(rg,new THREE.LineBasicMaterial({color:"#7ee0ff",transparent:true,opacity:.6}));scene.add(rl);
+    const ship=sprite("#7ee0ff",3,1);scene.add(ship);const rn=new THREE.Object3D();scene.add(rn);const A=new THREE.Vector3(),B=new THREE.Vector3();
+    const pt=(k)=>{const c=A.clone().add(B).multiplyScalar(.5);c.add(c.clone().normalize().multiplyScalar(40));const u=1-k;return A.clone().multiplyScalar(u*u).add(c.multiplyScalar(2*u*k)).add(B.clone().multiplyScalar(k*k));};
+    anims.push(t=>{PL.earth.getWorldPosition(A);PL.mars.getWorldPosition(B);const par=rl.parent;if(par){par.worldToLocal(A);par.worldToLocal(B);}const P=rg.attributes.position;for(let i=0;i<N;i++){const q=pt(i/(N-1));P.setXYZ(i,q.x,q.y,q.z);}P.needsUpdate=true;ship.position.copy(pt((t*.06)%1));rn.position.copy(pt(.5));});
+    obj("t1route","地球〜火星の定期航路（もしも）",rn,80,"今の化学ロケットで片道約7か月。核融合や原子力のロケットなら数週間〜数か月に縮む。航路は、惑星の位置が合う約2年2か月ごとに開く。","最短 約5600万km");}
+  function t1Outer(g,id){
+    if(id==="jupiter"){const eb=new THREE.Object3D();g.add(eb);eb.add(sprite("#9fe8ff",3,.9));anims.push(t=>eb.position.set(Math.cos(t*1.9+1)*14,.6,Math.sin(t*1.9+1)*14));obj("t1europa","エウロパの氷の下の探査ロボット（もしも）",eb,10,"厚さ十数kmの氷を溶かしながら掘り進み、その下の海で生命を探す。エウロパの海の水は地球の海の約2倍あるとされる。","木星の衛星");
+      const cb=new THREE.Object3D();g.add(cb);cb.add(sprite("#ffd27a",3,.9));anims.push(t=>cb.position.set(Math.cos(t*.9+3)*23,.6,Math.sin(t*.9+3)*23));obj("t1callisto","カリストの有人基地（もしも）",cb,10,"木星の強い放射線帯の外側にあるので、人が滞在しやすい。木星系の有人探査の拠点として研究された（NASAのHOPE構想、2003年）。","木星の衛星");}
+    if(id==="saturn"){const tb=new THREE.Object3D();g.add(tb);tb.add(sprite("#ffb070",3,.9));anims.push(t=>tb.position.set(Math.cos(t*.6)*20,1.2,Math.sin(t*.6)*20));obj("t1titan","タイタンの基地（もしも）",tb,10,"大気は地球の約1.5倍の濃さで、宇宙服なしでも防寒具と酸素マスクで歩けるといわれる。メタンの湖で船を浮かべ、重力が小さいので腕に翼をつければ飛べるという試算もある。","土星の衛星");}}
+  function t1OuterEnd(){const dir=V(-.3,.35,.9).normalize(),end=dir.clone().multiplyScalar(2600);const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),end]),new THREE.LineDashedMaterial({color:"#ffd27a",dashSize:30,gapSize:20,transparent:true,opacity:.6}));l.computeLineDistances();scene.add(l);
+    const pr=sprite("#ffd27a",14,1);scene.add(pr);anims.push(t=>pr.position.copy(end).multiplyScalar(.2+((t*.02)%1)*.8));const n=new THREE.Object3D();n.position.copy(end).multiplyScalar(.6);scene.add(n);
+    obj("t1probe","恒星間探査機（もしも）",n,200,"ボイジャーの約10倍の速さで太陽圏の外へ出て、恒星間空間を本格的に調べる。光速の約20%で飛ぶ超小型機なら、ケンタウルス座α星まで約20年（ブレークスルー・スターショット構想）。","100天文単位〜");}
+  function t1Helio(){const dir=V(.8,.15,-.55).normalize();const p=dir.clone().multiplyScalar(5.5);const tl=new THREE.Group();tl.position.copy(p);tl.add(sprite("#ffd27a",.6,1));const ring=new THREE.Mesh(new THREE.TorusGeometry(.35,.02,8,48),new THREE.MeshBasicMaterial({color:"#ffd27a"}));ring.lookAt(0,0,0);tl.add(ring);scene.add(tl);
+    const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints([dir.clone().multiplyScalar(-30),V(0,0,0),p]),new THREE.LineDashedMaterial({color:"#ffd27a",dashSize:.4,gapSize:.3,transparent:true,opacity:.5}));ln.computeLineDistances();scene.add(ln);
+    obj("t1focal","太陽重力レンズ望遠鏡（もしも）",tl,6,"太陽の重力で曲がった遠い星の光は、約550天文単位より先で一点に集まる。そこに望遠鏡を置くと太陽そのものが巨大なレンズになり、近くの系外惑星の表面の模様まで撮れる可能性がある（NASAで研究された構想）。","約550天文単位〜");}
+  function radioBubble(){const Y=typeof window.KYEAR==="number"?window.KYEAR:2026;if(Y<1905)return;const ly=Math.min(3000,Y-1900);const r=ly*10;
+    const sp=new THREE.Mesh(new THREE.IcosahedronGeometry(r,2),new THREE.MeshBasicMaterial({color:"#7ee0ff",wireframe:true,transparent:true,opacity:.07,depthWrite:false}));scene.add(sp);
+    const n=new THREE.Object3D();n.position.set(0,r,0);scene.add(n);obj("radiobubble","人類の電波が届いている範囲",n,r*.9,"20世紀の初めから人類が出してきたラジオ・テレビ・レーダーの電波は、光の速さで広がり、今は約"+Math.round(ly)+"光年先まで届いている。この球の中には数万個の恒星がある。ただし遠くでは電波が弱すぎて、同じ程度の技術ではほとんど検出できない。","半径 約"+Math.round(ly)+"光年");}
+  function t1Stars(){const [l,b]=eq2gal(14.66*15,-60.8);const ac=gal(l,b).multiplyScalar(43.7);const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),ac]),new THREE.LineDashedMaterial({color:"#ffd27a",dashSize:1.5,gapSize:1,transparent:true,opacity:.8}));ln.computeLineDistances();scene.add(ln);
+    const pr=[];for(let i=0;i<4;i++){const s=sprite("#ffd27a",.8,1);scene.add(s);pr.push([s,i/4]);}anims.push(t=>pr.forEach(([s,o])=>s.position.copy(ac).multiplyScalar((t*.03+o)%1)));
+    const n=new THREE.Object3D();n.position.copy(ac).multiplyScalar(.5);scene.add(n);obj("t1starshot","ケンタウルス座α星への探査機の群れ（もしも）",n,30,"地上の巨大なレーザーで、重さ数グラムの探査機を帆ごと押し、光速の約20%まで加速する。約20年で到着し、その4年後に写真が地球に届く（ブレークスルー・スターショット構想）。","約4.4光年");
+    const se=new THREE.Object3D();se.position.set(0,-40,0);scene.add(se);obj("t1seti","地球外文明の探索（SETI）",se,60,"電波や光の信号を探し続けている。Type Iの文明なら、近くの数千個の恒星を一つずつ、もっと深く調べられる（もしも）。今のところ確かな信号は見つかっていない。","");}
   // ---- Type II（もしも）の構造物 ----
   const T2=y=>typeof window.KYEAR==="number"&&window.KYEAR>=y;
   function t2Inner(s){const k=Math.min(1,(window.KYEAR-2500)/1500);const n=Math.floor(300+2700*k);const pos=[];const D=[];for(let i=0;i<n;i++){const u=R()*2-1,a=R()*6.283,r=24+R()*4;D.push([a,Math.asin(u),r,.05+R()*.08]);pos.push(0,0,0);}
@@ -189,13 +252,13 @@ __SPACEPLANET__
    {id:"moon",name:"地球と月",center:[0,0,0],unit:"1目盛＝1000km",desc:"月は約38万km先。2026年4月、アルテミスIIの4人が54年ぶりに月の近くまで行き、人類の最遠記録を更新した。",dist:1100,min:6,max:4000,
     build(){sunLight(V(-1,.1,.4).multiplyScalar(2000));
       const e=earthMesh(6.371,V(-1,.1,.4));scene.add(e);anims.push(t=>e.rotation.y=t*.02);scene.add(atmoMesh(6.371,V(-1,.1,.4)));scene.add(sprite("#6fb6ff",16,.25));obj("earth","地球",e,25,"","—");
-      const mo=orbit(384.4,"#6a7aa0",.5);scene.add(mo);const m=planetGPU(1.737,"moon",V(-1,.1,.4).multiplyScalar(2000),96);m.rotation.y=Math.PI;m.position.set(384.4,0,0);scene.add(m);obj("moon","月",m,8,"直径3474km。1969〜72年に12人が月面を歩いた。2027年にアルテミスIIIで再着陸の予定。","約384,400km");if(T1())t1Moon(m);
+      const mo=orbit(384.4,"#6a7aa0",.5);scene.add(mo);const m=planetGPU(1.737,"moon",V(-1,.1,.4).multiplyScalar(2000),96);m.rotation.y=Math.PI;m.position.set(384.4,0,0);scene.add(m);obj("moon","月",m,8,"直径3474km。1969〜72年に12人が月面を歩いた。2027年にアルテミスIIIで再着陸の予定。","約384,400km");if(T1()){t1Moon(m);t1Cis(m);}
       if(ok(2026)){const pts=[V(6.8,0,0),V(120,30,-18),V(300,30,-30),V(390,8,-10),V(392,-4,6),V(380,-12,10),V(300,-30,30),V(120,-30,18),V(6.8,0,0)];
       const cu=new THREE.CatmullRomCurve3(pts);const tl=new THREE.Line(new THREE.BufferGeometry().setFromPoints(cu.getPoints(300)),new THREE.LineBasicMaterial({color:"#f4b942",transparent:true,opacity:.85}));scene.add(tl);
       const ori=sphere(1.2,new THREE.MeshBasicMaterial({color:"#ffd27a"}),12);scene.add(ori);anims.push(t=>ori.position.copy(cu.getPoint((t*.02)%1)));}
       const a11=new THREE.Object3D();const la=.67*Math.PI/180,lo=23.47*Math.PI/180;a11.position.set(Math.cos(la)*Math.cos(lo)*1.75,Math.sin(la)*1.75,-Math.cos(la)*Math.sin(lo)*1.75);m.add(a11);
       obj("apollo11","アポロ11号の着陸地点（静かの海）",a11,4,"1969年7月20日、アームストロングとオルドリンが人類で初めて月面に降り立った。","月面");
-      const jw=new THREE.Object3D();jw.position.set(-1500,0,0);scene.add(jw);const jm=jwstSat();jm.scale.setScalar(4);jw.add(jm);jw.add(sprite("#ffd27a",14,.4));
+      const jw=new THREE.Object3D();jw.position.copy(V(-1,.1,.4).normalize().multiplyScalar(-1500));scene.add(jw);const jm=jwstSat();jm.scale.setScalar(4);jw.add(jm);jw.add(sprite("#ffd27a",14,.4));
       obj("jwst","ジェイムズ・ウェッブ宇宙望遠鏡（L2）",jw,30,"地球から約150万km、太陽と反対側のラグランジュ点L2を回る。赤外線で宇宙の最初の銀河を観測している（模型の大きさは誇張）。","約150万km");
       const far=new THREE.Object3D();far.position.copy(V(392,-4,6));scene.add(far);obj("artemis","アルテミスII（人類の最遠到達）",far,30,"2026年4月、月の裏側を回って地球から40万6771kmに達した。","40万6771km");
     }},
@@ -226,7 +289,7 @@ __SPACEPLANET__
       const ec=orbit(ZR,"#f4b942",.18);scene.add(ec);Z.forEach(([id,nm,lon,st,ln,info])=>constellation(id,nm,lon,st,ln,ZR,info+"（星の並びは簡略化した模式図。占いの期間と、実際に太陽がその星座の方向にある期間は約1か月ずれている）"));
       const ophn=new THREE.Object3D();ophn.position.set(Math.cos(262*Math.PI/180)*ZR,ZR*.14,Math.sin(262*Math.PI/180)*ZR);scene.add(ophn);obj("ophiuchus","へびつかい座（13番目）",ophn,ZR*.35,"実際には太陽はへびつかい座も通る（11月末〜12月中旬）。占いの十二星座には含まれない。","黄経 約262°");
       const ab=[];for(let i=0;i<5000;i++){const a=R()*6.283,r=220+R()*100;ab.push(Math.cos(a)*r,(R()-.5)*8,Math.sin(a)*r);}const belt=points(ab,"#c9b28f",1.6,.7);scene.add(belt);anims.push(t=>belt.rotation.y=t*.02);
-      const bn=new THREE.Object3D();bn.position.set(0,0,270);scene.add(bn);obj("belt","小惑星帯",bn,160,"火星と木星の間に数百万個の小天体。","2.2〜3.2天文単位");
+      const bn=new THREE.Object3D();bn.position.set(0,0,270);scene.add(bn);obj("belt","小惑星帯",bn,160,"火星と木星の間に数百万個の小天体。","2.2〜3.2天文単位");if(T1())t1Inner(PL,ce);
     }},
    {id:"outer",name:"外太陽系",unit:"1目盛＝15億km（10天文単位）",desc:"木星・土星・天王星・海王星、冥王星とカイパーベルト。ボイジャー1号・2号は太陽系の外へ向かっている。",dist:1500,min:15,max:5000,
     build(){scene.add(new THREE.PointLight("#fff3dc",2.6,0,0));scene.add(new THREE.AmbientLight("#334466",.35));
@@ -240,7 +303,7 @@ __SPACEPLANET__
           const rs=new THREE.Object3D();rs.position.set(4,-2.6,5.2);p.add(rs);obj("grs","大赤斑（木星）",rs,22,"地球がすっぽり入る大きさの巨大な嵐。300年以上前から観測されている。","木星");
           const gm=new THREE.Object3D();g.add(gm);anims.push(t=>gm.position.set(Math.cos(t*1.3+2)*18,0,Math.sin(t*1.3+2)*18));obj("europa","木星の衛星（イオ・エウロパなど）",gm,30,"ガリレオが1610年に発見した4つの大きな衛星。エウロパの氷の下には海があり、生命の可能性が探られている。","木星");}
         if(id==="saturn"){const ti=planetGPU(.9,"titan",V(0,0,0),24);g.add(ti);anims.push(t=>ti.position.set(Math.cos(t*.6)*20,0,Math.sin(t*.6)*20));obj("titan","タイタン（土星の衛星）",ti,12,"厚い大気とメタンの湖を持つ。2028年にドローン探査機ドラゴンフライが打ち上げ予定。","土星");}
-        const ph=i*1.3;anims.push(t=>{const q=ph+t*.6/per;g.position.set(Math.cos(q)*a,0,Math.sin(q)*a);p.rotation.y=t*.4;});scene.add(g);obj(id,nm,g,r*8,d,(a/10).toFixed(1)+"天文単位");});
+        if(T1())t1Outer(g,id);const ph=i*1.3;anims.push(t=>{const q=ph+t*.6/per;g.position.set(Math.cos(q)*a,0,Math.sin(q)*a);p.rotation.y=t*.4;});scene.add(g);obj(id,nm,g,r*8,d,(a/10).toFixed(1)+"天文単位");});
       // ハレー彗星（早回し）
       const ha=(350+5.9)/2,he=(350-5.9)/(350+5.9);const hor=orbit(ha,"#9fe0ff",.5,.3,512,he,Math.PI);hor.rotation.y=1.0;scene.add(hor);
       const hc=new THREE.Group();hor.add(hc);const nuc=sphere(1.2,smat({color:"#bfc8d6"}),10);hc.add(nuc);hc.add(sprite("#cfe9ff",8,.9));
@@ -255,10 +318,10 @@ __SPACEPLANET__
       const vo=(id,nm,dir,dist,d)=>{const end=dir.clone().normalize().multiplyScalar(dist);const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),V(52,0,0),end]),new THREE.LineBasicMaterial({color:"#7fb2ff",transparent:true,opacity:.7}));scene.add(l);
         const m=sphere(4,new THREE.MeshBasicMaterial({color:"#7fb2ff"}),10);m.position.copy(end);scene.add(m);m.add(sprite("#7fb2ff",30,.6));obj(id,nm,m,120,d,(dist/10).toFixed(0)+"天文単位");};
       vo("voyager1","ボイジャー1号",V(.4,.6,.7),1690,"1977年打ち上げ。人工物で最も遠くにある。2026年11月18日に地球から1光日に達する予定。");
-      vo("voyager2","ボイジャー2号",V(.5,-.55,-.65),1420,"天王星と海王星を訪れた唯一の探査機。");
+      vo("voyager2","ボイジャー2号",V(.5,-.55,-.65),1420,"天王星と海王星を訪れた唯一の探査機。");if(T1())t1OuterEnd();
     }},
    {id:"helio",name:"太陽圏とオールトの雲",unit:"1目盛＝1万5000億km（100天文単位）",desc:"太陽風が届く範囲（太陽圏）の外は恒星間空間。その外側を、彗星のふるさとオールトの雲が数万天文単位にわたって包む（存在は推定）。",dist:2400,min:3,max:5000,
-    build(){scene.add(new THREE.AmbientLight("#ffffff",.6));const s=sprite("#ffd27a",6,1);scene.add(s);obj("sun","太陽",s,8,"","—");if(T2(2800))t2Helio();
+    build(){scene.add(new THREE.AmbientLight("#ffffff",.6));const s=sprite("#ffd27a",6,1);scene.add(s);obj("sun","太陽",s,8,"","—");if(T2(2800))t2Helio();if(T1()&&!T2(2800))t1Helio();
       const hm=new THREE.MeshBasicMaterial({color:"#5aa0ff",transparent:true,opacity:.14,side:THREE.DoubleSide,depthWrite:false});const h=sphere(1.2,hm,48);h.scale.set(1,1,2.6);h.position.z=1.6;scene.add(h);
       const ts=sphere(.9,new THREE.MeshBasicMaterial({color:"#7fd3ff",transparent:true,opacity:.1,wireframe:true}),24);ts.scale.set(1,1,1.8);ts.position.z=.7;scene.add(ts);
       const hp=new THREE.Object3D();hp.position.set(0,0,-1.2);scene.add(hp);obj("heliopause","太陽圏の境界（ヘリオポーズ）",hp,5,"太陽風と恒星間の物質がぶつかる境界。ボイジャー1号は2012年、2号は2018年に越えた。","約120天文単位");
@@ -282,7 +345,7 @@ __SPACEPLANET__
         const c=star(sz*.5,col,9);c.position.copy(p);scene.add(c);
         if(d>0){scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(p.x,0,p.z),p]),new THREE.LineBasicMaterial({color:"#4a5a80",transparent:true,opacity:.6})));}
         obj(id,nm,c,14,ds,d?d+"光年":"—");});
-      [50,100,200,400].forEach(r=>scene.add(orbit(r,"#3a4a70",.6)));const g=new THREE.GridHelper(820,41,"#2a3558","#1a2240");g.material.transparent=true;g.material.opacity=.4;scene.add(g);
+      radioBubble();if(T1())t1Stars();[50,100,200,400].forEach(r=>scene.add(orbit(r,"#3a4a70",.6)));const g=new THREE.GridHelper(820,41,"#2a3558","#1a2240");g.material.transparent=true;g.material.opacity=.4;scene.add(g);
     }},
    {id:"nebula",iso:1,name:"星雲と近くの天体（〜1万光年）",unit:"1目盛＝100光年",desc:"太陽の周り数千光年。星が生まれる星雲、星が死んだあとの星雲、星団、恒星質量ブラックホールがある。方向はおおよそ（銀河座標）、大きさは誇張しています。",dist:180,min:2,max:420,
     build(){scene.add(new THREE.AmbientLight("#fff",1));const bg=[];for(let i=0;i<9000;i++){const r=Math.sqrt(R())*110,a=R()*6.283;bg.push(Math.cos(a)*r,(R()-.5)*6*(1-r/130),Math.sin(a)*r);}scene.add(points(bg,"#cfd8ff",.35,.55));
@@ -488,7 +551,12 @@ __SPACEBR__
     camera.near=Math.max(.001,d*.01);camera.far=d*400+2e5;camera.updateProjectionMatrix();starfield.position.copy(camera.position);
     renderer.render(scene,camera);
     const w=el.clientWidth,h=el.clientHeight,p=new THREE.Vector3();
-    objs.forEach(o=>{o.node.getWorldPosition(p);p.project(camera);let vc=o.node;while(vc&&vc.visible)vc=vc.parent;const vis=p.z<1&&p.z>-1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05&&!vc;o.el.style.display=vis?"":"none";if(vis)o.el.style.transform=`translate(${(p.x*.5+.5)*w}px,${(-p.y*.5+.5)*h}px)`;o.el.classList.toggle("on",focus===o);});
+    // ラベルの重なりを減らす：大きい（重要な）ものから順に置き、重なるラベルは隠す
+    const cand=[];objs.forEach(o=>{o.node.getWorldPosition(p);p.project(camera);let vc=o.node;while(vc&&vc.visible)vc=vc.parent;const vis=p.z<1&&p.z>-1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05&&!vc;o.el.classList.toggle("on",focus===o);
+      if(!vis){o.el.style.display="none";return;}cand.push([o,(p.x*.5+.5)*w,(-p.y*.5+.5)*h]);});
+    cand.sort((A,B)=>(B[0]===focus)-(A[0]===focus)||(B[0]===anchor)-(A[0]===anchor)||B[0].view-A[0].view);const placed=[];
+    cand.forEach(([o,x,y])=>{if(!o._w||o._w<8)o._w=o.el.offsetWidth||(o.name.length*13+20);const bx=[x-6,y-9,x+o._w,y+9];const hit=o!==focus&&placed.some(q=>bx[0]<q[2]&&bx[2]>q[0]&&bx[1]<q[3]&&bx[3]>q[1]);
+      o.el.style.display=hit?"none":"";if(!hit){placed.push(bx);o.el.style.transform=`translate(${x}px,${y}px)`;}});
   }
   return {LEVELS,ALL,LANES,BRMAP,SUBMAP,BODY,planetMapURL,outward,inward,goBr(id){const i=idx(id);if(i>=0)go(i,null,"in",ALL[i].downObj||null);},get levelId(){return ALL[LV]&&ALL[LV].id;},get focusId(){return focus&&focus.id;},get anchorId(){return anchor&&anchor.id;},goFrom(id,from){const i=idx(id);if(i>=0)go(i,null,"out",from);},home(){go(0,null,"in","earth");},goId(id,o,dir){id=SUBMAP[id]||id;const i=ALL.findIndex(L=>L.id===id);if(i>=0){if(i===LV&&o)focusOn(o);else go(i,o,dir||(i<LV?"in":"out"));}},init,go,focusOn,unfocus(){focus=null;isolate(null);cam.goal=ALL[LV].dist;cam.min=ALL[LV].min;renderInfo();},get level(){return LV;},
     start(){if(running||!renderer)return;running=true;last=performance.now();requestAnimationFrame(frame);},stop(){running=false;}};
