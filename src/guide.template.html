@@ -694,21 +694,17 @@ footer p{margin:0 0 6px;max-width:120ch}
 }
 @media (prefers-reduced-motion:reduce){.mnode{transition:none}}
 
-/* 共通レイアウト：操作できる画面を中央に、チップは下に */
+/* 共通レイアウト：操作できる画面を中央（全幅）に、選んだものの情報パネルはその下に */
 .view.staged>.view-head{margin-bottom:12px}
-.stagectl{display:flex;flex-direction:column;gap:10px;margin:12px 0 18px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#0c1224}
-.stagectl>*{margin:0!important}
-.stagectl.inner{margin-top:10px}
-.stagectl>.tlswitch{align-self:flex-start}
-.stagectl .ctabs{border-bottom:0;border-top:1px solid #3a4466;align-items:flex-start;padding-top:0}
-.stagectl .ctabs button{border-top:0;border-bottom:1px solid var(--line);border-radius:0 0 10px 10px;top:-1px}
-.stagectl .ctabs button[aria-selected="true"]{padding-top:9px;padding-bottom:11px}
-.view.staged .ctabbody{border-top:1px solid #3a4466;border-bottom:0;border-radius:14px 14px 0 0}
-#v-laws .stagectl{padding:0 6px;background:none;border:0;margin-top:0}
-.view.staged .spwrap.mcwrap{grid-template-columns:minmax(0,1fr) 300px}
-.stagectl .mclist{flex-direction:row;flex-wrap:wrap;max-height:180px;overflow-y:auto}
-.stagectl .mclist button{flex-direction:row;align-items:baseline;gap:6px;padding:5px 10px;border-radius:999px}
-@media (max-width:900px){.view.staged .spwrap.mcwrap{grid-template-columns:1fr}}
+.view.staged .spwrap,.view.staged .spwrap.mcwrap{grid-template-columns:minmax(0,1fr)}
+.view.staged .spinfo{height:auto;min-height:0;max-height:none;overflow:visible}
+.view.staged .maprow{grid-template-columns:minmax(0,1fr)}
+.view.staged .gwrap.open{grid-template-columns:minmax(0,1fr)}
+.view.staged .gpanel{height:auto;max-height:none;min-height:0;box-shadow:none}
+.view.staged .whpanel.bgpanel{position:static;width:auto;max-height:none;box-shadow:none;margin-top:12px;z-index:auto}
+.view.staged .whpanel{max-height:none}
+#v-micro.staged>.mclist{flex-direction:row;flex-wrap:wrap;max-height:150px;overflow-y:auto;margin:0 0 10px}
+#v-micro.staged>.mclist button{flex-direction:row;align-items:baseline;gap:6px;padding:5px 10px;border-radius:999px}
 </style>
 </head>
 <body>

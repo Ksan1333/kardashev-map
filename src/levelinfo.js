@@ -100,8 +100,8 @@ dims:{f:[["次元の数え方","独立に動ける方向の数。点は0次元�
   s:"丸まった次元がプランク長（10⁻³⁵m）だとすると、それを1mmに拡大しても、原子は約100万光年の大きさになる。"}
 };
 window.LVOPEN=false;
-window.lvMore=function(id){const d=window.LVINFO[id];if(!d)return "";
-  return `<details class="lvmore" ${window.LVOPEN?"open":""} ontoggle="window.LVOPEN=this.open"><summary>📘 くわしく：数字・ポイント・スケール感・よくある誤解</summary><div class="lvbody">
+window.lvMore=function(id,title){const d=window.LVINFO[id];if(!d)return "";
+  return `<details class="lvmore" ${window.LVOPEN?"open":""} ontoggle="window.LVOPEN=this.open"><summary>📘 くわしく${title?"（"+title+"）":""}：数字・ポイント・スケール感・よくある誤解</summary><div class="lvbody">
   <table class="ltable lvt"><tbody>${d.f.map(([k,v])=>`<tr><th>${k}</th><td>${v}</td></tr>`).join("")}</tbody></table>
   <h5>ポイント</h5><ul>${d.p.map(x=>`<li>${x}</li>`).join("")}</ul>
   <h5>スケール感</h5><p>${d.s}</p>
