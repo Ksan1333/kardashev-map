@@ -861,9 +861,10 @@ footer p{margin:0 0 6px;max-width:120ch}
           <button id="gz-out" title="ズームアウト">−</button>
           <button id="gz-fit" title="30万年すべて">全期間</button><button id="gz-civ" title="文明の誕生以降">文明以降</button><button id="gz-mod" title="産業革命以降">近現代</button>
           <button id="gz-read" title="名前が読める大きさに">読める大きさ</button>
+          <button id="gz-scale" title="時間軸の目盛りを切り替え（時代ごとに幅をそろえる／実際の年数どおり）">目盛り：時代ごと</button>
           <label class="gtoggle"><input type="checkbox" id="gdead" checked> 消えた要素</label>
         </div>
-        <div class="ghint" id="ghint">ホイール・ピンチでズーム／ドラッグで移動／Alt＋ホイールで時間軸だけ伸縮／右下で期間を切り替え</div>
+        <div class="ghint" id="ghint">ホイール・ピンチでズーム／ドラッグで移動／Alt＋ホイールで時間軸だけ伸縮／右下で期間と目盛り（時代ごと・実際の年数）を切り替え</div>
         <div class="gzoom num" id="gzoom"></div>
       </div>
       <aside class="gpanel detail" id="gpanel" aria-live="polite" hidden></aside>
@@ -928,6 +929,7 @@ __TYPE2__
 __TYPE3__
 __FUTACAD__
 __FUTTREE__
+__TREEADD3__
 __SFNOTE__
 const FIELD2TREE={history:'nations',politics:'politics',war:'war',tech:'info',energy:'energy',space:'space',medicine:'medicine',academia:'academia',agriculture:'agri',food:'food',culture:'culture',subculture:'ent'};
 

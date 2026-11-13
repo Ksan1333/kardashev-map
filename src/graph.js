@@ -4,8 +4,14 @@
   const B=[-300000,-40000,-10000,-3500,-500,500,1450,1760,1880,1945,1990,2026].concat(END>2026?[END]:[]);
   const ERA=[["先史",-300000,-3500],["古代",-3500,500],["中世",500,1450],["近世",1450,1760],["近代",1760,1945],["現代",1945,2026],["Type Iへ（もしも）",2026,2300],["Type IIへ（もしも）",2300,6000],["Type IIIへ（もしも）",6000,END]];
   let EY=END;
-  const Y0=-300000, W0=END-Y0, RH=20, AX=40;   // 1年＝1単位の均等な時間軸
-  const X0=y=>Math.max(Y0,Math.min(END,y))-Y0;
+  const Y0=-300000, RH=20, AX=40;
+  // 時間軸の目盛り：era＝時代ごとに幅を割り当てる（既定）／real＝1年＝1単位の実年数
+  const ERAW=[6,12,9,9,16,18,15,9,6];
+  let SCALE=(()=>{try{return localStorage.getItem("treeScale")}catch(e){return null}})()||"era", SEG=[], W0=1;
+  function mkSeg(){SEG=[];let u=0;ERA.forEach(([nm,a,b],i)=>{const w=SCALE==="era"?ERAW[i]*1000:(b-a);SEG.push([a,b,u,u+w]);u+=w;});W0=u;}
+  mkSeg();
+  const X0=y=>{y=Math.max(Y0,Math.min(END,y));for(const [a,b,u0,u1] of SEG){if(y<=b)return u0+(y-a)/(b-a)*(u1-u0);}return W0;};
+  const Yof=u=>{u=Math.max(0,Math.min(W0,u));for(const [a,b,u0,u1] of SEG){if(u<=u1)return a+(u-u0)/(u1-u0)*(b-a);}return END;};
   const man=n=>n>=10000?(n%10000?`${Math.floor(n/10000)}万${n%10000}`:`${n/10000}万`):`${n}`;
   const fy=y=>y<=-10000?`約${man(-y)}年前`:y<0?`前${-y}年頃`:`${y}年`;
   const fyShort=y=>y<=-10000?`${man(-y)}年前`:y<0?`前${-y}`:`${y}`;
@@ -141,8 +147,9 @@
     // 時間軸（上に固定）
     let grid="", ax=`<rect x="0" y="0" width="${vw}" height="${AX}" fill="#0a0f1f"/><line x1="0" x2="${vw}" y1="${AX}" y2="${AX}" stroke="var(--line)"/>`;
     ERA.forEach(([nm,a,b])=>{const x1=Math.max(sx(a),0),x2=Math.min(sx(b),vw);if(x2-x1<30)return;ax+=`<text x="${(x1+x2)/2}" y="15" text-anchor="middle" font-size="12" font-weight="700" fill="#e9edf7" font-family="Murecho,sans-serif">${nm}</text>`;});
-    const ya=(0-tx)/kx+Y0, yb=(vw-tx)/kx+Y0, steps=[1,2,5,10,20,50,100,200,500,1000,2000,5000,10000,20000,50000,100000];
-    const step=steps.find(s=>s*kx>=72)||100000, cand=[]; for(let y=Math.ceil(ya/step)*step;y<=Math.min(yb,EY);y+=step)cand.push(y);
+    const ua=(0-tx)/kx, ub=(vw-tx)/kx, steps=[1,2,5,10,20,50,100,200,500,1000,2000,5000,10000,20000,50000,100000,200000,500000], cand=[];
+    SEG.forEach(([a,b,u0,u1])=>{if(u1<ua||u0>ub)return;const ppy=kx*(u1-u0)/(b-a);const step=steps.find(s=>s*ppy>=72)||1e6;const ya=Math.max(a,Yof(ua)),yb=Math.min(b,Yof(ub),EY);for(let y=Math.ceil(ya/step)*step;y<=yb;y+=step)if(!cand.includes(y))cand.push(y);});
+    cand.sort((p,q)=>p-q);
     let last=-1e9; cand.forEach(y=>{const x=sx(y);if(x<-5||x>vw+5||x-last<50)return;last=x;
       ax+=`<line x1="${x}" x2="${x}" y1="${AX-8}" y2="${AX}" stroke="#8e98b5"/><text x="${x}" y="${AX-12}" text-anchor="middle" font-size="10" fill="#8e98b5" font-family="IBM Plex Mono,monospace">${fyShort(y)}</text>`;grid+=`<line x1="${x}" x2="${x}" y1="${AX}" y2="${vh}" stroke="#ffffff0b"/>`;});
     const defs=`<defs>${F.map(f=>`<linearGradient id="gf-${f.key}" x1="0" x2="1"><stop offset="0" stop-color="${f.color}"/><stop offset=".6" stop-color="${f.color}" stop-opacity=".7"/><stop offset="1" stop-color="${f.color}" stop-opacity="0"/></linearGradient>`).join("")}</defs>`;
@@ -201,6 +208,8 @@
   document.getElementById("gz-out").onclick=()=>zoomAt(vw/2,vh/2,1/1.6,1/1.6);
   document.getElementById("gz-fit").onclick=()=>fitFull();
   document.getElementById("gz-civ").onclick=()=>{viewRange(-3500,EY);clamp();draw();};
+  {const bt=document.getElementById("gz-scale");const lab=()=>{if(bt)bt.textContent=SCALE==="era"?"目盛り：時代ごと":"目盛り：実際の年数";};lab();
+    if(bt)bt.onclick=()=>{const ya=Yof((120-tx)/kx),yb=Yof((vw-30-tx)/kx);SCALE=SCALE==="era"?"real":"era";try{localStorage.setItem("treeScale",SCALE)}catch(e){}mkSeg();measure();viewRange(ya,yb);clamp();lab();draw();};}
   document.getElementById("gz-mod").onclick=()=>{viewRange(1750,EY);clamp();draw();};
   document.getElementById("gz-read").onclick=()=>{const f=(24/RH)/ky;zoomAt(vw/2,vh/2,Math.max(f,1),f);};
   document.getElementById("gdead").addEventListener("change",e=>{showDead=e.target.checked;
@@ -280,6 +289,6 @@
     const b=e.target.closest("button[data-id]"); if(b) select(b.dataset.f,b.dataset.id,true);
   });
 
-  new ResizeObserver(()=>{const first=!vw, wasFitY=ky<=fit.ky*1.02, ya=(120-tx)/kx+Y0, yb=(vw-30-tx)/kx+Y0;if(measure()===false)return;if(first)fitAll();else{viewRange(ya,yb);if(wasFitY){ky=fit.ky;}clamp();draw();}}).observe(cv);
+  new ResizeObserver(()=>{const first=!vw, wasFitY=ky<=fit.ky*1.02, ya=Yof((120-tx)/kx), yb=Yof((vw-30-tx)/kx);if(measure()===false)return;if(first)fitAll();else{viewRange(ya,yb);if(wasFitY){ky=fit.ky;}clamp();draw();}}).observe(cv);
   window.addEventListener("k-year",()=>{applyEra();build();if(measure()!==false){ky=fit.ky;ty=0;if(EY>-3000)viewRange(-3500,Math.min(EY,6000));else viewRange(-300000,Math.max(EY,-200000));clamp();draw();}});
 })();
