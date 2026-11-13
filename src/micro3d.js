@@ -410,5 +410,5 @@ __MICROX__
 window.MICRO=MICRO;
 // 世界地図 ⇄ ミクロ
 window.toMicro=()=>{const v=document.getElementById("veil");v.textContent="ミクロの世界へ…";v.classList.add("on");setTimeout(()=>{location.hash="micro";MICRO&&MICRO.open("life");setTimeout(()=>v.classList.remove("on"),350);},450);};
-window.addEventListener("micro-loop",()=>{const v=document.getElementById("veil");v.textContent="一周して、宇宙のいちばん大きなスケールへ…";v.classList.add("on");setTimeout(()=>{location.hash="space-map";setTimeout(()=>{if(typeof SPZ!=="undefined"&&SPZ){const i=SPZ.ALL.findIndex(x=>x.id==="shape");if(i>=0)SPZ.go(i,null,"out");}setTimeout(()=>v.classList.remove("on"),700);},300);},1100);});
+window.addEventListener("micro-loop",()=>{const v=document.getElementById("veil");v.textContent="一周して、宇宙のいちばん外側「無」へ…";v.classList.add("on");setTimeout(()=>{location.hash="space-map";setTimeout(()=>{if(typeof SPZ!=="undefined"&&SPZ)SPZ.goBr("void");setTimeout(()=>v.classList.remove("on"),700);},300);},1100);});
 window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent="世界地図へ…";v.classList.add("on");setTimeout(()=>{location.hash="world-map";setTimeout(()=>v.classList.remove("on"),350);},450);};

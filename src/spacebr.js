@@ -346,7 +346,7 @@
     build(){scene.add(new THREE.AmbientLight("#fff",.15));const what=fn();const h=new THREE.Object3D();h.position.set(0,560,0);scene.add(h);label(id+"_all",nm.replace("（中）","").replace("（中・","（")+"（全体）",h,1600,d+"（すべて空想）",what);
       const bg=[];for(let i=0;i<3000;i++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(2500+R()*2000);bg.push(q.x,q.y,q.z);}scene.add(points(bg,col,4,.5));}});});
 
-  // オムニバースのさらに外：不可能世界の層 → 無 → 一周して地球へ（すべて空想）
+  // オムニバースのさらに外：不可能世界の層 → 無 → 一周してミクロの「描けない底」へ（すべて空想）
   const cvSprite=(text,col,h)=>{const c=document.createElement("canvas");const x=c.getContext("2d");x.font="bold 64px sans-serif";const w=Math.ceil(x.measureText(text).width)+40;c.width=w;c.height=96;x.font="bold 64px sans-serif";x.fillStyle=col;x.textBaseline="middle";x.fillText(text,20,50);const T=new THREE.CanvasTexture(c);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:T,transparent:true,depthWrite:false}));s.scale.set(h*w/96,h,1);return s;};
   addBr({id:"imposs",lane:"mv",parent:"omni",up:"void",downObj:"i_omni",down:"omni",fic:1,name:"不可能世界の層（空想）",short:"不可能世界",unit:"矛盾まで許す世界（空想）",th:Math.PI/4,ph:.9553,
     desc:"オムニバースは「矛盾なく書けるもの」の全部。その外に、矛盾したものまで成り立つ世界を置いた空想の層。哲学には「不可能世界」を本気で考える分野（矛盾を許す論理＝パラコンシステント論理）が実際にある。中央の三角形は、この角度から見ると閉じているが、ドラッグで回すと正体がわかる。",dist:3000,min:60,max:5000,
@@ -371,7 +371,7 @@
       const h=new THREE.Object3D();h.position.set(0,700,0);scene.add(h);label("imposs_all","不可能世界の層（全体）",h,2600,"矛盾したものまで成り立つ世界を集めた、完全な空想の層。さらにズームアウトすると「無」へ。","空想");}});
   BRMAP["imposs:i_omni"]="omni";
   addBr({id:"void",lane:"mv",parent:"imposs",loop:1,nostars:1,bg:"#000000",downObj:"v_imposs",down:"imposs",fic:1,name:"無（空想）",short:"無",unit:"何もない（空想）",
-    desc:"すべての外側に「何もない」を置いた。ただし物理学の「真空」は無ではなく、量子のゆらぎで満ちている。本当の無とは何か、なぜ何もないのではなく何かがあるのか（ライプニッツの問い）は、今も答えが出ていない。ここからさらにズームアウトすると、一周して地球に戻る。",dist:1200,min:60,max:2600,
+    desc:"すべての外側に「何もない」を置いた。ただし物理学の「真空」は無ではなく、量子のゆらぎで満ちている。本当の無とは何か、なぜ何もないのではなく何かがあるのか（ライプニッツの問い）は、今も答えが出ていない。ここからさらにズームアウトすると、一周してミクロの世界のいちばん底「描けない底」につながる。",dist:1200,min:60,max:2600,
     build(){const dot=glowBB("#ffffff",30,0);scene.add(dot);anims.push(t=>dot.material.uniforms.uSize.value=24+Math.sin(t*1.3)*8);label("v_dot","ひとつの点",dot,500,"何もない中に、ぽつんと一つの点。宇宙の始まりの象徴として置いた（実際のビッグバンは「一点から爆発した」のではなく、空間全体が同時に膨らみ始めたと考えられている）。","空想");
       const N=600,pos=new Float32Array(N*3),ph=[];for(let i=0;i<N;i++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(300+R()*500);ph.push([q,R()*6.283,.6+R()*1.4]);pos.set([q.x,q.y,q.z],i*3);}
       const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.BufferAttribute(pos,3));const sz=new Float32Array(N);g.setAttribute("aAlpha",new THREE.BufferAttribute(sz,1));
@@ -379,5 +379,5 @@
       const vq=new THREE.Object3D();vq.position.set(520,0,0);scene.add(vq);label("v_vac","真空は「無」ではない",vq,600,"点滅する青い粒は、量子の真空で粒子が生まれては消える「ゆらぎ」のイメージ。物理学でいちばん何もない状態（真空）にも、エネルギーがある。","空想");
       const q2=new THREE.Object3D();q2.position.set(-480,240,0);scene.add(q2);label("v_why","なぜ何もないのではなく、何かがあるのか",q2,600,"哲学者ライプニッツ（1714年）の問い。物理学も哲学も、まだ答えを出せていない。","空想");
       const imp=glowBB("#c99cf2",220,0);imp.position.set(0,-200,-1100);scene.add(imp);label("v_imposs","不可能世界の層（ここから来た）",imp,1300,"一つ下の層。ズームインすると戻れる。","空想");
-      const lp=new THREE.Object3D();lp.position.set(0,600,0);scene.add(lp);label("v_loop","一周して地球へ（さらにズームアウト）",lp,2000,"物理学者グラショーが描いた「宇宙のウロボロス」では、いちばん大きな宇宙といちばん小さな素粒子の世界が、自分の尾をくわえた蛇のようにつながっている。この地図でも、いちばん外側からさらに外へ出ると、地球に戻ってくる。","空想");}});
+      const lp=new THREE.Object3D();lp.position.set(0,600,0);scene.add(lp);label("v_loop","一周してミクロの「描けない底」へ（さらにズームアウト）",lp,2000,"物理学者グラショーが描いた「宇宙のウロボロス」では、いちばん大きな宇宙といちばん小さな世界が、自分の尾をくわえた蛇のようにつながっている。この地図でも、いちばん外側の「無」からさらに外へ出ると、ミクロのいちばん底「描けない底」に出る（空想）。地球へは「地球へ戻る」ボタンでいつでも戻れる。","空想");}});
   BRMAP["void:v_imposs"]="imposs";

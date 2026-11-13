@@ -838,7 +838,7 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ④ 宇宙マップ -->
   <section class="view space" id="v-space-map">
-    <div class="view-head"><h2>宇宙と地球</h2><p>地球のまわりから宇宙の形まで6段階の「本線」（7〜11は空想の上位層。いちばん外の「無」からさらに出ると地球に戻ります）と、そこから枝分かれする「天体の中」「銀河の中」「別の宇宙」「法則の海の島」「オムニバースの世界」。上の枝分かれ図（ホイール・ドラッグでズーム）から選ぶか、天体を選んでズームインし続けると中に入れます。惑星・月・太陽にズームインし続けると世界地図のページでその天体の地図が開き、地球なら世界地図に降ります。</p></div>
+    <div class="view-head"><h2>宇宙と地球</h2><p>地球のまわりから宇宙の形まで5段階の「本線」（6〜10は空想の上位層。いちばん外の「無」からさらに出ると、ミクロのいちばん底「描けない底」につながります）と、そこから枝分かれする「天体の中」「銀河の中」「別の宇宙」「法則の海の島」「オムニバースの世界」。上の枝分かれ図（ホイール・ドラッグでズーム）から選ぶか、天体を選んでズームインし続けると中に入れます。惑星・月・太陽にズームインし続けると世界地図のページでその天体の地図が開き、地球なら世界地図に降ります。</p></div>
     <div class="chips" id="splevels"></div>
     <div class="spwrap">
       <div id="spscene" class="spscene"><div id="splabels" class="splabels"></div><div id="spfade" class="spfade"></div>
@@ -850,7 +850,7 @@ footer p{margin:0 0 6px;max-width:120ch}
   </section>
 
   <section class="view space" id="v-micro">
-    <div class="view-head"><h2>ミクロの世界</h2><p>生き物→体と器官→細胞→生体分子→分子→物質→原子→原子核→クオーク→素粒子→量子の「本線」11段階と、その先のプランク長より下（仮説→空想）の3段階。枝分かれは「細胞の中」「微生物・ウイルス」「理論（超ひも・1〜11次元）」。選んでいるものにズームインし続けると、その「中」へ入っていきます（例：人→体→細胞→核→DNA→…）。いちばん底からさらに進むと、宇宙のいちばん大きなスケールにつながります。</p></div>
+    <div class="view-head"><h2>ミクロの世界</h2><p>生き物→体と器官→細胞→生体分子→分子→物質→原子→原子核→クオーク→素粒子→量子の「本線」11段階と、その先のプランク長より下（仮説→空想）の3段階。枝分かれは「細胞の中」「微生物・ウイルス」「理論（超ひも・1〜11次元）」。選んでいるものにズームインし続けると、その「中」へ入っていきます（例：人→体→細胞→核→DNA→…）。いちばん底からさらに進むと、宇宙マップのいちばん外側「無」につながります。</p></div>
     <div class="chips" id="mclevels"></div>
     <div class="spwrap mcwrap">
       <div class="mclist" id="mclist"></div>
@@ -2196,19 +2196,19 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
       obj("uni_shape","宇宙の形",here,700,D,"説："+({flat:"平坦",sphere:"閉じた（球）",saddle:"開いた（双曲）",torus:"トーラス",multi:"多元宇宙"})[sh]);
       (LEVELS.find(l=>l.id==="shape")||{}).desc2=D;}},
   ];
-  // ---- 画面遷移を減らすため、近いスケールをまとめた6段階（中身は元の各スケールを拡大縮小して1つの場面に重ねる） ----
+  // ---- 画面遷移を減らすため、近いスケールをまとめた5段階（中身は元の各スケールを拡大縮小して1つの場面に重ねる） ----
   const SUBI=Object.fromEntries(SUB.map(L=>[L.id,L]));
   const MERGE=[
    {id:"em",name:"地球と月",short:"地球と月",parts:[["leo",1],["moon",1]],unit:"1目盛＝1000km",dist:150,min:7.5,max:4000,desc:"地球のまわりの人工衛星から、約38万km先の月まで。"+SUBI.leo.desc+" "+SUBI.moon.desc},
    {id:"solar",name:"太陽系",short:"太陽系",env:{__SPZ_ZR:40000},parts:[["inner",.1],["outer",1],["helio",1000]],unit:"1目盛＝1500万km（0.1天文単位）",dist:420,min:1.2,max:5e6,desc:"太陽と惑星、カイパーベルト、太陽圏、オールトの雲まで。"+SUBI.inner.desc+" "+SUBI.outer.desc+" ズームアウトを続けると太陽圏とオールトの雲（約1.6光年）まで広がる。惑星の大きさは誇張しています。"},
-   {id:"near",name:"近くの恒星と星雲",short:"恒星と星雲",env:{__SPZ_NEBK:.3},parts:[["stars",1],["nebula",1000]],unit:"1目盛＝0.1光年",dist:320,min:2,max:4.2e5,iso:1,desc:SUBI.stars.desc+" ズームアウトすると数千光年先の星雲まで。"+SUBI.nebula.desc},
-   {id:"galaxy",name:"天の川銀河と局部銀河群",short:"銀河",parts:[["galaxy",1],["local",10]],unit:"1目盛＝1000光年",dist:150,min:4,max:12000,desc:SUBI.galaxy.desc+" ズームアウトするとアンドロメダ銀河などの局部銀河群へ。"+SUBI.local.desc},
+   {id:"galaxy",name:"近くの恒星から天の川銀河まで",short:"恒星と銀河",env:{__SPZ_NEBK:.3},shift:{anchor:"sunpos",parts:["galaxy","local"],minDist:1.2e5},nearParts:{parts:["stars","nebula"],maxDist:6e5},parts:[["stars",1],["nebula",1000],["galaxy",10000],["local",100000]],unit:"1目盛＝0.1光年",dist:320,min:2,max:1.2e8,iso:1,desc:SUBI.stars.desc+" ズームアウトすると数千光年先の星雲、さらに天の川銀河全体、局部銀河群まで続く。"+SUBI.nebula.desc+" "+SUBI.galaxy.desc+" "+SUBI.local.desc},
    {id:"lania",name:"超銀河団と大規模構造",short:"大規模構造",hide:["home"],parts:[["lania",1],["web",100]],unit:"1目盛＝100万光年",dist:780,min:10,max:240000,desc:SUBI.lania.desc+" ズームアウトすると宇宙の大規模構造へ。"+SUBI.web.desc},
    {id:"shape",name:SUBI.shape.name,short:"宇宙の形",parts:[["shape",1]],unit:SUBI.shape.unit,dist:SUBI.shape.dist,min:SUBI.shape.min,max:SUBI.shape.max,desc:SUBI.shape.desc}];
   const SUBMAP={};MERGE.forEach(M=>M.parts.forEach(([id])=>SUBMAP[id]=M.id));
-  const LEVELS=MERGE.map(M=>({...M,build(){const root=scene;const seen=new Set(M.hide||[]);Object.assign(window,M.env||{});M.parts.forEach(([id,k])=>{const g=new THREE.Group();g.scale.setScalar(k);root.add(g);const n0=objs.length;scene=g;try{SUBI[id].build();}finally{scene=root;}
+  const LEVELS=MERGE.map(M=>({...M,build(){const root=scene;const seen=new Set(M.hide||[]);Object.assign(window,M.env||{});let sbox=null;if(M.shift){sbox=new THREE.Group();root.add(sbox);}M.parts.forEach(([id,k])=>{const g=new THREE.Group();g.scale.setScalar(k);(sbox&&M.shift.parts.includes(id)?sbox:root).add(g);if(M.nearParts&&M.nearParts.parts.includes(id)){const md=M.nearParts.maxDist;anims.push(()=>{g.visible=cam.dist<md;});}const n0=objs.length;scene=g;try{SUBI[id].build();}finally{scene=root;}
       g.traverse(o=>{const m=o.material;if(!m)return;if(m.isPointsMaterial&&m.sizeAttenuation!==false)m.size*=k;if(m.uniforms&&m.uniforms.uSize)m.uniforms.uSize.value*=k;});
       for(let i=n0;i<objs.length;i++){objs[i].view*=k;}});
+      if(sbox){root.updateMatrixWorld(true);const an=objs.find(o=>o.id===M.shift.anchor);if(an){const wp=new THREE.Vector3();an.node.getWorldPosition(wp);sbox.position.sub(wp);root.updateMatrixWorld(true);}}if(sbox&&M.shift.minDist){const bx=sbox,md=M.shift.minDist;anims.push(()=>{bx.visible=cam.dist>md;});}
       Object.keys(M.env||{}).forEach(k=>{delete window[k];});objs=objs.filter(o=>{if(seen.has(o.id)){o.node.visible=false;return false;}seen.add(o.id);return true;});}}));
   // ===== 分岐（GitHubの枝分かれのように、本線1〜12から横に伸びる） =====
   const ALL=LEVELS.slice();const BRMAP={};const LANES=[];
@@ -2558,7 +2558,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
     build(){scene.add(new THREE.AmbientLight("#fff",.15));const what=fn();const h=new THREE.Object3D();h.position.set(0,560,0);scene.add(h);label(id+"_all",nm.replace("（中）","").replace("（中・","（")+"（全体）",h,1600,d+"（すべて空想）",what);
       const bg=[];for(let i=0;i<3000;i++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(2500+R()*2000);bg.push(q.x,q.y,q.z);}scene.add(points(bg,col,4,.5));}});});
 
-  // オムニバースのさらに外：不可能世界の層 → 無 → 一周して地球へ（すべて空想）
+  // オムニバースのさらに外：不可能世界の層 → 無 → 一周してミクロの「描けない底」へ（すべて空想）
   const cvSprite=(text,col,h)=>{const c=document.createElement("canvas");const x=c.getContext("2d");x.font="bold 64px sans-serif";const w=Math.ceil(x.measureText(text).width)+40;c.width=w;c.height=96;x.font="bold 64px sans-serif";x.fillStyle=col;x.textBaseline="middle";x.fillText(text,20,50);const T=new THREE.CanvasTexture(c);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:T,transparent:true,depthWrite:false}));s.scale.set(h*w/96,h,1);return s;};
   addBr({id:"imposs",lane:"mv",parent:"omni",up:"void",downObj:"i_omni",down:"omni",fic:1,name:"不可能世界の層（空想）",short:"不可能世界",unit:"矛盾まで許す世界（空想）",th:Math.PI/4,ph:.9553,
     desc:"オムニバースは「矛盾なく書けるもの」の全部。その外に、矛盾したものまで成り立つ世界を置いた空想の層。哲学には「不可能世界」を本気で考える分野（矛盾を許す論理＝パラコンシステント論理）が実際にある。中央の三角形は、この角度から見ると閉じているが、ドラッグで回すと正体がわかる。",dist:3000,min:60,max:5000,
@@ -2583,7 +2583,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
       const h=new THREE.Object3D();h.position.set(0,700,0);scene.add(h);label("imposs_all","不可能世界の層（全体）",h,2600,"矛盾したものまで成り立つ世界を集めた、完全な空想の層。さらにズームアウトすると「無」へ。","空想");}});
   BRMAP["imposs:i_omni"]="omni";
   addBr({id:"void",lane:"mv",parent:"imposs",loop:1,nostars:1,bg:"#000000",downObj:"v_imposs",down:"imposs",fic:1,name:"無（空想）",short:"無",unit:"何もない（空想）",
-    desc:"すべての外側に「何もない」を置いた。ただし物理学の「真空」は無ではなく、量子のゆらぎで満ちている。本当の無とは何か、なぜ何もないのではなく何かがあるのか（ライプニッツの問い）は、今も答えが出ていない。ここからさらにズームアウトすると、一周して地球に戻る。",dist:1200,min:60,max:2600,
+    desc:"すべての外側に「何もない」を置いた。ただし物理学の「真空」は無ではなく、量子のゆらぎで満ちている。本当の無とは何か、なぜ何もないのではなく何かがあるのか（ライプニッツの問い）は、今も答えが出ていない。ここからさらにズームアウトすると、一周してミクロの世界のいちばん底「描けない底」につながる。",dist:1200,min:60,max:2600,
     build(){const dot=glowBB("#ffffff",30,0);scene.add(dot);anims.push(t=>dot.material.uniforms.uSize.value=24+Math.sin(t*1.3)*8);label("v_dot","ひとつの点",dot,500,"何もない中に、ぽつんと一つの点。宇宙の始まりの象徴として置いた（実際のビッグバンは「一点から爆発した」のではなく、空間全体が同時に膨らみ始めたと考えられている）。","空想");
       const N=600,pos=new Float32Array(N*3),ph=[];for(let i=0;i<N;i++){const q=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(300+R()*500);ph.push([q,R()*6.283,.6+R()*1.4]);pos.set([q.x,q.y,q.z],i*3);}
       const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.BufferAttribute(pos,3));const sz=new Float32Array(N);g.setAttribute("aAlpha",new THREE.BufferAttribute(sz,1));
@@ -2591,7 +2591,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
       const vq=new THREE.Object3D();vq.position.set(520,0,0);scene.add(vq);label("v_vac","真空は「無」ではない",vq,600,"点滅する青い粒は、量子の真空で粒子が生まれては消える「ゆらぎ」のイメージ。物理学でいちばん何もない状態（真空）にも、エネルギーがある。","空想");
       const q2=new THREE.Object3D();q2.position.set(-480,240,0);scene.add(q2);label("v_why","なぜ何もないのではなく、何かがあるのか",q2,600,"哲学者ライプニッツ（1714年）の問い。物理学も哲学も、まだ答えを出せていない。","空想");
       const imp=glowBB("#c99cf2",220,0);imp.position.set(0,-200,-1100);scene.add(imp);label("v_imposs","不可能世界の層（ここから来た）",imp,1300,"一つ下の層。ズームインすると戻れる。","空想");
-      const lp=new THREE.Object3D();lp.position.set(0,600,0);scene.add(lp);label("v_loop","一周して地球へ（さらにズームアウト）",lp,2000,"物理学者グラショーが描いた「宇宙のウロボロス」では、いちばん大きな宇宙といちばん小さな素粒子の世界が、自分の尾をくわえた蛇のようにつながっている。この地図でも、いちばん外側からさらに外へ出ると、地球に戻ってくる。","空想");}});
+      const lp=new THREE.Object3D();lp.position.set(0,600,0);scene.add(lp);label("v_loop","一周してミクロの「描けない底」へ（さらにズームアウト）",lp,2000,"物理学者グラショーが描いた「宇宙のウロボロス」では、いちばん大きな宇宙といちばん小さな世界が、自分の尾をくわえた蛇のようにつながっている。この地図でも、いちばん外側の「無」からさらに外へ出ると、ミクロのいちばん底「描けない底」に出る（空想）。地球へは「地球へ戻る」ボタンでいつでも戻れる。","空想");}});
   BRMAP["void:v_imposs"]="imposs";
 
   // ---- 共通 ----
@@ -2618,7 +2618,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
   function outward(){const L=ALL[LV];if(L.up){const u=idx(L.up);if(u>=0)go(u,null,"out",ALL[u].downObj);return;}if(L.top)return;if(L.loop){window.dispatchEvent(new CustomEvent("spz-loop"));return;}
     if(L.br){const pi=idx(L.parent);if(pi>=0)go(pi,null,"out",L.pobj);return;}if(LV<LEVELS.length-1)go(LV+1,null,"out",GATE[LEVELS[LV+1].id]);else go(idx("mv"),null,"out","u_home");}
   // ズームインの行き先：注目中（またはカーソル付近）の天体を優先し、勝手に別の場所へ飛ばない
-  const GATE={em:"earth",solar:"earth",near:"sun",galaxy:"sunpos",lania:"lg",shape:"uni_shape"};
+  const GATE={em:"earth",solar:"earth",galaxy:"sun",lania:"lg",shape:"uni_shape"};window.SPZ_SETDIST=d=>{cam.goal=d;cam.dist=d;};
   let ptrW=null;const PLMAP=new Set(["mercury","venus","mars","jupiter","saturn","uranus","neptune","pluto","moon"]);
   function pickNear(){const w=el.clientWidth,h=el.clientHeight;const fresh=ptrW&&performance.now()-ptrW.t<1500;const px=fresh?ptrW.x:w/2,py=fresh?ptrW.y:h/2;let best=null,bd=1e9;const p=new THREE.Vector3();
     objs.forEach(o=>{if(!o.node.visible)return;o.node.getWorldPosition(p);p.project(camera);if(p.z>1||p.z<-1)return;const d=Math.hypot((p.x*.5+.5)*w-px,(-p.y*.5+.5)*h-py);if(d<bd){bd=d;best=o;}});return bd<Math.min(w,h)*.3?best:null;}
@@ -2646,7 +2646,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
       cam.dist=dir==="in"?L.dist*3:dir==="out"?L.dist*.25:L.dist;cam.auto=true;cam.ph=L.ph!=null?L.ph:1.1;if(L.th!=null){cam.th=L.th;cam.auto=false;}
       lab.innerHTML=objs.map(o=>`<button class="splab" data-o="${o.id}"><i></i>${o.name}</button>`).join("");objs.forEach(o=>o.el=lab.querySelector(`[data-o="${o.id}"]`));
       renderInfo(); window.dispatchEvent(new CustomEvent("spz-level",{detail:i}));
-      anchor=null;const DEFA={near:"sun",galaxy:"sunpos",lania:"lg"};if(!fromId&&!L.br&&DEFA[L.id])fromId=DEFA[L.id];if(fromId){const fo=objs.find(x=>x.id===fromId);if(fo){anchor=fo;const p=new THREE.Vector3();fo.node.getWorldPosition(p);cam.target.copy(p);cam.goalT.copy(p);if(dir==="out")cam.dist=Math.max(fo.view*.6,L.min*1.5);}}
+      anchor=null;const DEFA={galaxy:"sun",lania:"lg"};if(!fromId&&!L.br&&DEFA[L.id])fromId=DEFA[L.id];if(fromId){const fo=objs.find(x=>x.id===fromId);if(fo){anchor=fo;const p=new THREE.Vector3();fo.node.getWorldPosition(p);cam.target.copy(p);cam.goalT.copy(p);if(dir==="out")cam.dist=Math.max(fo.view*.6,L.min*1.5);}}
       if(oid)setTimeout(()=>focusOn(oid),dir?500:50);
       fade.classList.remove("on");
     },first?0:220);
@@ -2665,7 +2665,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
     camera.near=Math.max(.001,d*.01);camera.far=d*400+2e5;camera.updateProjectionMatrix();starfield.position.copy(camera.position);
     renderer.render(scene,camera);
     const w=el.clientWidth,h=el.clientHeight,p=new THREE.Vector3();
-    objs.forEach(o=>{o.node.getWorldPosition(p);p.project(camera);const vis=p.z<1&&p.z>-1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05&&o.node.visible;o.el.style.display=vis?"":"none";if(vis)o.el.style.transform=`translate(${(p.x*.5+.5)*w}px,${(-p.y*.5+.5)*h}px)`;o.el.classList.toggle("on",focus===o);});
+    objs.forEach(o=>{o.node.getWorldPosition(p);p.project(camera);let vc=o.node;while(vc&&vc.visible)vc=vc.parent;const vis=p.z<1&&p.z>-1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05&&!vc;o.el.style.display=vis?"":"none";if(vis)o.el.style.transform=`translate(${(p.x*.5+.5)*w}px,${(-p.y*.5+.5)*h}px)`;o.el.classList.toggle("on",focus===o);});
   }
   return {LEVELS,ALL,LANES,BRMAP,SUBMAP,BODY,planetMapURL,outward,inward,goBr(id){const i=idx(id);if(i>=0)go(i,null,"in",ALL[i].downObj||null);},get levelId(){return ALL[LV]&&ALL[LV].id;},get focusId(){return focus&&focus.id;},get anchorId(){return anchor&&anchor.id;},goFrom(id,from){const i=idx(id);if(i>=0)go(i,null,"out",from);},home(){go(0,null,"in","earth");},goId(id,o,dir){id=SUBMAP[id]||id;const i=ALL.findIndex(L=>L.id===id);if(i>=0){if(i===LV&&o)focusOn(o);else go(i,o,dir||(i<LV?"in":"out"));}},init,go,focusOn,unfocus(){focus=null;isolate(null);cam.goal=ALL[LV].dist;cam.min=ALL[LV].min;renderInfo();},get level(){return LV;},
     start(){if(running||!renderer)return;running=true;last=performance.now();requestAnimationFrame(frame);},stop(){running=false;}};
@@ -6234,7 +6234,7 @@ window.GITNAV=(function(){
   const veil=document.getElementById("veil");
   function toEarth(){veil.textContent="地球へ降下中…";veil.classList.add("on");setTimeout(()=>{location.hash="world-map";setTimeout(()=>veil.classList.remove("on"),350);},450);}
   window.addEventListener("spz-earth",toEarth);
-  window.addEventListener("spz-loop",()=>{veil.textContent="一周して、地球へ戻ります…";veil.classList.add("on");setTimeout(()=>{SPZ.home();setTimeout(()=>veil.classList.remove("on"),900);},1100);});
+  window.addEventListener("spz-loop",()=>{veil.textContent="一周して、ミクロのいちばん底「描けない底」へ…";veil.classList.add("on");setTimeout(()=>{location.hash="micro";setTimeout(()=>{if(window.MICRO)MICRO.open("bottom","uroboros");setTimeout(()=>veil.classList.remove("on"),700);},300);},1100);});
   window.toSpace=()=>{veil.textContent="宇宙へ上昇中…";veil.classList.add("on");setTimeout(()=>{location.hash="space-map";SPZ.goFrom("leo","earth");setTimeout(()=>veil.classList.remove("on"),400);},450);};
   let started=false;function sync(){if(location.hash==="#space-map"){if(!started){started=true;SPZ.go(0,null);}SPZ.start();render();}else SPZ.stop();}
   window.addEventListener("hashchange",sync);window.addEventListener("resize",()=>location.hash==="#space-map"&&render());render();sync();
@@ -8180,8 +8180,8 @@ const MICRO=(function(){
     items:()=>[["pfoam","時空の泡","ホイーラーの考え"],["spinnet","スピンネットワーク","ループ量子重力"],["causal","因果集合","時空は「点と順番」"],["holo","ホログラフィー原理","情報は表面に書ける"],["pstring","超ひも","→ 理論の分岐へ"]].map(([id,name,sub])=>({id,name,sub}))},
    {id:"bit",ln:"deep",name:"情報の最小単位（仮説＋空想）",scale:"プランク長より下？",bg:"#04030a",fic:1,desc:"「物質のいちばん底は、粒でもひもでもなく『情報』なのでは」という考え。物理学者ホイーラーの「It from bit（すべては情報から）」などの思想がもとになっているが、科学的に確かめる方法はまだない。ここからは空想の色が濃い。",dist:9,
     items:()=>[["itbit","It from bit","粒子は情報からできている？"],["simul","計算する宇宙","宇宙はセル・オートマトン？"],["pixel","ピクセルの時空","最小の長さと最小の時間"]].map(([id,name,sub])=>({id,name,sub}))},
-   {id:"bottom",ln:"deep",name:"描けない底（空想）",scale:"—",bg:"#000000",fic:1,desc:"ミクロの地図のいちばん底。ここより小さな世界は、今の物理学では言葉にも図にもできない。宇宙マップの「いちばん外側」と同じく、ここも一周してつながっている…という空想で閉じた。さらにズームインすると、宇宙のいちばん大きなスケール（宇宙の形）へ。",dist:9,
-    items:()=>[["uroboros","宇宙のウロボロス","最小と最大がつながる"],["abyss","底のない底","さらにズームインすると…"]].map(([id,name,sub])=>({id,name,sub}))},
+   {id:"bottom",ln:"deep",name:"描けない底（空想）",scale:"—",bg:"#000000",fic:1,desc:"ミクロの地図のいちばん底。ここより小さな世界は、今の物理学では言葉にも図にもできない。宇宙マップの「いちばん外側」と同じく、ここも一周してつながっている…という空想で閉じた。さらにズームインすると、宇宙マップのいちばん外側「無」へ。",dist:9,
+    items:()=>[["uroboros","宇宙のウロボロス","最小と最大がつながる"],["abyss","底のない底","さらにズームインすると「無」へ"]].map(([id,name,sub])=>({id,name,sub}))},
   ];
   const XB={
    body(id){
@@ -8377,8 +8377,8 @@ const MICRO=(function(){
       anims.push(t=>root.rotation.y=Math.sin(t*.2)*.4);
       return [9,"宇宙のウロボロス","物理学者シェルドン・グラショーが描いた図。自分の尾をくわえた蛇（ウロボロス）の体に、いちばん小さなスケールから、いちばん大きなスケールまでを並べたもの。頭と尾が出会うところでは、宇宙の始まり（インフレーション）を理解するのに素粒子の理論が必要になるように、最小と最大がつながっている。"];}
     const N=3000,pos=[];for(let i=0;i<N;i++){const k=i/N,a=k*60,r=4*Math.pow(1-k,2);pos.push(Math.cos(a)*r,(k-.5)*-6*(1-k),Math.sin(a)*r);}const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));const pp=new THREE.Points(g,new THREE.PointsMaterial({color:"#c99cf2",size:.05,transparent:true,opacity:.8}));root.add(pp);anims.push(t=>pp.rotation.y=t*.4);
-    lbl("さらにズームインすると、宇宙のいちばん大きなスケールへ",0,3.4,0,"#fff",.7);
-    return [7,"底のない底","どこまでも小さくなっていく渦。物理学では、プランク長より小さな長さに意味があるのかどうかもわかっていない。この地図ではここを底とし、さらに進むと、宇宙のいちばん大きなスケールにつながる（空想）。"];}
+    lbl("さらにズームインすると、宇宙のいちばん外側「無」へ",0,3.4,0,"#fff",.7);
+    return [7,"底のない底","どこまでも小さくなっていく渦。物理学では、プランク長より小さな長さに意味があるのかどうかもわかっていない。この地図ではここを底とし、さらに進むと宇宙マップのいちばん外側「無」につながる（空想）。"];}
   };
   // ズームインの行き先（選んでいるものに合わせて「中」へ）
   const SYMZ=s=>{const e=ELEMENTS.find(x=>x.sym===s);return e?e.Z:1;};
@@ -8804,7 +8804,7 @@ const MICRO=(function(){
 window.MICRO=MICRO;
 // 世界地図 ⇄ ミクロ
 window.toMicro=()=>{const v=document.getElementById("veil");v.textContent="ミクロの世界へ…";v.classList.add("on");setTimeout(()=>{location.hash="micro";MICRO&&MICRO.open("life");setTimeout(()=>v.classList.remove("on"),350);},450);};
-window.addEventListener("micro-loop",()=>{const v=document.getElementById("veil");v.textContent="一周して、宇宙のいちばん大きなスケールへ…";v.classList.add("on");setTimeout(()=>{location.hash="space-map";setTimeout(()=>{if(typeof SPZ!=="undefined"&&SPZ){const i=SPZ.ALL.findIndex(x=>x.id==="shape");if(i>=0)SPZ.go(i,null,"out");}setTimeout(()=>v.classList.remove("on"),700);},300);},1100);});
+window.addEventListener("micro-loop",()=>{const v=document.getElementById("veil");v.textContent="一周して、宇宙のいちばん外側「無」へ…";v.classList.add("on");setTimeout(()=>{location.hash="space-map";setTimeout(()=>{if(typeof SPZ!=="undefined"&&SPZ)SPZ.goBr("void");setTimeout(()=>v.classList.remove("on"),700);},300);},1100);});
 window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent="世界地図へ…";v.classList.add("on");setTimeout(()=>{location.hash="world-map";setTimeout(()=>v.classList.remove("on"),350);},450);};
 
 /* ---------- 全体検索（／・Ctrl+K）・ショートカット・使い方・はじめてガイド ---------- */

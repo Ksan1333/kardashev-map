@@ -399,19 +399,19 @@ __SPACEPLANET__
       obj("uni_shape","宇宙の形",here,700,D,"説："+({flat:"平坦",sphere:"閉じた（球）",saddle:"開いた（双曲）",torus:"トーラス",multi:"多元宇宙"})[sh]);
       (LEVELS.find(l=>l.id==="shape")||{}).desc2=D;}},
   ];
-  // ---- 画面遷移を減らすため、近いスケールをまとめた6段階（中身は元の各スケールを拡大縮小して1つの場面に重ねる） ----
+  // ---- 画面遷移を減らすため、近いスケールをまとめた5段階（中身は元の各スケールを拡大縮小して1つの場面に重ねる） ----
   const SUBI=Object.fromEntries(SUB.map(L=>[L.id,L]));
   const MERGE=[
    {id:"em",name:"地球と月",short:"地球と月",parts:[["leo",1],["moon",1]],unit:"1目盛＝1000km",dist:150,min:7.5,max:4000,desc:"地球のまわりの人工衛星から、約38万km先の月まで。"+SUBI.leo.desc+" "+SUBI.moon.desc},
    {id:"solar",name:"太陽系",short:"太陽系",env:{__SPZ_ZR:40000},parts:[["inner",.1],["outer",1],["helio",1000]],unit:"1目盛＝1500万km（0.1天文単位）",dist:420,min:1.2,max:5e6,desc:"太陽と惑星、カイパーベルト、太陽圏、オールトの雲まで。"+SUBI.inner.desc+" "+SUBI.outer.desc+" ズームアウトを続けると太陽圏とオールトの雲（約1.6光年）まで広がる。惑星の大きさは誇張しています。"},
-   {id:"near",name:"近くの恒星と星雲",short:"恒星と星雲",env:{__SPZ_NEBK:.3},parts:[["stars",1],["nebula",1000]],unit:"1目盛＝0.1光年",dist:320,min:2,max:4.2e5,iso:1,desc:SUBI.stars.desc+" ズームアウトすると数千光年先の星雲まで。"+SUBI.nebula.desc},
-   {id:"galaxy",name:"天の川銀河と局部銀河群",short:"銀河",parts:[["galaxy",1],["local",10]],unit:"1目盛＝1000光年",dist:150,min:4,max:12000,desc:SUBI.galaxy.desc+" ズームアウトするとアンドロメダ銀河などの局部銀河群へ。"+SUBI.local.desc},
+   {id:"galaxy",name:"近くの恒星から天の川銀河まで",short:"恒星と銀河",env:{__SPZ_NEBK:.3},shift:{anchor:"sunpos",parts:["galaxy","local"],minDist:1.2e5},nearParts:{parts:["stars","nebula"],maxDist:6e5},parts:[["stars",1],["nebula",1000],["galaxy",10000],["local",100000]],unit:"1目盛＝0.1光年",dist:320,min:2,max:1.2e8,iso:1,desc:SUBI.stars.desc+" ズームアウトすると数千光年先の星雲、さらに天の川銀河全体、局部銀河群まで続く。"+SUBI.nebula.desc+" "+SUBI.galaxy.desc+" "+SUBI.local.desc},
    {id:"lania",name:"超銀河団と大規模構造",short:"大規模構造",hide:["home"],parts:[["lania",1],["web",100]],unit:"1目盛＝100万光年",dist:780,min:10,max:240000,desc:SUBI.lania.desc+" ズームアウトすると宇宙の大規模構造へ。"+SUBI.web.desc},
    {id:"shape",name:SUBI.shape.name,short:"宇宙の形",parts:[["shape",1]],unit:SUBI.shape.unit,dist:SUBI.shape.dist,min:SUBI.shape.min,max:SUBI.shape.max,desc:SUBI.shape.desc}];
   const SUBMAP={};MERGE.forEach(M=>M.parts.forEach(([id])=>SUBMAP[id]=M.id));
-  const LEVELS=MERGE.map(M=>({...M,build(){const root=scene;const seen=new Set(M.hide||[]);Object.assign(window,M.env||{});M.parts.forEach(([id,k])=>{const g=new THREE.Group();g.scale.setScalar(k);root.add(g);const n0=objs.length;scene=g;try{SUBI[id].build();}finally{scene=root;}
+  const LEVELS=MERGE.map(M=>({...M,build(){const root=scene;const seen=new Set(M.hide||[]);Object.assign(window,M.env||{});let sbox=null;if(M.shift){sbox=new THREE.Group();root.add(sbox);}M.parts.forEach(([id,k])=>{const g=new THREE.Group();g.scale.setScalar(k);(sbox&&M.shift.parts.includes(id)?sbox:root).add(g);if(M.nearParts&&M.nearParts.parts.includes(id)){const md=M.nearParts.maxDist;anims.push(()=>{g.visible=cam.dist<md;});}const n0=objs.length;scene=g;try{SUBI[id].build();}finally{scene=root;}
       g.traverse(o=>{const m=o.material;if(!m)return;if(m.isPointsMaterial&&m.sizeAttenuation!==false)m.size*=k;if(m.uniforms&&m.uniforms.uSize)m.uniforms.uSize.value*=k;});
       for(let i=n0;i<objs.length;i++){objs[i].view*=k;}});
+      if(sbox){root.updateMatrixWorld(true);const an=objs.find(o=>o.id===M.shift.anchor);if(an){const wp=new THREE.Vector3();an.node.getWorldPosition(wp);sbox.position.sub(wp);root.updateMatrixWorld(true);}}if(sbox&&M.shift.minDist){const bx=sbox,md=M.shift.minDist;anims.push(()=>{bx.visible=cam.dist>md;});}
       Object.keys(M.env||{}).forEach(k=>{delete window[k];});objs=objs.filter(o=>{if(seen.has(o.id)){o.node.visible=false;return false;}seen.add(o.id);return true;});}}));
 __SPACEBR__
   // ---- 共通 ----
@@ -438,7 +438,7 @@ __SPACEBR__
   function outward(){const L=ALL[LV];if(L.up){const u=idx(L.up);if(u>=0)go(u,null,"out",ALL[u].downObj);return;}if(L.top)return;if(L.loop){window.dispatchEvent(new CustomEvent("spz-loop"));return;}
     if(L.br){const pi=idx(L.parent);if(pi>=0)go(pi,null,"out",L.pobj);return;}if(LV<LEVELS.length-1)go(LV+1,null,"out",GATE[LEVELS[LV+1].id]);else go(idx("mv"),null,"out","u_home");}
   // ズームインの行き先：注目中（またはカーソル付近）の天体を優先し、勝手に別の場所へ飛ばない
-  const GATE={em:"earth",solar:"earth",near:"sun",galaxy:"sunpos",lania:"lg",shape:"uni_shape"};
+  const GATE={em:"earth",solar:"earth",galaxy:"sun",lania:"lg",shape:"uni_shape"};window.SPZ_SETDIST=d=>{cam.goal=d;cam.dist=d;};
   let ptrW=null;const PLMAP=new Set(["mercury","venus","mars","jupiter","saturn","uranus","neptune","pluto","moon"]);
   function pickNear(){const w=el.clientWidth,h=el.clientHeight;const fresh=ptrW&&performance.now()-ptrW.t<1500;const px=fresh?ptrW.x:w/2,py=fresh?ptrW.y:h/2;let best=null,bd=1e9;const p=new THREE.Vector3();
     objs.forEach(o=>{if(!o.node.visible)return;o.node.getWorldPosition(p);p.project(camera);if(p.z>1||p.z<-1)return;const d=Math.hypot((p.x*.5+.5)*w-px,(-p.y*.5+.5)*h-py);if(d<bd){bd=d;best=o;}});return bd<Math.min(w,h)*.3?best:null;}
@@ -466,7 +466,7 @@ __SPACEBR__
       cam.dist=dir==="in"?L.dist*3:dir==="out"?L.dist*.25:L.dist;cam.auto=true;cam.ph=L.ph!=null?L.ph:1.1;if(L.th!=null){cam.th=L.th;cam.auto=false;}
       lab.innerHTML=objs.map(o=>`<button class="splab" data-o="${o.id}"><i></i>${o.name}</button>`).join("");objs.forEach(o=>o.el=lab.querySelector(`[data-o="${o.id}"]`));
       renderInfo(); window.dispatchEvent(new CustomEvent("spz-level",{detail:i}));
-      anchor=null;const DEFA={near:"sun",galaxy:"sunpos",lania:"lg"};if(!fromId&&!L.br&&DEFA[L.id])fromId=DEFA[L.id];if(fromId){const fo=objs.find(x=>x.id===fromId);if(fo){anchor=fo;const p=new THREE.Vector3();fo.node.getWorldPosition(p);cam.target.copy(p);cam.goalT.copy(p);if(dir==="out")cam.dist=Math.max(fo.view*.6,L.min*1.5);}}
+      anchor=null;const DEFA={galaxy:"sun",lania:"lg"};if(!fromId&&!L.br&&DEFA[L.id])fromId=DEFA[L.id];if(fromId){const fo=objs.find(x=>x.id===fromId);if(fo){anchor=fo;const p=new THREE.Vector3();fo.node.getWorldPosition(p);cam.target.copy(p);cam.goalT.copy(p);if(dir==="out")cam.dist=Math.max(fo.view*.6,L.min*1.5);}}
       if(oid)setTimeout(()=>focusOn(oid),dir?500:50);
       fade.classList.remove("on");
     },first?0:220);
@@ -485,7 +485,7 @@ __SPACEBR__
     camera.near=Math.max(.001,d*.01);camera.far=d*400+2e5;camera.updateProjectionMatrix();starfield.position.copy(camera.position);
     renderer.render(scene,camera);
     const w=el.clientWidth,h=el.clientHeight,p=new THREE.Vector3();
-    objs.forEach(o=>{o.node.getWorldPosition(p);p.project(camera);const vis=p.z<1&&p.z>-1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05&&o.node.visible;o.el.style.display=vis?"":"none";if(vis)o.el.style.transform=`translate(${(p.x*.5+.5)*w}px,${(-p.y*.5+.5)*h}px)`;o.el.classList.toggle("on",focus===o);});
+    objs.forEach(o=>{o.node.getWorldPosition(p);p.project(camera);let vc=o.node;while(vc&&vc.visible)vc=vc.parent;const vis=p.z<1&&p.z>-1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05&&!vc;o.el.style.display=vis?"":"none";if(vis)o.el.style.transform=`translate(${(p.x*.5+.5)*w}px,${(-p.y*.5+.5)*h}px)`;o.el.classList.toggle("on",focus===o);});
   }
   return {LEVELS,ALL,LANES,BRMAP,SUBMAP,BODY,planetMapURL,outward,inward,goBr(id){const i=idx(id);if(i>=0)go(i,null,"in",ALL[i].downObj||null);},get levelId(){return ALL[LV]&&ALL[LV].id;},get focusId(){return focus&&focus.id;},get anchorId(){return anchor&&anchor.id;},goFrom(id,from){const i=idx(id);if(i>=0)go(i,null,"out",from);},home(){go(0,null,"in","earth");},goId(id,o,dir){id=SUBMAP[id]||id;const i=ALL.findIndex(L=>L.id===id);if(i>=0){if(i===LV&&o)focusOn(o);else go(i,o,dir||(i<LV?"in":"out"));}},init,go,focusOn,unfocus(){focus=null;isolate(null);cam.goal=ALL[LV].dist;cam.min=ALL[LV].min;renderInfo();},get level(){return LV;},
     start(){if(running||!renderer)return;running=true;last=performance.now();requestAnimationFrame(frame);},stop(){running=false;}};

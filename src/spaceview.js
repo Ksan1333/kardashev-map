@@ -64,7 +64,7 @@
   const veil=document.getElementById("veil");
   function toEarth(){veil.textContent="地球へ降下中…";veil.classList.add("on");setTimeout(()=>{location.hash="world-map";setTimeout(()=>veil.classList.remove("on"),350);},450);}
   window.addEventListener("spz-earth",toEarth);
-  window.addEventListener("spz-loop",()=>{veil.textContent="一周して、地球へ戻ります…";veil.classList.add("on");setTimeout(()=>{SPZ.home();setTimeout(()=>veil.classList.remove("on"),900);},1100);});
+  window.addEventListener("spz-loop",()=>{veil.textContent="一周して、ミクロのいちばん底「描けない底」へ…";veil.classList.add("on");setTimeout(()=>{location.hash="micro";setTimeout(()=>{if(window.MICRO)MICRO.open("bottom","uroboros");setTimeout(()=>veil.classList.remove("on"),700);},300);},1100);});
   window.toSpace=()=>{veil.textContent="宇宙へ上昇中…";veil.classList.add("on");setTimeout(()=>{location.hash="space-map";SPZ.goFrom("leo","earth");setTimeout(()=>veil.classList.remove("on"),400);},450);};
   let started=false;function sync(){if(location.hash==="#space-map"){if(!started){started=true;SPZ.go(0,null);}SPZ.start();render();}else SPZ.stop();}
   window.addEventListener("hashchange",sync);window.addEventListener("resize",()=>location.hash==="#space-map"&&render());render();sync();
