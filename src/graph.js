@@ -1,20 +1,20 @@
 /* ---------- ⑧ 系統樹（ズーム式ブランチグラフ） ---------- */
 (()=>{
-  const END=1000000;
+  const END=1e8;
   const B=[-300000,-40000,-10000,-3500,-500,500,1450,1760,1880,1945,1990,2026].concat(END>2026?[END]:[]);
-  const ERA=[["先史",-300000,-3500],["古代",-3500,500],["中世",500,1450],["近世",1450,1760],["近代",1760,1945],["現代",1945,2026],["Type Iへ（もしも）",2026,2300],["Type IIへ（もしも）",2300,6000],["Type IIIへ（もしも）",6000,END]];
+  const ERA=[["先史",-300000,-3500],["古代",-3500,500],["中世",500,1450],["近世",1450,1760],["近代",1760,1945],["現代",1945,2026],["Type Iへ（もしも）",2026,2300],["Type IIへ（もしも）",2300,6000],["Type IIIへ",6000,1e6],["Type IVへ",1e6,END]];
   let EY=END;
   const Y0=-300000, RH=20, AX=40;
   // 時間軸の目盛り：era＝時代ごとに幅を割り当てる（既定）／real＝1年＝1単位の実年数
-  const ERAW=[6,12,9,9,16,18,15,9,6];
+  const ERAW=[6,12,9,9,15,16,15,10,8,8];
   let SCALE=(()=>{try{return localStorage.getItem("treeScale")}catch(e){return null}})()||"era", SEG=[], W0=1;
   function mkSeg(){SEG=[];let u=0;ERA.forEach(([nm,a,b],i)=>{const w=SCALE==="era"?ERAW[i]*1000:(b-a);SEG.push([a,b,u,u+w]);u+=w;});W0=u;}
   mkSeg();
   const X0=y=>{y=Math.max(Y0,Math.min(END,y));for(const [a,b,u0,u1] of SEG){if(y<=b)return u0+(y-a)/(b-a)*(u1-u0);}return W0;};
   const Yof=u=>{u=Math.max(0,Math.min(W0,u));for(const [a,b,u0,u1] of SEG){if(u<=u1)return a+(u-u0)/(u1-u0)*(b-a);}return END;};
-  const man=n=>n>=10000?(n%10000?`${Math.floor(n/10000)}万${n%10000}`:`${n/10000}万`):`${n}`;
-  const fy=y=>y<=-10000?`約${man(-y)}年前`:y<0?`前${-y}年頃`:`${y}年`;
-  const fyShort=y=>y<=-10000?`${man(-y)}年前`:y<0?`前${-y}`:`${y}`;
+  const man=n=>n>=1e8?(n%1e8?(n/1e8).toFixed(1)+"億":`${n/1e8}億`):n>=10000?(n%10000?`${Math.floor(n/10000)}万${n%10000}`:`${n/10000}万`):`${n}`;
+  const fy=y=>y<=-10000?`約${man(-y)}年前`:y<0?`前${-y}年頃`:y>=10000?`${man(y)}年`:`${y}年`;
+  const fyShort=y=>y<=-10000?`${man(-y)}年前`:y<0?`前${-y}`:y>=10000?man(y):`${y}`;
   const eraOf=y=>ERA.find(([,a,b])=>y>=a&&y<b)?.[0]||"現代";
   const endOf=n=>typeof n.d==="number"?n.d:EY;
   const status=n=>typeof n.d==="number"?"dead":n.d==="f"?"fade":"alive";
@@ -147,7 +147,7 @@
     // 時間軸（上に固定）
     let grid="", ax=`<rect x="0" y="0" width="${vw}" height="${AX}" fill="#0a0f1f"/><line x1="0" x2="${vw}" y1="${AX}" y2="${AX}" stroke="var(--line)"/>`;
     ERA.forEach(([nm,a,b])=>{const x1=Math.max(sx(a),0),x2=Math.min(sx(b),vw);if(x2-x1<30)return;ax+=`<text x="${(x1+x2)/2}" y="15" text-anchor="middle" font-size="12" font-weight="700" fill="#e9edf7" font-family="Murecho,sans-serif">${nm}</text>`;});
-    const ua=(0-tx)/kx, ub=(vw-tx)/kx, steps=[1,2,5,10,20,50,100,200,500,1000,2000,5000,10000,20000,50000,100000,200000,500000], cand=[];
+    const ua=(0-tx)/kx, ub=(vw-tx)/kx, steps=[1,2,5,10,20,50,100,200,500,1000,2000,5000,10000,20000,50000,100000,200000,500000,1e6,2e6,5e6,1e7,2e7,5e7], cand=[];
     SEG.forEach(([a,b,u0,u1])=>{if(u1<ua||u0>ub)return;const ppy=kx*(u1-u0)/(b-a);const step=steps.find(s=>s*ppy>=72)||1e6;const ya=Math.max(a,Yof(ua)),yb=Math.min(b,Yof(ub),EY);for(let y=Math.ceil(ya/step)*step;y<=yb;y+=step)if(!cand.includes(y))cand.push(y);});
     cand.sort((p,q)=>p-q);
     let last=-1e9; cand.forEach(y=>{const x=sx(y);if(x<-5||x>vw+5||x-last<50)return;last=x;
