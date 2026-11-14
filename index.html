@@ -39,7 +39,7 @@ button{font-family:inherit}
 header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
 h1{font-family:var(--font-display);font-weight:900;font-size:28px;margin:0;letter-spacing:.02em;text-wrap:balance}
 .sub{color:var(--muted);font-size:13px;margin:4px 0 0}
-body.t1 .top h1::after{content:"Type I・もしも";font:600 11px var(--font-body);color:#06222c;background:#7ee0ff;border-radius:99px;padding:3px 9px;margin-left:10px;vertical-align:middle}
+body.t1 .top h1::after{content:"Type I（想定）";font:600 11px var(--font-body);color:#06222c;background:#7ee0ff;border-radius:99px;padding:3px 9px;margin-left:10px;vertical-align:middle}
 body.t1 .whev[data-fut="1"]{border-style:dashed}
 .view .note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6}
 .thwrap{position:relative;height:min(70vh,640px);min-height:420px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#02030a}
@@ -721,7 +721,7 @@ footer p{margin:0 0 6px;max-width:120ch}
   <div class="kglobal" aria-label="カルダシェフ・スライダー（全ビュー共通）"><div class="kglabel"><b>カルダシェフ・スライダー</b><span>動かすと全ビューの時代が切り替わります</span></div>
       <div class="track ktrack" id="track"><div class="bar"></div><div class="fill" id="fill"></div><div class="knob" id="knob" role="slider" aria-label="時代"><em></em><i></i></div></div>
       <input type="range" id="krange" min="-0.6" max="4" step="0.01" class="krange" aria-label="カルダシェフ値">
-      <div class="kbtns"><button class="chip" id="kprev">◀ 前の時代</button><button class="chip" id="know">現在に戻る</button><button class="chip" id="knext">次の時代 ▶</button><span class="klegend"><i class="d pre"></i>宇宙・地球史<i class="d past"></i>過去（推定）<i class="d isnow"></i>現在<i class="d fut"></i>未来（もしも）</span></div>
+      <div class="kbtns"><button class="chip" id="kprev">◀ 前の時代</button><button class="chip" id="know">現在に戻る</button><button class="chip" id="knext">次の時代 ▶</button><span class="klegend"><i class="d pre"></i>宇宙・地球史<i class="d past"></i>過去（推定）<i class="d isnow"></i>現在<i class="d fut"></i>未来（想定）</span></div>
   </div>
   <nav class="views" id="views" aria-label="ビュー"></nav>
 
@@ -745,7 +745,7 @@ footer p{margin:0 0 6px;max-width:120ch}
         <div class="facts">人口 約82億人<br>活動範囲 地球＋地球周辺<br>主な動力 化石燃料（86%）</div>
       </div>
     </div>
-    <div class="panel tguide" id="tguide"><div class="gauge-head"><b>文明タイプ・ガイド（もしもの世界）</b><span>スライダーの位置に合わせて自動で切り替わります</span></div>
+    <div class="panel tguide" id="tguide"><div class="gauge-head"><b>文明タイプ・ガイド（想定の世界）</b><span>スライダーの位置に合わせて自動で切り替わります</span></div>
       <div class="ctabs"><button data-t="t1">Type I 惑星</button><button data-t="t2">Type II 恒星</button><button data-t="t3">Type III 銀河</button></div><div class="ctabbody tgbody"></div></div>
     <div class="panel sfnote" id="sfnote"></div>
   </section>
@@ -863,7 +863,7 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ⑧ 系統樹 -->
   <section class="view" id="v-lineage">
-    <div class="view-head"><h2>系統樹（分野ごと）</h2><p>分野を1つ選ぶと、その分野だけの系統樹を独立した時間軸で表示する（分野どうしは混ぜない）。2026年より先（点線）は「もしも」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線と、SFノートの構想（【SF】）に分かれて並ぶ。消えた要素は後継に合流（マージ）する。</p></div>
+    <div class="view-head"><h2>系統樹（分野ごと）</h2><p>分野を1つ選ぶと、その分野だけの系統樹を独立した時間軸で表示する（分野どうしは混ぜない）。2026年より先（点線）は「近未来〜Type IVの想定」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線と、SFノートの構想（【SF】）に分かれて並ぶ。消えた要素は後継に合流（マージ）する。</p></div>
     <div class="chips" id="gchips"></div>
     <div class="gwrap">
       <div class="gcanvas" id="gcanvas" tabindex="0" aria-label="系統樹のキャンバス。ホイールまたはピンチでズーム、ドラッグで移動">
@@ -1290,7 +1290,7 @@ slab(-33.9,-8,8,[gm,rk]);slab(6.5,33.9,7,[gm,rk]);
              n:{sky:"#8ec5f2",fog:"#b9dbf5",sun:["#ffffff",1.15],pos:[10,60,15],amb:.55,hemi:["#dff0ff","#6a5a48",.55]},
              e:{sky:"#e8875a",fog:"#d99a7a",sun:["#ffb070",.85],pos:[-40,14,-10],amb:.38,hemi:["#ffb88c","#3a2a3a",.4]},
              x:{sky:"#0a1430",fog:"#0d1836",sun:["#9db4ff",.22],pos:[-20,40,30],amb:.16,hemi:["#2a3a6a","#0a0a14",.25]}};
-  // ---- Type I（もしも）の未来シーン ----
+  // ---- Type I（想定）の未来シーン ----
   const neon=(c,o=1)=>new THREE.MeshBasicMaterial({color:c,transparent:o<1,opacity:o});
   const glass=(c="#9fd8ff",o=.35)=>new THREE.MeshStandardMaterial({color:c,transparent:true,opacity:o,roughness:.05,metalness:.6,side:THREE.DoubleSide});
   const glowM=(c)=>{const m=mat("#2a3140",{emissive:c,emissiveIntensity:.25});onTod.push(t=>m.emissiveIntensity=t==="x"?1.8:t==="e"?.8:.25);return m;};
@@ -3989,6 +3989,9 @@ nations:[
 };
 TREE.forEach(t=>{(TREE_ADD2[t.key]||[]).forEach(n=>t.nodes.push(n));});
 
+// 未来の年→どのTypeの時代か（宇宙マップ・系統樹と同じ区切り）
+function TYP(y){return y<2100?"近未来":y<2300?"Type I":y<6000?"Type II":y<1e7?"Type III":"Type IV";}
+const ISFUT=t=>/^(近未来|Type I{1,3}|Type IV)$/.test(t);
 // 世界史年表 [表示年, 並び順の年, 地域, 出来事, 説明, タグ]
 const WH_REGIONS=["ヨーロッパ","中東・北アフリカ","アフリカ","南・東南アジア・オセアニア","東アジア","南北アメリカ","世界"];
 const WH_ERAS=[["先史",-1e9,-3500],["古代①（文明の誕生）",-3500,-500],["古代②（古典の帝国）",-500,500],["中世",500,1450],["近世",1450,1760],["近代",1760,1914],["二つの世界大戦",1914,1945],["現代",1945,2100]];
@@ -5439,7 +5442,7 @@ TREE.forEach(t=>{const ids=new Set(t.nodes.map(x=>x[0]));(TREE_ADD3[t.key]||[]).
    [3900,"くじら座τ星の植民地","約11.9光年先の、太陽によく似た恒星系に入植する。",["宇宙","社会"]],
    [3950,"TRAPPIST-1の植民地","約40光年先の、7つの地球サイズの惑星をもつ恒星系に入植する。地球との会話は往復約81年。",["宇宙","社会"]],
    [4000.5,"シュカドフ推進器","太陽の片側を巨大な鏡で覆い、光の圧力で太陽系ごとゆっくり動かす装置（1987年、シュカドフが提案）。",["宇宙","技術"]]];
-  const add=(arr,tp)=>arr.forEach(([y,t,d,tags])=>{if(WH.some(e=>e[3]===t))return;WH.push([L(y,tp),y,"世界",t,d+"（宇宙マップの"+tp+"の時代で見られます）",[...tags,"もしも"]]);});
+  const add=(arr,tp)=>arr.forEach(([y,t,d,tags])=>{if(WH.some(e=>e[3]===t))return;WH.push([L(y,tp),y,"世界",t,d+"（宇宙マップの"+tp+"の時代で見られます）",[...tags,tp]]);});
   add(E1,"Type I");add(E2,"Type II");
   // 宇宙マップと年がずれていた出来事を合わせる
   const fix=(title,y,lab,desc)=>{const e=WH.find(x=>x[3]===title);if(!e)return;e[1]=y;e[0]=lab;if(desc)e[4]=desc;};
@@ -5496,8 +5499,7 @@ TREE.forEach(t=>{const ids=new Set(t.nodes.map(x=>x[0]));(TREE_ADD3[t.key]||[]).
 (()=>{
   const man=n=>n>=1e8?(n/1e8)+"億":n>=1e4?Math.floor(n/1e4)+"万"+(n%1e4?Math.round(n%1e4):""):String(n);
   const L=(y,t)=>`${man(y)}年ごろ（${t}）`;
-  // 既存のType IIIの出来事は「（もしも）」→「（Type III）」、年を宇宙マップに合わせる
-  WH.forEach(e=>{if(e[1]>=6000&&/（もしも）$/.test(e[0]))e[0]=e[0].replace("（もしも）","（Type III）");});
+  // 年を宇宙マップに合わせる
   const fix=(title,y,desc)=>{const e=WH.find(x=>x[3]===title);if(!e)return;e[1]=y;e[0]=L(y,y>=1e7?"Type IV":"Type III");if(desc)e[4]=desc;};
   fix("銀河中心ブラックホールのエネルギー",1e6,"天の川銀河の中心にある、太陽の約400万倍の重さのブラックホール「いて座A*」。その回転からエネルギーを取り出す（ペンローズ過程、1969年に提案）。宇宙マップではType IIIの時代に「いて座A*のペンローズ発電所」として登場。");
   fix("アンドロメダ銀河へ",1e6);
@@ -5543,8 +5545,6 @@ TREE.forEach(t=>{const ids=new Set(t.nodes.map(x=>x[0]));(TREE_ADD3[t.key]||[]).
    [1e6,"おとめ座銀河団に他の文明？","約5400万光年先の、銀河が1000個以上集まる銀河団。他のType III文明がいるかを探す。",["宇宙","学問"]],
    [1e6,"Type IVへの道","銀河の外へ出るには光でも数百万年かかる。ここから先はワームホールのような新しい物理が必要になる。",["宇宙","技術"]]];
   // ---- Type IV（構想：1000万年〜1億年） ----
-  const W="（ワームホールの出口は光より遅く運ぶしかないので、実際には最低でも約";
-  const far=ly=>W+(ly>=1e8?(ly/1e8).toFixed(1).replace(/\.0$/,"")+"億":Math.round(ly/1e4)+"万")+"年かかる）";
   const E4=[
    [1e7,"最初の通れるワームホール","地球の軌道に、遠くの場所とつながる「時空のトンネル」を開く。1988年にモリスとソーンが、通れるワームホールには負のエネルギーが必要だと示した。",["宇宙","技術"]],
    [1e7,"負のエネルギー工場（カシミール効果）","ごく近い2枚の金属板の間に生じるカシミール効果（1997年に実験で確認）を、ワームホールを支える負のエネルギー源として大規模化する。必要な量は誰にもわからない。",["宇宙","エネルギー"]],
@@ -5565,19 +5565,20 @@ TREE.forEach(t=>{const ids=new Set(t.nodes.map(x=>x[0]));(TREE_ADD3[t.key]||[]).
    [5e7,"ダークマター地図局","銀河の重さの大半を占める見えない物質の分布を、局部銀河群全体で地図にする。",["宇宙","学問"]],
    [5.5e7,"ミルコメダ計画","約45億年後に天の川とアンドロメダが合体してできる銀河（ミルコメダ）に向け、恒星と植民地の配置を準備する。",["宇宙","社会"]],
    [6.5e7,"おとめ座銀河団ゲートとM87発電所","約5400万光年先の銀河団へ。中心の銀河M87には太陽の約65億倍のブラックホール（2019年に初めて撮影）。",["宇宙","エネルギー"]],
-   [7e7,"超銀河団評議会","ラニアケア超銀河団（約10万個の銀河）の文明をまとめる。",["宇宙","社会"]],
-   [8e7,"近くの銀河団・銀河群へのゲート","ケンタウルス座・うみへび座・ろ座の銀河団や、M81・M101・子持ち銀河（M51）などの銀河群へ。遠いもの（約1.6億光年先）は、出口を運ぶだけで1.6億年以上かかる。",["宇宙","技術"]],
+   [3.5e8,"超銀河団評議会","ラニアケア超銀河団（約10万個の銀河）の文明をまとめる。",["宇宙","社会"]],
+   [2e8,"近くの銀河団・銀河群へのゲート","ケンタウルス座・うみへび座・ろ座の銀河団や、M81・M101・子持ち銀河（M51）などの銀河群へ。いちばん遠いもの（約1.6億光年先）は、出口を運ぶだけで1.6億年以上かかる。",["宇宙","技術"]],
    [8e7,"ダークエネルギー観測所と膨張を越える橋","宇宙の膨張を加速させているダークエネルギーを調べ、膨張で離れていく銀河団どうしをゲートでつなぎとめる。",["宇宙","学問"]],
-   [1e8,"ラニアケア中央ゲート（グレート・アトラクター）","銀河の流れが集まる、ラニアケア超銀河団の中心へのゲート"+far(2.5e8)+"。",["宇宙","技術"]],
-   [1e8,"近くの超銀河団へのゲート","ペルセウス座・うお座、かみのけ座、ヘルクレス座、シャプレー超銀河団へ"+far(6.5e8)+"。",["宇宙","技術"]],
-   [1e8,"グレートウォールとボイドの基地","スローン・グレートウォールや、うしかい座ボイドなど宇宙の網目の「壁」と「空洞」に観測基地を置く"+far(1e9)+"。",["宇宙","学問"]],
-   [1e8,"宇宙網の地図局とフィラメント高速路","銀河が並ぶ宇宙の網目（フィラメント）に沿ってゲートを並べ、宇宙の大規模構造を地図にする。",["宇宙","技術"]],
-   [1e8,"宇宙の形の測量網","宇宙が平らか、丸いか、つながっているかを、宇宙背景放射と巨大な測量網で確かめる。",["宇宙","学問"]],
-   [1e8,"赤ちゃん宇宙の工房とマルチバースへの窓","新しい宇宙を作れるか、他の宇宙をのぞけるかを研究する（Type Vへの道）。完全に推測の領域。",["宇宙","学問"]],
-   [1e8,"Type IV文明（構想）に到達","ワームホール網で超銀河団規模のエネルギー（約10⁴⁶W）を使う文明。物理的に可能かどうかもわかっていない。",["宇宙","技術"]]];
-  const add=(arr,tp)=>arr.forEach(([y,t,d,tags])=>{if(WH.some(e=>e[3]===t))return;WH.push([L(y,tp),y,"世界",t,d+"（宇宙マップの"+tp+"の時代で見られます）",[...tags,"もしも"]]);});
+   [3e8,"ラニアケア中央ゲート（グレート・アトラクター）","銀河の流れが集まる、ラニアケア超銀河団の中心（約2.5億光年先）へのゲート。出口を運ぶのに2.5億年以上かかる。",["宇宙","技術"]],
+   [7e8,"近くの超銀河団へのゲート","ペルセウス座・うお座（約2.5億光年）、かみのけ座（約3億光年）、ヘルクレス座（約5億光年）、シャプレー超銀河団（約6.5億光年）へ。いちばん遠いシャプレーまで出口を運ぶのに6.5億年以上かかる。",["宇宙","技術"]],
+   [1e9,"グレートウォールとボイドの基地","スローン・グレートウォール（約10億光年）や、うしかい座ボイド（約7億光年）など、宇宙の網目の「壁」と「空洞」に基地を置く。それより遠いエリダヌス座の超空洞やヘルクレス座・かんむり座グレートウォールは、10億年でも届かないので遠隔観測にとどまる。",["宇宙","学問"]],
+   [8e8,"宇宙網の地図局とフィラメント高速路","銀河が並ぶ宇宙の網目（フィラメント）に沿ってゲートを並べ、宇宙の大規模構造を地図にする。",["宇宙","技術"]],
+   [9e8,"宇宙の形の測量網","宇宙が平らか、丸いか、つながっているかを、宇宙背景放射と巨大な測量網で確かめる。",["宇宙","学問"]],
+   [1e9,"赤ちゃん宇宙の工房とマルチバースへの窓","新しい宇宙を作れるか、他の宇宙をのぞけるかを研究する（Type Vへの道）。完全に推測の領域。",["宇宙","学問"]],
+   [1e9,"太陽が明るくなり、地球の海が失われ始める","太陽は少しずつ明るくなり、約10億年後には約1割明るくなる。自然のままなら地球は暑くなりすぎて海が蒸発し始める（実際の予測）。Type IIIの時代の「寿命をのばした太陽」や、地球の軌道を動かす技術が必要になる。",["宇宙","環境"]],
+   [1e9,"Type IV文明（構想）に到達","ワームホール網で超銀河団規模のエネルギー（約10⁴⁶W）を使う文明。物理的に可能かどうかもわかっていない。",["宇宙","技術"]]];
+  const add=(arr,tp)=>arr.forEach(([y,t,d,tags])=>{if(WH.some(e=>e[3]===t))return;WH.push([L(y,tp),y,"世界",t,d+"（宇宙マップの"+tp+"の時代で見られます）",[...tags,tp]]);});
   add(E3,"Type III");add(E4,"Type IV");
-  if(!WH_ERAS.some(e=>e[1]===1e7))WH_ERAS.push(["1000万〜1億年・Type IV（構想）",1e7,1e9]);
+  if(!WH_ERAS.some(e=>e[1]===1e7))WH_ERAS.push(["1000万〜10億年・Type IV（構想）",1e7,1e10]);
   WH.sort((a,b)=>a[1]-b[1]);
 
   // ---- 系統樹 ----
@@ -5620,8 +5621,9 @@ TREE.forEach(t=>{const ids=new Set(t.nodes.map(x=>x[0]));(TREE_ADD3[t.key]||[]).
     ["z_m31gate","銀河間ゲート（天の川〜アンドロメダ）","z_satgate",4e7,null,null,t4("【時空】約250万光年をつなぐ")],
     ["z_lggate","局部銀河群ゲート網","z_m31gate",4.8e7,null,null,t4("【時空】約80の銀河をつなぐ")],
     ["z_virgogate","おとめ座銀河団ゲート","z_lggate",6.5e7,null,null,t4("【時空】約5400万光年先の銀河団へ")],
-    ["z_laniagate","ラニアケア中央ゲート","z_virgogate",1e8,null,null,t4("【時空】約2.5億光年先。出口を運ぶだけで2.5億年以上かかるため、本当は1億年では間に合わない")],
-    ["z_filament","フィラメント高速路","z_laniagate",1e8,null,null,t4("【時空】宇宙の網目に沿ってゲートを並べる")]],
+    ["z_laniagate","ラニアケア中央ゲート","z_virgogate",3e8,null,null,t4("【時空】約2.5億光年先。出口を運ぶだけで2.5億年以上かかる")],
+    ["z_scgate","近くの超銀河団へのゲート","z_laniagate",7e8,null,null,t4("【時空】ペルセウス座・うお座、かみのけ座、ヘルクレス座、シャプレー超銀河団へ")],
+    ["z_filament","フィラメント高速路","z_scgate",8e8,null,null,t4("【時空】宇宙の網目に沿ってゲートを並べる")]],
    academia:[
     ["y_ghz","銀河の居住可能領域","cosmology",6000,null,null,t3("【宇宙】銀河の中で住みやすい帯を地図にする")],
     ["y_fermi","フェルミのパラドックスの答え","y_ghz",50000,null,null,t3("【宇宙】銀河に広がっても他の文明に出会わない理由を探す")],
@@ -5630,20 +5632,32 @@ TREE.forEach(t=>{const ids=new Set(t.nodes.map(x=>x[0]));(TREE_ADD3[t.key]||[]).
     ["z_lab","時空工学","z_chrono",2.7e7,null,null,t4("【時空】ゲートを作り、時空のゆがみを研究する学問")],
     ["z_darkmap","ダークマター地図","y_interf",5e7,null,null,t4("【時空】局部銀河群全体の見えない物質の分布を地図にする")],
     ["z_darkenergy","ダークエネルギー研究","z_darkmap",8e7,null,null,t4("【時空】宇宙の加速膨張の正体を調べる")],
-    ["z_shape","宇宙の形の測量","z_darkenergy",1e8,null,null,t4("【時空】宇宙が平らか、丸いか、つながっているかを確かめる")],
-    ["z_baby","赤ちゃん宇宙の工房","z_lab",1e8,null,null,t4("【時空】新しい宇宙を作れるかを研究する（Type Vへの道）。完全に推測")]],
+    ["z_shape","宇宙の形の測量","z_darkenergy",9e8,null,null,t4("【時空】宇宙が平らか、丸いか、つながっているかを確かめる")],
+    ["z_baby","赤ちゃん宇宙の工房","z_lab",1e9,null,null,t4("【時空】新しい宇宙を作れるかを研究する（Type Vへの道）。完全に推測")]],
    politics:[
     ["y_merger","アンドロメダ衝突への備え","interstellar",50000,null,null,t3("【協調】約45億年後の銀河の合体に向けた長期計画")],
     ["y_arms","渦巻き腕ごとの文化圏","interstellar",1e6,null,null,t3("【分化】通信に何万年もかかり、腕ごとに別の文化が育つ")],
     ["z_lgcouncil","局部銀河群の評議会","y_arms",4.5e7,null,null,t4("【協調】ゲートで一瞬で会えるようになり、銀河をまたいだ政治が可能に")],
     ["z_milkomeda","ミルコメダ計画","y_merger",5.5e7,null,null,t4("【協調】合体後の銀河での恒星と植民地の配置を準備する")],
-    ["z_sccouncil","超銀河団評議会","z_lgcouncil",7e7,null,null,t4("【協調】ラニアケア超銀河団の文明をまとめる")]],
+    ["z_sccouncil","超銀河団評議会","z_lgcouncil",3.5e8,null,null,t4("【協調】ラニアケア超銀河団の文明をまとめる")]],
    info:[
     ["y_archive","月の記録保管庫","ipn",6000,null,null,t3("【記録】人類の歴史・言語・遺伝子を月の地下に何百万年も残す")],
     ["z_gatenet","ゲート通信網","galnet",1.2e7,null,null,t4("【時空】ワームホールを通して、光より速く情報を届ける")]]};
   TREE.forEach(t=>{const ids=new Set(t.nodes.map(x=>x[0]));(N[t.key]||[]).forEach(n=>{if(ids.has(n[0]))return;n=[...n];if(n[2]&&!ids.has(n[2]))n[2]=null;t.nodes.push(n);ids.add(n[0]);});});
   const yr=(key,id,y)=>{const t=TREE.find(x=>x.key===key);const n=t&&t.nodes.find(x=>x[0]===id);if(n)n[3]=y;};
   yr("energy","bhenergy",78000);
+})();
+/* ===== 「もしも」をどのTypeの時代かの表記にそろえる ===== */
+(()=>{
+  const lab=(s,y)=>/Type/.test(s)?s.replace(/・?（もしも）/g,"").replace(/（Type ([IV]+)・もしも）/g,"（Type $1）"):s.replace(/（もしも）/g,"（"+TYP(y)+"）");
+  const txt=(s,y)=>typeof s!=="string"?s:s.replace(/（もしも）/g,"（"+TYP(y)+"の想定）").replace(/「もしも」/g,"「"+TYP(y)+"の想定」").replace(/もしもの未来/g,TYP(y)+"の未来");
+  WH.forEach(e=>{if(e[1]<=2026.5)return;e[0]=lab(e[0],e[1]);e[3]=lab(e[3],e[1]);e[4]=txt(e[4],e[1]);
+    if(Array.isArray(e[5])){const t=TYP(e[1]);e[5]=e[5].map(x=>x==="もしも"?t:x).filter((x,i,a)=>a.indexOf(x)===i);}});
+  WH_ERAS.forEach(e=>{if(e[2]>2026.5&&e[1]>=2026)e[0]=lab(e[0],e[1]);});
+  TREE.forEach(t=>t.nodes.forEach(n=>{if(n[3]<=2026.5)return;n[1]=lab(n[1],n[3]);n[6]=txt(n[6],n[3]);}));
+  if(typeof MAP!=="undefined"&&MAP.pins)MAP.pins.forEach(p=>{if(p.cat==="future"){p.name=lab(p.name||"",2200);p.desc=txt(p.desc,2200);}});
+  const deep=o=>{if(Array.isArray(o)||(o&&typeof o==="object"))for(const k in o){if(typeof o[k]==="string")o[k]=txt(o[k],2200);else deep(o[k]);}};
+  if(typeof PLACES_T1!=="undefined")Object.keys(PLACES_T1).forEach(k=>PLACES[k]&&deep(PLACES[k]));
 })();
 
 /* ---------- SFノート（けいの構想）：文明の5段階・知性の進化・言語・記憶・哲学 ---------- */
@@ -5684,7 +5698,7 @@ const SFN_STAGES=[
  ["超因果圏","Type IIIの先（仮：1万年〜）","今の因果律や時空の制約を超えて、知性どうしが交流できる。","時間と距離の制約からの解放","「一度きり」の選択の重み","同じ川に二度入れないからこそ、選択に意味があるのでは？"],
  ["高次存在領域","さらにその先（仮：10万年〜）","空間・時間・言語といった概念を超えた存在の領域。UOIが現れる。","生命・宇宙・情報の境界の再定義","有限であることの魅力","あらゆる制約から解放された存在は、それでも何かを望むのか？"]];
 window.SFNOTE_RENDER=function(el){if(!el)return;const e=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
-  el.innerHTML=`<div class="gauge-head"><b>SFノート：文明はどこまで進化できるか（構想・空想）</b><span>けいのSFノートの構想。事実や研究にもとづく「もしも」とは別の、創作の層です。年代はすべて仮。</span></div>
+  el.innerHTML=`<div class="gauge-head"><b>SFノート：文明はどこまで進化できるか（構想・空想）</b><span>けいのSFノートの構想。事実や研究にもとづく「近未来〜Type IVの想定」とは別の、創作の層です。年代はすべて仮。</span></div>
   <p class="sfq">根本の問い：<b>人類と知性はどこまで進化できるのか。そして、人類を超えた知性が生まれたとき、文明・幸福・生命・宇宙はどう変わるのか。</b></p>
   <div class="sfstages">${SFN_STAGES.map(([n,k,d,g,l,q],i)=>`<div class="sfst"><div class="sfn">${i+1}</div><h4>${e(n)}</h4><div class="sfk">${e(k)}</div><p>${e(d)}</p><dl><dt>得るもの</dt><dd>${e(g)}</dd><dt>失うもの</dt><dd>${e(l)}</dd><dt>残る問い</dt><dd>${e(q)}</dd></dl></div>`).join('<div class="sfarr">→</div>')}</div>
   <div class="sfgrid">
@@ -5867,7 +5881,7 @@ const WHC={
  victoria:["natural","モシ・オ・トゥニャ／ヴィクトリアの滝","ザンビア／ジンバブエ",1989,[7,8]],
 };
 const WHC_OTHER={normandy:"世界遺産には未登録（フランスの暫定リストに「ノルマンディー上陸作戦の海岸」として記載）。",sahara:"サハラ砂漠全体は未登録。域内にタッシリ・ナジェール（複合遺産）やアイル・テネレ自然保護区などがある。",antarctica:"南極大陸は南極条約によりどの国の領土でもないため、世界遺産の対象外。条約で環境が保護されている。"};
-const WHC_TYPE={cultural:["文化遺産","#e8a46a"],natural:["自然遺産","#8fd16a"],mixed:["複合遺産","#c99cf2"],other:["世界遺産以外（現代建築・科学施設など）","#6fd3c7"],future:["Type I（もしも）","#7ee0ff"]};
+const WHC_TYPE={cultural:["文化遺産","#e8a46a"],natural:["自然遺産","#8fd16a"],mixed:["複合遺産","#c99cf2"],other:["世界遺産以外（現代建築・科学施設など）","#6fd3c7"],future:["Type I（想定）","#7ee0ff"]};
 // 地図のピンを世界遺産の区分に並べ替え
 MAP.pins.forEach(p=>{p.cat0=p.cat;p.cat=WHC[p.id]?WHC[p.id][0]:(p.cat==="future"?"future":"other");});
 Object.keys(CAT).forEach(k=>delete CAT[k]);Object.assign(CAT,WHC_TYPE);
@@ -5875,7 +5889,7 @@ function whcCard(id,p){const w=WHC[id];
   if(w)return `<div class="whc"><div class="whch"><span class="whcemb" style="--wc:${WHC_TYPE[w[0]][1]}"><i></i></span><div><div class="whct" style="color:${WHC_TYPE[w[0]][1]}">世界遺産・${WHC_TYPE[w[0]][0]}</div><b>${w[1]}</b></div></div>
     <dl><dt>国</dt><dd>${w[2]}</dd><dt>登録年</dt><dd>${w[3]}年</dd><dt>登録基準</dt><dd>${w[4].map(c=>`<span class="whcc"><b>(${["","i","ii","iii","iv","v","vi","vii","viii","ix","x"][c]})</b>${WHC_CRIT[c]}</span>`).join("")}</dd></dl>${w[5]?`<p class="whcn">${w[5]}</p>`:""}</div>`;
   const fut=p&&p.cat==="future";
-  return `<div class="whc none"><div class="whch"><span class="whcemb off"><i></i></span><div><div class="whct">${fut?"もしもの未来の施設":"世界遺産には未登録"}</div><b>${p?p.name:""}</b></div></div><p class="whcn">${WHC_OTHER[id]||(fut?"想像上の施設です。":"現代の建築・施設・自然地域などで、世界遺産には登録されていません。")}</p></div>`;}
+  return `<div class="whc none"><div class="whch"><span class="whcemb off"><i></i></span><div><div class="whct">${fut?"Type Iの想定の施設":"世界遺産には未登録"}</div><b>${p?p.name:""}</b></div></div><p class="whcn">${WHC_OTHER[id]||(fut?"想像上の施設です。":"現代の建築・施設・自然地域などで、世界遺産には登録されていません。")}</p></div>`;}
 
 // 時代ごとの全体マップ（12分野）。順番は FIELDS と同じ：
 // history, politics, war, tech, energy, space, medicine, academia, agriculture, food, culture, subculture
@@ -5895,7 +5909,7 @@ const ERA_FIELDS=[
  [["恒星文明","太陽のエネルギーを掌握"],["太陽系全体の統治","惑星間の協定"],["想像の外","恒星規模の防衛"],["ダイソン・スウォーム","恒星工学"],["10²⁶W","太陽の全出力"],["近くの恒星へ探査機","恒星間通信"],["不老？","意識のアップロード？"],["物理法則の限界","宇宙の起源"],["人工生態系","テラフォーミング"],["分子レベルの合成","制約なし"],["数兆人の文明？","多様な人類"],["仮想宇宙","惑星規模の芸術"]],
  [["恒星間文明","人類が星々へ"],["恒星系どうしの連合","光速の壁"],["数百光年の安全保障","未知"],["光速に近い宇宙船","恒星の移動？"],["10³¹W","多数の恒星"],["数千光年","恒星系への植民"],["長期航行の医学","冷凍睡眠？"],["異星生命との接触？","銀河の地図"],["惑星の改造","生物圏の移植"],["恒星系ごとの食文化","未知"],["分岐する人類","言語と文化の多様化"],["数百年の旅の文化","未知"]],
  [["銀河文明","数百万年の歴史"],["銀河規模の文明","光速で10万年の隔たり"],["想像の外","未知"],["銀河工学","ブラックホールの利用？"],["10³⁶W","銀河全体の恒星"],["天の川銀河全体","他の銀河へ"],["生命の再設計？","未知"],["宇宙の終わりの研究","未知"],["銀河の生物圏","未知"],["未知","未知"],["数千億の恒星系の文化","未知"],["想像の外","未知"]],
- [["超銀河団文明","約1億年後（構想）"],["銀河どうしの連合","ワームホール網で結ばれる"],["想像の外","未知"],["時空工学","ワームホール・負のエネルギー"],["10⁴⁶W","数万〜数十万の銀河"],["ラニアケア超銀河団","宇宙の大規模構造へ"],["意識の転送？","未知"],["宇宙の始まりと終わりの研究","時間旅行は可能か"],["銀河ごとの生物圏","未知"],["未知","未知"],["銀河ごとに別の文明","未知"],["想像の外","未知"]],
+ [["超銀河団文明","約10億年後（構想）"],["銀河どうしの連合","ワームホール網で結ばれる"],["想像の外","未知"],["時空工学","ワームホール・負のエネルギー"],["10⁴⁶W","数万〜数十万の銀河"],["ラニアケア超銀河団","宇宙の大規模構造へ"],["意識の転送？","未知"],["宇宙の始まりと終わりの研究","時間旅行は可能か"],["銀河ごとの生物圏","未知"],["未知","未知"],["銀河ごとに別の文明","未知"],["想像の外","未知"]],
 ];
 
 const ERA_PRE=[
@@ -5912,7 +5926,7 @@ ERA_FIELDS.unshift(...ERA_PRE);
 window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=document.getElementById("ktype");
   const k=+(document.getElementById("krange")||{}).value||.73;const T=E.kind==="pre"?"pre":k>=3?3:k>=2?2:k>=1?1:0;
   const nm=["Type 0","Type I","Type II","Type III"];
-  el.innerHTML=`<div class="ktsteps">${["文明以前",...nm].map((t,i)=>`<span class="${(T==="pre"?0:T+1)===i?"on":""}">${t}</span>`).join("")}</div><div class="ktnow"><b>${T==="pre"?"文明以前":nm[T]}</b><span>${E.when}・${E.name}${E.kind==="future"&&!/もしも/.test(E.when)?"（もしも）":""}</span></div>`;
+  el.innerHTML=`<div class="ktsteps">${["文明以前",...nm].map((t,i)=>`<span class="${(T==="pre"?0:T+1)===i?"on":""}">${t}</span>`).join("")}</div><div class="ktnow"><b>${T==="pre"?"文明以前":nm[T]}</b><span>${E.when}・${E.name}${E.kind==="future"&&!/想定|構想/.test(E.when+E.name)?"（想定）":""}</span></div>`;
   document.getElementById("modesub").textContent=E.now?"文明レベルごとに、同じビューで世界を描くガイドブック。いまは「現在の地球」を表示中。":`いまは「${E.when}・${E.name}」の世界を表示中。${E.kind==="future"?"2026年より先は予測・目標と想像です。":E.kind==="pre"?"人類が登場する前の宇宙・地球です。":"その時代までに起きたこと・知られていたことだけを表示します。"}`;});
 
 /* 宇宙・地図・ミクロの切り替え */
@@ -5951,9 +5965,9 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
     "space-map":"その時代に知られていなかった天体や、まだない人工衛星は隠しています。"};
   const bars={};
   Object.keys(MSG).forEach(id=>{const sec=document.getElementById("v-"+id);if(!sec)return;const b=document.createElement("div");b.className="erabar";b.hidden=true;const h=sec.querySelector(".view-head");(h||sec.firstChild).after(b);bars[id]=b;});
-  const yfmt=y=>y< -1e8?(-y/1e8).toFixed(1).replace(/\.0$/,"")+"億年前":y< -1e4?Math.round(-y/1e4).toLocaleString()+"万年前":y<0?"紀元前"+(-y).toLocaleString()+"年":y>1e8?"":y+"年";
+  const yfmt=y=>y< -1e8?(-y/1e8).toFixed(1).replace(/\.0$/,"")+"億年前":y< -1e4?Math.round(-y/1e4).toLocaleString()+"万年前":y<0?"紀元前"+(-y).toLocaleString()+"年":y>1e9?"":y+"年";
   function upd(){const E=window.KERA;if(!E)return;const now=E.now;
-    Object.entries(bars).forEach(([id,b])=>{b.hidden=now||E.kind==="future"&&window.KYEAR>1e8;if(b.hidden)return;
+    Object.entries(bars).forEach(([id,b])=>{b.hidden=now||E.kind==="future"&&window.KYEAR>1e9;if(b.hidden)return;
       b.innerHTML=`<span class="erapill ${E.kind}">${E.when}</span><b>「${E.name}」の時点</b><span class="eramsg">${MSG[id]}</span><button class="chip" data-now="1">現在に戻す</button><button class="chip" data-top="1">↑ 上のスライダーで変える</button>`;});}
   document.addEventListener("click",e=>{if(e.target.closest(".erabar [data-top]"))window.scrollTo({top:0,behavior:"smooth"});if(e.target.closest(".erabar [data-now]"))window.KSETK&&window.KSETK(.73);});
   window.addEventListener("k-year",upd);
@@ -5974,12 +5988,12 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
    [.65,"1950年ごろ","戦後の高度成長",3.4e12,"約25億人","石油・石炭・水力、原子力の始まり","ジェット機で世界が1日圏に。まもなく宇宙へ","大量生産・大量消費の社会。人口が急増し始める。","past"],
    [.71,"2000年ごろ","情報化の時代",1.27e13,"約61億人","化石燃料が中心、原子力・水力","地球全体と低軌道","インターネットと携帯電話が普及。国際宇宙ステーションに人が常駐。","past"],
    [.73,"2025年（現在）","現在の地球",1.9e13,"約82億人","化石燃料86%、太陽光・風力が急成長","地球と地球周辺（月の近くまで有人）","エネルギー供給は年600EJ超。このガイドブックの他のビューで詳しく描いている世界。","now"],
-   [.8,"近未来（もしも）","惑星文明への途上",1e14,"100億人前後？","核融合・宇宙太陽光・再生可能エネルギー","月面基地、火星への有人飛行","エネルギーが今の約5倍に。気候を安定させつつ、宇宙での生産が始まる——という想像。","future"],
-   [1,"Type I（もしも）","惑星文明",1e16,"未知数","惑星に届く太陽光のかなりの部分","地球全体の管理、月と火星に定住","惑星規模の電力網、気象や地震の制御、軌道エレベーター——といった姿がよく想像される。","future"],
-   [1.5,"Type I.5（もしも）","太陽系文明",1e21,"未知数","宇宙空間の巨大太陽光発電、小惑星資源","太陽系の惑星と衛星","小惑星を資源として採掘し、太陽系のあちこちに居住地を持つ。","future"],
-   [2,"Type II（もしも）","恒星文明",1e26,"未知数","太陽の全出力（ダイソン・スウォーム）","太陽系全体、近くの恒星へ探査機","太陽を無数の発電衛星で取り囲み、その光をほぼすべて使う。","future"],
-   [2.5,"Type II.5（もしも）","恒星間文明",1e31,"未知数","多数の恒星のエネルギー","数百〜数千光年の範囲の恒星系","光速に近い宇宙船で、近くの恒星系に広がっていく。","future"],
-   [3,"Type III（もしも）","銀河文明",1e36,"未知数","銀河全体の恒星（約1000億個以上）","天の川銀河全体","銀河中の恒星のエネルギーを使う。外から見ると、銀河が赤外線でしか光らなく見えるかもしれない。","future"],
+   [.8,"近未来","惑星文明への途上",1e14,"100億人前後？","核融合・宇宙太陽光・再生可能エネルギー","月面基地、火星への有人飛行","エネルギーが今の約5倍に。気候を安定させつつ、宇宙での生産が始まる——という想像。","future"],
+   [1,"Type I（想定）","惑星文明",1e16,"未知数","惑星に届く太陽光のかなりの部分","地球全体の管理、月と火星に定住","惑星規模の電力網、気象や地震の制御、軌道エレベーター——といった姿がよく想像される。","future"],
+   [1.5,"Type I.5（想定）","太陽系文明",1e21,"未知数","宇宙空間の巨大太陽光発電、小惑星資源","太陽系の惑星と衛星","小惑星を資源として採掘し、太陽系のあちこちに居住地を持つ。","future"],
+   [2,"Type II（想定）","恒星文明",1e26,"未知数","太陽の全出力（ダイソン・スウォーム）","太陽系全体、近くの恒星へ探査機","太陽を無数の発電衛星で取り囲み、その光をほぼすべて使う。","future"],
+   [2.5,"Type II.5（想定）","恒星間文明",1e31,"未知数","多数の恒星のエネルギー","数百〜数千光年の範囲の恒星系","光速に近い宇宙船で、近くの恒星系に広がっていく。","future"],
+   [3,"Type III（想定）","銀河文明",1e36,"未知数","銀河全体の恒星（約1000億個以上）","天の川銀河全体","銀河中の恒星のエネルギーを使う。外から見ると、銀河が赤外線でしか光らなく見えるかもしれない。","future"],
    [4,"Type IV（構想）","超銀河団文明",1e46,"未知数","ワームホール網でつないだ数万〜数十万の銀河","ラニアケア超銀河団（約10万個の銀河）から宇宙の大規模構造へ","ワームホールの「近道」で、光でも数億年かかる銀河どうしを行き来する。カルダシェフの元の分類にはない、後から考えられた段階。","future"]];
   const PRE=[
    [-.6,"138億年前","宇宙の誕生",null,"—","ビッグバンの熱","宇宙全体（まだ原子もない）","時間と空間が始まり、宇宙が急膨張する。38万年後に原子ができ、光がまっすぐ進めるようになる。","pre"],
@@ -5989,7 +6003,7 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
    [-.2,"約2億年前","恐竜の時代",null,"—","—","超大陸パンゲア","恐竜が陸の主役。大陸はひとつにまとまり、これから分かれていく。","pre"],
    [-.1,"約300万年前","道具を使う人類",null,"数万人？","人の筋肉","アフリカのサバンナ","二本足で歩く人類が石を割って道具を作り始める。まだ火も言葉も確かではない。","pre"]];
   S.unshift(...PRE);window.KSTAGES=S;
-  const YEAR=[-13.8e9,-13e9,-4.54e9,-3.8e9,-2e8,-3e6,-10000,-3000,1,1500,1800,1900,1950,2000,2026,2100,2250,2700,4000,50000,1000000,1e8];
+  const YEAR=[-13.8e9,-13e9,-4.54e9,-3.8e9,-2e8,-3e6,-10000,-3000,1,1500,1800,1900,1950,2000,2026,2100,2250,2700,4000,50000,1000000,1e9];
   const KMIN=-.65,NOWI=S.findIndex(s=>s[8]==="now");
   const track=document.getElementById("track"), fill=document.getElementById("fill"), knob=document.getElementById("knob"), card=document.getElementById("kcard"), rng=document.getElementById("krange"), cv=document.getElementById("kcanvas");
   const pct=k=>((k-KMIN)/(4-KMIN)*100)+"%";
@@ -6006,7 +6020,7 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
     track.querySelectorAll(".kstop").forEach((b,i)=>b.classList.toggle("on",i===idx));updateMap();window.dispatchEvent(new CustomEvent("k-stage",{detail:idx}));
     if(idx!==lastIdx){lastIdx=idx;window.KYEAR=YEAR[idx];window.KERA={i:idx,name:S[idx][2],when:S[idx][1],kind:S[idx][8],now:idx===NOWI};window.dispatchEvent(new CustomEvent("k-year",{detail:YEAR[idx]}));}
     const s=S[idx], fut=s[8]==="future", pre=s[8]==="pre";
-    card.innerHTML=`<div class="kera k-${s[8]}">${s[1]}${fut?'<span class="kif">推測・もしもの世界</span>':""}</div><h3>${s[2]}</h3>
+    card.innerHTML=`<div class="kera k-${s[8]}">${s[1]}${fut?'<span class="kif">推測・想定の世界</span>':""}</div><h3>${s[2]}</h3>
       <div class="kstat"><div><b class="num">${pre?"—":"K≈"+s[0].toFixed(2)}</b><span>${pre?"文明はまだない":"カルダシェフ値"}</span></div><div><b class="num">${pre?"—":fmtW(s[3])}</b><span>文明全体の消費電力（${s[8]==="past"?"推定":fut?"定義上の目安":"2025年"}）</span></div><div><b>${s[8]==="now"||pre?"—":ratio(s[3])}</b><span>現在と比べて</span></div></div>
       <dl class="kdl"><dt>人口</dt><dd>${s[4]}</dd><dt>主な動力</dt><dd>${s[5]}</dd><dt>活動範囲</dt><dd>${s[6]}</dd></dl><p>${s[7]}</p>
       ${s[8]==="now"?`<div class="klinks"><a href="#timeline" class="chip">世界史年表</a><a href="#space-map" class="chip">宇宙と地球</a><a href="#lineage" class="chip">系統樹</a></div>`:fut?(s[0]===1?(true?`<div class="klinks"><a href="#timeline" class="chip">未来の年表</a><a href="#world-map" class="chip">Type Iの世界地図</a><a href="#space-map" class="chip">軌道エレベーターと宇宙</a><a href="#lineage" class="chip">系統樹（未来の枝）</a><a href="#timeline" class="chip">歴史シアター</a></div>`:`<div class="klinks"><button class="chip" onclick="document.querySelector('.levels [data-mode=t1]').click()">Type I の世界を開く →</button></div>`):`<div class="klinks">${s[0]<1?`<p class="knote">Type Iへ向かう途中の段階（予測と想像）。</p>`:`<button class="chip" onclick="document.getElementById('tguide').scrollIntoView({behavior:'smooth'})">📘 文明タイプ・ガイドを読む ↓</button><a href="#timeline" class="chip">未来の年表</a><a href="#space-map" class="chip">宇宙マップ</a>`}</div>`):pre?`<div class="klinks"><a href="#timeline" class="chip">宇宙・地球の年表</a><a href="#timeline" class="chip">歴史シアターで見る</a></div>`:`<p class="knote">過去の値は人口と1人あたりのエネルギー消費からの大まかな推定。</p>`}`;
@@ -6015,7 +6029,7 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
     nodes.forEach((n,i)=>{const [v,l]=data?data[i]:[FIELDS[i].v,FIELDS[i].l];n.querySelector(".v").textContent=v;n.querySelector(".l").textContent=l;n.classList.toggle("fut",s[8]==="future");n.classList.toggle("past",s[8]==="past"||s[8]==="pre");});
     const core=document.getElementById("core");core.querySelector(".eyebrow").textContent=s[1];core.querySelector("h3").textContent=s[2];core.querySelector(".big").innerHTML=s[8]==="pre"?`— <small>文明以前`:`K≈${s[0].toFixed(2)} <small>${s[0]>=4?"Type IV":s[0]>=3?"Type III":s[0]>=2?"Type II":s[0]>=1?"Type I":"Type 0"}</small>`;
     core.querySelector(".facts").innerHTML=`人口 ${s[4]}<br>活動範囲 ${s[6].length>14?s[6].slice(0,14)+"…":s[6]}<br>主な動力 ${s[5].length>14?s[5].slice(0,14)+"…":s[5]}`;
-    core.classList.toggle("fut",s[8]==="future");document.getElementById("mmnote").textContent=s[8]==="now"?"12分野の現在地。カードを押すと、その分野の系統樹へ移動します。":s[8]==="pre"?`${s[1]}：人類の文明はまだありません。各カードは、その時代の宇宙・地球のようすです。`:s[8]==="past"?`${s[1]}の12分野（大まかな概要）。スライダーを「現在」に戻すと今の地球に戻ります。`:`${s[1]}の12分野（推測・もしもの世界）。`;}
+    core.classList.toggle("fut",s[8]==="future");document.getElementById("mmnote").textContent=s[8]==="now"?"12分野の現在地。カードを押すと、その分野の系統樹へ移動します。":s[8]==="pre"?`${s[1]}：人類の文明はまだありません。各カードは、その時代の宇宙・地球のようすです。`:s[8]==="past"?`${s[1]}の12分野（大まかな概要）。スライダーを「現在」に戻すと今の地球に戻ります。`:`${s[1]}の12分野（推測・想定の世界）。`;}
   rng.addEventListener("input",()=>set(+rng.value,false));rng.addEventListener("change",()=>set(+rng.value,true));
   track.addEventListener("click",e=>{const b=e.target.closest(".kstop");if(b){set(S[+b.dataset.i][0],true);}});
   let drag=false;const fromX=x=>{const r=track.getBoundingClientRect();return KMIN+(x-r.left)/r.width*(4-KMIN);};
@@ -6095,7 +6109,7 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
   t1:{h:"Type I：惑星文明",lead:"惑星に届くエネルギーをすべて使える文明。地球なら約10¹⁶〜10¹⁷W（今の約500〜1万倍）。",body:`
     <table class="ltable"><tr><th>エネルギー</th><td>約10¹⁶W（セーガンの定義）。地球に届く太陽光は約1.7×10¹⁷W</td></tr><tr><th>今との比較</th><td>約500倍</td></tr><tr><th>到達の目安</th><td>エネルギー消費が年2%で増え続けると約320年後（2340年ごろ）。このマップでは2250年ごろに置いています</td></tr><tr><th>主な技術</th><td>核融合、宇宙太陽光発電、軌道エレベーター、気候の管理</td></tr></table>
     <p>詳しい姿は、スライダーを「Type I」に合わせると年表・系統樹・世界地図・宇宙マップに現れます。</p>`},
-  t2:{h:"Type II：恒星文明（もしも）",lead:"自分の恒星（太陽）の全出力を使う文明。約3.8×10²⁶W。今の人類の約20兆倍、Type Iの約400億倍。",body:`
+  t2:{h:"Type II：恒星文明（想定）",lead:"自分の恒星（太陽）の全出力を使う文明。約3.8×10²⁶W。今の人類の約20兆倍、Type Iの約400億倍。",body:`
     <h4>1. どれくらいのエネルギーか</h4>
     <table class="ltable"><tr><th>使えるエネルギー</th><td><b>約3.8×10²⁶W</b>（太陽の光度。1秒間に約400万トンの質量がエネルギーに変わっている）</td></tr><tr><th>今の人類と比べて</th><td>約2×10¹³倍（20兆倍）</td></tr><tr><th>地球に届く太陽光と比べて</th><td>約22億倍（地球は太陽の光の約22億分の1しか受けていない）</td></tr></table>
     <h4>2. いつごろ到達できるか（試算）</h4>
@@ -6116,7 +6130,7 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
     <h4>7. 課題とリスク</h4>
     <ul><li><b>廃熱：</b>使ったエネルギーはすべて熱になる。熱をどう宇宙へ逃がすかが大きな制約</li><li><b>自己複製機械：</b>衛星を自分で増やす工場が暴走しないように管理する必要</li><li><b>分裂：</b>通信の遅れと環境の違いで、人類が別々の文化・種へ分かれていく可能性</li><li><b>軌道のごみ：</b>無数の衛星どうしの衝突が連鎖する危険</li></ul>
     <p>スライダーを「Type II」に合わせると、年表（24〜50世紀）、系統樹、宇宙マップ（内太陽系のダイソン・スウォーム、金星の日よけ、世代宇宙船、恒星植民地）に、この時代の姿が現れます。</p>`},
-  t3:{h:"Type III：銀河文明（もしも）",lead:"銀河全体の恒星のエネルギーを使う文明。約10³⁶〜10³⁷W。今の人類の約50垓（5×10²³）倍。",body:`
+  t3:{h:"Type III：銀河文明（想定）",lead:"銀河全体の恒星のエネルギーを使う文明。約10³⁶〜10³⁷W。今の人類の約50垓（5×10²³）倍。",body:`
     <h4>1. どれくらいのエネルギーか</h4>
     <table class="ltable"><tr><th>使えるエネルギー</th><td><b>約10³⁷W</b>（天の川銀河の明るさは太陽の約250億倍。セーガンの式では10³⁶W）</td></tr><tr><th>今の人類と比べて</th><td>約5×10²³倍（50垓倍）</td></tr><tr><th>Type IIと比べて</th><td>数百億倍（恒星数千億個ぶん）</td></tr></table>
     <h4>2. いつごろ到達できるか</h4>
@@ -6181,7 +6195,7 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
       <div><h4>同じ地域の前後</h4><div class="whnav">${k>0?btn(same[k-1]):""}${k<same.length-1?btn(same[k+1]):""}</div></div>
       ${others.length?`<div><h4>同じころ、ほかの地域では（±${w}年）</h4><div class="whnav">${others.map(btn).join("")}</div></div>`:""}
       ${tree.length?`<div><h4>同じころ生まれた要素（系統樹より）</h4><ul class="whtree">${tree.map(([f,n,b])=>`<li><span>${f}</span>${n}</li>`).join("")}</ul></div>`:""}
-      ${tags.includes("もしも")?`<p class="clim">この出来事は想像（もしもの未来）です。実際の予定ではありません。</p>`:tags.includes("予定")||tags.includes("予測")?`<p class="clim">2026年時点の計画・目標・予測です。変わる可能性があります。</p>`:""}
+      ${tags.some(ISFUT)?`<p class="clim">この出来事は想像（${tags.find(ISFUT)}の想定）です。実際の予定ではありません。</p>`:tags.includes("予定")||tags.includes("予測")?`<p class="clim">2026年時点の計画・目標・予測です。変わる可能性があります。</p>`:""}
       <div><h4>もっと詳しく（外部サイト）</h4><div class="photo"><a href="https://ja.wikipedia.org/w/index.php?search=${q}" target="_blank" rel="noopener">Wikipediaで調べる</a><a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">画像検索</a></div></div>`;
     panel.hidden=false;wrap.classList.add("open");panel.scrollTop=0;
     if(typeof EV3D!=="undefined"&&EV3D)EV3D.mount(panel.querySelector(".ev3d"),{title:t,desc:d,y:yr,tags,region:r,kind:"hist"});
@@ -6308,9 +6322,9 @@ const EARTH={
 // ===== 世界史のブランチ（文明・国家の系譜） =====
 // re: この枝に割り当てる出来事のキーワード（地域と期間が合うものだけ）
 const HIST={title:"世界史",unit:"yr",now:2026,
- bands:[[-300000,-10000,"先史","#3a2a1a"],[-10000,-3500,"農耕の始まり","#3a3a1a"],[-3500,-500,"古代①","#4a3a2a"],[-500,500,"古代②","#4a2f2f"],[500,1450,"中世","#2a3a4a"],[1450,1760,"近世","#2a4a3a"],[1760,1914,"近代","#4a3a5a"],[1914,1945,"世界大戦","#5a2a2a"],[1945,2026.5,"現代","#2a3a5a"],[2026.5,2300,"Type Iへ（もしも）","#24304a"],[2300,6000,"Type IIへ（もしも）","#1a2a44"],[6000,1e6,"Type IIIへ（もしも）","#22183a"],[1e6,100000100,"Type IVへ（構想）","#2a1638"]],
- ticks:[[-300000,"30万年前"],[-60000,"6万年前"],[-10000,"1万年前"],[-3000,"前3000"],[-1500,"前1500"],[-500,"前500"],[1,"1年"],[500,"500"],[1000,"1000"],[1500,"1500"],[1800,"1800"],[1900,"1900"],[1950,"1950"],[2000,"2000"],[2026,"2026"],[2100,"2100"],[2300,"2300"],[3000,"3000"],[4000,"4000"],[5000,"5000"],[6000,"6000"],[10000,"1万"],[100000,"10万"],[1000000,"100万年"],[1e7,"1000万"],[1e8,"1億年"]],
- seg:[[-300000,0],[-10000,.05],[-3500,.11],[-500,.24],[500,.36],[1450,.52],[1800,.68],[1914,.76],[1945,.8],[2026.5,.83],[2300,.865],[6000,.9],[100000,.93],[1000600,.96],[100000100,1]],
+ bands:[[-300000,-10000,"先史","#3a2a1a"],[-10000,-3500,"農耕の始まり","#3a3a1a"],[-3500,-500,"古代①","#4a3a2a"],[-500,500,"古代②","#4a2f2f"],[500,1450,"中世","#2a3a4a"],[1450,1760,"近世","#2a4a3a"],[1760,1914,"近代","#4a3a5a"],[1914,1945,"世界大戦","#5a2a2a"],[1945,2026.5,"現代","#2a3a5a"],[2026.5,2300,"Type Iへ","#24304a"],[2300,6000,"Type IIへ","#1a2a44"],[6000,1e6,"Type IIIへ","#22183a"],[1e6,1000000100,"Type IVへ（構想）","#2a1638"]],
+ ticks:[[-300000,"30万年前"],[-60000,"6万年前"],[-10000,"1万年前"],[-3000,"前3000"],[-1500,"前1500"],[-500,"前500"],[1,"1年"],[500,"500"],[1000,"1000"],[1500,"1500"],[1800,"1800"],[1900,"1900"],[1950,"1950"],[2000,"2000"],[2026,"2026"],[2100,"2100"],[2300,"2300"],[3000,"3000"],[4000,"4000"],[5000,"5000"],[6000,"6000"],[10000,"1万"],[100000,"10万"],[1000000,"100万年"],[1e7,"1000万"],[1e8,"1億"],[1e9,"10億年"]],
+ seg:[[-300000,0],[-10000,.05],[-3500,.11],[-500,.24],[500,.36],[1450,.52],[1800,.68],[1914,.76],[1945,.8],[2026.5,.83],[2300,.865],[6000,.9],[100000,.93],[1000600,.955],[1000000100,1]],
  lanes:[
   {id:"hum",name:"現生人類",a:-300000,b:-10000,col:"#e9edf7",reg:"アフリカ",desc:"約30万年前にアフリカで誕生し、6万年前ごろから世界中に広がった。",re:/人類|アフリカ|洞窟|壁画|土器|到達|オーストラリア|アメリカ大陸/},
   {id:"agri",name:"農耕と定住",p:"hum",a:-10000,b:-3500,col:"#d8c48a",reg:"世界",desc:"西アジアで始まった農耕が、各地で独立に生まれる。",re:/農耕|小麦|稲|定住|家畜|土器|ジェリコ|ギョベクリ/},
@@ -6357,11 +6371,11 @@ const HIST={title:"世界史",unit:"yr",now:2026,
   // 世界
   {id:"world",name:"世界がつながる（交易・戦争・国際社会）",p:"modeu",a:1492,b:null,col:"#f4b942",reg:"世界",desc:"大航海時代から世界大戦、国際連合、グローバル化。",re:/.*/},
   {id:"world_old",name:"古代〜中世の世界のできごと",p:"agri",a:-3500,b:1492,into:"world",col:"#d4a942",reg:"世界",desc:"",re:/.*/},
-  {id:"t1",name:"惑星文明へ（Type I・もしも）",p:"world",a:2026.5,b:2300,col:"#7ee0ff",dash:1,reg:"*",desc:"2026年より先は予測・目標と想像。",re:/.*/},
-  {id:"t2",name:"太陽系文明からType IIへ（もしも）",p:"t1",a:2300,b:null,col:"#f4b942",dash:1,reg:"*",desc:"ダイソン・スウォームで太陽の全エネルギーを使う恒星文明へ（想像）。",re:/.*/},
-  {id:"t2ex",name:"恒星間へ（もしも）",p:"t2",a:2800,b:6000,into:"t3",col:"#c99cf2",dash:1,reg:"*",desc:"世代宇宙船と恒星植民地（想像）。",re:/.*/},
-  {id:"t3",name:"銀河文明・Type IIIへ（もしも）",p:"t2",a:6000,b:null,col:"#ff9ad0",dash:1,reg:"*",desc:"恒星から恒星へ、銀河全体に広がる文明（想像）。",re:/.*/},
-  {id:"t3div",name:"多様化した人類（もしも）",p:"t3",a:15000,b:null,col:"#9fd86a",dash:1,reg:"*",desc:"別々の惑星環境に適応した人類の枝（想像）。",re:/.*/},
+  {id:"t1",name:"惑星文明へ（Type I）",p:"world",a:2026.5,b:2300,col:"#7ee0ff",dash:1,reg:"*",desc:"2026年より先は予測・目標と想像。",re:/.*/},
+  {id:"t2",name:"太陽系文明からType IIへ",p:"t1",a:2300,b:null,col:"#f4b942",dash:1,reg:"*",desc:"ダイソン・スウォームで太陽の全エネルギーを使う恒星文明へ（想像）。",re:/.*/},
+  {id:"t2ex",name:"恒星間へ（Type II）",p:"t2",a:2800,b:6000,into:"t3",col:"#c99cf2",dash:1,reg:"*",desc:"世代宇宙船と恒星植民地（想像）。",re:/.*/},
+  {id:"t3",name:"銀河文明・Type IIIへ",p:"t2",a:6000,b:null,col:"#ff9ad0",dash:1,reg:"*",desc:"恒星から恒星へ、銀河全体に広がる文明（想像）。",re:/.*/},
+  {id:"t3div",name:"多様化した人類（Type III）",p:"t3",a:15000,b:null,col:"#9fd86a",dash:1,reg:"*",desc:"別々の惑星環境に適応した人類の枝（想像）。",re:/.*/},
   {id:"t4",name:"超銀河団文明・Type IVへ（構想）",p:"t3",a:1e7,b:null,col:"#b08cff",dash:1,reg:"*",desc:"ワームホール網で銀河と銀河団をつなぐ文明（構想。物理的に可能かは不明）。",re:/.*/},
  ]};
 // 世界史の出来事を枝に割り当てる
@@ -6392,7 +6406,7 @@ function BranchGraph(host,D,panel){
   const wrap=host.firstChild,svg=wrap.querySelector("svg");
   let W0=1200,k=1,tx=0,sel=null;
   const cut=()=>null;
-  const markY=()=>{const Y=window.KYEAR;if(typeof Y!=="number")return null;if(D.unit==="yr")return Y>1e8?null:Y;if(D.unit==="ma"){if(Y>=2026)return null;return Y/1e6;}
+  const markY=()=>{const Y=window.KYEAR;if(typeof Y!=="number")return null;if(D.unit==="yr")return Y>1e9?null:Y;if(D.unit==="ma"){if(Y>=2026)return null;return Y/1e6;}
     if(Y>=2026)return null;const sec=(Y+13.8e9)*3.156e7;return Math.log10(Math.max(1e-50,sec));};
   const sx=t=>LX+X01(t)*W0*k+tx;
   const star=(x,y,R,r)=>[...Array(10)].map((_,i)=>{const a=i*Math.PI/5-Math.PI/2,q=i%2?r:R;return (x+Math.cos(a)*q).toFixed(1)+","+(y+Math.sin(a)*q).toFixed(1);}).join(" ");
@@ -6818,9 +6832,9 @@ window.GITNAV=(function(){
 
 /* ---------- ⑧ 系統樹（ズーム式ブランチグラフ） ---------- */
 (()=>{
-  const END=1e8;
+  const END=1e9;
   const B=[-300000,-40000,-10000,-3500,-500,500,1450,1760,1880,1945,1990,2026].concat(END>2026?[END]:[]);
-  const ERA=[["先史",-300000,-3500],["古代",-3500,500],["中世",500,1450],["近世",1450,1760],["近代",1760,1945],["現代",1945,2026],["Type Iへ（もしも）",2026,2300],["Type IIへ（もしも）",2300,6000],["Type IIIへ",6000,1e6],["Type IVへ",1e6,END]];
+  const ERA=[["先史",-300000,-3500],["古代",-3500,500],["中世",500,1450],["近世",1450,1760],["近代",1760,1945],["現代",1945,2026],["Type Iへ",2026,2300],["Type IIへ",2300,6000],["Type IIIへ",6000,1e6],["Type IVへ",1e6,END]];
   let EY=END;
   const Y0=-300000, RH=20, AX=40;
   // 時間軸の目盛り：era＝時代ごとに幅を割り当てる（既定）／real＝1年＝1単位の実年数
@@ -7058,7 +7072,7 @@ window.GITNAV=(function(){
     return `<div class="plate" style="background:linear-gradient(135deg,#0e1830,#1c2748)"><svg viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice">${rings}
       <text x="16" y="62" fill="${f.color}" font-family="Murecho,sans-serif" font-weight="900" font-size="30">${esc(n.name.replace(/（.*?）/,"").slice(0,10))}</text>
       <text x="16" y="88" fill="#ffffffaa" font-family="IBM Plex Mono,monospace" font-size="13">${fy(n.b)}〜${typeof n.d==="number"?fy(n.d):n.b>2026.5?"":"現在"}</text></svg>
-      <span class="cap">${n.b>2026.5?((n.desc||"").startsWith("【SF】")?"SFノート（創作）":"想像（もしも）"):"図版（写真は下のリンクから）"}</span></div>`;
+      <span class="cap">${n.b>2026.5?((n.desc||"").startsWith("【SF】")?"SFノート（創作）":"想像（"+TYP(n.b)+"の想定）"):"図版（写真は下のリンクから）"}</span></div>`;
   }
   function openPanel(){panel.hidden=false;document.querySelector('.gwrap').classList.add('open');}
   function closePanel(){panel.hidden=true;document.querySelector('.gwrap').classList.remove('open');}
@@ -7073,7 +7087,7 @@ window.GITNAV=(function(){
     const q=encodeURIComponent(n.name.replace(/（.*?）/g,""));
     const btn=(fkey,x)=>`<button data-f="${fkey}" data-id="${x.id}" class="${typeof x.d==="number"?"linkbtn dead":""}">${esc(x.name)}</button>`;
     panel.innerHTML=closeBtn+plate(f,n)+`
-      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">もしも（想像）</span>':""}${(n.desc||"").match(/^【(.+?)】/)?`<span class="pill wl wl-${(n.desc.match(/^【(.+?)】/)[1])}">${n.desc.match(/^【(.+?)】/)[1]==="SF"?"SFノート（創作）":"世界線："+n.desc.match(/^【(.+?)】/)[1]}</span>`:""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
+      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">'+TYP(n.b)+'の想定</span>':""}${(n.desc||"").match(/^【(.+?)】/)?`<span class="pill wl wl-${(n.desc.match(/^【(.+?)】/)[1])}">${n.desc.match(/^【(.+?)】/)[1]==="SF"?"SFノート（創作）":"世界線："+n.desc.match(/^【(.+?)】/)[1]}</span>`:""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
       <h3>${esc(n.name)}</h3>
       <div class="meta num">${fy(n.b)} 〜 ${typeof n.d==="number"?fy(n.d)+"に消滅":n.d==="f"?"現在（衰退中）":n.b>2026.5?"（続く）":"現在"}</div>
       <p>${esc((n.desc||"").replace(/^【.+?】/,""))}</p>
@@ -7083,7 +7097,7 @@ window.GITNAV=(function(){
       <div><h4>系譜</h4><div class="lineage"><span style="color:var(--muted)">人類 → ${f.name} →</span>${anc.map((a,i)=>(i?"<span>→</span>":"")+btn(fk,a)).join("")}</div></div>
       ${kids.length?`<div><h4>ここから分かれた要素（${kids.length}）</h4><div class="lineage">${kids.map(k=>btn(fk,k)).join("")}</div></div>`:""}
       <div><h4>${fy(y)}ごろ、他の分野では</h4><div class="snap">${snap||"<div>この時代の記録はまだ少ない</div>"}</div></div>
-      ${n.b>2026.5?`<p class="note">2026年より先の要素は、いまの社会・技術からの延長として想像した「もしも」です。点線で表示しています。世界線（協調・分断・加速・再建・宇宙）が違う枝は、同時に起きるとは限らない「ありうる未来の分岐」です。</p>`:`<div><h4>写真を見る（外部サイト）</h4><div class="photo">
+      ${n.b>2026.5?`<p class="note">2026年より先の要素は、いまの社会・技術からの延長として想像した「${TYP(n.b)}の想定」です。点線で表示しています。世界線（協調・分断・加速・再建・宇宙）が違う枝は、同時に起きるとは限らない「ありうる未来の分岐」です。</p>`:`<div><h4>写真を見る（外部サイト）</h4><div class="photo">
         <a href="https://ja.wikipedia.org/w/index.php?search=${q}" target="_blank" rel="noopener">Wikipediaで調べる</a>
         <a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">画像検索</a></div></div>`}`;
     openPanel(); requestAnimationFrame(()=>panel.scrollTop=0);
@@ -7344,7 +7358,7 @@ window.EV3D=(function(){
     if(hist){try{const txt=(spec.title||"")+" "+(spec.desc||"");PROPS.forEach(([re,f])=>{if(re.test(txt))f();});weather();
         const ys=spec.y<0?"紀元前"+(-Math.round(spec.y)).toLocaleString()+"年":Math.floor(spec.y)+"年";sign(spec.title||"",ys);}catch(e){console.error(e);}}
     else if(spec.title){try{const ys=spec.y< -1e8?(-spec.y/1e8).toFixed(1)+"億年前":spec.y< -1e4?Math.round(-spec.y/1e4).toLocaleString()+"万年前":"";sign(spec.title,ys);}catch(e){}}
-    if(!note&&k.era!=null)note=["先史の暮らし","古代","中世","近世","近代","現代","もしもの未来"][k.era]+"の人々の目線で描いた想像図。";
+    if(!note&&k.era!=null)note=["先史の暮らし","古代","中世","近世","近代","現代","未来（想定）"][k.era]+"の人々の目線で描いた想像図。";
     return {anims,note:note+(hist?({dawn:"（夜明け）",dusk:"（夕暮れ）",night:"（夜）",day:""}[TOD]+({rain:"雨",snow:"雪",fog:"霧",clear:""}[WX])):""),kind:k.s,space:k.s==="space",yaw:(R()-.5)*1.2};}
   function mount(div,spec){if(!div)return;if(!renderer){renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(2,devicePixelRatio));cam=new THREE.PerspectiveCamera(60,1,.1,600);}
     host=div;div.innerHTML="";div.appendChild(renderer.domElement);const sc=new THREE.Scene();const r=build(sc,spec);cur={sc,r};const cap=document.createElement("div");cap.className="ev3dcap";cap.textContent="👤 "+(r.note||"人の目線で見た想像図");div.appendChild(cap);
@@ -7434,12 +7448,12 @@ window.EV3D=(function(){
   // ---- UI ----
   const cap=document.getElementById("thcap"),phaseEl=document.getElementById("thphase"),logEl=document.getElementById("thlog"),scr=document.getElementById("thscrub"),yr=document.getElementById("thyear"),play=document.getElementById("thplay"),ticks=document.getElementById("thticks"),jumps=document.getElementById("thjumps"),speedBox=document.getElementById("thspeed");
   scr.max=1000;
-  const JUMP=[["宇宙の誕生",-13.8e9],["太陽系と地球",-4.6e9],["生命",-3.8e9],["恐竜",-2.3e8],["人類",-7e6],["文明",-3500],["近代",1760],["現代",1945]].concat(T1?[["未来（もしも）",2026.6]]:[]);
+  const JUMP=[["宇宙の誕生",-13.8e9],["太陽系と地球",-4.6e9],["生命",-3.8e9],["恐竜",-2.3e8],["人類",-7e6],["文明",-3500],["近代",1760],["現代",1945]].concat(T1?[["未来（想定）",2026.6]]:[]);
   // ---- ズームできる出来事バー ----
   const bar=document.getElementById("thbar2");let v0=0,v1=TOTAL,follow=true,hov=-1;
   const RC={"ヨーロッパ":"#7fb2ff","中東・北アフリカ":"#e8a46a","アフリカ":"#8fd16a","南・東南アジア・オセアニア":"#e6a0c4","東アジア":"#ff8f8f","南北アメリカ":"#c99cf2","世界":"#f4b942"};
   const evCol=e=>e.k!=="hist"?(e.y< -4.6e9?"#b48cff":e.y< -7e6?"#6fd2a0":"#ffb070"):(e.y>2026.5?"#7ee0ff":RC[e.reg]||"#f4b942");
-  const PH=[["宇宙",-1e12,-4.6e9,"#2a1f4a"],["太陽系・地球",-4.6e9,-5.4e8,"#1f3a3a"],["生命の進化",-5.4e8,-7e6,"#1f3a24"],["人類",-7e6,-3500,"#3a2f1f"],["文明",-3500,1450,"#3a2424"],["近世〜近代",1450,1945,"#2a2a44"],["現代",1945,2026.5,"#24304a"],["未来（もしも）",2026.5,1e9,"#1a3a44"]];
+  const PH=[["宇宙",-1e12,-4.6e9,"#2a1f4a"],["太陽系・地球",-4.6e9,-5.4e8,"#1f3a3a"],["生命の進化",-5.4e8,-7e6,"#1f3a24"],["人類",-7e6,-3500,"#3a2f1f"],["文明",-3500,1450,"#3a2424"],["近世〜近代",1450,1945,"#2a2a44"],["現代",1945,2026.5,"#24304a"],["未来（想定）",2026.5,1e10,"#1a3a44"]];
   function drawBar(){if(!bar)return;const W=bar.clientWidth||900,H=96;bar.setAttribute("viewBox",`0 0 ${W} ${H}`);bar.setAttribute("height",H);
     if(v1>TOTAL){v1=TOTAL;}if(v1-v0<3){v1=Math.min(TOTAL,v0+3);}const X=p=>(p-v0)/(v1-v0)*W;let g="";
     PH.forEach(([n,a,b,c])=>{const pa=posOfYear(a),pb=b>2026.5&&TOTAL<=posOfYear(2026.6)?TOTAL:posOfYear(b);const x1=Math.max(0,X(pa)),x2=Math.min(W,X(pb));if(x2<=x1)return;g+=`<rect x="${x1}" y="0" width="${x2-x1}" height="${H}" fill="${c}"/>`+(x2-x1>50?`<text x="${x1+5}" y="12" class="tbph">${n}</text>`:"");});
@@ -7471,8 +7485,8 @@ window.EV3D=(function(){
   play.addEventListener("click",()=>{if(!playing&&pos>=TOTAL-0.02){pos=0;lastI=-1;clearMarks();}setPlay(!playing);});
   scr.addEventListener("input",()=>{pos=scr.value/1000*TOTAL;lastI=-1;clearMarks();update(true);});
   jumps.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;pos=posOfYear(+b.dataset.y);lastI=-1;clearMarks();update(true);});
-  const fmtYear=y=>{if(y<-1e8)return `${(-y/1e8).toFixed(1)}億年前`;if(y<-1e4)return `${Math.round(-y/1e4).toLocaleString()}万年前`;if(y<0)return `紀元前${Math.round(-y).toLocaleString()}年`;return (y>=10000?`西暦約${Math.round(y/1e4).toLocaleString()}万年`:`${Math.floor(y)}年`)+(y>2026.5?"（もしも）":"");};
-  const phaseOf=y=>y< -4.6e9?["宇宙","宇宙の誕生と銀河"]:y< -4.54e9?["太陽系","太陽系の誕生"]:y< -7e6?["地球","地球と生命の歴史"]:y< -3500?["人類","人類の誕生と旅"]:y<2026.5?["文明","世界史"]:["未来","もしもの未来（Type Iへ）"];
+  const fmtYear=y=>{if(y<-1e8)return `${(-y/1e8).toFixed(1)}億年前`;if(y<-1e4)return `${Math.round(-y/1e4).toLocaleString()}万年前`;if(y<0)return `紀元前${Math.round(-y).toLocaleString()}年`;return (y>=1e8?`約${(y/1e8).toLocaleString()}億年後`:y>=10000?`西暦約${Math.round(y/1e4).toLocaleString()}万年`:`${Math.floor(y)}年`)+(y>2026.5?"（"+TYP(y)+"）":"");};
+  const phaseOf=y=>y< -4.6e9?["宇宙","宇宙の誕生と銀河"]:y< -4.54e9?["太陽系","太陽系の誕生"]:y< -7e6?["地球","地球と生命の歴史"]:y< -3500?["人類","人類の誕生と旅"]:y<2026.5?["文明","世界史"]:["未来",TYP(y)+"の時代（想定）"];
 
   // ---- 3D ----
   let renderer,scene,camera,running=false,t0=performance.now(),last=0,inited=false;
@@ -7585,7 +7599,7 @@ window.EV3D=(function(){
       for(let k=Math.max(from,i-5);k<=i;k++){const e=EV[k];if(!e)continue;addMark(e);if(e.k==="impact"||e.k==="moonimpact")G.earth&&(G.earth.userData.boom=performance.now());
         const li=document.createElement("li");li.innerHTML=`<span class="num">${e.lab}</span>${e.t}`;if(e.y>2026.5)li.className="fut";logEl.prepend(li);while(logEl.children.length>6)logEl.lastChild.remove();}
       lastI=i;pipWant=i;
-      cap.innerHTML=`<div class="thmeta"><span class="pill">${ev.reg}</span>${ev.tags&&ev.tags.includes("もしも")?'<span class="pill fut">もしも</span>':ev.y>2026.5?'<span class="pill fut">予定・予測</span>':""}</div><div class="thy num">${ev.lab}</div><h3>${ev.t}</h3><p>${ev.d||""}</p><div class="thlinks">${ev.k==="hist"?`<button class="chip" data-tl="hist">📜 年表で詳しく</button>`:`<button class="chip" data-tl="${ev.y< -4.6e9?"cosmos":"earth"}">${ev.y< -4.6e9?"🌌 宇宙年表へ":"🌏 地球史年表へ"}</button>`}</div>`;
+      cap.innerHTML=`<div class="thmeta"><span class="pill">${ev.reg}</span>${ev.tags&&ev.tags.some(ISFUT)?'<span class="pill fut">'+ev.tags.find(ISFUT)+'の想定</span>':ev.y>2026.5?'<span class="pill fut">予定・予測</span>':""}</div><div class="thy num">${ev.lab}</div><h3>${ev.t}</h3><p>${ev.d||""}</p><div class="thlinks">${ev.k==="hist"?`<button class="chip" data-tl="hist">📜 年表で詳しく</button>`:`<button class="chip" data-tl="${ev.y< -4.6e9?"cosmos":"earth"}">${ev.y< -4.6e9?"🌌 宇宙年表へ":"🌏 地球史年表へ"}</button>`}</div>`;
       const ll=ev.y< -1e6?(ev.y>-5.45e8?[ev.y< -4.2e8?-35:5,20]:ev.ll):ev.ll;if(ll){const p=toXYZ(ll[0],ll[1],1);target.ry=-Math.atan2(p.x,p.z);target.rx=ll[0]*Math.PI/180*.75;}
     }
   }
@@ -7852,7 +7866,7 @@ window.L3D=(function(){
   const CH=[
   {id:"read",ic:"📖",t:"このガイドの読み方",h:`
     <p class="eblead">これは、地球の外から来た知的存在が「地球とは何か、人類とは何か」を理解するための手引きです。数と物理法則から始め、私たちの住所、惑星、生命、人類、社会、技術、そして課題の順に進みます。</p>
-    ${tbl([["数","10進法（指が10本だから）。ここでは算用数字（0123456789）で書く"],["単位","国際単位系（SI）。すべて、宇宙のどこでも同じ物理定数で定義されている（次の章）"],["日付","西暦（グレゴリオ暦）。「2026年」は、ある宗教の創始者の生年とされた年から数えた年数"],["「約」","測定値や推計には誤差がある。新しい測定で変わる数字は年を添えた"],["もしも","このマップの未来（2026年より後）は予測・目標・想像。事実とは区別している"]])}
+    ${tbl([["数","10進法（指が10本だから）。ここでは算用数字（0123456789）で書く"],["単位","国際単位系（SI）。すべて、宇宙のどこでも同じ物理定数で定義されている（次の章）"],["日付","西暦（グレゴリオ暦）。「2026年」は、ある宗教の創始者の生年とされた年から数えた年数"],["「約」","測定値や推計には誤差がある。新しい測定で変わる数字は年を添えた"],["未来の表記","2026年より後は予測・目標・想像。どのTypeの時代かを「（近未来）」「（Type I）」〜「（Type IV）」で示し、事実とは区別している"]])}
     <p>このページの内容は、ほかのタブ（年表・宇宙・ミクロ・系統樹・法則）とつながっています。上の🔍（Ctrl+K）で全体を検索できます。</p>`},
   {id:"num",ic:"🔢",t:"数と単位",h:`
     <p class="eblead">数は宇宙共通の言語。私たちは0から9の10個の記号で数を書きます。</p>
@@ -9400,12 +9414,12 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
     T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（分野別）","17分野・約1,400要素の系譜（分野ごとに独立。未来は5つの世界線＋SFノート）"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
     T(()=>{add("view","歴史シアター（3D）","年表の中の3D映像で通し再生","シアター 映像 再生",()=>{goHash("timeline");later(()=>{const d=$("thdock");if(d){d.open=true;d.scrollIntoView({behavior:"smooth"});}});});});
     T(()=>window.EBOOK&&EBOOK.chapters.forEach(c=>add("book",c.t,"地球大全の章",c.text,()=>go.book(c.id))));
-    T(()=>[["t1","Type I 文明ガイド（惑星文明）"],["t2","Type II 文明ガイド（恒星文明）"],["t3","Type III 文明ガイド（銀河文明）"]].forEach(([k,t])=>add("view",t,"全体マップ・もしもの世界","タイプ カルダシェフ 文明",()=>go.tg(k))));
+    T(()=>[["t1","Type I 文明ガイド（惑星文明）"],["t2","Type II 文明ガイド（恒星文明）"],["t3","Type III 文明ガイド（銀河文明）"]].forEach(([k,t])=>add("view",t,"全体マップ・想定の世界","タイプ カルダシェフ 文明",()=>go.tg(k))));
     T(()=>(window.KSTAGES||[]).forEach((st,i)=>add("era",st[2],`時代（スライダー）・${st[1]}`,st[7]||"",()=>go.era(i))));
     T(()=>FIELDS.forEach(f=>add("field",f.t,`分野・${f.v}（${f.l}）`,f.lead+" "+f.pts.join(" "),()=>go.field(f.id))));
     T(()=>WH.forEach((w,i)=>add("hist",w[3],`${w[0]}・${w[2]}`,(w[4]||"")+" "+(w[5]||[]).join(" "),()=>go.wh(i),w[1])));
     T(()=>[["cosmos",COSMOS,"宇宙年表"],["earth",EARTH,"地球史年表"]].forEach(([m,D,lab])=>D.lanes.forEach(l=>{add("tl",l.name,`${lab}のブランチ`,l.desc||"",()=>go.tl(m,l.id));(l.ev||[]).forEach((e,j)=>add("tl",e[1],`${lab}・${l.name}`,e[2]||"",()=>go.tl(m,l.id,j)));})));
-    T(()=>TREE.forEach(f=>f.nodes.forEach(n=>add("tree",n[1],`${f.name}・${fy(n[3])}〜${n[3]>2026.5?"（もしも）":""}`,n[6]||"",()=>go.tree(f.key,n[0],n[3]),n[3]))));
+    T(()=>TREE.forEach(f=>f.nodes.forEach(n=>add("tree",n[1],`${f.name}・${fy(n[3])}〜${n[3]>2026.5?"（"+TYP(n[3])+"）":""}`,n[6]||"",()=>go.tree(f.key,n[0],n[3]),n[3]))));
     T(()=>COUNTRIES.list.forEach(c=>add("country",`${c.flag||""} ${c.ja}`,`${c.reg}・${c.sub}${c.cap?"・首都 "+c.cap:""}`,`${c.en} ${(c.lang||[]).join(" ")} ${(c.cur||[]).join(" ")}`,()=>go.country(c.c3))));
     T(()=>MAP.pins.forEach(p=>add("place",p.name,`ランドマーク・${(CAT[p.cat]||["その他"])[0]}`,p.desc||"",()=>go.place(p.id))));
     T(()=>(window.SP_P||[]).forEach((q,i)=>{const L=SPZ.LEVELS.find(x=>x.id===(SPZ.SUBMAP[q[2]]||q[2]));add("space",q[0],`${L?L.name:""}`,"",()=>go.sp(i));}));
@@ -9450,7 +9464,7 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
   $("navsearch").addEventListener("click",open);
   // ---- 使い方・ショートカット ----
   const HELP=()=>`<h3>使い方</h3>
-    <ol class="hxsteps"><li><b>時代を選ぶ</b>：上の「カルダシェフ・スライダー」を動かすと、宇宙誕生（138億年前）からType III（100万年後・もしも）まで、すべてのページがその時代の姿に変わります。</li>
+    <ol class="hxsteps"><li><b>時代を選ぶ</b>：上の「カルダシェフ・スライダー」を動かすと、宇宙誕生（138億年前）からType IV（約10億年後・構想）まで、すべてのページがその時代の姿に変わります。</li>
     <li><b>見方を選ぶ</b>：タブで「全体マップ・年表・宇宙/地球/ミクロ・系統樹・宇宙の法則・地球大全」を切り替えます。</li>
     <li><b>なんでも検索</b>：🔍（<kbd>/</kbd>キー）で、出来事・国・元素・生き物・天体など約${(IDX||[]).length.toLocaleString()}件から探して、その場所へ飛べます。</li>
     <li><b>地球の外から来た方へ</b>：まず「地球大全」を読むと、地球と人類の全体像がつかめます。</li></ol>
@@ -9459,9 +9473,9 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
     <tr><th><kbd>[</kbd> <kbd>]</kbd></th><td>ひとつ前／次の時代へ</td></tr><tr><th><kbd>0</kbd></th><td>現在（2026年）に戻る</td></tr><tr><th><kbd>?</kbd></th><td>この使い方を開く</td></tr><tr><th><kbd>Esc</kbd></th><td>閉じる</td></tr></tbody></table>
     <h3>記号の意味</h3><table class="ltable hxkeys"><tbody>
     <tr><th><span class="hxstar">★</span></th><td>年表：その出来事専用の3D映像がある</td></tr><tr><th><span class="hxdot"></span></th><td>年表：ふつうの出来事（3Dは時代と地域の風景）</td></tr>
-    <tr><th><span class="hxdia"></span></th><td>年表：ブランチ（国・系統）の終わり</td></tr><tr><th>点線</th><td>仮説・予測・もしも</td></tr>
+    <tr><th><span class="hxdia"></span></th><td>年表：ブランチ（国・系統）の終わり</td></tr><tr><th>点線</th><td>仮説・予測・想定</td></tr>
     <tr><th>暗い表示</th><td>スライダーの時代にはまだ存在しない・知られていない</td></tr><tr><th>もや</th><td>世界地図：その時代に文明がない／人がいない地域</td></tr></tbody></table>
-    <p class="note">数値は2026年時点の概数です。2026年より先の内容は、予測・目標・想像（もしも）です。</p>`;
+    <p class="note">数値は2026年時点の概数です。2026年より先の内容は、予測・目標・想像（近未来〜Type IVの想定）です。</p>`;
   function help(){if(!IDX)build();$("hxbody").innerHTML=HELP();hx.hidden=false;}
   $("navhelp").addEventListener("click",help);hx.addEventListener("click",e=>{if(e.target===hx||e.target.closest("[data-hclose]"))hx.hidden=true;});
   const typing=e=>{const t=e.target;return t&&(t.tagName==="INPUT"&&!["range","checkbox","radio","button"].includes(t.type)||t.tagName==="TEXTAREA"||t.tagName==="SELECT"||t.isContentEditable);};

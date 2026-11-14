@@ -69,12 +69,12 @@
   // ---- UI ----
   const cap=document.getElementById("thcap"),phaseEl=document.getElementById("thphase"),logEl=document.getElementById("thlog"),scr=document.getElementById("thscrub"),yr=document.getElementById("thyear"),play=document.getElementById("thplay"),ticks=document.getElementById("thticks"),jumps=document.getElementById("thjumps"),speedBox=document.getElementById("thspeed");
   scr.max=1000;
-  const JUMP=[["宇宙の誕生",-13.8e9],["太陽系と地球",-4.6e9],["生命",-3.8e9],["恐竜",-2.3e8],["人類",-7e6],["文明",-3500],["近代",1760],["現代",1945]].concat(T1?[["未来（もしも）",2026.6]]:[]);
+  const JUMP=[["宇宙の誕生",-13.8e9],["太陽系と地球",-4.6e9],["生命",-3.8e9],["恐竜",-2.3e8],["人類",-7e6],["文明",-3500],["近代",1760],["現代",1945]].concat(T1?[["未来（想定）",2026.6]]:[]);
   // ---- ズームできる出来事バー ----
   const bar=document.getElementById("thbar2");let v0=0,v1=TOTAL,follow=true,hov=-1;
   const RC={"ヨーロッパ":"#7fb2ff","中東・北アフリカ":"#e8a46a","アフリカ":"#8fd16a","南・東南アジア・オセアニア":"#e6a0c4","東アジア":"#ff8f8f","南北アメリカ":"#c99cf2","世界":"#f4b942"};
   const evCol=e=>e.k!=="hist"?(e.y< -4.6e9?"#b48cff":e.y< -7e6?"#6fd2a0":"#ffb070"):(e.y>2026.5?"#7ee0ff":RC[e.reg]||"#f4b942");
-  const PH=[["宇宙",-1e12,-4.6e9,"#2a1f4a"],["太陽系・地球",-4.6e9,-5.4e8,"#1f3a3a"],["生命の進化",-5.4e8,-7e6,"#1f3a24"],["人類",-7e6,-3500,"#3a2f1f"],["文明",-3500,1450,"#3a2424"],["近世〜近代",1450,1945,"#2a2a44"],["現代",1945,2026.5,"#24304a"],["未来（もしも）",2026.5,1e9,"#1a3a44"]];
+  const PH=[["宇宙",-1e12,-4.6e9,"#2a1f4a"],["太陽系・地球",-4.6e9,-5.4e8,"#1f3a3a"],["生命の進化",-5.4e8,-7e6,"#1f3a24"],["人類",-7e6,-3500,"#3a2f1f"],["文明",-3500,1450,"#3a2424"],["近世〜近代",1450,1945,"#2a2a44"],["現代",1945,2026.5,"#24304a"],["未来（想定）",2026.5,1e10,"#1a3a44"]];
   function drawBar(){if(!bar)return;const W=bar.clientWidth||900,H=96;bar.setAttribute("viewBox",`0 0 ${W} ${H}`);bar.setAttribute("height",H);
     if(v1>TOTAL){v1=TOTAL;}if(v1-v0<3){v1=Math.min(TOTAL,v0+3);}const X=p=>(p-v0)/(v1-v0)*W;let g="";
     PH.forEach(([n,a,b,c])=>{const pa=posOfYear(a),pb=b>2026.5&&TOTAL<=posOfYear(2026.6)?TOTAL:posOfYear(b);const x1=Math.max(0,X(pa)),x2=Math.min(W,X(pb));if(x2<=x1)return;g+=`<rect x="${x1}" y="0" width="${x2-x1}" height="${H}" fill="${c}"/>`+(x2-x1>50?`<text x="${x1+5}" y="12" class="tbph">${n}</text>`:"");});
@@ -106,8 +106,8 @@
   play.addEventListener("click",()=>{if(!playing&&pos>=TOTAL-0.02){pos=0;lastI=-1;clearMarks();}setPlay(!playing);});
   scr.addEventListener("input",()=>{pos=scr.value/1000*TOTAL;lastI=-1;clearMarks();update(true);});
   jumps.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;pos=posOfYear(+b.dataset.y);lastI=-1;clearMarks();update(true);});
-  const fmtYear=y=>{if(y<-1e8)return `${(-y/1e8).toFixed(1)}億年前`;if(y<-1e4)return `${Math.round(-y/1e4).toLocaleString()}万年前`;if(y<0)return `紀元前${Math.round(-y).toLocaleString()}年`;return (y>=10000?`西暦約${Math.round(y/1e4).toLocaleString()}万年`:`${Math.floor(y)}年`)+(y>2026.5?"（もしも）":"");};
-  const phaseOf=y=>y< -4.6e9?["宇宙","宇宙の誕生と銀河"]:y< -4.54e9?["太陽系","太陽系の誕生"]:y< -7e6?["地球","地球と生命の歴史"]:y< -3500?["人類","人類の誕生と旅"]:y<2026.5?["文明","世界史"]:["未来","もしもの未来（Type Iへ）"];
+  const fmtYear=y=>{if(y<-1e8)return `${(-y/1e8).toFixed(1)}億年前`;if(y<-1e4)return `${Math.round(-y/1e4).toLocaleString()}万年前`;if(y<0)return `紀元前${Math.round(-y).toLocaleString()}年`;return (y>=1e8?`約${(y/1e8).toLocaleString()}億年後`:y>=10000?`西暦約${Math.round(y/1e4).toLocaleString()}万年`:`${Math.floor(y)}年`)+(y>2026.5?"（"+TYP(y)+"）":"");};
+  const phaseOf=y=>y< -4.6e9?["宇宙","宇宙の誕生と銀河"]:y< -4.54e9?["太陽系","太陽系の誕生"]:y< -7e6?["地球","地球と生命の歴史"]:y< -3500?["人類","人類の誕生と旅"]:y<2026.5?["文明","世界史"]:["未来",TYP(y)+"の時代（想定）"];
 
   // ---- 3D ----
   let renderer,scene,camera,running=false,t0=performance.now(),last=0,inited=false;
@@ -220,7 +220,7 @@
       for(let k=Math.max(from,i-5);k<=i;k++){const e=EV[k];if(!e)continue;addMark(e);if(e.k==="impact"||e.k==="moonimpact")G.earth&&(G.earth.userData.boom=performance.now());
         const li=document.createElement("li");li.innerHTML=`<span class="num">${e.lab}</span>${e.t}`;if(e.y>2026.5)li.className="fut";logEl.prepend(li);while(logEl.children.length>6)logEl.lastChild.remove();}
       lastI=i;pipWant=i;
-      cap.innerHTML=`<div class="thmeta"><span class="pill">${ev.reg}</span>${ev.tags&&ev.tags.includes("もしも")?'<span class="pill fut">もしも</span>':ev.y>2026.5?'<span class="pill fut">予定・予測</span>':""}</div><div class="thy num">${ev.lab}</div><h3>${ev.t}</h3><p>${ev.d||""}</p><div class="thlinks">${ev.k==="hist"?`<button class="chip" data-tl="hist">📜 年表で詳しく</button>`:`<button class="chip" data-tl="${ev.y< -4.6e9?"cosmos":"earth"}">${ev.y< -4.6e9?"🌌 宇宙年表へ":"🌏 地球史年表へ"}</button>`}</div>`;
+      cap.innerHTML=`<div class="thmeta"><span class="pill">${ev.reg}</span>${ev.tags&&ev.tags.some(ISFUT)?'<span class="pill fut">'+ev.tags.find(ISFUT)+'の想定</span>':ev.y>2026.5?'<span class="pill fut">予定・予測</span>':""}</div><div class="thy num">${ev.lab}</div><h3>${ev.t}</h3><p>${ev.d||""}</p><div class="thlinks">${ev.k==="hist"?`<button class="chip" data-tl="hist">📜 年表で詳しく</button>`:`<button class="chip" data-tl="${ev.y< -4.6e9?"cosmos":"earth"}">${ev.y< -4.6e9?"🌌 宇宙年表へ":"🌏 地球史年表へ"}</button>`}</div>`;
       const ll=ev.y< -1e6?(ev.y>-5.45e8?[ev.y< -4.2e8?-35:5,20]:ev.ll):ev.ll;if(ll){const p=toXYZ(ll[0],ll[1],1);target.ry=-Math.atan2(p.x,p.z);target.rx=ll[0]*Math.PI/180*.75;}
     }
   }

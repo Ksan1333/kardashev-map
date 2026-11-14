@@ -20,7 +20,7 @@ const WHC={
  victoria:["natural","モシ・オ・トゥニャ／ヴィクトリアの滝","ザンビア／ジンバブエ",1989,[7,8]],
 };
 const WHC_OTHER={normandy:"世界遺産には未登録（フランスの暫定リストに「ノルマンディー上陸作戦の海岸」として記載）。",sahara:"サハラ砂漠全体は未登録。域内にタッシリ・ナジェール（複合遺産）やアイル・テネレ自然保護区などがある。",antarctica:"南極大陸は南極条約によりどの国の領土でもないため、世界遺産の対象外。条約で環境が保護されている。"};
-const WHC_TYPE={cultural:["文化遺産","#e8a46a"],natural:["自然遺産","#8fd16a"],mixed:["複合遺産","#c99cf2"],other:["世界遺産以外（現代建築・科学施設など）","#6fd3c7"],future:["Type I（もしも）","#7ee0ff"]};
+const WHC_TYPE={cultural:["文化遺産","#e8a46a"],natural:["自然遺産","#8fd16a"],mixed:["複合遺産","#c99cf2"],other:["世界遺産以外（現代建築・科学施設など）","#6fd3c7"],future:["Type I（想定）","#7ee0ff"]};
 // 地図のピンを世界遺産の区分に並べ替え
 MAP.pins.forEach(p=>{p.cat0=p.cat;p.cat=WHC[p.id]?WHC[p.id][0]:(p.cat==="future"?"future":"other");});
 Object.keys(CAT).forEach(k=>delete CAT[k]);Object.assign(CAT,WHC_TYPE);
@@ -28,4 +28,4 @@ function whcCard(id,p){const w=WHC[id];
   if(w)return `<div class="whc"><div class="whch"><span class="whcemb" style="--wc:${WHC_TYPE[w[0]][1]}"><i></i></span><div><div class="whct" style="color:${WHC_TYPE[w[0]][1]}">世界遺産・${WHC_TYPE[w[0]][0]}</div><b>${w[1]}</b></div></div>
     <dl><dt>国</dt><dd>${w[2]}</dd><dt>登録年</dt><dd>${w[3]}年</dd><dt>登録基準</dt><dd>${w[4].map(c=>`<span class="whcc"><b>(${["","i","ii","iii","iv","v","vi","vii","viii","ix","x"][c]})</b>${WHC_CRIT[c]}</span>`).join("")}</dd></dl>${w[5]?`<p class="whcn">${w[5]}</p>`:""}</div>`;
   const fut=p&&p.cat==="future";
-  return `<div class="whc none"><div class="whch"><span class="whcemb off"><i></i></span><div><div class="whct">${fut?"もしもの未来の施設":"世界遺産には未登録"}</div><b>${p?p.name:""}</b></div></div><p class="whcn">${WHC_OTHER[id]||(fut?"想像上の施設です。":"現代の建築・施設・自然地域などで、世界遺産には登録されていません。")}</p></div>`;}
+  return `<div class="whc none"><div class="whch"><span class="whcemb off"><i></i></span><div><div class="whct">${fut?"Type Iの想定の施設":"世界遺産には未登録"}</div><b>${p?p.name:""}</b></div></div><p class="whcn">${WHC_OTHER[id]||(fut?"想像上の施設です。":"現代の建築・施設・自然地域などで、世界遺産には登録されていません。")}</p></div>`;}

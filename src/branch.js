@@ -15,7 +15,7 @@ function BranchGraph(host,D,panel){
   const wrap=host.firstChild,svg=wrap.querySelector("svg");
   let W0=1200,k=1,tx=0,sel=null;
   const cut=()=>null;
-  const markY=()=>{const Y=window.KYEAR;if(typeof Y!=="number")return null;if(D.unit==="yr")return Y>1e8?null:Y;if(D.unit==="ma"){if(Y>=2026)return null;return Y/1e6;}
+  const markY=()=>{const Y=window.KYEAR;if(typeof Y!=="number")return null;if(D.unit==="yr")return Y>1e9?null:Y;if(D.unit==="ma"){if(Y>=2026)return null;return Y/1e6;}
     if(Y>=2026)return null;const sec=(Y+13.8e9)*3.156e7;return Math.log10(Math.max(1e-50,sec));};
   const sx=t=>LX+X01(t)*W0*k+tx;
   const star=(x,y,R,r)=>[...Array(10)].map((_,i)=>{const a=i*Math.PI/5-Math.PI/2,q=i%2?r:R;return (x+Math.cos(a)*q).toFixed(1)+","+(y+Math.sin(a)*q).toFixed(1);}).join(" ");

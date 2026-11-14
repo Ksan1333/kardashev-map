@@ -31,9 +31,9 @@
     "space-map":"その時代に知られていなかった天体や、まだない人工衛星は隠しています。"};
   const bars={};
   Object.keys(MSG).forEach(id=>{const sec=document.getElementById("v-"+id);if(!sec)return;const b=document.createElement("div");b.className="erabar";b.hidden=true;const h=sec.querySelector(".view-head");(h||sec.firstChild).after(b);bars[id]=b;});
-  const yfmt=y=>y< -1e8?(-y/1e8).toFixed(1).replace(/\.0$/,"")+"億年前":y< -1e4?Math.round(-y/1e4).toLocaleString()+"万年前":y<0?"紀元前"+(-y).toLocaleString()+"年":y>1e8?"":y+"年";
+  const yfmt=y=>y< -1e8?(-y/1e8).toFixed(1).replace(/\.0$/,"")+"億年前":y< -1e4?Math.round(-y/1e4).toLocaleString()+"万年前":y<0?"紀元前"+(-y).toLocaleString()+"年":y>1e9?"":y+"年";
   function upd(){const E=window.KERA;if(!E)return;const now=E.now;
-    Object.entries(bars).forEach(([id,b])=>{b.hidden=now||E.kind==="future"&&window.KYEAR>1e8;if(b.hidden)return;
+    Object.entries(bars).forEach(([id,b])=>{b.hidden=now||E.kind==="future"&&window.KYEAR>1e9;if(b.hidden)return;
       b.innerHTML=`<span class="erapill ${E.kind}">${E.when}</span><b>「${E.name}」の時点</b><span class="eramsg">${MSG[id]}</span><button class="chip" data-now="1">現在に戻す</button><button class="chip" data-top="1">↑ 上のスライダーで変える</button>`;});}
   document.addEventListener("click",e=>{if(e.target.closest(".erabar [data-top]"))window.scrollTo({top:0,behavior:"smooth"});if(e.target.closest(".erabar [data-now]"))window.KSETK&&window.KSETK(.73);});
   window.addEventListener("k-year",upd);

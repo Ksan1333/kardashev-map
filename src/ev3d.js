@@ -231,7 +231,7 @@ window.EV3D=(function(){
     if(hist){try{const txt=(spec.title||"")+" "+(spec.desc||"");PROPS.forEach(([re,f])=>{if(re.test(txt))f();});weather();
         const ys=spec.y<0?"紀元前"+(-Math.round(spec.y)).toLocaleString()+"年":Math.floor(spec.y)+"年";sign(spec.title||"",ys);}catch(e){console.error(e);}}
     else if(spec.title){try{const ys=spec.y< -1e8?(-spec.y/1e8).toFixed(1)+"億年前":spec.y< -1e4?Math.round(-spec.y/1e4).toLocaleString()+"万年前":"";sign(spec.title,ys);}catch(e){}}
-    if(!note&&k.era!=null)note=["先史の暮らし","古代","中世","近世","近代","現代","もしもの未来"][k.era]+"の人々の目線で描いた想像図。";
+    if(!note&&k.era!=null)note=["先史の暮らし","古代","中世","近世","近代","現代","未来（想定）"][k.era]+"の人々の目線で描いた想像図。";
     return {anims,note:note+(hist?({dawn:"（夜明け）",dusk:"（夕暮れ）",night:"（夜）",day:""}[TOD]+({rain:"雨",snow:"雪",fog:"霧",clear:""}[WX])):""),kind:k.s,space:k.s==="space",yaw:(R()-.5)*1.2};}
   function mount(div,spec){if(!div)return;if(!renderer){renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(2,devicePixelRatio));cam=new THREE.PerspectiveCamera(60,1,.1,600);}
     host=div;div.innerHTML="";div.appendChild(renderer.domElement);const sc=new THREE.Scene();const r=build(sc,spec);cur={sc,r};const cap=document.createElement("div");cap.className="ev3dcap";cap.textContent="👤 "+(r.note||"人の目線で見た想像図");div.appendChild(cap);

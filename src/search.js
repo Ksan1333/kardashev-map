@@ -50,12 +50,12 @@
     T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（分野別）","17分野・約1,400要素の系譜（分野ごとに独立。未来は5つの世界線＋SFノート）"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
     T(()=>{add("view","歴史シアター（3D）","年表の中の3D映像で通し再生","シアター 映像 再生",()=>{goHash("timeline");later(()=>{const d=$("thdock");if(d){d.open=true;d.scrollIntoView({behavior:"smooth"});}});});});
     T(()=>window.EBOOK&&EBOOK.chapters.forEach(c=>add("book",c.t,"地球大全の章",c.text,()=>go.book(c.id))));
-    T(()=>[["t1","Type I 文明ガイド（惑星文明）"],["t2","Type II 文明ガイド（恒星文明）"],["t3","Type III 文明ガイド（銀河文明）"]].forEach(([k,t])=>add("view",t,"全体マップ・もしもの世界","タイプ カルダシェフ 文明",()=>go.tg(k))));
+    T(()=>[["t1","Type I 文明ガイド（惑星文明）"],["t2","Type II 文明ガイド（恒星文明）"],["t3","Type III 文明ガイド（銀河文明）"]].forEach(([k,t])=>add("view",t,"全体マップ・想定の世界","タイプ カルダシェフ 文明",()=>go.tg(k))));
     T(()=>(window.KSTAGES||[]).forEach((st,i)=>add("era",st[2],`時代（スライダー）・${st[1]}`,st[7]||"",()=>go.era(i))));
     T(()=>FIELDS.forEach(f=>add("field",f.t,`分野・${f.v}（${f.l}）`,f.lead+" "+f.pts.join(" "),()=>go.field(f.id))));
     T(()=>WH.forEach((w,i)=>add("hist",w[3],`${w[0]}・${w[2]}`,(w[4]||"")+" "+(w[5]||[]).join(" "),()=>go.wh(i),w[1])));
     T(()=>[["cosmos",COSMOS,"宇宙年表"],["earth",EARTH,"地球史年表"]].forEach(([m,D,lab])=>D.lanes.forEach(l=>{add("tl",l.name,`${lab}のブランチ`,l.desc||"",()=>go.tl(m,l.id));(l.ev||[]).forEach((e,j)=>add("tl",e[1],`${lab}・${l.name}`,e[2]||"",()=>go.tl(m,l.id,j)));})));
-    T(()=>TREE.forEach(f=>f.nodes.forEach(n=>add("tree",n[1],`${f.name}・${fy(n[3])}〜${n[3]>2026.5?"（もしも）":""}`,n[6]||"",()=>go.tree(f.key,n[0],n[3]),n[3]))));
+    T(()=>TREE.forEach(f=>f.nodes.forEach(n=>add("tree",n[1],`${f.name}・${fy(n[3])}〜${n[3]>2026.5?"（"+TYP(n[3])+"）":""}`,n[6]||"",()=>go.tree(f.key,n[0],n[3]),n[3]))));
     T(()=>COUNTRIES.list.forEach(c=>add("country",`${c.flag||""} ${c.ja}`,`${c.reg}・${c.sub}${c.cap?"・首都 "+c.cap:""}`,`${c.en} ${(c.lang||[]).join(" ")} ${(c.cur||[]).join(" ")}`,()=>go.country(c.c3))));
     T(()=>MAP.pins.forEach(p=>add("place",p.name,`ランドマーク・${(CAT[p.cat]||["その他"])[0]}`,p.desc||"",()=>go.place(p.id))));
     T(()=>(window.SP_P||[]).forEach((q,i)=>{const L=SPZ.LEVELS.find(x=>x.id===(SPZ.SUBMAP[q[2]]||q[2]));add("space",q[0],`${L?L.name:""}`,"",()=>go.sp(i));}));
@@ -100,7 +100,7 @@
   $("navsearch").addEventListener("click",open);
   // ---- 使い方・ショートカット ----
   const HELP=()=>`<h3>使い方</h3>
-    <ol class="hxsteps"><li><b>時代を選ぶ</b>：上の「カルダシェフ・スライダー」を動かすと、宇宙誕生（138億年前）からType III（100万年後・もしも）まで、すべてのページがその時代の姿に変わります。</li>
+    <ol class="hxsteps"><li><b>時代を選ぶ</b>：上の「カルダシェフ・スライダー」を動かすと、宇宙誕生（138億年前）からType IV（約10億年後・構想）まで、すべてのページがその時代の姿に変わります。</li>
     <li><b>見方を選ぶ</b>：タブで「全体マップ・年表・宇宙/地球/ミクロ・系統樹・宇宙の法則・地球大全」を切り替えます。</li>
     <li><b>なんでも検索</b>：🔍（<kbd>/</kbd>キー）で、出来事・国・元素・生き物・天体など約${(IDX||[]).length.toLocaleString()}件から探して、その場所へ飛べます。</li>
     <li><b>地球の外から来た方へ</b>：まず「地球大全」を読むと、地球と人類の全体像がつかめます。</li></ol>
@@ -109,9 +109,9 @@
     <tr><th><kbd>[</kbd> <kbd>]</kbd></th><td>ひとつ前／次の時代へ</td></tr><tr><th><kbd>0</kbd></th><td>現在（2026年）に戻る</td></tr><tr><th><kbd>?</kbd></th><td>この使い方を開く</td></tr><tr><th><kbd>Esc</kbd></th><td>閉じる</td></tr></tbody></table>
     <h3>記号の意味</h3><table class="ltable hxkeys"><tbody>
     <tr><th><span class="hxstar">★</span></th><td>年表：その出来事専用の3D映像がある</td></tr><tr><th><span class="hxdot"></span></th><td>年表：ふつうの出来事（3Dは時代と地域の風景）</td></tr>
-    <tr><th><span class="hxdia"></span></th><td>年表：ブランチ（国・系統）の終わり</td></tr><tr><th>点線</th><td>仮説・予測・もしも</td></tr>
+    <tr><th><span class="hxdia"></span></th><td>年表：ブランチ（国・系統）の終わり</td></tr><tr><th>点線</th><td>仮説・予測・想定</td></tr>
     <tr><th>暗い表示</th><td>スライダーの時代にはまだ存在しない・知られていない</td></tr><tr><th>もや</th><td>世界地図：その時代に文明がない／人がいない地域</td></tr></tbody></table>
-    <p class="note">数値は2026年時点の概数です。2026年より先の内容は、予測・目標・想像（もしも）です。</p>`;
+    <p class="note">数値は2026年時点の概数です。2026年より先の内容は、予測・目標・想像（近未来〜Type IVの想定）です。</p>`;
   function help(){if(!IDX)build();$("hxbody").innerHTML=HELP();hx.hidden=false;}
   $("navhelp").addEventListener("click",help);hx.addEventListener("click",e=>{if(e.target===hx||e.target.closest("[data-hclose]"))hx.hidden=true;});
   const typing=e=>{const t=e.target;return t&&(t.tagName==="INPUT"&&!["range","checkbox","radio","button"].includes(t.type)||t.tagName==="TEXTAREA"||t.tagName==="SELECT"||t.isContentEditable);};

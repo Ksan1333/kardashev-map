@@ -1,8 +1,8 @@
 /* ---------- ⑧ 系統樹（ズーム式ブランチグラフ） ---------- */
 (()=>{
-  const END=1e8;
+  const END=1e9;
   const B=[-300000,-40000,-10000,-3500,-500,500,1450,1760,1880,1945,1990,2026].concat(END>2026?[END]:[]);
-  const ERA=[["先史",-300000,-3500],["古代",-3500,500],["中世",500,1450],["近世",1450,1760],["近代",1760,1945],["現代",1945,2026],["Type Iへ（もしも）",2026,2300],["Type IIへ（もしも）",2300,6000],["Type IIIへ",6000,1e6],["Type IVへ",1e6,END]];
+  const ERA=[["先史",-300000,-3500],["古代",-3500,500],["中世",500,1450],["近世",1450,1760],["近代",1760,1945],["現代",1945,2026],["Type Iへ",2026,2300],["Type IIへ",2300,6000],["Type IIIへ",6000,1e6],["Type IVへ",1e6,END]];
   let EY=END;
   const Y0=-300000, RH=20, AX=40;
   // 時間軸の目盛り：era＝時代ごとに幅を割り当てる（既定）／real＝1年＝1単位の実年数
@@ -240,7 +240,7 @@
     return `<div class="plate" style="background:linear-gradient(135deg,#0e1830,#1c2748)"><svg viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice">${rings}
       <text x="16" y="62" fill="${f.color}" font-family="Murecho,sans-serif" font-weight="900" font-size="30">${esc(n.name.replace(/（.*?）/,"").slice(0,10))}</text>
       <text x="16" y="88" fill="#ffffffaa" font-family="IBM Plex Mono,monospace" font-size="13">${fy(n.b)}〜${typeof n.d==="number"?fy(n.d):n.b>2026.5?"":"現在"}</text></svg>
-      <span class="cap">${n.b>2026.5?((n.desc||"").startsWith("【SF】")?"SFノート（創作）":"想像（もしも）"):"図版（写真は下のリンクから）"}</span></div>`;
+      <span class="cap">${n.b>2026.5?((n.desc||"").startsWith("【SF】")?"SFノート（創作）":"想像（"+TYP(n.b)+"の想定）"):"図版（写真は下のリンクから）"}</span></div>`;
   }
   function openPanel(){panel.hidden=false;document.querySelector('.gwrap').classList.add('open');}
   function closePanel(){panel.hidden=true;document.querySelector('.gwrap').classList.remove('open');}
@@ -255,7 +255,7 @@
     const q=encodeURIComponent(n.name.replace(/（.*?）/g,""));
     const btn=(fkey,x)=>`<button data-f="${fkey}" data-id="${x.id}" class="${typeof x.d==="number"?"linkbtn dead":""}">${esc(x.name)}</button>`;
     panel.innerHTML=closeBtn+plate(f,n)+`
-      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">もしも（想像）</span>':""}${(n.desc||"").match(/^【(.+?)】/)?`<span class="pill wl wl-${(n.desc.match(/^【(.+?)】/)[1])}">${n.desc.match(/^【(.+?)】/)[1]==="SF"?"SFノート（創作）":"世界線："+n.desc.match(/^【(.+?)】/)[1]}</span>`:""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
+      <div class="meta"><span class="pill ${sc}">${sl}</span>${n.b>2026.5?'<span class="pill fut">'+TYP(n.b)+'の想定</span>':""}${(n.desc||"").match(/^【(.+?)】/)?`<span class="pill wl wl-${(n.desc.match(/^【(.+?)】/)[1])}">${n.desc.match(/^【(.+?)】/)[1]==="SF"?"SFノート（創作）":"世界線："+n.desc.match(/^【(.+?)】/)[1]}</span>`:""}<span style="color:${f.color}">${f.name}</span><span>・${eraOf(n.b)}に誕生</span></div>
       <h3>${esc(n.name)}</h3>
       <div class="meta num">${fy(n.b)} 〜 ${typeof n.d==="number"?fy(n.d)+"に消滅":n.d==="f"?"現在（衰退中）":n.b>2026.5?"（続く）":"現在"}</div>
       <p>${esc((n.desc||"").replace(/^【.+?】/,""))}</p>
@@ -265,7 +265,7 @@
       <div><h4>系譜</h4><div class="lineage"><span style="color:var(--muted)">人類 → ${f.name} →</span>${anc.map((a,i)=>(i?"<span>→</span>":"")+btn(fk,a)).join("")}</div></div>
       ${kids.length?`<div><h4>ここから分かれた要素（${kids.length}）</h4><div class="lineage">${kids.map(k=>btn(fk,k)).join("")}</div></div>`:""}
       <div><h4>${fy(y)}ごろ、他の分野では</h4><div class="snap">${snap||"<div>この時代の記録はまだ少ない</div>"}</div></div>
-      ${n.b>2026.5?`<p class="note">2026年より先の要素は、いまの社会・技術からの延長として想像した「もしも」です。点線で表示しています。世界線（協調・分断・加速・再建・宇宙）が違う枝は、同時に起きるとは限らない「ありうる未来の分岐」です。</p>`:`<div><h4>写真を見る（外部サイト）</h4><div class="photo">
+      ${n.b>2026.5?`<p class="note">2026年より先の要素は、いまの社会・技術からの延長として想像した「${TYP(n.b)}の想定」です。点線で表示しています。世界線（協調・分断・加速・再建・宇宙）が違う枝は、同時に起きるとは限らない「ありうる未来の分岐」です。</p>`:`<div><h4>写真を見る（外部サイト）</h4><div class="photo">
         <a href="https://ja.wikipedia.org/w/index.php?search=${q}" target="_blank" rel="noopener">Wikipediaで調べる</a>
         <a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">画像検索</a></div></div>`}`;
     openPanel(); requestAnimationFrame(()=>panel.scrollTop=0);

@@ -284,7 +284,7 @@ slab(-33.9,-8,8,[gm,rk]);slab(6.5,33.9,7,[gm,rk]);
              n:{sky:"#8ec5f2",fog:"#b9dbf5",sun:["#ffffff",1.15],pos:[10,60,15],amb:.55,hemi:["#dff0ff","#6a5a48",.55]},
              e:{sky:"#e8875a",fog:"#d99a7a",sun:["#ffb070",.85],pos:[-40,14,-10],amb:.38,hemi:["#ffb88c","#3a2a3a",.4]},
              x:{sky:"#0a1430",fog:"#0d1836",sun:["#9db4ff",.22],pos:[-20,40,30],amb:.16,hemi:["#2a3a6a","#0a0a14",.25]}};
-  // ---- Type I（もしも）の未来シーン ----
+  // ---- Type I（想定）の未来シーン ----
   const neon=(c,o=1)=>new THREE.MeshBasicMaterial({color:c,transparent:o<1,opacity:o});
   const glass=(c="#9fd8ff",o=.35)=>new THREE.MeshStandardMaterial({color:c,transparent:true,opacity:o,roughness:.05,metalness:.6,side:THREE.DoubleSide});
   const glowM=(c)=>{const m=mat("#2a3140",{emissive:c,emissiveIntensity:.25});onTod.push(t=>m.emissiveIntensity=t==="x"?1.8:t==="e"?.8:.25);return m;};

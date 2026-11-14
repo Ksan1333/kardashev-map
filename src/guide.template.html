@@ -39,7 +39,7 @@ button{font-family:inherit}
 header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
 h1{font-family:var(--font-display);font-weight:900;font-size:28px;margin:0;letter-spacing:.02em;text-wrap:balance}
 .sub{color:var(--muted);font-size:13px;margin:4px 0 0}
-body.t1 .top h1::after{content:"Type I・もしも";font:600 11px var(--font-body);color:#06222c;background:#7ee0ff;border-radius:99px;padding:3px 9px;margin-left:10px;vertical-align:middle}
+body.t1 .top h1::after{content:"Type I（想定）";font:600 11px var(--font-body);color:#06222c;background:#7ee0ff;border-radius:99px;padding:3px 9px;margin-left:10px;vertical-align:middle}
 body.t1 .whev[data-fut="1"]{border-style:dashed}
 .view .note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6}
 .thwrap{position:relative;height:min(70vh,640px);min-height:420px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#02030a}
@@ -721,7 +721,7 @@ footer p{margin:0 0 6px;max-width:120ch}
   <div class="kglobal" aria-label="カルダシェフ・スライダー（全ビュー共通）"><div class="kglabel"><b>カルダシェフ・スライダー</b><span>動かすと全ビューの時代が切り替わります</span></div>
       <div class="track ktrack" id="track"><div class="bar"></div><div class="fill" id="fill"></div><div class="knob" id="knob" role="slider" aria-label="時代"><em></em><i></i></div></div>
       <input type="range" id="krange" min="-0.6" max="4" step="0.01" class="krange" aria-label="カルダシェフ値">
-      <div class="kbtns"><button class="chip" id="kprev">◀ 前の時代</button><button class="chip" id="know">現在に戻る</button><button class="chip" id="knext">次の時代 ▶</button><span class="klegend"><i class="d pre"></i>宇宙・地球史<i class="d past"></i>過去（推定）<i class="d isnow"></i>現在<i class="d fut"></i>未来（もしも）</span></div>
+      <div class="kbtns"><button class="chip" id="kprev">◀ 前の時代</button><button class="chip" id="know">現在に戻る</button><button class="chip" id="knext">次の時代 ▶</button><span class="klegend"><i class="d pre"></i>宇宙・地球史<i class="d past"></i>過去（推定）<i class="d isnow"></i>現在<i class="d fut"></i>未来（想定）</span></div>
   </div>
   <nav class="views" id="views" aria-label="ビュー"></nav>
 
@@ -745,7 +745,7 @@ footer p{margin:0 0 6px;max-width:120ch}
         <div class="facts">人口 約82億人<br>活動範囲 地球＋地球周辺<br>主な動力 化石燃料（86%）</div>
       </div>
     </div>
-    <div class="panel tguide" id="tguide"><div class="gauge-head"><b>文明タイプ・ガイド（もしもの世界）</b><span>スライダーの位置に合わせて自動で切り替わります</span></div>
+    <div class="panel tguide" id="tguide"><div class="gauge-head"><b>文明タイプ・ガイド（想定の世界）</b><span>スライダーの位置に合わせて自動で切り替わります</span></div>
       <div class="ctabs"><button data-t="t1">Type I 惑星</button><button data-t="t2">Type II 恒星</button><button data-t="t3">Type III 銀河</button></div><div class="ctabbody tgbody"></div></div>
     <div class="panel sfnote" id="sfnote"></div>
   </section>
@@ -863,7 +863,7 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ⑧ 系統樹 -->
   <section class="view" id="v-lineage">
-    <div class="view-head"><h2>系統樹（分野ごと）</h2><p>分野を1つ選ぶと、その分野だけの系統樹を独立した時間軸で表示する（分野どうしは混ぜない）。2026年より先（点線）は「もしも」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線と、SFノートの構想（【SF】）に分かれて並ぶ。消えた要素は後継に合流（マージ）する。</p></div>
+    <div class="view-head"><h2>系統樹（分野ごと）</h2><p>分野を1つ選ぶと、その分野だけの系統樹を独立した時間軸で表示する（分野どうしは混ぜない）。2026年より先（点線）は「近未来〜Type IVの想定」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線と、SFノートの構想（【SF】）に分かれて並ぶ。消えた要素は後継に合流（マージ）する。</p></div>
     <div class="chips" id="gchips"></div>
     <div class="gwrap">
       <div class="gcanvas" id="gcanvas" tabindex="0" aria-label="系統樹のキャンバス。ホイールまたはピンチでズーム、ドラッグで移動">
@@ -1097,7 +1097,7 @@ __ERADATA__
 window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=document.getElementById("ktype");
   const k=+(document.getElementById("krange")||{}).value||.73;const T=E.kind==="pre"?"pre":k>=3?3:k>=2?2:k>=1?1:0;
   const nm=["Type 0","Type I","Type II","Type III"];
-  el.innerHTML=`<div class="ktsteps">${["文明以前",...nm].map((t,i)=>`<span class="${(T==="pre"?0:T+1)===i?"on":""}">${t}</span>`).join("")}</div><div class="ktnow"><b>${T==="pre"?"文明以前":nm[T]}</b><span>${E.when}・${E.name}${E.kind==="future"&&!/もしも/.test(E.when)?"（もしも）":""}</span></div>`;
+  el.innerHTML=`<div class="ktsteps">${["文明以前",...nm].map((t,i)=>`<span class="${(T==="pre"?0:T+1)===i?"on":""}">${t}</span>`).join("")}</div><div class="ktnow"><b>${T==="pre"?"文明以前":nm[T]}</b><span>${E.when}・${E.name}${E.kind==="future"&&!/想定|構想/.test(E.when+E.name)?"（想定）":""}</span></div>`;
   document.getElementById("modesub").textContent=E.now?"文明レベルごとに、同じビューで世界を描くガイドブック。いまは「現在の地球」を表示中。":`いまは「${E.when}・${E.name}」の世界を表示中。${E.kind==="future"?"2026年より先は予測・目標と想像です。":E.kind==="pre"?"人類が登場する前の宇宙・地球です。":"その時代までに起きたこと・知られていたことだけを表示します。"}`;});
 
 /* 宇宙・地図・ミクロの切り替え */

@@ -34,7 +34,7 @@
       <div><h4>同じ地域の前後</h4><div class="whnav">${k>0?btn(same[k-1]):""}${k<same.length-1?btn(same[k+1]):""}</div></div>
       ${others.length?`<div><h4>同じころ、ほかの地域では（±${w}年）</h4><div class="whnav">${others.map(btn).join("")}</div></div>`:""}
       ${tree.length?`<div><h4>同じころ生まれた要素（系統樹より）</h4><ul class="whtree">${tree.map(([f,n,b])=>`<li><span>${f}</span>${n}</li>`).join("")}</ul></div>`:""}
-      ${tags.includes("もしも")?`<p class="clim">この出来事は想像（もしもの未来）です。実際の予定ではありません。</p>`:tags.includes("予定")||tags.includes("予測")?`<p class="clim">2026年時点の計画・目標・予測です。変わる可能性があります。</p>`:""}
+      ${tags.some(ISFUT)?`<p class="clim">この出来事は想像（${tags.find(ISFUT)}の想定）です。実際の予定ではありません。</p>`:tags.includes("予定")||tags.includes("予測")?`<p class="clim">2026年時点の計画・目標・予測です。変わる可能性があります。</p>`:""}
       <div><h4>もっと詳しく（外部サイト）</h4><div class="photo"><a href="https://ja.wikipedia.org/w/index.php?search=${q}" target="_blank" rel="noopener">Wikipediaで調べる</a><a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">画像検索</a></div></div>`;
     panel.hidden=false;wrap.classList.add("open");panel.scrollTop=0;
     if(typeof EV3D!=="undefined"&&EV3D)EV3D.mount(panel.querySelector(".ev3d"),{title:t,desc:d,y:yr,tags,region:r,kind:"hist"});

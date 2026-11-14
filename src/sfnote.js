@@ -36,7 +36,7 @@ const SFN_STAGES=[
  ["超因果圏","Type IIIの先（仮：1万年〜）","今の因果律や時空の制約を超えて、知性どうしが交流できる。","時間と距離の制約からの解放","「一度きり」の選択の重み","同じ川に二度入れないからこそ、選択に意味があるのでは？"],
  ["高次存在領域","さらにその先（仮：10万年〜）","空間・時間・言語といった概念を超えた存在の領域。UOIが現れる。","生命・宇宙・情報の境界の再定義","有限であることの魅力","あらゆる制約から解放された存在は、それでも何かを望むのか？"]];
 window.SFNOTE_RENDER=function(el){if(!el)return;const e=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
-  el.innerHTML=`<div class="gauge-head"><b>SFノート：文明はどこまで進化できるか（構想・空想）</b><span>けいのSFノートの構想。事実や研究にもとづく「もしも」とは別の、創作の層です。年代はすべて仮。</span></div>
+  el.innerHTML=`<div class="gauge-head"><b>SFノート：文明はどこまで進化できるか（構想・空想）</b><span>けいのSFノートの構想。事実や研究にもとづく「近未来〜Type IVの想定」とは別の、創作の層です。年代はすべて仮。</span></div>
   <p class="sfq">根本の問い：<b>人類と知性はどこまで進化できるのか。そして、人類を超えた知性が生まれたとき、文明・幸福・生命・宇宙はどう変わるのか。</b></p>
   <div class="sfstages">${SFN_STAGES.map(([n,k,d,g,l,q],i)=>`<div class="sfst"><div class="sfn">${i+1}</div><h4>${e(n)}</h4><div class="sfk">${e(k)}</div><p>${e(d)}</p><dl><dt>得るもの</dt><dd>${e(g)}</dd><dt>失うもの</dt><dd>${e(l)}</dd><dt>残る問い</dt><dd>${e(q)}</dd></dl></div>`).join('<div class="sfarr">→</div>')}</div>
   <div class="sfgrid">
