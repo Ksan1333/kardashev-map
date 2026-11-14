@@ -147,7 +147,7 @@ __SPACEPLANET__
     const cs=[];for(let i=0;i<4000;i++){const u=R()*2-1,a=R()*6.283,r=6.371+.45+R()*.8;cs.push(Math.cos(a)*Math.sqrt(1-u*u)*r,u*r*.9,Math.sin(a)*Math.sqrt(1-u*u)*r);}const cp=points(cs,"#9fe8ff",.06,.75);scene.add(cp);anims.push(t=>cp.rotation.y=t*.08);
     const cn=new THREE.Object3D();cn.position.set(0,7.6,0);scene.add(cn);obj("t1const","地球を包む衛星の網（もしも）",cn,14,"通信・観測・測位の衛星が数十万基。2026年時点でも稼働中の衛星は1万基を超えている。ぶつかったときの破片が次の衝突を呼ぶ連鎖（ケスラー・シンドローム）を防ぐ管理が必須になる。","高度 約500〜1200km");
     // ラグランジュ点L4・L5の宇宙植民地
-    [[1,"L4"],[-1,"L5"]].forEach(([sg,nm])=>{const g=new THREE.Group();g.position.set(384.4*Math.cos(Math.PI/3),0,sg*384.4*Math.sin(Math.PI/3));
+    if(window.KYEAR>=2250)[[1,"L4"],[-1,"L5"]].forEach(([sg,nm])=>{const g=new THREE.Group();g.position.set(384.4*Math.cos(Math.PI/3),0,sg*384.4*Math.sin(Math.PI/3));
       const c=new THREE.Mesh(new THREE.CylinderGeometry(2.2,2.2,9,24,1,true),smat({color:"#e6ebf2",metalness:.4,roughness:.35,side:THREE.DoubleSide}));c.rotation.z=Math.PI/2;g.add(c);g.add(sprite("#ffe9a8",14,.35));
       for(const k of[-1,1]){const w=new THREE.Mesh(new THREE.BoxGeometry(9,.05,3),smat({color:"#9fd8ff",emissive:"#3a7ab0",transparent:true,opacity:.75}));w.position.y=k*3;g.add(w);}
       anims.push(t=>c.rotation.y=t*.5);scene.add(g);if(sg>0)obj("t1l45","L4・L5の宇宙植民地（もしも）",g,60,"地球と月の重力がつり合うラグランジュ点（月の軌道の60°前と後ろ）は、物が自然にとどまる安定した場所。1970年代にオニールが、ここに数万人が住む回転式の植民地を提案した。","地球から約38万km");});
@@ -172,9 +172,11 @@ __SPACEPLANET__
     const mc=[];for(let c=0;c<6;c++){const la0=(R()-.5)*1.2,lo0=c/6*6.283;for(let i=0;i<60;i++){const la=la0+(R()-.5)*.25,lo=lo0+(R()-.5)*.3;mc.push(Math.cos(la)*Math.cos(lo)*2.64,Math.sin(la)*2.64,Math.cos(la)*Math.sin(lo)*2.64);}}const mp=points(mc,"#ffc860",.3,1);PL.mars.children[0].add(mp);
     const mn=new THREE.Object3D();mn.position.set(0,3.2,0);PL.mars.add(mn);obj("t1mars","火星の都市（もしも）",mn,18,"人口100万人を目標とする構想。ドームや地下で暮らし、氷から水と酸素を、大気のCO₂からメタン燃料を作る。地球との行き来に適した時期は約2年2か月ごと。","火星");
     const fb=new THREE.Object3D();fb.position.set(-4.5,.8,0);PL.mars.add(fb);obj("t1phobos","フォボスの宇宙港（もしも）",fb,8,"火星の衛星フォボスは重力が小さく、着陸も出発も楽。火星に降りる前の中継基地の候補。日本のMMX計画がフォボスの砂を持ち帰る予定。","火星の上空 約6000km");
+    if(window.KYEAR>=2250){
     // 金星の浮遊都市
     const vc=new THREE.Group();PL.venus.add(vc);for(let i=0;i<6;i++){const a=i/6*6.283;const b=sprite("#ffe9c0",1.6,.9);b.position.set(Math.cos(a)*4.6,.6,Math.sin(a)*4.6);vc.add(b);}anims.push(t=>vc.rotation.y=t*.6);
     const vn=new THREE.Object3D();vn.position.set(0,5,0);PL.venus.add(vn);obj("t1venus","金星の雲の上の浮遊都市（もしも）",vn,18,"地表は460℃でも、高度約50〜55kmの雲の上は気圧が約0.5〜1気圧、気温が約30〜70℃で、太陽系で最も地球に近い環境。呼吸できる空気は金星の大気より軽いので、空気そのものが浮き袋になる（NASAのHAVOC構想）。","金星の上空 約50km");
+    }
     // 小惑星帯：ケレスの補給基地とプシケの採掘
     const cn=new THREE.Object3D();cn.position.copy(ce.position).add(V(0,3,0));scene.add(cn);ce.add(sprite("#7ee0ff",8,.6));obj("t1ceres","ケレスの補給基地（もしも）",cn,14,"ケレスは水の氷を多く含むので、水と燃料を作る小惑星帯の「港」の候補。","2.8天文単位");
     const ps=sphere(1,smat({color:"#a8a8b0",metalness:.7,roughness:.35}),10);ps.scale.set(1.3,.9,1);ps.position.set(-250,-2,150);scene.add(ps);
@@ -188,8 +190,8 @@ __SPACEPLANET__
     obj("t1route","地球〜火星の定期航路（もしも）",rn,80,"今の化学ロケットで片道約7か月。核融合や原子力のロケットなら数週間〜数か月に縮む。航路は、惑星の位置が合う約2年2か月ごとに開く。","最短 約5600万km");}
   function t1Outer(g,id){
     if(id==="jupiter"){const eb=new THREE.Object3D();g.add(eb);eb.add(sprite("#9fe8ff",3,.9));anims.push(t=>eb.position.set(Math.cos(t*1.9+1)*14,.6,Math.sin(t*1.9+1)*14));obj("t1europa","エウロパの氷の下の探査ロボット（もしも）",eb,10,"厚さ十数kmの氷を溶かしながら掘り進み、その下の海で生命を探す。エウロパの海の水は地球の海の約2倍あるとされる。","木星の衛星");
-      const cb=new THREE.Object3D();g.add(cb);cb.add(sprite("#ffd27a",3,.9));anims.push(t=>cb.position.set(Math.cos(t*.9+3)*23,.6,Math.sin(t*.9+3)*23));obj("t1callisto","カリストの有人基地（もしも）",cb,10,"木星の強い放射線帯の外側にあるので、人が滞在しやすい。木星系の有人探査の拠点として研究された（NASAのHOPE構想、2003年）。","木星の衛星");}
-    if(id==="saturn"){const tb=new THREE.Object3D();g.add(tb);tb.add(sprite("#ffb070",3,.9));anims.push(t=>tb.position.set(Math.cos(t*.6)*20,1.2,Math.sin(t*.6)*20));obj("t1titan","タイタンの基地（もしも）",tb,10,"大気は地球の約1.5倍の濃さで、宇宙服なしでも防寒具と酸素マスクで歩けるといわれる。メタンの湖で船を浮かべ、重力が小さいので腕に翼をつければ飛べるという試算もある。","土星の衛星");}}
+      if(window.KYEAR>=2250){const cb=new THREE.Object3D();g.add(cb);cb.add(sprite("#ffd27a",3,.9));anims.push(t=>cb.position.set(Math.cos(t*.9+3)*23,.6,Math.sin(t*.9+3)*23));obj("t1callisto","カリストの有人基地（もしも）",cb,10,"木星の強い放射線帯の外側にあるので、人が滞在しやすい。木星系の有人探査の拠点として研究された（NASAのHOPE構想、2003年）。","木星の衛星");}}
+    if(id==="saturn"&&window.KYEAR>=2250){const tb=new THREE.Object3D();g.add(tb);tb.add(sprite("#ffb070",3,.9));anims.push(t=>tb.position.set(Math.cos(t*.6)*20,1.2,Math.sin(t*.6)*20));obj("t1titan","タイタンの基地（もしも）",tb,10,"大気は地球の約1.5倍の濃さで、宇宙服なしでも防寒具と酸素マスクで歩けるといわれる。メタンの湖で船を浮かべ、重力が小さいので腕に翼をつければ飛べるという試算もある。","土星の衛星");}}
   function t1OuterEnd(){const dir=V(-.3,.35,.9).normalize(),end=dir.clone().multiplyScalar(2600);const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),end]),new THREE.LineDashedMaterial({color:"#ffd27a",dashSize:30,gapSize:20,transparent:true,opacity:.6}));l.computeLineDistances();scene.add(l);
     const pr=sprite("#ffd27a",14,1);scene.add(pr);anims.push(t=>pr.position.copy(end).multiplyScalar(.2+((t*.02)%1)*.8));const n=new THREE.Object3D();n.position.copy(end).multiplyScalar(.6);scene.add(n);
     obj("t1probe","恒星間探査機（もしも）",n,200,"ボイジャーの約10倍の速さで太陽圏の外へ出て、恒星間空間を本格的に調べる。光速の約20%で飛ぶ超小型機なら、ケンタウルス座α星まで約20年（ブレークスルー・スターショット構想）。","100天文単位〜");}
@@ -530,10 +532,10 @@ __SPACEPLANET__
       const vo=(id,nm,dir,dist,d)=>{const end=dir.clone().normalize().multiplyScalar(dist);const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),V(52,0,0),end]),new THREE.LineBasicMaterial({color:"#7fb2ff",transparent:true,opacity:.7}));scene.add(l);
         const m=sphere(4,new THREE.MeshBasicMaterial({color:"#7fb2ff"}),10);m.position.copy(end);scene.add(m);m.add(sprite("#7fb2ff",30,.6));obj(id,nm,m,120,d,(dist/10).toFixed(0)+"天文単位");};
       vo("voyager1","ボイジャー1号",V(.4,.6,.7),1690,"1977年打ち上げ。人工物で最も遠くにある。2026年11月18日に地球から1光日に達する予定。");
-      vo("voyager2","ボイジャー2号",V(.5,-.55,-.65),1420,"天王星と海王星を訪れた唯一の探査機。");if(T1())t1OuterEnd();if(T4())t4Outer();
+      vo("voyager2","ボイジャー2号",V(.5,-.55,-.65),1420,"天王星と海王星を訪れた唯一の探査機。");if(T2(2250))t1OuterEnd();if(T4())t4Outer();
     }},
    {id:"helio",name:"太陽圏とオールトの雲",unit:"1目盛＝1万5000億km（100天文単位）",desc:"太陽風が届く範囲（太陽圏）の外は恒星間空間。その外側を、彗星のふるさとオールトの雲が数万天文単位にわたって包む（存在は推定）。",dist:2400,min:3,max:5000,
-    build(){scene.add(new THREE.AmbientLight("#ffffff",.6));const s=sprite("#ffd27a",6,1);scene.add(s);obj("sun","太陽",s,8,"","—");if(T2(2700))t2Helio();if(T1())t1Helio();if(T3())t3Helio();if(T4())t4Helio();
+    build(){scene.add(new THREE.AmbientLight("#ffffff",.6));const s=sprite("#ffd27a",6,1);scene.add(s);obj("sun","太陽",s,8,"","—");if(T2(2700))t2Helio();if(T2(2250))t1Helio();if(T3())t3Helio();if(T4())t4Helio();
       const hm=new THREE.MeshBasicMaterial({color:"#5aa0ff",transparent:true,opacity:.14,side:THREE.DoubleSide,depthWrite:false});const h=sphere(1.2,hm,48);h.scale.set(1,1,2.6);h.position.z=1.6;scene.add(h);
       const ts=sphere(.9,new THREE.MeshBasicMaterial({color:"#7fd3ff",transparent:true,opacity:.1,wireframe:true}),24);ts.scale.set(1,1,1.8);ts.position.z=.7;scene.add(ts);
       const hp=new THREE.Object3D();hp.position.set(0,0,-1.2);scene.add(hp);obj("heliopause","太陽圏の境界（ヘリオポーズ）",hp,5,"太陽風と恒星間の物質がぶつかる境界。ボイジャー1号は2012年、2号は2018年に越えた。","約120天文単位");

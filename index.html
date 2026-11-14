@@ -1944,7 +1944,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
     const cs=[];for(let i=0;i<4000;i++){const u=R()*2-1,a=R()*6.283,r=6.371+.45+R()*.8;cs.push(Math.cos(a)*Math.sqrt(1-u*u)*r,u*r*.9,Math.sin(a)*Math.sqrt(1-u*u)*r);}const cp=points(cs,"#9fe8ff",.06,.75);scene.add(cp);anims.push(t=>cp.rotation.y=t*.08);
     const cn=new THREE.Object3D();cn.position.set(0,7.6,0);scene.add(cn);obj("t1const","地球を包む衛星の網（もしも）",cn,14,"通信・観測・測位の衛星が数十万基。2026年時点でも稼働中の衛星は1万基を超えている。ぶつかったときの破片が次の衝突を呼ぶ連鎖（ケスラー・シンドローム）を防ぐ管理が必須になる。","高度 約500〜1200km");
     // ラグランジュ点L4・L5の宇宙植民地
-    [[1,"L4"],[-1,"L5"]].forEach(([sg,nm])=>{const g=new THREE.Group();g.position.set(384.4*Math.cos(Math.PI/3),0,sg*384.4*Math.sin(Math.PI/3));
+    if(window.KYEAR>=2250)[[1,"L4"],[-1,"L5"]].forEach(([sg,nm])=>{const g=new THREE.Group();g.position.set(384.4*Math.cos(Math.PI/3),0,sg*384.4*Math.sin(Math.PI/3));
       const c=new THREE.Mesh(new THREE.CylinderGeometry(2.2,2.2,9,24,1,true),smat({color:"#e6ebf2",metalness:.4,roughness:.35,side:THREE.DoubleSide}));c.rotation.z=Math.PI/2;g.add(c);g.add(sprite("#ffe9a8",14,.35));
       for(const k of[-1,1]){const w=new THREE.Mesh(new THREE.BoxGeometry(9,.05,3),smat({color:"#9fd8ff",emissive:"#3a7ab0",transparent:true,opacity:.75}));w.position.y=k*3;g.add(w);}
       anims.push(t=>c.rotation.y=t*.5);scene.add(g);if(sg>0)obj("t1l45","L4・L5の宇宙植民地（もしも）",g,60,"地球と月の重力がつり合うラグランジュ点（月の軌道の60°前と後ろ）は、物が自然にとどまる安定した場所。1970年代にオニールが、ここに数万人が住む回転式の植民地を提案した。","地球から約38万km");});
@@ -1969,9 +1969,11 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
     const mc=[];for(let c=0;c<6;c++){const la0=(R()-.5)*1.2,lo0=c/6*6.283;for(let i=0;i<60;i++){const la=la0+(R()-.5)*.25,lo=lo0+(R()-.5)*.3;mc.push(Math.cos(la)*Math.cos(lo)*2.64,Math.sin(la)*2.64,Math.cos(la)*Math.sin(lo)*2.64);}}const mp=points(mc,"#ffc860",.3,1);PL.mars.children[0].add(mp);
     const mn=new THREE.Object3D();mn.position.set(0,3.2,0);PL.mars.add(mn);obj("t1mars","火星の都市（もしも）",mn,18,"人口100万人を目標とする構想。ドームや地下で暮らし、氷から水と酸素を、大気のCO₂からメタン燃料を作る。地球との行き来に適した時期は約2年2か月ごと。","火星");
     const fb=new THREE.Object3D();fb.position.set(-4.5,.8,0);PL.mars.add(fb);obj("t1phobos","フォボスの宇宙港（もしも）",fb,8,"火星の衛星フォボスは重力が小さく、着陸も出発も楽。火星に降りる前の中継基地の候補。日本のMMX計画がフォボスの砂を持ち帰る予定。","火星の上空 約6000km");
+    if(window.KYEAR>=2250){
     // 金星の浮遊都市
     const vc=new THREE.Group();PL.venus.add(vc);for(let i=0;i<6;i++){const a=i/6*6.283;const b=sprite("#ffe9c0",1.6,.9);b.position.set(Math.cos(a)*4.6,.6,Math.sin(a)*4.6);vc.add(b);}anims.push(t=>vc.rotation.y=t*.6);
     const vn=new THREE.Object3D();vn.position.set(0,5,0);PL.venus.add(vn);obj("t1venus","金星の雲の上の浮遊都市（もしも）",vn,18,"地表は460℃でも、高度約50〜55kmの雲の上は気圧が約0.5〜1気圧、気温が約30〜70℃で、太陽系で最も地球に近い環境。呼吸できる空気は金星の大気より軽いので、空気そのものが浮き袋になる（NASAのHAVOC構想）。","金星の上空 約50km");
+    }
     // 小惑星帯：ケレスの補給基地とプシケの採掘
     const cn=new THREE.Object3D();cn.position.copy(ce.position).add(V(0,3,0));scene.add(cn);ce.add(sprite("#7ee0ff",8,.6));obj("t1ceres","ケレスの補給基地（もしも）",cn,14,"ケレスは水の氷を多く含むので、水と燃料を作る小惑星帯の「港」の候補。","2.8天文単位");
     const ps=sphere(1,smat({color:"#a8a8b0",metalness:.7,roughness:.35}),10);ps.scale.set(1.3,.9,1);ps.position.set(-250,-2,150);scene.add(ps);
@@ -1985,8 +1987,8 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
     obj("t1route","地球〜火星の定期航路（もしも）",rn,80,"今の化学ロケットで片道約7か月。核融合や原子力のロケットなら数週間〜数か月に縮む。航路は、惑星の位置が合う約2年2か月ごとに開く。","最短 約5600万km");}
   function t1Outer(g,id){
     if(id==="jupiter"){const eb=new THREE.Object3D();g.add(eb);eb.add(sprite("#9fe8ff",3,.9));anims.push(t=>eb.position.set(Math.cos(t*1.9+1)*14,.6,Math.sin(t*1.9+1)*14));obj("t1europa","エウロパの氷の下の探査ロボット（もしも）",eb,10,"厚さ十数kmの氷を溶かしながら掘り進み、その下の海で生命を探す。エウロパの海の水は地球の海の約2倍あるとされる。","木星の衛星");
-      const cb=new THREE.Object3D();g.add(cb);cb.add(sprite("#ffd27a",3,.9));anims.push(t=>cb.position.set(Math.cos(t*.9+3)*23,.6,Math.sin(t*.9+3)*23));obj("t1callisto","カリストの有人基地（もしも）",cb,10,"木星の強い放射線帯の外側にあるので、人が滞在しやすい。木星系の有人探査の拠点として研究された（NASAのHOPE構想、2003年）。","木星の衛星");}
-    if(id==="saturn"){const tb=new THREE.Object3D();g.add(tb);tb.add(sprite("#ffb070",3,.9));anims.push(t=>tb.position.set(Math.cos(t*.6)*20,1.2,Math.sin(t*.6)*20));obj("t1titan","タイタンの基地（もしも）",tb,10,"大気は地球の約1.5倍の濃さで、宇宙服なしでも防寒具と酸素マスクで歩けるといわれる。メタンの湖で船を浮かべ、重力が小さいので腕に翼をつければ飛べるという試算もある。","土星の衛星");}}
+      if(window.KYEAR>=2250){const cb=new THREE.Object3D();g.add(cb);cb.add(sprite("#ffd27a",3,.9));anims.push(t=>cb.position.set(Math.cos(t*.9+3)*23,.6,Math.sin(t*.9+3)*23));obj("t1callisto","カリストの有人基地（もしも）",cb,10,"木星の強い放射線帯の外側にあるので、人が滞在しやすい。木星系の有人探査の拠点として研究された（NASAのHOPE構想、2003年）。","木星の衛星");}}
+    if(id==="saturn"&&window.KYEAR>=2250){const tb=new THREE.Object3D();g.add(tb);tb.add(sprite("#ffb070",3,.9));anims.push(t=>tb.position.set(Math.cos(t*.6)*20,1.2,Math.sin(t*.6)*20));obj("t1titan","タイタンの基地（もしも）",tb,10,"大気は地球の約1.5倍の濃さで、宇宙服なしでも防寒具と酸素マスクで歩けるといわれる。メタンの湖で船を浮かべ、重力が小さいので腕に翼をつければ飛べるという試算もある。","土星の衛星");}}
   function t1OuterEnd(){const dir=V(-.3,.35,.9).normalize(),end=dir.clone().multiplyScalar(2600);const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),end]),new THREE.LineDashedMaterial({color:"#ffd27a",dashSize:30,gapSize:20,transparent:true,opacity:.6}));l.computeLineDistances();scene.add(l);
     const pr=sprite("#ffd27a",14,1);scene.add(pr);anims.push(t=>pr.position.copy(end).multiplyScalar(.2+((t*.02)%1)*.8));const n=new THREE.Object3D();n.position.copy(end).multiplyScalar(.6);scene.add(n);
     obj("t1probe","恒星間探査機（もしも）",n,200,"ボイジャーの約10倍の速さで太陽圏の外へ出て、恒星間空間を本格的に調べる。光速の約20%で飛ぶ超小型機なら、ケンタウルス座α星まで約20年（ブレークスルー・スターショット構想）。","100天文単位〜");}
@@ -2327,10 +2329,10 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
       const vo=(id,nm,dir,dist,d)=>{const end=dir.clone().normalize().multiplyScalar(dist);const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),V(52,0,0),end]),new THREE.LineBasicMaterial({color:"#7fb2ff",transparent:true,opacity:.7}));scene.add(l);
         const m=sphere(4,new THREE.MeshBasicMaterial({color:"#7fb2ff"}),10);m.position.copy(end);scene.add(m);m.add(sprite("#7fb2ff",30,.6));obj(id,nm,m,120,d,(dist/10).toFixed(0)+"天文単位");};
       vo("voyager1","ボイジャー1号",V(.4,.6,.7),1690,"1977年打ち上げ。人工物で最も遠くにある。2026年11月18日に地球から1光日に達する予定。");
-      vo("voyager2","ボイジャー2号",V(.5,-.55,-.65),1420,"天王星と海王星を訪れた唯一の探査機。");if(T1())t1OuterEnd();if(T4())t4Outer();
+      vo("voyager2","ボイジャー2号",V(.5,-.55,-.65),1420,"天王星と海王星を訪れた唯一の探査機。");if(T2(2250))t1OuterEnd();if(T4())t4Outer();
     }},
    {id:"helio",name:"太陽圏とオールトの雲",unit:"1目盛＝1万5000億km（100天文単位）",desc:"太陽風が届く範囲（太陽圏）の外は恒星間空間。その外側を、彗星のふるさとオールトの雲が数万天文単位にわたって包む（存在は推定）。",dist:2400,min:3,max:5000,
-    build(){scene.add(new THREE.AmbientLight("#ffffff",.6));const s=sprite("#ffd27a",6,1);scene.add(s);obj("sun","太陽",s,8,"","—");if(T2(2700))t2Helio();if(T1())t1Helio();if(T3())t3Helio();if(T4())t4Helio();
+    build(){scene.add(new THREE.AmbientLight("#ffffff",.6));const s=sprite("#ffd27a",6,1);scene.add(s);obj("sun","太陽",s,8,"","—");if(T2(2700))t2Helio();if(T2(2250))t1Helio();if(T3())t3Helio();if(T4())t4Helio();
       const hm=new THREE.MeshBasicMaterial({color:"#5aa0ff",transparent:true,opacity:.14,side:THREE.DoubleSide,depthWrite:false});const h=sphere(1.2,hm,48);h.scale.set(1,1,2.6);h.position.z=1.6;scene.add(h);
       const ts=sphere(.9,new THREE.MeshBasicMaterial({color:"#7fd3ff",transparent:true,opacity:.1,wireframe:true}),24);ts.scale.set(1,1,1.8);ts.position.z=.7;scene.add(ts);
       const hp=new THREE.Object3D();hp.position.set(0,0,-1.2);scene.add(hp);obj("heliopause","太陽圏の境界（ヘリオポーズ）",hp,5,"太陽風と恒星間の物質がぶつかる境界。ボイジャー1号は2012年、2号は2018年に越えた。","約120天文単位");
@@ -5395,6 +5397,101 @@ tools:[
 Object.entries(TREE_ADD3B).forEach(([k,v])=>{TREE_ADD3[k]=(TREE_ADD3[k]||[]).concat(v);});
 TREE.forEach(t=>{const ids=new Set(t.nodes.map(x=>x[0]));(TREE_ADD3[t.key]||[]).forEach(n=>{if(ids.has(n[0]))return;n=[...n];if(n[2]&&!ids.has(n[2])&&!(TREE_ADD3[t.key]||[]).some(m=>m[0]===n[2]))n[2]=null;t.nodes.push(n);ids.add(n[0]);});
   const P=DESC_PLUS[t.key];if(P)t.nodes.forEach(n=>{if(P[n[0]]&&n[3]<=2026&&!(n[6]||"").includes(P[n[0]]))n[6]=((n[6]||"").replace(/\s+$/,""))+P[n[0]];});});
+
+/* ===== 宇宙マップのType I・IIの構造物を、年表と系統樹にそろえる ===== */
+(()=>{
+  // ---- 年表（世界史の未来）：[表示, 年, 地域, 見出し, 説明, タグ] ----
+  const L=(y,t)=>`${Math.floor(y/10)*10}年代（${t}）`;
+  const E1=[
+   [2100,"地球を包む衛星の網","通信・観測・測位の衛星が数十万基に。衝突の連鎖（ケスラー・シンドローム）を防ぐ国際的な管理が始まる。",["宇宙","技術"]],
+   [2105,"低軌道の燃料補給基地","宇宙で燃料を積み直す「ガソリンスタンド」。月の氷から作った燃料が使われ始める。",["宇宙","交通"]],
+   [2115,"地球と月の定期便","再使用できる宇宙船が、燃料補給基地と月を数日で往復する。",["宇宙","交通"]],
+   [2120,"宇宙太陽光発電衛星の本格運用","静止軌道で発電し、マイクロ波で地上へ送る。夜も雲も関係ない発電所。",["宇宙","エネルギー"]],
+   [2126,"L1の日よけ","太陽と地球の間のラグランジュ点L1に薄い膜を浮かべ、日差しを約2%さえぎって温暖化を打ち消す（2006年にロジャー・エンジェルが提案した構想）。",["宇宙","環境"]],
+   [2130,"月面都市と質量投射機","月の南極の氷で数万人が暮らし、電磁レールで月の資源を宇宙へ打ち出す。",["宇宙","技術"]],
+   [2140,"地球〜火星の定期航路","惑星の位置が合う約2年2か月ごとに、大型船が地球と火星を結ぶ。",["宇宙","交通"]],
+   [2142,"フォボスの宇宙港","火星の衛星フォボスに、火星へ降りる前の中継基地ができる。",["宇宙","交通"]],
+   [2150,"軌道リングの完成","地球を一周する環状の構造物。宇宙への輸送が「電車並み」になる。",["宇宙","技術"]],
+   [2160,"宇宙居住地（オニール・シリンダー）","回転する円筒の内側に遠心力で重力を作り、数万人が暮らす。",["宇宙","社会"]],
+   [2170,"金属の小惑星プシケの採掘","鉄やニッケルが主成分とみられる小惑星から、宇宙で使う金属を手に入れる。",["宇宙","経済"]],
+   [2180,"ケレスの補給基地","水の氷を多く含むケレスが、小惑星帯の水と燃料の港になる。",["宇宙","経済"]],
+   [2190,"エウロパの氷の下の探査ロボット","厚い氷を溶かしながら掘り進み、その下の海で生命を探す。",["宇宙","学問"]],
+   [2250,"ラグランジュ点L4・L5の宇宙植民地","地球と月の重力がつり合う安定した場所に、大型の回転式植民地が並ぶ。",["宇宙","社会"]],
+   [2260,"金星の雲の上の浮遊都市","高度約50〜55kmの、気圧と気温が地球に近い層に都市が浮かぶ（NASAのHAVOC構想が下敷き）。",["宇宙","社会"]],
+   [2270,"カリストの有人基地","木星の強い放射線帯の外側にある衛星カリストに、木星系の有人探査の拠点ができる。",["宇宙","学問"]],
+   [2280,"タイタンの基地","大気が地球の約1.5倍の濃さの土星の衛星タイタンに、防寒具と酸素マスクで歩ける基地ができる。",["宇宙","学問"]],
+   [2285,"恒星間探査機の出発","ボイジャーの約10倍の速さで、太陽圏の外の恒星間空間を本格的に調べる。",["宇宙","学問"]],
+   [2290,"太陽の重力レンズ望遠鏡","約550天文単位より先に望遠鏡を置き、太陽の重力をレンズにして系外惑星の表面を撮る。",["宇宙","学問"]]];
+  const E2=[
+   [2400,"小惑星をくりぬいた居住地","数kmの小惑星の内部をくりぬいて回転させ、遠心力で重力を作る町が小惑星帯に増える。",["宇宙","社会"]],
+   [2510,"水星の解体が始まる","ダイソン・スウォームの材料にするため、水星を少しずつ解体し、電磁レールで材料を打ち出す。",["宇宙","エネルギー"]],
+   [2600,"エネルギーの送電ビーム","スウォームが集めた太陽のエネルギーを、レーザーやマイクロ波で惑星や宇宙船へ送る。",["宇宙","エネルギー"]],
+   [2610,"火星のテラフォーミング開始","軌道の鏡で極冠を温め、大気を厚くしていく。地球並みの気圧にするには今の約170倍の大気が必要。",["宇宙","環境"]],
+   [2620,"木星の大気の採掘船","木星の上層の大気に浮かぶ船が、核融合の燃料になる水素やヘリウム3を集める。",["宇宙","エネルギー"]],
+   [2650,"土星の環の氷の採掘","大部分が水の氷でできた土星の環が、外太陽系の水と燃料の倉庫になる。",["宇宙","経済"]],
+   [2680,"海王星の燃料基地","天王星や海王星の大気から燃料を集め、太陽系の外へ向かう船に補給する。",["宇宙","交通"]],
+   [2690,"カイパーベルトの氷の町","冥王星のような氷の天体の地下に、核融合の熱で暮らす町が点在する。",["宇宙","社会"]],
+   [3300,"ケンタウルス座α星の植民地","太陽系の外に最初の恒星植民地ができる。地球との会話は往復9年近くかかる。",["宇宙","社会"]],
+   [3600,"バーナード星の植民地","約6光年先の小さな赤色矮星の周りの小天体を資源にする。",["宇宙","社会"]],
+   [3600.5,"恒星間ラムジェット船","宇宙の薄い水素を磁場ですくい集めて燃料にする船（1960年、バサードが提案。実現できるかは疑問視されている）。",["宇宙","交通"]],
+   [3800,"エリダヌス座ε星の植民地","約10.5光年先の、ちりの円盤をもつ若い恒星系に入植する。",["宇宙","社会"]],
+   [3850,"オールトの雲の彗星の町","数兆個あるとされる彗星の核に住み、恒星間への出発点にする。",["宇宙","社会"]],
+   [3900,"くじら座τ星の植民地","約11.9光年先の、太陽によく似た恒星系に入植する。",["宇宙","社会"]],
+   [3950,"TRAPPIST-1の植民地","約40光年先の、7つの地球サイズの惑星をもつ恒星系に入植する。地球との会話は往復約81年。",["宇宙","社会"]],
+   [4000.5,"シュカドフ推進器","太陽の片側を巨大な鏡で覆い、光の圧力で太陽系ごとゆっくり動かす装置（1987年、シュカドフが提案）。",["宇宙","技術"]]];
+  const add=(arr,tp)=>arr.forEach(([y,t,d,tags])=>{if(WH.some(e=>e[3]===t))return;WH.push([L(y,tp),y,"世界",t,d+"（宇宙マップの"+tp+"の時代で見られます）",[...tags,"もしも"]]);});
+  add(E1,"Type I");add(E2,"Type II");
+  // 宇宙マップと年がずれていた出来事を合わせる
+  const fix=(title,y,lab,desc)=>{const e=WH.find(x=>x[3]===title);if(!e)return;e[1]=y;e[0]=lab;if(desc)e[4]=desc;};
+  fix("太陽の重力レンズ望遠鏡",2290,"2290年代（Type I）");
+  fix("世代宇宙船の出発",2700,"2700年代（Type II）");
+  fix("ケンタウルス座α星の植民地",3300,"3300年代（Type II）");
+  fix("太陽光の10%を利用（K≈1.9）",3000,"3000年代（Type II）","ダイソン・スウォームが太陽の出力の約4割を集める（4000年ごろに完成）。");
+  {const e=WH.find(x=>x[3]==="太陽光の10%を利用（K≈1.9）");if(e)e[3]="ダイソン・スウォームが約4割完成（K≈2.0）";}
+  fix("マトリョーシカ・ブレイン",50000,"5万年ごろ（Type III）","太陽を何重にも囲む超巨大コンピュータ。廃熱を外側の層で再利用する構想（宇宙マップではType IIIの時代に登場）。");
+  WH.sort((a,b)=>a[1]-b[1]);
+
+  // ---- 系統樹：[id, 名前, 親, 誕生年, 消滅年, 合流先, 説明] ----
+  const N={
+   space:[
+    ["x_oneill","宇宙居住地（オニール・シリンダー）","iss",2160,null,null,"【宇宙】回転する円筒の内側に遠心力で重力を作り、数万人が暮らす（Type Iの想定）。"],
+    ["x_phobos","フォボスの宇宙港","marscity",2142,null,null,"【宇宙】火星の衛星フォボスに置く、火星へ降りる前の中継基地（Type Iの想定）。日本のMMX計画がフォボスの砂を持ち帰る予定。"],
+    ["x_psyche","金属の小惑星プシケの採掘","samplereturn",2170,null,null,"【宇宙】鉄やニッケルが主成分とみられる幅約220kmの小惑星（Type Iの想定）。NASAの探査機サイキが2029年に到着予定。"],
+    ["x_ceresdepot","ケレスの補給基地","x_psyche",2180,"f","ceres","【宇宙】水の氷を多く含むケレスを、小惑星帯の水と燃料の港にする（Type Iの想定）。のちに小惑星帯都市へ発展。"],
+    ["x_europabot","エウロパの氷の下の探査ロボット","x_europa",2190,null,null,"【宇宙】厚い氷を溶かしながら掘り進み、その下の海で生命を探す（Type Iの想定）。"],
+    ["x_planetdef","地球防衛網","x_spacelaw",2210,null,null,"【協調】宇宙ごみを回収し、危険な小惑星を早めに見つけて軌道を変える体制（Type Iの想定）。2022年のDART実験が第一歩。"],
+    ["x_l45","ラグランジュ点L4・L5の宇宙植民地","x_oneill",2250,null,null,"【宇宙】地球と月の重力がつり合う安定した場所に並ぶ回転式植民地（Type Iの想定）。1970年代にオニールが提案。"],
+    ["x_venuscloud","金星の浮遊都市","venus",2260,null,null,"【宇宙】高度約50〜55kmの雲の上に浮かぶ都市（Type Iの想定）。NASAのHAVOC構想が下敷き。"],
+    ["x_callisto","カリストの有人基地","x_europabot",2270,null,null,"【宇宙】木星の放射線帯の外側にある衛星カリストの基地（Type Iの想定）。NASAのHOPE構想（2003年）。"],
+    ["x_titanbase","タイタンの基地","x_titan",2280,null,null,"【宇宙】大気が地球の約1.5倍の濃さで、防寒具と酸素マスクで歩けるといわれる（Type Iの想定）。"],
+    ["x_focal","太陽重力レンズ望遠鏡","jwst",2290,null,null,"【宇宙】約550天文単位より先に置き、太陽の重力をレンズにする望遠鏡（Type Iの想定）。"],
+    ["x_asthab","小惑星をくりぬいた居住地","ceres",2400,null,null,"【宇宙】小惑星の内部をくりぬいて回転させ、遠心力で重力を作る（Type IIの想定）。"],
+    ["x_jovecity","木星の衛星の都市群","x_callisto",2450,null,null,"【宇宙】ガニメデやカリストの氷の地下に都市が広がる（Type IIの想定）。"],
+    ["x_marsterra","火星のテラフォーミング","marscity",2610,null,null,"【宇宙】軌道の鏡で極冠を温め、大気を厚くし、海と緑を作る（Type IIの想定）。今の火星の気圧は地球の約0.6%。"],
+    ["x_saturnice","土星の環の氷の採掘","x_titanbase",2650,null,null,"【宇宙】大部分が水の氷の環を、外太陽系の水と燃料の倉庫にする（Type IIの想定）。"],
+    ["x_kuipertown","カイパーベルトの氷の町","x_saturnice",2690,null,null,"【宇宙】氷の天体の地下で、核融合の熱で暮らす（Type IIの想定）。"],
+    ["x_oorttown","オールトの雲の彗星の町","x_kuipertown",3850,null,null,"【宇宙】彗星の核に住み、恒星間への出発点にする（Type IIの想定）。"],
+    ["x_barnardcol","バーナード星の植民地","alphacol",3600,null,null,"【宇宙】約6光年先の赤色矮星の植民地（Type IIの想定）。"],
+    ["x_epericol","エリダヌス座ε星の植民地","alphacol",3800,null,null,"【宇宙】約10.5光年先の若い恒星系の植民地（Type IIの想定）。"],
+    ["x_taucol","くじら座τ星の植民地","alphacol",3900,null,null,"【宇宙】約11.9光年先の、太陽によく似た恒星の植民地（Type IIの想定）。"],
+    ["x_trapcol","TRAPPIST-1の植民地","alphacol",3950,null,null,"【宇宙】約40光年先の、地球サイズの惑星が7つある恒星系の植民地（Type IIの想定）。"]],
+   energy:[
+    ["x_l1shade","L1の日よけ","x_geoeng",2126,null,null,"【再建】太陽と地球の間に薄い膜を浮かべ、日差しを約2%さえぎる（Type Iの想定）。2006年にロジャー・エンジェルが提案。"],
+    ["x_powerbeam","エネルギーの送電ビーム","dyson",2600,null,null,"【宇宙】スウォームのエネルギーを、レーザーやマイクロ波で惑星や宇宙船へ送る（Type IIの想定）。"],
+    ["x_jupscoop","木星の大気の採掘","x_he3",2620,null,null,"【宇宙】木星の上層の大気から、核融合の燃料になる水素やヘリウム3を集める（Type IIの想定）。"],
+    ["x_neptunefuel","海王星の燃料基地","x_jupscoop",2680,null,null,"【宇宙】天王星・海王星の大気から燃料を集める（Type IIの想定）。"],
+    ["x_shkadov","シュカドフ推進器","starlift",4000,null,null,"【宇宙】太陽の片側を巨大な鏡で覆い、光の圧力で太陽系ごと動かす（Type IIの想定）。1987年にシュカドフが提案。"]],
+   transport:[
+    ["x_depot","低軌道の燃料補給基地","x_rocketp2p",2105,null,null,"【宇宙】宇宙で燃料を積み直す「ガソリンスタンド」（Type Iの想定）。"],
+    ["x_cislunar","地球と月の定期便","x_depot",2115,null,null,"【宇宙】再使用できる宇宙船が地球の低軌道と月を数日で往復する（Type Iの想定）。"],
+    ["x_marsroute","地球〜火星の定期航路","x_cislunar",2140,null,null,"【宇宙】惑星の位置が合う約2年2か月ごとに開く航路（Type Iの想定）。"],
+    ["x_ramjet","恒星間ラムジェット船","x_fusionship",3600,null,null,"【宇宙】宇宙の薄い水素を磁場ですくい集めて燃料にする（Type IIの想定）。1960年にバサードが提案。"]],
+  };
+  TREE.forEach(t=>{const ids=new Set(t.nodes.map(x=>x[0]));(N[t.key]||[]).forEach(n=>{if(ids.has(n[0]))return;n=[...n];if(n[2]&&!ids.has(n[2])&&!(N[t.key]||[]).some(m=>m[0]===n[2]))n[2]=null;t.nodes.push(n);ids.add(n[0]);});});
+  // 宇宙マップと年をそろえる
+  const yr=(key,id,y)=>{const t=TREE.find(x=>x.key===key);const n=t&&t.nodes.find(x=>x[0]===id);if(n)n[3]=y;};
+  yr("space","alphacol",3300);yr("space","genship",2700);yr("info","mbrain",50000);
+})();
 
 /* ---------- SFノート（けいの構想）：文明の5段階・知性の進化・言語・記憶・哲学 ---------- */
 // 系統樹の要素：[id, 名前, 親, 誕生, 消滅, 合流先, 説明]。【SF】はSFノートの構想（年代は仮）
