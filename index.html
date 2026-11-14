@@ -1531,7 +1531,8 @@ const SPZ=(()=>{
     if(colors)g.setAttribute("color",new THREE.BufferAttribute(new Float32Array(colors),3));
     return new THREE.Points(g,new THREE.PointsMaterial({color:colors?"#ffffff":col,vertexColors:!!colors,size,sizeAttenuation:attn,transparent:true,opacity:op,blending:THREE.AdditiveBlending,depthWrite:false,map:T.glow("#ffffff")}));}
   function sph2(r,col){const m=new THREE.Mesh(new THREE.SphereGeometry(r,12,8),new THREE.MeshBasicMaterial({color:col}));scene.add(m);return m;}
-  function obj(id,name,node,view,desc,dist){const o={id,name,node,view,desc,dist};objs.push(o);(window.SPZ_ALL=window.SPZ_ALL||{})[id]=name;return o;}
+  // Type I〜III の構造物は「（もしも）」の代わりにどのタイプの想定かを書く
+  function obj(id,name,node,view,desc,dist){const tm=/^t([123])/.exec(id);if(tm){const T="Type "+["I","II","III"][tm[1]-1];name=name.replace(/（もしも）/g,"").replace(/・もしも）/g,"）").replace(/\s+$/,"")+"（"+T+"）";if(desc)desc=desc.replace(/（もしも）/g,"（"+T+"の想定）").replace(/「もしも」/g,T+"の想定");}const o={id,name,node,view,desc,dist};objs.push(o);(window.SPZ_ALL=window.SPZ_ALL||{})[id]=name;return o;}
   function sunLight(pos=V(-1,0,0).multiplyScalar(1000)){const l=new THREE.DirectionalLight("#fff6e8",1.6);l.position.copy(pos);scene.add(l);scene.add(new THREE.AmbientLight("#334466",.35));}
   function planet(r,tex,opts={}){const m=sphere(r,smat({map:tex,...opts}));return m;}
   function iss(){const g=new THREE.Group();const tm=smat({color:"#c9ced6",metalness:.6,roughness:.4});
