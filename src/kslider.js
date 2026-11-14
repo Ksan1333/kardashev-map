@@ -16,7 +16,8 @@
    [1.5,"Type I.5（もしも）","太陽系文明",1e21,"未知数","宇宙空間の巨大太陽光発電、小惑星資源","太陽系の惑星と衛星","小惑星を資源として採掘し、太陽系のあちこちに居住地を持つ。","future"],
    [2,"Type II（もしも）","恒星文明",1e26,"未知数","太陽の全出力（ダイソン・スウォーム）","太陽系全体、近くの恒星へ探査機","太陽を無数の発電衛星で取り囲み、その光をほぼすべて使う。","future"],
    [2.5,"Type II.5（もしも）","恒星間文明",1e31,"未知数","多数の恒星のエネルギー","数百〜数千光年の範囲の恒星系","光速に近い宇宙船で、近くの恒星系に広がっていく。","future"],
-   [3,"Type III（もしも）","銀河文明",1e36,"未知数","銀河全体の恒星（約1000億個以上）","天の川銀河全体","銀河中の恒星のエネルギーを使う。外から見ると、銀河が赤外線でしか光らなく見えるかもしれない。","future"]];
+   [3,"Type III（もしも）","銀河文明",1e36,"未知数","銀河全体の恒星（約1000億個以上）","天の川銀河全体","銀河中の恒星のエネルギーを使う。外から見ると、銀河が赤外線でしか光らなく見えるかもしれない。","future"],
+   [4,"Type IV（構想）","超銀河団文明",1e46,"未知数","ワームホール網でつないだ数万〜数十万の銀河","ラニアケア超銀河団（約10万個の銀河）から宇宙の大規模構造へ","ワームホールの「近道」で、光でも数億年かかる銀河どうしを行き来する。カルダシェフの元の分類にはない、後から考えられた段階。","future"]];
   const PRE=[
    [-.6,"138億年前","宇宙の誕生",null,"—","ビッグバンの熱","宇宙全体（まだ原子もない）","時間と空間が始まり、宇宙が急膨張する。38万年後に原子ができ、光がまっすぐ進めるようになる。","pre"],
    [-.5,"約130億年前","星と銀河の誕生",null,"—","星の核融合","できたばかりの銀河","最初の星が輝き、銀河が集まっていく。炭素や酸素など、生命の材料になる元素は星の中で作られる。","pre"],
@@ -25,19 +26,19 @@
    [-.2,"約2億年前","恐竜の時代",null,"—","—","超大陸パンゲア","恐竜が陸の主役。大陸はひとつにまとまり、これから分かれていく。","pre"],
    [-.1,"約300万年前","道具を使う人類",null,"数万人？","人の筋肉","アフリカのサバンナ","二本足で歩く人類が石を割って道具を作り始める。まだ火も言葉も確かではない。","pre"]];
   S.unshift(...PRE);window.KSTAGES=S;
-  const YEAR=[-13.8e9,-13e9,-4.54e9,-3.8e9,-2e8,-3e6,-10000,-3000,1,1500,1800,1900,1950,2000,2026,2100,2250,2700,4000,50000,1000000];
+  const YEAR=[-13.8e9,-13e9,-4.54e9,-3.8e9,-2e8,-3e6,-10000,-3000,1,1500,1800,1900,1950,2000,2026,2100,2250,2700,4000,50000,1000000,1e8];
   const KMIN=-.65,NOWI=S.findIndex(s=>s[8]==="now");
   const track=document.getElementById("track"), fill=document.getElementById("fill"), knob=document.getElementById("knob"), card=document.getElementById("kcard"), rng=document.getElementById("krange"), cv=document.getElementById("kcanvas");
-  const pct=k=>((k-KMIN)/(3-KMIN)*100)+"%";
+  const pct=k=>((k-KMIN)/(4-KMIN)*100)+"%";
   // 目盛り
-  [[KMIN,"宇宙・地球史"],[0,"0"],[1,"Type I 10¹⁶W"],[2,"Type II 10²⁶W"],[3,"Type III 10³⁶W"]].forEach(([k,t])=>{const tk=document.createElement("div");tk.className="tick";tk.style.left=pct(k);track.appendChild(tk);
-    const lb=document.createElement("div");lb.className="tick-label";lb.style.left=pct(k);lb.innerHTML=t.replace(/^(Type [IV]+) (.*)$/,"$1<span class=\"tkw\"> $2</span>");if(k===KMIN)lb.style.transform="none";if(k===3)lb.style.transform="translateX(-100%)";track.appendChild(lb);});
+  [[KMIN,"宇宙・地球史"],[0,"0"],[1,"Type I 10¹⁶W"],[2,"Type II 10²⁶W"],[3,"Type III 10³⁶W"],[4,"Type IV 10⁴⁶W"]].forEach(([k,t])=>{const tk=document.createElement("div");tk.className="tick";tk.style.left=pct(k);track.appendChild(tk);
+    const lb=document.createElement("div");lb.className="tick-label";lb.style.left=pct(k);lb.innerHTML=t.replace(/^(Type [IV]+) (.*)$/,"$1<span class=\"tkw\"> $2</span>");if(k===KMIN)lb.style.transform="none";if(k===4)lb.style.transform="translateX(-100%)";track.appendChild(lb);});
   S.forEach((s,i)=>{const d=document.createElement("button");d.className="kstop"+(s[8]==="now"?" is-now":s[8]==="future"?" fut":s[8]==="pre"?" pre":"");d.style.left=pct(s[0]);d.title=s[1]+"　"+s[2];d.dataset.i=i;d.setAttribute("aria-label",s[1]+" "+s[2]);track.appendChild(d);});
   const sup=n=>String(n).split("").map(c=>"⁰¹²³⁴⁵⁶⁷⁸⁹⁻"["0123456789-".indexOf(c)]).join("");
   const fmtW=w=>{const e=Math.floor(Math.log10(w)),m=w/10**e;return `${m.toFixed(1).replace(/\.0$/,"")}×10${sup(e)} W`;};
   const ratio=w=>{const r=w/1.9e13;return r>=1?(r<1e4?`現在の約${Math.round(r).toLocaleString()}倍`:`現在の約10${sup(Math.round(Math.log10(r)))}倍`):`現在の約${(1/r)<100?(1/r).toFixed(0):Math.round(1/r).toLocaleString()}分の1`;};
   let K=.73, idx=NOWI, lastIdx=-1;
-  function set(k,snap){K=Math.max(KMIN+.05,Math.min(3,k));let best=0;S.forEach((s,i)=>{if(Math.abs(s[0]-K)<Math.abs(S[best][0]-K))best=i;});idx=best;if(snap)K=S[best][0];
+  function set(k,snap){K=Math.max(KMIN+.05,Math.min(4,k));let best=0;S.forEach((s,i)=>{if(Math.abs(s[0]-K)<Math.abs(S[best][0]-K))best=i;});idx=best;if(snap)K=S[best][0];
     fill.style.width=pct(K);knob.style.left=pct(K);rng.value=K;knob.querySelector("em").textContent=K<.2?S[idx][1]:`K=${K.toFixed(2)}`;
     track.querySelectorAll(".kstop").forEach((b,i)=>b.classList.toggle("on",i===idx));updateMap();window.dispatchEvent(new CustomEvent("k-stage",{detail:idx}));
     if(idx!==lastIdx){lastIdx=idx;window.KYEAR=YEAR[idx];window.KERA={i:idx,name:S[idx][2],when:S[idx][1],kind:S[idx][8],now:idx===NOWI};window.dispatchEvent(new CustomEvent("k-year",{detail:YEAR[idx]}));}
@@ -49,12 +50,12 @@
   }
   function updateMap(){const s=S[idx],data=ERA_FIELDS[idx];const nodes=document.querySelectorAll("#mm .mnode");
     nodes.forEach((n,i)=>{const [v,l]=data?data[i]:[FIELDS[i].v,FIELDS[i].l];n.querySelector(".v").textContent=v;n.querySelector(".l").textContent=l;n.classList.toggle("fut",s[8]==="future");n.classList.toggle("past",s[8]==="past"||s[8]==="pre");});
-    const core=document.getElementById("core");core.querySelector(".eyebrow").textContent=s[1];core.querySelector("h3").textContent=s[2];core.querySelector(".big").innerHTML=s[8]==="pre"?`— <small>文明以前`:`K≈${s[0].toFixed(2)} <small>${s[0]>=3?"Type III":s[0]>=2?"Type II":s[0]>=1?"Type I":"Type 0"}</small>`;
+    const core=document.getElementById("core");core.querySelector(".eyebrow").textContent=s[1];core.querySelector("h3").textContent=s[2];core.querySelector(".big").innerHTML=s[8]==="pre"?`— <small>文明以前`:`K≈${s[0].toFixed(2)} <small>${s[0]>=4?"Type IV":s[0]>=3?"Type III":s[0]>=2?"Type II":s[0]>=1?"Type I":"Type 0"}</small>`;
     core.querySelector(".facts").innerHTML=`人口 ${s[4]}<br>活動範囲 ${s[6].length>14?s[6].slice(0,14)+"…":s[6]}<br>主な動力 ${s[5].length>14?s[5].slice(0,14)+"…":s[5]}`;
     core.classList.toggle("fut",s[8]==="future");document.getElementById("mmnote").textContent=s[8]==="now"?"12分野の現在地。カードを押すと、その分野の系統樹へ移動します。":s[8]==="pre"?`${s[1]}：人類の文明はまだありません。各カードは、その時代の宇宙・地球のようすです。`:s[8]==="past"?`${s[1]}の12分野（大まかな概要）。スライダーを「現在」に戻すと今の地球に戻ります。`:`${s[1]}の12分野（推測・もしもの世界）。`;}
   rng.addEventListener("input",()=>set(+rng.value,false));rng.addEventListener("change",()=>set(+rng.value,true));
   track.addEventListener("click",e=>{const b=e.target.closest(".kstop");if(b){set(S[+b.dataset.i][0],true);}});
-  let drag=false;const fromX=x=>{const r=track.getBoundingClientRect();return KMIN+(x-r.left)/r.width*(3-KMIN);};
+  let drag=false;const fromX=x=>{const r=track.getBoundingClientRect();return KMIN+(x-r.left)/r.width*(4-KMIN);};
   knob.addEventListener("pointerdown",e=>{drag=true;knob.setPointerCapture(e.pointerId);e.preventDefault();});
   knob.addEventListener("pointermove",e=>{if(drag)set(fromX(e.clientX),false);});
   knob.addEventListener("pointerup",e=>{drag=false;set(K,true);});
@@ -77,7 +78,7 @@
     stars.forEach(([x,y,b])=>{g.fillStyle=`rgba(220,230,255,${.2+b*.6})`;g.fillRect(x*W,y*H,1+b,1+b);});
     const cx=W/2,cy=H/2,k=K;
     if(S[idx][8]==="pre"){drawPre(idx,cx,cy,t);g.fillStyle="rgba(233,237,247,.75)";g.font="12px 'Noto Sans JP',sans-serif";g.fillText(S[idx][1]+"　"+S[idx][2],12,H-12);return;}
-    const aE=1-sm(1.15,1.45,k), aS=sm(1.15,1.45,k)*(1-sm(2.6,2.85,k)), aG=sm(2.6,2.85,k);
+    const aE=1-sm(1.15,1.45,k), aS=sm(1.15,1.45,k)*(1-sm(2.6,2.85,k)), aG=sm(2.6,2.85,k)*(1-sm(3.3,3.8,k)), aV=sm(3.3,3.8,k);
     if(aE>0){g.globalAlpha=aE;const R=Math.min(W,H)*.32;
       const lit=k<.3?.01:k<.73?sm(.28,.73,k)*.55:.55+sm(.73,1,k)*.45;earth(cx,cy,R,t,lit);
       if(k>=.65){const ns=Math.floor(sm(.65,1.1,k)*120);for(let i=0;i<ns;i++){const a=i/ns*6.283+t*.15*(1+i%3*.3),rr=R*(1.12+(i%4)*.05),inc=.35+(i%5)*.12;g.fillStyle="rgba(200,230,255,.9)";g.fillRect(cx+Math.cos(a)*rr-1,cy+Math.sin(a)*rr*inc-1,2,2);}}
@@ -94,6 +95,11 @@
     if(aG>0){g.globalAlpha=aG;const R=Math.min(W,H)*.45;g.save();g.translate(cx,cy);g.rotate(t*.03);
       galaxy.forEach(([x,y,b],i)=>{const red=i%3!==0;g.fillStyle=red?`rgba(255,${120+b*60|0},80,${.5+b*.4})`:`rgba(200,220,255,${.3+b*.5})`;g.fillRect(x*R,y*R*.55,1.6,1.6);});
       const cg=g.createRadialGradient(0,0,0,0,0,R*.25);cg.addColorStop(0,"rgba(255,200,140,.8)");cg.addColorStop(1,"rgba(255,140,80,0)");g.fillStyle=cg;g.beginPath();g.arc(0,0,R*.25,0,7);g.fill();g.restore();g.globalAlpha=1;}
+    if(aV>0){g.globalAlpha=aV;const GP=[[0,0,1.3],[-.33,-.2,.8],[.35,-.25,.9],[-.38,.25,.7],[.3,.28,.75],[-.05,-.38,.6],[.05,.4,.6],[-.62,.02,.55],[.62,0,.6]].map(([x,y,s2])=>[cx+x*W,cy+y*H,s2]);
+      GP.forEach(([x,y],i)=>{if(!i)return;const [x0,y0]=GP[0];const mx=(x+x0)/2,my=(y+y0)/2-40;g.strokeStyle="rgba(158,232,255,.45)";g.lineWidth=1.2;g.beginPath();g.moveTo(x0,y0);g.quadraticCurveTo(mx,my,x,y);g.stroke();
+        const f=(t*.25+i*.13)%1,u=1-f;g.fillStyle="rgba(200,240,255,.95)";g.fillRect(u*u*x0+2*u*f*mx+f*f*x-1.5,u*u*y0+2*u*f*my+f*f*y-1.5,3,3);});
+      GP.forEach(([x,y,s2],k2)=>{const rr=40*s2;g.save();g.translate(x,y);g.rotate(t*.05+k2);galaxy.slice(0,500).forEach(([gx,gy,b],i)=>{const red=i%3!==0;g.fillStyle=red?`rgba(255,${120+b*60|0},80,${.4+b*.4})`:`rgba(200,220,255,${.3+b*.5})`;g.fillRect(gx*rr,gy*rr*.55,1.2,1.2);});g.restore();
+        g.strokeStyle="rgba(200,160,255,.8)";g.lineWidth=1.5;g.beginPath();g.ellipse(x+rr*1.1,y-rr*.4,5,8,0,0,7);g.stroke();});g.globalAlpha=1;}
     g.fillStyle="rgba(233,237,247,.75)";g.font="12px 'Noto Sans JP',sans-serif";g.fillText(S[idx][1]+"　"+S[idx][2],12,H-12);}
   let paleoC=null;
   function drawPre(i,cx,cy,t){const R=Math.min(W,H)*.32;

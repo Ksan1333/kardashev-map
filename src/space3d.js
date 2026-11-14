@@ -66,7 +66,7 @@ const SPZ=(()=>{
     return new THREE.Points(g,new THREE.PointsMaterial({color:colors?"#ffffff":col,vertexColors:!!colors,size,sizeAttenuation:attn,transparent:true,opacity:op,blending:THREE.AdditiveBlending,depthWrite:false,map:T.glow("#ffffff")}));}
   function sph2(r,col){const m=new THREE.Mesh(new THREE.SphereGeometry(r,12,8),new THREE.MeshBasicMaterial({color:col}));scene.add(m);return m;}
   // Type I〜III の構造物は「（もしも）」の代わりにどのタイプの想定かを書く
-  function obj(id,name,node,view,desc,dist){const tm=/^t([123])/.exec(id);if(tm){const T="Type "+["I","II","III"][tm[1]-1];name=name.replace(/（もしも）/g,"").replace(/・もしも）/g,"）").replace(/\s+$/,"")+"（"+T+"）";if(desc)desc=desc.replace(/（もしも）/g,"（"+T+"の想定）").replace(/「もしも」/g,T+"の想定");}const o={id,name,node,view,desc,dist};objs.push(o);(window.SPZ_ALL=window.SPZ_ALL||{})[id]=name;return o;}
+  function obj(id,name,node,view,desc,dist){const tm=/^t([1234])/.exec(id);if(tm){const T="Type "+["I","II","III","IV"][tm[1]-1];name=name.replace(/（もしも）/g,"").replace(/・もしも）/g,"）").replace(/\s+$/,"")+"（"+T+"）";if(desc)desc=desc.replace(/（もしも）/g,"（"+T+"の想定）").replace(/「もしも」/g,T+"の想定");}const o={id,name,node,view,desc,dist};objs.push(o);(window.SPZ_ALL=window.SPZ_ALL||{})[id]=name;return o;}
   function sunLight(pos=V(-1,0,0).multiplyScalar(1000)){const l=new THREE.DirectionalLight("#fff6e8",1.6);l.position.copy(pos);scene.add(l);scene.add(new THREE.AmbientLight("#334466",.35));}
   function planet(r,tex,opts={}){const m=sphere(r,smat({map:tex,...opts}));return m;}
   function iss(){const g=new THREE.Group();const tm=smat({color:"#c9ced6",metalness:.6,roughness:.4});
@@ -334,6 +334,104 @@ __SPACEPLANET__
   function t3Web(){const us=lp("home");if(!us)return;const r=160;const sp=new THREE.Mesh(new THREE.SphereGeometry(r,48,24),new THREE.MeshBasicMaterial({color:"#ff9a6a",transparent:true,opacity:.06,side:THREE.DoubleSide,depthWrite:false}));sp.position.copy(us);scene.add(sp);
     const n=new THREE.Object3D();n.position.copy(us).add(V(0,r,0));scene.add(n);obj("t3horizon","永遠にたどり着ける宇宙の限界",n,300,"宇宙の膨張が加速しているので、今の時点で約160億光年より遠い銀河には、光の速さで出発しても永遠にたどり着けない（宇宙の事象の地平線）。どんな文明も、この球の外には手が届かない。これは実際の物理。","半径 約160億光年");
     const g=new THREE.Object3D();g.position.copy(us).add(V(r*.7,-20,0));scene.add(g);obj("t3ghat","Type III文明は見つかっていない",g,200,"もし銀河全体をダイソン構造で覆う文明があれば、その銀河は可視光で暗く、赤外線で明るく見えるはず。2015年に約10万個の銀河を調べた研究（G-HAT）では、そうした銀河は見つからなかった。これは実際の観測。","観測された約10万個の銀河");}
+  // ---- Type IV（構想）：ワームホール網で銀河どうしを結ぶ超銀河団文明 ----
+  const T4=()=>typeof window.KYEAR==="number"&&window.KYEAR>=1e8;
+  const WH="#9fe8ff",WP="#c8a0ff";
+  function gate4(pos,sz,col=WH){const g=new THREE.Group();g.position.copy(pos);g.rotation.set(R()*3,R()*3,0);
+    const ring=new THREE.Mesh(new THREE.TorusGeometry(sz,sz*.08,8,48),new THREE.MeshBasicMaterial({color:col}));g.add(ring);
+    const disk=new THREE.Mesh(new THREE.CircleGeometry(sz*.92,40),new THREE.MeshBasicMaterial({color:WP,transparent:true,opacity:.45,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,depthWrite:false}));g.add(disk);
+    const ph=R()*6;anims.push(t=>{ring.rotation.z=t*.3+ph;disk.material.opacity=.3+.2*Math.sin(t*1.5+ph);});scene.add(g);return g;}
+  function link4(a,b,col=WH){const d=a.distanceTo(b);const m=a.clone().add(b).multiplyScalar(.5).add(V(0,d*.22,0));const cu=new THREE.QuadraticBezierCurve3(a,m,b);
+    const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints(cu.getPoints(48)),new THREE.LineBasicMaterial({color:col,transparent:true,opacity:.45}));scene.add(l);
+    const pu=sprite("#e8f8ff",d*.03,1);scene.add(pu);const o=R();anims.push(t=>pu.position.copy(cu.getPoint((t*.12+o)%1)));}
+  function put4(list){const G={};list.forEach(([id,nm,pos,sz,desc,dist,col])=>{if(!pos)return;const g=gate4(pos,sz,col);obj(id,nm,g,sz*6,desc,dist||"");G[id]=pos;});return G;}
+  const WHN="（ワームホールは一般相対論の方程式の解として存在しうるが、通り抜けられる形を保つには「負のエネルギー」をもつ特殊な物質が必要で、作り方はわかっていない）";
+  function t4Em(){const G=put4([
+    ["t4earthgate","地球軌道の玄関ゲート",V(0,6,-60),5,"地球から他の銀河へ向かう人と物は、まずここを通る。口の直径は数km。くぐると、数千万〜数億光年先の銀河のゲートから出てくる。"+WHN,"地球から約6万km"],
+    ["t4moongate","月のゲート管制局",V(384.4,10,30),3,"何千本ものワームホールの行き先と通行の順番を管理する。月の裏側の静かな環境が、時空のゆがみを精密に測るのに向いている。","月の上空"],
+    ["t4portal","都市間ポータル網",V(10,9,8),1.6,"直径数mの小さなワームホールで、地球の都市どうしを「ドア一枚」でつなぐ。乗り物という考え方そのものがなくなる。","地上と低軌道"]]);
+    link4(G.t4earthgate,G.t4moongate);link4(G.t4earthgate,G.t4portal);}
+  function t4Inner(){const G=put4([
+    ["t4solgate","太陽系中央ゲート",V(0,10,-180),14,"太陽系と銀河中央ハブを結ぶ大型ゲート。入口と出口の距離は約2万6000光年でも、通り抜けるのは一瞬。","約1.8天文単位"],
+    ["t4casimir","負のエネルギー工場（カシミール効果）",V(70,-18,50),6,"非常に近づけた2枚の金属板の間では、真空のエネルギーがまわりより低くなる（カシミール効果。1948年に予言、1997年に測定）。これを途方もない規模に拡大して、ワームホールを支える「負のエネルギー」を作る。","太陽のそば"],
+    ["t4logi","太陽系物流ターミナル",V(130,12,-70),7,"他の銀河から届く資源や製品を、太陽系の各地に振り分ける。","約1.5天文単位"]]);link4(G.t4solgate,G.t4logi);link4(G.t4solgate,G.t4casimir);}
+  function t4Outer(){const G=put4([
+    ["t4jupgate","木星の重力アンカー・ゲート",V(0,8,72),6,"大質量の木星のそばにゲートを置き、重力で口の位置を安定させる。燃料の水素をゲート越しに他の星系へ送る。","約7天文単位"],
+    ["t4chrono","時間順序保護の監視所",V(-160,20,110),8,"ワームホールの口を光速近くで動かすと、タイムマシンになりうる（1988年、ソーンら）。ホーキングは「自然が過去への旅を禁じるはず」と予想した（時間順序保護仮説、1992年）。ここではゲートがタイムマシンにならないよう監視する。","約20天文単位"]]);link4(G.t4jupgate,G.t4chrono);}
+  function t4Helio(){put4([["t4oortgate","オールトの雲の外縁ゲート",V(220,30,-110),6,"太陽系の重力がほとんど届かない場所に置いた、大型の資材や宇宙船専用のゲート。","約2万天文単位"]]);}
+  function t4Gal(){const SW=lp("sunpos");if(!SW)return;const BH=lp("sgra")||V(0,0,0);const gp=(l,b,dly)=>SW.clone().add(gal(l,b).multiplyScalar(dly/1000));const ar=id=>{const q=lp(id);return q?q.clone().add(V(0,1.2,0)):null;};
+    const G=put4([
+     ["t4hub","銀河中央ハブ（いて座A*ゲート）",BH.clone().add(V(0,2.5,0)),1.6,"天の川銀河のすべてのワームホールが集まる中心駅。いて座A*（太陽の約400万倍のブラックホール）の回転エネルギーでゲートを動かす。","約2万6000光年"],
+     ["t4perseus","ペルセウス腕ゲート",ar("perseus"),.9,"渦巻きの腕ごとに置いた地域ゲート。腕の中の数十億の恒星系へ支線が伸びる。","ペルセウス腕"],
+     ["t4sagitt","いて腕ゲート",ar("sagitt"),.9,"太陽系のすぐ内側の腕の中心駅。","いて腕"],
+     ["t4scutum","たて・ケンタウルス腕ゲート",ar("scutum"),.9,"銀河の中心をぐるりと回る大きな腕のゲート。","たて・ケンタウルス腕"],
+     ["t4norma","じょうぎ腕ゲート",ar("norma"),.9,"銀河中心に近い、恒星が密集した腕のゲート。","じょうぎ腕"],
+     ["t4sol","太陽系への支線ゲート",SW.clone().add(V(0,.8,0)),.5,"太陽系中央ゲートにつながる支線。人類の故郷へ帰る巡礼者が多い路線。","太陽系"],
+     ["t4omega","オメガ星団ゲート",gp(309,15,17000),.6,"約1000万個の恒星が集まる球状星団。星団の中は恒星どうしが近く、ゲート1本で多くの星系に行ける。","約1万7000光年"],
+     ["t4m13","ヘルクレス座球状星団（M13）ゲート",gp(59,41,22000),.6,"1974年、アレシボ電波望遠鏡からメッセージが送られた星団。届くのは約2万5000年後だが、ゲートなら一瞬で行ける。","約2万2000光年"],
+     ["t4m4","M4球状星団ゲート",gp(351,16,7200),.5,"地球に最も近い球状星団の一つ。年齢約120億歳の古い星々。","約7200光年"],
+     ["t4tuc47","きょしちょう座47ゲート",gp(306,-44,13000),.6,"南天で2番目に明るい球状星団。中心部に数百個のパルサーがあり、時刻の基準局を置く。","約1万3000光年"],
+     ["t4m22","M22球状星団ゲート",gp(9.9,-7.6,10600),.5,"銀河中心方向にある明るい球状星団。","約1万600光年"],
+     ["t4halo","ハローの重力レンズ観測ゲート",V(0,-32,0),.9,"銀河の下側のハローに置いたゲート。ゲート越しに望遠鏡を何万光年も先へ「瞬間移動」させ、遠くの天体を間近で観測する。","銀河の下 約3万光年"],
+     ["t4dock","ゲート保守ドック",V(10,0,10),.7,"ワームホールは放っておくとつぶれてしまう。負のエネルギーを補給し、口の大きさを保つ整備工場。","銀河中心から約1万4000光年"],
+     ["t4lab","時空工学研究所",V(-12,1,5),.7,"新しいワームホールを生み出す研究所。量子もつれとワームホールが同じものだという理論（ER=EPR、2013年）も研究の手がかり。","銀河中心から約1万3000光年"],
+     ["t4lmc","大マゼラン雲ゲート",(lp("lmc")||V(0,0,0)).clone().add(V(0,4,0)),1.2,"天の川銀河の伴銀河への路線。光で約16万年の距離が一瞬に。","約16万光年"],
+     ["t4smc","小マゼラン雲ゲート",(lp("smc")||V(0,0,0)).clone().add(V(0,4,0)),1,"大マゼラン雲のさらに先の小さな銀河への路線。","約20万光年"],
+     ["t4sgrdw","いて座矮小楕円銀河ゲート",gp(5.6,-14,70000),.9,"天の川銀河に今まさに飲み込まれつつある小さな銀河（実際に観測されている）。その恒星系を救い出す路線。","約7万光年"],
+     ["t4cma","おおいぬ座矮小銀河ゲート",gp(240,-8,25000),.8,"天の川銀河の円盤のすぐそばにあるとされる小さな銀河（存在には議論がある）。","約2万5000光年"],
+     ["t4edge","銀河円盤の外縁ゲート",gp(180,0,30000),.9,"銀河の外へ向かう銀河間ゲートの発着場。","銀河中心の反対側"],
+     ["t4bhnet","恒星ブラックホール連結網",V(5,-1,-15),.8,"天の川銀河にあるとされる約1億個の恒星質量ブラックホールを、ゲート網でつなぎ、発電所と中継所に使う。","銀河全体"]]);
+    ["t4perseus","t4sagitt","t4scutum","t4norma","t4omega","t4m13","t4m4","t4tuc47","t4m22","t4lmc","t4smc","t4sgrdw","t4cma","t4edge","t4halo"].forEach(k=>{if(G[k])link4(G.t4hub,G[k]);});if(G.t4sol&&G.t4sagitt)link4(G.t4sol,G.t4sagitt);}
+  function t4Local(AP){const P=(l,b,d)=>gdir(l,b).multiplyScalar(d);const tr=lp("triangulum");const G=put4([
+     ["t4mwgate","天の川銀河の銀河間ゲート",V(0,9,0),3,"天の川銀河と他の銀河を結ぶ大型ゲート。光で250万年かかるアンドロメダ銀河にも一瞬で着く。","天の川銀河"],
+     ["t4m31gate","アンドロメダ中央ゲート",AP.clone().add(V(0,12,0)),3.5,"約1兆個の恒星をもつアンドロメダ銀河の中心駅。","約250万光年"],
+     ["t4m33gate","さんかく座銀河ゲート",tr?tr.clone().add(V(0,6,0)):null,2,"局部銀河群で3番目に大きい銀河への路線。","約273万光年"],
+     ["t4m32","M32ゲート",AP.clone().add(V(-6,-4,4)),1.2,"アンドロメダ銀河のすぐそばの小さな楕円銀河。","約250万光年"],
+     ["t4ngc6822","バーナード銀河（NGC 6822）ゲート",P(25.3,-18.4,160),1.2,"不規則な形の小さな銀河。星が活発に生まれている。","約160万光年"],
+     ["t4ic1613","IC 1613ゲート",P(129.7,-60.6,240),1.2,"静かな不規則銀河。古い星の研究に向いている。","約240万光年"],
+     ["t4wlm","WLM銀河ゲート",P(75.9,-73.6,300),1.2,"局部銀河群の端にある孤立した小さな銀河。","約300万光年"],
+     ["t4draco","りゅう座矮小銀河ゲート",P(86.4,34.7,26),.9,"ダークマターがとても多い（見えている星の質量の数十倍以上）とされる銀河。ダークマター研究の拠点。","約26万光年"],
+     ["t4sculptor","ちょうこくしつ座矮小銀河ゲート",P(287.5,-83.2,29),.9,"天の川銀河を回る小さな楕円体銀河。","約29万光年"],
+     ["t4fornax","ろ座矮小銀河ゲート",P(237.1,-65.7,46),.9,"6つの球状星団をもつ小さな銀河。","約46万光年"],
+     ["t4council","局部銀河群の評議会",AP.clone().multiplyScalar(.5).add(V(0,-18,0)),2.2,"80以上の銀河の文明の代表が、ゲートを通って集まる。銀河ごとに何百万年も別々に進化した文明どうしの話し合い。","二大銀河の間"],
+     ["t4milkomeda","銀河合体の準備（ミルコメダ計画）",AP.clone().multiplyScalar(.5),2.5,"約45億年後に天の川銀河とアンドロメダ銀河は合体する（実際の予測）。その日に向けて、恒星系の配置や通信網を何億年もかけて組み直す。","二大銀河の間"],
+     ["t4trade","銀河間交易ハブ",AP.clone().multiplyScalar(.3).add(V(12,6,0)),2,"銀河ごとに違う資源や技術、文化をやりとりする市場。","二大銀河の間"],
+     ["t4dark","ダークマター地図局",V(-40,-30,20),1.6,"見えないダークマターの分布を、ゲートで送り込んだ観測機で立体的に測る。宇宙の物質の約85%はまだ正体不明。","局部銀河群"],
+     ["t4lgedge","局部銀河群の外縁ゲート",V(-120,20,-80),2.5,"局部銀河群から、おとめ座銀河団などラニアケアの他の場所へ向かう出口。","局部銀河群の外側"]]);
+    ["t4m31gate","t4m33gate","t4ngc6822","t4ic1613","t4wlm","t4draco","t4sculptor","t4fornax","t4lgedge","t4council"].forEach(k=>{if(G[k])link4(G.t4mwgate,G[k]);});if(G.t4m32)link4(G.t4m31gate,G.t4m32);if(G.t4trade)link4(G.t4m31gate,G.t4trade);}
+  function t4Lania(){const lg=lp("lg")||V(-60,0,40),vg=lp("virgo")||V(-30,20,10);const rp=(r,a,b)=>V(Math.cos(a)*Math.cos(b)*r,Math.sin(b)*r*.6,Math.sin(a)*Math.cos(b)*r);
+    const CL=[["t4centaurus","ケンタウルス座銀河団",170,"数百個の銀河が集まる銀河団。中心に巨大な楕円銀河がある。"],["t4hydra","うみへび座銀河団",160,"約160個の明るい銀河をもつ銀河団。"],["t4norma2","じょうぎ座銀河団",220,"グレート・アトラクターの中心近くにある、とても重い銀河団。天の川の向こう側で見えにくい。"],["t4fornaxcl","ろ座銀河団",62,"南天にある、比較的近くの銀河団。"],["t4eridanus","エリダヌス座銀河群",75,"ろ座銀河団のそばの銀河群。"],["t4cena","ケンタウルス座A・M83銀河群",12,"電波を強く出す楕円銀河ケンタウルス座Aを含む、近くの銀河群。"],["t4m81","M81銀河群",12,"M81とM82（スターバースト銀河）を中心とした近くの銀河群。"],["t4sculptorg","ちょうこくしつ座銀河群",11,"局部銀河群に最も近い銀河群の一つ。"],["t4leo","しし座の三つ子銀河",35,"3つの渦巻銀河が重力で引き合っている。"],["t4m101","M101銀河群",21,"大きな渦巻銀河M101（回転花火銀河）を中心とした銀河群。"],["t4m51","子持ち銀河（M51）銀河群",31,"小さな銀河を伴った美しい渦巻銀河の銀河群。"],["t4uma","おおぐま座銀河団",55,"渦巻銀河が多い、まばらな銀河団。"],["t4antennae","アンテナ銀河（衝突銀河）",45,"2つの銀河が衝突中で、激しく星が生まれている（実際の天体）。"],["t4sombrero","ソンブレロ銀河（M104）",31,"帽子のような形の銀河。中心に太陽の約10億倍のブラックホール。"],["t4pavo","くじゃく座・インディアン座の銀河群",200,"ラニアケア超銀河団を作る大きな集まりの一つ。"]];
+    const list=[["t4lania","ラニアケア中央ゲート（グレート・アトラクター）",V(0,14,0),16,"ラニアケア超銀河団（約10万個の銀河、直径約5億光年）のすべてのゲートが集まる中枢。銀河が流れ込んでいく重力の中心に置かれる。","グレート・アトラクター"],
+      ["t4lgport","局部銀河群ポート",lg.clone().add(V(0,8,0)),6,"天の川銀河やアンドロメダ銀河からの路線が集まる、私たちの「最寄り駅」。","局部銀河群"],
+      ["t4virgo","おとめ座銀河団ゲート",vg.clone().add(V(0,10,0)),9,"約1500個以上の銀河が集まる、近くで最大の銀河団の中心駅。","約5400万光年"],
+      ["t4m87","M87ブラックホール発電所",vg.clone().add(V(6,-4,3)),5,"おとめ座銀河団の中心にある巨大楕円銀河M87のブラックホール（太陽の約65億倍。2019年に初めて撮影された）の回転エネルギーを使う。","約5500万光年"]];
+    CL.forEach(([id,nm,d,ds],i)=>{const a=i*2.39+.4,b=((i*37)%13-6)*.06;const r=Math.min(240,30+d*.9);list.push([id,nm+"ゲート",rp(r,a,b),5,ds+" ゲートで結ばれ、ラニアケアの文明圏の一部になる（Type IVの想定）。",d>=100?"約"+(d/100).toFixed(1).replace(/\.0$/,"")+"億光年":"約"+(d*100).toLocaleString()+"万光年"]);});
+    const S=[["t4council2","超銀河団評議会",rp(60,3.5,.3),7,"ラニアケアの何万もの銀河文明が集まる会議。ここで決めたことが銀河に伝わるのは、ゲート網があるから。"],
+      ["t4flow","銀河の流れの観測所",rp(90,1.2,-.4),6,"天の川銀河を含む局部銀河群は、宇宙背景放射に対して秒速約600kmで動いている（実際の観測）。銀河団の流れを精密に測り、ゲートの位置を補正する。"],
+      ["t4dark2","ダークエネルギー観測所",rp(150,4.6,.5),6,"宇宙の膨張を加速させているダークエネルギー（宇宙のエネルギーの約70%）の正体を調べる。"],
+      ["t4bridge","宇宙の膨張を越える橋",rp(230,5.5,.1),8,"宇宙の膨張で遠い銀河はどんどん離れていくが、ワームホールでつながった2点は膨張に関係なくつながり続けるかもしれない（理論上の推測）。"],
+      ["t4logi2","超銀河団物流ハブ",rp(70,.7,.1),6,"銀河団どうしの間で、恒星やガスまで運ぶ物流の拠点。"],
+      ["t4library","銀河団図書館",rp(110,2.6,.6),6,"何十億年分の、数万の文明の記録を保存する。"],
+      ["t4smbh","超大質量ブラックホール発電網",rp(130,3.0,-.5),6,"銀河の中心にある巨大ブラックホールを次々と発電所にし、ゲート網でエネルギーを分け合う。"],
+      ["t4icm","銀河団ガスの採取",rp(180,1.9,.4),6,"銀河団の銀河の間には数千万〜1億度の高温ガスがあり、その質量は銀河の星の合計より多い（実際の観測）。これを資源にする。"],
+      ["t4lens","銀河団レンズ望遠鏡",rp(200,.2,-.3),6,"銀河団の巨大な重力で曲がった光を使い、宇宙の果ての銀河を拡大して見る（重力レンズ。実際に使われている観測法）。"],
+      ["t4forge","ゲート製造所",rp(100,5.0,-.2),7,"新しいワームホールを作り、宇宙船で数億年かけて口の片方を運ぶ。一度つなげば、その後は一瞬で行き来できる。"],
+      ["t4void","局部ボイドの観測基地",lg.clone().add(V(-40,25,-20)),5,"局部銀河群のすぐ隣にある、銀河がほとんどない巨大な空洞（局部ボイド。実際の構造）。何もない宇宙を調べる。"]];
+    S.forEach(x=>list.push([...x,""]));const G=put4(list);
+    Object.keys(G).forEach(k=>{if(k!=="t4lania")link4(G.t4lania,G[k]);});link4(G.t4lgport,G.t4virgo);}
+  function t4Web(){const us=lp("home");if(!us)return;const rp=(r,a,b)=>us.clone().add(V(Math.cos(a)*Math.cos(b)*r,Math.sin(b)*r,Math.sin(a)*Math.cos(b)*r));
+    const L=[["t4perpisc","ペルセウス座・うお座超銀河団ゲート",2.5,.4,.2,"ラニアケアの隣にある、銀河が長くつながった超銀河団。"],["t4coma","かみのけ座超銀河団ゲート",3,1.5,.5,"巨大なかみのけ座銀河団を含む超銀河団。ダークマターが最初に指摘された場所（1933年）。"],["t4shapley","シャプレー超銀河団ゲート",6.5,3.6,-.2,"近くの宇宙で最も重い超銀河団。天の川銀河もわずかにこの方向へ引かれている。"],["t4hercules","ヘルクレス座超銀河団ゲート",5,2.2,.4,"北天の大きな超銀河団。"],["t4bootes","うしかい座ボイドの基地",7,1.0,.6,"直径約3億3000万光年の巨大な空洞。銀河がほとんどない宇宙の砂漠。"],["t4sloan","スローン・グレートウォールゲート",10,4.4,.1,"長さ約14億光年の、銀河がつながった巨大な壁。"],["t4sculptw","ちょうこくしつ座の壁ゲート",4,5.5,-.6,"南天に広がる銀河の壁。"],["t4eridvoid","エリダヌス座の超空洞の基地",30,2.9,-.5,"宇宙背景放射の「冷たい点（コールドスポット）」の方向にある大きな空洞の候補。"],["t4hcgw","ヘルクレス座・かんむり座グレートウォール基地",95,.8,.7,"知られている中で最大級の構造の候補（約100億光年の距離、長さ約100億光年）。"]];
+    const list=L.map(([id,nm,r,a,b,ds])=>[id,nm,rp(Math.min(r*10,330),a,b),Math.min(r*10,330)>200?14:9,ds+" ゲートでラニアケアと結ばれる（Type IVの想定）。","約"+r+"億光年"]);
+    [["t4laniaout","ラニアケアの外縁ゲート",rp(25,4.0,.2),7,"ラニアケア超銀河団から隣の超銀河団へ向かう出口。","約2.5億光年"],["t4atlas","宇宙網の地図局",rp(60,2.0,-.3),8,"銀河の網目（フィラメント）とボイドの地図を作り、ゲート網の路線計画を立てる。",""],["t4horizon","宇宙の地平線の向こうへ（理論上の可能性）",rp(160,.2,.3),12,"約160億光年より遠い銀河には、光の速さでも永遠に届かない（実際の物理）。ただし、地平線の外とすでにつながったワームホールがあれば…という推測。誰も方法を知らない。","約160億光年"],["t4cmb","宇宙背景放射の観測所",rp(120,5.2,.6),9,"ビッグバンから約38万年後の光（宇宙背景放射）を、宇宙のあちこちに置いた観測所から同時に測る。",""],["t4filament","フィラメント高速路",rp(45,3.0,.4),7,"銀河が糸のように連なるフィラメントに沿って、ゲートを数珠つなぎに並べた幹線。",""],["t4voidcity","ボイドの居住地",rp(55,5.9,-.5),7,"銀河のない空洞の中に、人工の恒星と居住地を置く。夜空にほとんど星がない世界。",""],["t4deexp","ダークエネルギーの実験場",rp(90,1.2,-.6),8,"宇宙の加速膨張の原因を調べ、もし操作できれば…という研究（Type IVの想定）。",""],["t4quasar","クエーサー発電所",rp(140,3.4,.7),10,"遠い宇宙の明るい活動銀河核（クエーサー）は、1つで銀河数百個分の明るさ。その中心のブラックホールに落ちるガスからエネルギーを取り出す。","数十億光年"],["t4firstgal","最初の銀河の観測ゲート",rp(250,4.8,-.2),12,"遠くを見ることは過去を見ること。最も遠い銀河の近くまでゲートで行けば、宇宙の若いころの姿を観測できる。","約130億年前の光"],["t4string","宇宙ひもの探査",rp(180,2.5,-.7),10,"宇宙の始まりにできたかもしれない、とても細く重い「宇宙ひも」（仮説）を探す。見つかればワームホール作りの材料になるかもしれない。",""],["t4lyman","銀河間ガスの採取",rp(80,.6,-.1),8,"銀河と銀河の間にも薄いガスが網のように広がっている（遠いクエーサーの光の吸収線「ライマンαの森」で実際に観測されている）。",""]].forEach(x=>list.push(x));
+    const G=put4(list);Object.keys(G).forEach(k=>{if(k!=="t4laniaout")link4(G.t4laniaout,G[k],k==="t4horizon"?WP:WH);});}
+  function t4Shape(){const rp=(r,a,b)=>V(Math.cos(a)*Math.cos(b)*r,Math.sin(b)*r,Math.sin(a)*Math.cos(b)*r);const G=put4([
+    ["t4shapeobs","宇宙の形の測量網",rp(260,.5,.2),30,"宇宙のあちこちのゲートから同時に測り、宇宙全体が平らか、閉じているか、開いているかを確かめる。今の観測では、平らにとても近い。",""],
+    ["t4bigbang","ビッグバン直後へのワームホール？",rp(380,2.2,.4),36,"時間をさかのぼる旅は、物理法則が許すかどうかわかっていない。ホーキングは「許されない」と予想した（時間順序保護仮説）。",""],
+    ["t4end","宇宙の終わりへの備え",rp(420,3.6,-.3),36,"宇宙が膨張し続けると、何兆年も先には星が燃え尽き、すべてが冷えていく（熱的死）。そのときに備えて、エネルギーを蓄え、ブラックホールを使い続ける計画。",""],
+    ["t4baby","赤ちゃん宇宙の工房（Type Vへの道）",rp(330,4.6,.5),34,"新しい宇宙を作れるかもしれない、という理論上の推測（インフレーション理論の研究者が議論）。成功すれば、宇宙の終わりから逃げられるかもしれない。",""],
+    ["t4cosmicE","宇宙全体のエネルギー管理",rp(300,5.6,-.5),30,"観測できる宇宙にある約2兆個の銀河のエネルギーを使う段階を、Type Vとする考えもある。",""],
+    ["t4multi","マルチバースへの窓",rp(460,1.3,-.6),40,"もし別の宇宙があり、そこへの道が作れたら…という究極の推測。この地図の「マルチバース」の層へつながる。",""]]);
+    link4(G.t4shapeobs,G.t4bigbang,WP);link4(G.t4shapeobs,G.t4end);link4(G.t4shapeobs,G.t4baby,WP);link4(G.t4shapeobs,G.t4cosmicE);link4(G.t4baby,G.t4multi,WP);}
   // ---- スケール ----
   const SUB=[
    {id:"leo",name:"地球周回軌道",unit:"1目盛＝1000km",desc:"国際宇宙ステーション、衛星コンステレーション、GPS、静止衛星。人類が日常的に使っている宇宙。",dist:40,min:7.5,max:120,
@@ -366,7 +464,7 @@ __SPACEPLANET__
    {id:"moon",name:"地球と月",center:[0,0,0],unit:"1目盛＝1000km",desc:"月は約38万km先。2026年4月、アルテミスIIの4人が54年ぶりに月の近くまで行き、人類の最遠記録を更新した。",dist:1100,min:6,max:4000,
     build(){sunLight(V(-1,.1,.4).multiplyScalar(2000));
       const e=earthMesh(6.371,V(-1,.1,.4));scene.add(e);anims.push(t=>e.rotation.y=t*.02);scene.add(atmoMesh(6.371,V(-1,.1,.4)));scene.add(sprite("#6fb6ff",16,.25));obj("earth","地球",e,25,"","—");
-      const mo=orbit(384.4,"#6a7aa0",.5);scene.add(mo);const m=planetGPU(1.737,"moon",V(-1,.1,.4).multiplyScalar(2000),96);m.rotation.y=Math.PI;m.position.set(384.4,0,0);scene.add(m);obj("moon","月",m,8,"直径3474km。1969〜72年に12人が月面を歩いた。2027年にアルテミスIIIで再着陸の予定。","約384,400km");if(T1()){t1Moon(m);t1Cis(m);}if(T3())t3Em(e,m);
+      const mo=orbit(384.4,"#6a7aa0",.5);scene.add(mo);const m=planetGPU(1.737,"moon",V(-1,.1,.4).multiplyScalar(2000),96);m.rotation.y=Math.PI;m.position.set(384.4,0,0);scene.add(m);obj("moon","月",m,8,"直径3474km。1969〜72年に12人が月面を歩いた。2027年にアルテミスIIIで再着陸の予定。","約384,400km");if(T1()){t1Moon(m);t1Cis(m);}if(T3())t3Em(e,m);if(T4())t4Em();
       if(ok(2026)){const pts=[V(6.8,0,0),V(120,30,-18),V(300,30,-30),V(390,8,-10),V(392,-4,6),V(380,-12,10),V(300,-30,30),V(120,-30,18),V(6.8,0,0)];
       const cu=new THREE.CatmullRomCurve3(pts);const tl=new THREE.Line(new THREE.BufferGeometry().setFromPoints(cu.getPoints(300)),new THREE.LineBasicMaterial({color:"#f4b942",transparent:true,opacity:.85}));scene.add(tl);
       const ori=sphere(1.2,new THREE.MeshBasicMaterial({color:"#ffd27a"}),12);scene.add(ori);anims.push(t=>ori.position.copy(cu.getPoint((t*.02)%1)));}
@@ -403,7 +501,7 @@ __SPACEPLANET__
       const ec=orbit(ZR,"#f4b942",.18);scene.add(ec);Z.forEach(([id,nm,lon,st,ln,info])=>constellation(id,nm,lon,st,ln,ZR,info+"（星の並びは簡略化した模式図。占いの期間と、実際に太陽がその星座の方向にある期間は約1か月ずれている）"));
       const ophn=new THREE.Object3D();ophn.position.set(Math.cos(262*Math.PI/180)*ZR,ZR*.14,Math.sin(262*Math.PI/180)*ZR);scene.add(ophn);obj("ophiuchus","へびつかい座（13番目）",ophn,ZR*.35,"実際には太陽はへびつかい座も通る（11月末〜12月中旬）。占いの十二星座には含まれない。","黄経 約262°");
       const ab=[];for(let i=0;i<5000;i++){const a=R()*6.283,r=220+R()*100;ab.push(Math.cos(a)*r,(R()-.5)*8,Math.sin(a)*r);}const belt=points(ab,"#c9b28f",1.6,.7);scene.add(belt);anims.push(t=>belt.rotation.y=t*.02);
-      const bn=new THREE.Object3D();bn.position.set(0,0,270);scene.add(bn);obj("belt","小惑星帯",bn,160,"火星と木星の間に数百万個の小天体。","2.2〜3.2天文単位");if(T1())t1Inner(PL,ce);if(T2(2400))t2Planets(PL,ce,s);if(T3())t3Inner(PL,s);
+      const bn=new THREE.Object3D();bn.position.set(0,0,270);scene.add(bn);obj("belt","小惑星帯",bn,160,"火星と木星の間に数百万個の小天体。","2.2〜3.2天文単位");if(T1())t1Inner(PL,ce);if(T2(2400))t2Planets(PL,ce,s);if(T3())t3Inner(PL,s);if(T4())t4Inner();
     }},
    {id:"outer",name:"外太陽系",unit:"1目盛＝15億km（10天文単位）",desc:"木星・土星・天王星・海王星、冥王星とカイパーベルト。ボイジャー1号・2号は太陽系の外へ向かっている。",dist:1500,min:15,max:5000,
     build(){scene.add(new THREE.PointLight("#fff3dc",2.6,0,0));scene.add(new THREE.AmbientLight("#334466",.35));
@@ -432,10 +530,10 @@ __SPACEPLANET__
       const vo=(id,nm,dir,dist,d)=>{const end=dir.clone().normalize().multiplyScalar(dist);const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),V(52,0,0),end]),new THREE.LineBasicMaterial({color:"#7fb2ff",transparent:true,opacity:.7}));scene.add(l);
         const m=sphere(4,new THREE.MeshBasicMaterial({color:"#7fb2ff"}),10);m.position.copy(end);scene.add(m);m.add(sprite("#7fb2ff",30,.6));obj(id,nm,m,120,d,(dist/10).toFixed(0)+"天文単位");};
       vo("voyager1","ボイジャー1号",V(.4,.6,.7),1690,"1977年打ち上げ。人工物で最も遠くにある。2026年11月18日に地球から1光日に達する予定。");
-      vo("voyager2","ボイジャー2号",V(.5,-.55,-.65),1420,"天王星と海王星を訪れた唯一の探査機。");if(T1())t1OuterEnd();
+      vo("voyager2","ボイジャー2号",V(.5,-.55,-.65),1420,"天王星と海王星を訪れた唯一の探査機。");if(T1())t1OuterEnd();if(T4())t4Outer();
     }},
    {id:"helio",name:"太陽圏とオールトの雲",unit:"1目盛＝1万5000億km（100天文単位）",desc:"太陽風が届く範囲（太陽圏）の外は恒星間空間。その外側を、彗星のふるさとオールトの雲が数万天文単位にわたって包む（存在は推定）。",dist:2400,min:3,max:5000,
-    build(){scene.add(new THREE.AmbientLight("#ffffff",.6));const s=sprite("#ffd27a",6,1);scene.add(s);obj("sun","太陽",s,8,"","—");if(T2(2700))t2Helio();if(T1())t1Helio();if(T3())t3Helio();
+    build(){scene.add(new THREE.AmbientLight("#ffffff",.6));const s=sprite("#ffd27a",6,1);scene.add(s);obj("sun","太陽",s,8,"","—");if(T2(2700))t2Helio();if(T1())t1Helio();if(T3())t3Helio();if(T4())t4Helio();
       const hm=new THREE.MeshBasicMaterial({color:"#5aa0ff",transparent:true,opacity:.14,side:THREE.DoubleSide,depthWrite:false});const h=sphere(1.2,hm,48);h.scale.set(1,1,2.6);h.position.z=1.6;scene.add(h);
       const ts=sphere(.9,new THREE.MeshBasicMaterial({color:"#7fd3ff",transparent:true,opacity:.1,wireframe:true}),24);ts.scale.set(1,1,1.8);ts.position.z=.7;scene.add(ts);
       const hp=new THREE.Object3D();hp.position.set(0,0,-1.2);scene.add(hp);obj("heliopause","太陽圏の境界（ヘリオポーズ）",hp,5,"太陽風と恒星間の物質がぶつかる境界。ボイジャー1号は2012年、2号は2018年に越えた。","約120天文単位");
@@ -500,7 +598,7 @@ __SPACEPLANET__
       obj("omegacen","オメガ星団（球状星団）",ocn,6,"約1000万個の星が集まる、天の川銀河で最大の球状星団。","約1万7000光年");
       const sn=new THREE.Object3D();g.add(sn);sn.position.copy(sunP);const sm=sprite("#f4b942",3,1);sn.add(sm);obj("sunpos","太陽系の位置",sn,12,"オリオン腕の中。銀河を約2億3000万年かけて1周する。","中心から約2万6000光年");if(typeof window.KYEAR==="number"&&window.KYEAR>=6000){t3Galaxy(g,sn);}
       const mw=new THREE.Object3D();mw.position.set(0,30,0);scene.add(mw);obj("mw","天の川銀河",mw,150,"夜空の天の川は、この円盤を内側から見た姿。","直径約10万光年");
-      [["lmc","大マゼラン雲",SUNW.clone().add(gal(280.5,-32.9).multiplyScalar(160)),6],["smc","小マゼラン雲",SUNW.clone().add(gal(302.8,-44.3).multiplyScalar(200)),4]].forEach(([id,nm,p,s])=>{const pts=[];for(let i=0;i<2500;i++)pts.push(p.x+(R()-.5)*s*2,p.y+(R()-.5)*s,p.z+(R()-.5)*s*2);scene.add(points(pts,"#cfe0ff",.6,.8));const n=new THREE.Object3D();n.position.copy(p);scene.add(n);obj(id,nm,n,40,"天の川銀河を回る小さな伴銀河。南半球で肉眼で見える。",id==="lmc"?"約16万光年":"約20万光年");});if(T3())t3GalX();
+      [["lmc","大マゼラン雲",SUNW.clone().add(gal(280.5,-32.9).multiplyScalar(160)),6],["smc","小マゼラン雲",SUNW.clone().add(gal(302.8,-44.3).multiplyScalar(200)),4]].forEach(([id,nm,p,s])=>{const pts=[];for(let i=0;i<2500;i++)pts.push(p.x+(R()-.5)*s*2,p.y+(R()-.5)*s,p.z+(R()-.5)*s*2);scene.add(points(pts,"#cfe0ff",.6,.8));const n=new THREE.Object3D();n.position.copy(p);scene.add(n);obj(id,nm,n,40,"天の川銀河を回る小さな伴銀河。南半球で肉眼で見える。",id==="lmc"?"約16万光年":"約20万光年");});if(T3())t3GalX();if(T4())t4Gal();
     }},
    {id:"local",name:"局部銀河群",unit:"1目盛＝1万光年",desc:"天の川銀河とアンドロメダ銀河を中心とする、80以上の銀河の集まり。約45億年後、二つの銀河は衝突・合体すると予測されている。",dist:520,min:6,max:1200,
     build(){scene.add(new THREE.AmbientLight("#fff",1));const SPEC2={mw:{type:"barred",arms:4,minor:1,pitch:.24,bulge:.11,c1:"#ffe0b0",c2:"#c8d6ff",seed:4},an:{type:"spiral",arms:2,pitch:.22,bulge:.13,ring:.62,c1:"#ffe2b8",c2:"#c8d4ff",c3:"#ff7aa0"},tr:{type:"flocculent",arms:2,pitch:.35,bulge:.06,c1:"#ffe8d0",c2:"#bcd0ff"}};
@@ -509,7 +607,7 @@ __SPACEPLANET__
       const AP=gdir(121.2,-21.6).multiplyScalar(250);const an=gal(AP,1.1,11,16000,"#ffe7cf",.5);obj("andromeda","アンドロメダ銀河",an,60,"約1兆個の恒星。肉眼で見える最も遠い天体の一つ。秒速約110kmで近づいている。","約250万光年");if(typeof window.KYEAR==="number"&&window.KYEAR>=1000000){const pr=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),AP]),new THREE.LineDashedMaterial({color:"#7ee0ff",dashSize:6,gapSize:4}));pr.computeLineDistances();scene.add(pr);const pd=sprite("#7ee0ff",6,1);scene.add(pd);anims.push(t=>pd.position.copy(AP.multiplyScalar((t*.01)%1)));const pm=new THREE.Object3D();pm.position.copy(AP).multiplyScalar(.5);scene.add(pm);obj("t3andro","アンドロメダへの探査（もしも）",pm,120,"Type III文明が隣の銀河へ送る探査機。約250万光年の旅で、光速に近くても数百万年かかる。","約250万光年");}
       const tr=gal(gdir(133.6,-31.3).multiplyScalar(273),.6,3,4000,"#cfe2ff",1);obj("triangulum","さんかく座銀河",tr,24,"局部銀河群で3番目に大きい渦巻銀河。","約273万光年");
       const dw=[];for(let i=0;i<70;i++){const c=R()<.5?V(0,0,0):AP;const a=R()*6.28,u=R()*2-1,r=10+R()*60;dw.push(c.x+Math.cos(a)*r*Math.sqrt(1-u*u),c.y+u*r,c.z+Math.sin(a)*r*Math.sqrt(1-u*u));}scene.add(points(dw,"#c9d6ff",2.4,.8));
-      const n=new THREE.Object3D();n.position.set(-80,60,80);scene.add(n);obj("dwarfs","矮小銀河たち",n,200,"数十個の小さな銀河が二大銀河の周りを回る。","");if(T3())t3Local(AP);
+      const n=new THREE.Object3D();n.position.set(-80,60,80);scene.add(n);obj("dwarfs","矮小銀河たち",n,200,"数十個の小さな銀河が二大銀河の周りを回る。","");if(T3())t3Local(AP);if(T4())t4Local(AP);
     }},
    {id:"lania",name:"ラニアケア超銀河団",unit:"1目盛＝100万光年",desc:"約10万個の銀河が、重力に引かれて「グレート・アトラクター」の方向へ流れていく、直径約5億光年の構造。2014年に名付けられた（ハワイ語で「広大な天」）。",dist:780,min:10,max:1800,
     build(){const ga=V(0,0,0);const pos=[],col=[];const cA=C("#ffd9a8"),cB=C("#a8c8ff");
@@ -528,7 +626,7 @@ __SPACEPLANET__
       ext("sombrero","ソンブレロ銀河（M104）",V(10,-8,-28),"#ffe8c8","つばの広い帽子のような形の銀河。","約3100万光年");
       ext("cena","ケンタウルス座A",V(-8,-6,-10),"#ffcf9a","強い電波を出す銀河。中心に巨大ブラックホール。","約1200万光年");
       ext("coma","かみのけ座銀河団",mw.clone().multiplyScalar(-1.1).add(V(0,120,0)).sub(mw),"cluster","1000個以上の銀河の集まり。ここでダークマターの存在が初めて指摘された（1933年）。","約3億2000万光年");
-      const lb=sphere(270,new THREE.MeshBasicMaterial({color:"#f4b942",transparent:true,opacity:.04,side:THREE.BackSide,depthWrite:false}),32);scene.add(lb);const ln=new THREE.Object3D();ln.position.set(0,260,0);scene.add(ln);obj("laniakea","ラニアケア超銀河団",ln,780,"約10万個の銀河を含む。","直径約5億光年");if(T3())t3Lania();
+      const lb=sphere(270,new THREE.MeshBasicMaterial({color:"#f4b942",transparent:true,opacity:.04,side:THREE.BackSide,depthWrite:false}),32);scene.add(lb);const ln=new THREE.Object3D();ln.position.set(0,260,0);scene.add(ln);obj("laniakea","ラニアケア超銀河団",ln,780,"約10万個の銀河を含む。","直径約5億光年");if(T3())t3Lania();if(T4())t4Lania();
     }},
    {id:"web",name:"宇宙の大規模構造",unit:"1目盛＝1億光年",desc:"銀河は泡のような網目（宇宙の大規模構造）に沿って並び、その間には銀河のほとんどない空洞（ボイド）が広がる。観測できる宇宙の半径は約465億光年。",dist:1100,min:10,max:2400,
     build(){const nodes=[];while(nodes.length<420){const p=V((R()-.5)*900,(R()-.5)*900,(R()-.5)*900);if(p.length()<450&&nodes.every(q=>q.distanceTo(p)>40))nodes.push(p);}
@@ -541,7 +639,7 @@ __SPACEPLANET__
       const ed=new THREE.Object3D();ed.position.set(0,0,465);scene.add(ed);obj("edge","観測可能な宇宙の果て（宇宙背景放射）",ed,700,"138億年前、宇宙が透明になった瞬間の光。宇宙の膨張により、今その場所は約465億光年先にある。","約465億光年");
       const us=sprite("#f4b942",14,1);scene.add(us);obj("home","ラニアケア（私たちはここ）",us,90,"この網目の中の、ほんの一点。","—");
       const vd=new THREE.Object3D();vd.position.set(120,60,-80);scene.add(vd);obj("void","ボイド（空洞）",vd,200,"直径数億光年にわたって銀河がほとんどない領域。","");
-      const fn=new THREE.Object3D();fn.position.copy(nodes[5]);scene.add(fn);obj("filament","フィラメントと銀河団",fn,160,"銀河が糸のように連なり、交点に巨大な銀河団ができる。","");t3Web();
+      const fn=new THREE.Object3D();fn.position.copy(nodes[5]);scene.add(fn);obj("filament","フィラメントと銀河団",fn,160,"銀河が糸のように連なり、交点に巨大な銀河団ができる。","");t3Web();if(T4())t4Web();
       const mk=(id,nm,pos,col,size,info,dist)=>{const s=sprite(col,size,.9);s.position.copy(pos);scene.add(s);obj(id,nm,s,size*6,info,dist);return s;};
       mk("shapley","シャプレー超銀河団",V(6.5,0,0),"#ffd27a",8,"近くの宇宙で最も重い銀河の集まり。","約6億5000万光年");
       const bv=sphere(1.4,new THREE.MeshBasicMaterial({color:"#000",transparent:true,opacity:.6}),16);bv.position.set(-5,4,3);scene.add(bv);obj("bootes","うしかい座ボイド",bv,14,"直径約3億光年、銀河がほとんどない巨大な空洞。","約7億光年");
@@ -576,7 +674,7 @@ __SPACEPLANET__
       if(sh==="multi"){for(let i=0;i<26;i++){const r=60+R()*240;const b=new THREE.Mesh(new THREE.SphereGeometry(r,24,16),new THREE.MeshBasicMaterial({color:i===0?"#f4b942":["#7fb2ff","#c99cf2","#6fd2a0","#ff9ad0"][i%4],transparent:true,opacity:i===0?.25:.1,depthWrite:false}));b.position.set(i?(R()-.5)*2600:0,i?(R()-.5)*1400:0,i?(R()-.5)*2600:0);scene.add(b);
         const s0=1+R()*.1;anims.push(t=>b.scale.setScalar(s0+Math.sin(t*.3+i)*.05));}
         D="多元宇宙（永久インフレーション）：インフレーションが場所によっては終わらずに続き、私たちの宇宙（金色）のような「泡宇宙」を次々に生み出しているという仮説。泡ごとに物理定数が違うかもしれない。ほかの泡は原理的に観測できない。";}
-      obj("uni_shape","宇宙の形",here,700,D,"説："+({flat:"平坦",sphere:"閉じた（球）",saddle:"開いた（双曲）",torus:"トーラス",multi:"多元宇宙"})[sh]);
+      obj("uni_shape","宇宙の形",here,700,D,"説："+({flat:"平坦",sphere:"閉じた（球）",saddle:"開いた（双曲）",torus:"トーラス",multi:"多元宇宙"})[sh]);if(T4())t4Shape();
       (LEVELS.find(l=>l.id==="shape")||{}).desc2=D;}},
   ];
   // ---- 画面遷移を減らすため、近いスケールをまとめた5段階（中身は元の各スケールを拡大縮小して1つの場面に重ねる） ----
