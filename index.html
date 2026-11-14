@@ -2001,16 +2001,61 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
     const se=new THREE.Object3D();se.position.set(0,-40,0);scene.add(se);obj("t1seti","地球外文明の探索（SETI）",se,60,"電波や光の信号を探し続けている。Type Iの文明なら、近くの数千個の恒星を一つずつ、もっと深く調べられる（もしも）。今のところ確かな信号は見つかっていない。","");}
   // ---- Type II（もしも）の構造物 ----
   const T2=y=>typeof window.KYEAR==="number"&&window.KYEAR>=y;
-  function t2Inner(s){const k=Math.min(1,(window.KYEAR-2500)/1500);const n=Math.floor(300+2700*k);const pos=[];const D=[];for(let i=0;i<n;i++){const u=R()*2-1,a=R()*6.283,r=24+R()*4;D.push([a,Math.asin(u),r,.05+R()*.08]);pos.push(0,0,0);}
+  function t2Inner(s){const k=Math.max(.05,Math.min(1,(window.KYEAR-2400)/1600));const n=Math.floor(300+2700*k);const pos=[];const D=[];for(let i=0;i<n;i++){const u=R()*2-1,a=R()*6.283,r=24+R()*4;D.push([a,Math.asin(u),r,.05+R()*.08]);pos.push(0,0,0);}
     const g=points(pos,"#f4b942",1.6,.9,true);scene.add(g);anims.push(t=>{const p=g.geometry.attributes.position;D.forEach(([a,b,r,w],i)=>{const q=a+t*w;p.setXYZ(i,Math.cos(b)*Math.cos(q)*r,Math.sin(b)*r,Math.cos(b)*Math.sin(q)*r);});p.needsUpdate=true;});
     const m=new THREE.Object3D();m.position.set(0,26,0);scene.add(m);obj("t2swarm","ダイソン・スウォーム（もしも）",m,70,`太陽のまわりを無数の発電衛星で取り囲み、太陽の光をほぼすべて集める。完成すれば利用できるエネルギーは約3.8×10²⁶W（今の人類の約20兆倍）。この時代の完成度：約${Math.round(k*100)}%。材料には水星を解体して使う案がある（水星の全質量で、地球軌道の球を厚さ約0.5mmの膜で覆える計算）。`,"太陽から約0.2〜0.4天文単位");
     if(T2(2350)){const v=new THREE.Object3D();v.position.set(72*Math.cos(1),3,72*Math.sin(1));scene.add(v);const sh=new THREE.Mesh(new THREE.CircleGeometry(5,24),new THREE.MeshBasicMaterial({color:"#cfe6ff",transparent:true,opacity:.5,side:THREE.DoubleSide}));sh.position.set(60*Math.cos(1),3,60*Math.sin(1));sh.lookAt(0,0,0);scene.add(sh);
       obj("t2venus","金星のテラフォーミング（もしも）",v,30,"太陽と金星の間に巨大な日よけを置いて金星を冷やし、厚い二酸化炭素の大気を固定して、人が住める星に変えていく。何百年もかかる計画。","太陽から0.72天文単位");}}
+  const pct=(y0,y1)=>Math.max(0,Math.min(1,(window.KYEAR-y0)/(y1-y0)));
+  // 内太陽系：水星の解体、火星のテラフォーミング、小惑星の居住地、送電ビーム、スター・リフティングなど
+  function t2Planets(PL,ce,s){const Y=window.KYEAR;
+    if(Y>=2500){const k=pct(2500,4000);const mp=PL.mercury.children[0];mp.scale.setScalar(1-.65*k);
+      const db=[];for(let i=0;i<500;i++){const a=R()*6.283,r=3.2+R()*2.5;db.push(Math.cos(a)*r,(R()-.5)*.6,Math.sin(a)*r);}const dp=points(db,"#c8b8a0",.25,.85);PL.mercury.add(dp);anims.push(t=>dp.rotation.y=t*.5);
+      const st=[];for(let i=0;i<40;i++){const q=sprite("#ffd27a",.5,1);scene.add(q);st.push([q,i/40]);}const A=new THREE.Vector3();
+      anims.push(t=>{PL.mercury.getWorldPosition(A);const par=scene;const dir=A.clone().normalize();st.forEach(([q,o])=>{const f=(t*.15+o)%1;q.position.copy(A).addScaledVector(dir,-f*(A.length()-27)).add(V(0,Math.sin(f*3.14)*3,0));});});
+      const mn=new THREE.Object3D();mn.position.set(0,3.5,0);PL.mercury.add(mn);obj("t2mercury","水星の解体工場（もしも）",mn,20,`ダイソン・スウォームの材料にするため、水星を少しずつ解体し、電磁レールで材料を太陽の近くへ打ち出す。自分で自分を複製するロボット工場なら、数十年〜数百年で可能という試算もある。この時代の解体の進み具合：約${Math.round(k*100)}%。`,"0.39天文単位");}
+    if(Y>=2600){const k=pct(2600,4000);const mg=PL.mars;const at=sphere(2.95,new THREE.MeshBasicMaterial({color:"#7fb8ff",transparent:true,opacity:.08+.22*k,depthWrite:false}),32);mg.add(at);
+      const oc=new THREE.Mesh(new THREE.SphereGeometry(2.64,48,24,0,Math.PI*2,0,Math.PI*.42),new THREE.MeshStandardMaterial({color:"#2a5a9a",roughness:.25,metalness:.1,transparent:true,opacity:.12+.5*k}));mg.children[0].add(oc);
+      if(k>.3){const gr=new THREE.Mesh(new THREE.SphereGeometry(2.635,48,24,0,Math.PI*2,Math.PI*.42,Math.PI*.25),new THREE.MeshStandardMaterial({color:"#4a8a4a",roughness:.8,transparent:true,opacity:(k-.3)*.8}));mg.children[0].add(gr);}
+      [[0,4.5,0],[0,-4.5,0]].forEach(([x,y,z])=>{const mi=new THREE.Mesh(new THREE.CircleGeometry(1.2,24),new THREE.MeshBasicMaterial({color:"#e0f0ff",transparent:true,opacity:.6,side:THREE.DoubleSide}));mi.position.set(x,y,z);mi.lookAt(0,0,0);mg.add(mi);});
+      const tn=new THREE.Object3D();tn.position.set(3.4,0,0);mg.add(tn);obj("t2mars","火星のテラフォーミング（もしも）",tn,20,`軌道の鏡で極冠を温めて大気を厚くし、北半球の低地に海を作り、植物を広げる。今の火星の気圧は地球の約0.6%しかなく、地球並みにするには約170倍の大気が必要。完了まで数百〜数千年。この時代の進み具合：約${Math.round(k*100)}%。`,"火星");}
+    if(Y>=2500){const en=new THREE.Object3D();en.position.set(0,5,0);PL.earth.add(en);obj("t2earth","自然に戻る地球（もしも）",en,18,"重工業や発電を宇宙へ移し、地球は人が暮らし訪れる「庭」として守る。森と海が回復していく。","1天文単位");}
+    if(Y>=2400){const hb=[];for(let i=0;i<7;i++){const a=i/7*6.283+.3,r=245+R()*50;const g=new THREE.Group();const c=new THREE.Mesh(new THREE.CylinderGeometry(1.2,1.2,4,16),smat({color:"#c8bfb0",roughness:.8}));c.rotation.z=Math.PI/2;g.add(c);g.add(sprite("#ffd27a",3,.7));g.position.set(Math.cos(a)*r,(R()-.5)*6,Math.sin(a)*r);scene.add(g);anims.push(t=>c.rotation.x=t*.6);hb.push(g);}
+      obj("t2astro","小惑星をくりぬいた居住地（もしも）",hb[0],40,"数kmの小惑星の内部をくりぬいて回転させ、遠心力で重力を作る。小惑星帯の資源だけで、地球の陸地の何千倍もの居住空間を作れるという試算がある。","2.2〜3.2天文単位");}
+    if(Y>=2600){const N=4,tg=[PL.earth,PL.mars,PL.venus,ce];const lines=tg.map(()=>{const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.BufferAttribute(new Float32Array(6),3));const l=new THREE.Line(g,new THREE.LineBasicMaterial({color:"#ffb347",transparent:true,opacity:.55}));scene.add(l);return l;});const W=new THREE.Vector3();
+      anims.push(t=>lines.forEach((l,i)=>{const o=tg[i];o.getWorldPosition(W);const d=W.clone().normalize();const P=l.geometry.attributes.position;P.setXYZ(0,d.x*27,d.y*27,d.z*27);P.setXYZ(1,W.x,W.y,W.z);P.needsUpdate=true;}));
+      const bn=new THREE.Object3D();bn.position.set(40,6,40);scene.add(bn);obj("t2beam","エネルギーの送電ビーム（もしも）",bn,40,"ダイソン・スウォームが集めた太陽のエネルギーを、レーザーやマイクロ波で惑星の都市や宇宙船、小惑星の工場へ送る。","太陽系の内側");}
+    if(Y>=4000){const jets=new THREE.Group();s.add(jets);[1,-1].forEach(sg=>{const c=new THREE.Mesh(new THREE.ConeGeometry(4,40,24,1,true),new THREE.MeshBasicMaterial({color:"#ffb347",transparent:true,opacity:.35,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide}));c.position.y=sg*32;c.rotation.x=sg>0?Math.PI:0;jets.add(c);});anims.push(t=>jets.children.forEach((c,i)=>c.material.opacity=.25+.15*Math.sin(t*3+i)));
+      const ln=new THREE.Object3D();ln.position.set(0,55,0);scene.add(ln);obj("t2lift","スター・リフティング（もしも）",ln,50,"太陽の磁場を操って、表面から水素やヘリウムを宇宙へくみ上げ、資源にする。太陽の質量を減らすと燃え方がゆっくりになり、寿命を延ばすことにもつながる。","太陽の両極");
+      const sh=new THREE.Mesh(new THREE.SphereGeometry(42,48,24,0,Math.PI*2,0,Math.PI*.35),new THREE.MeshStandardMaterial({color:"#d8e8ff",metalness:.9,roughness:.15,transparent:true,opacity:.35,side:THREE.DoubleSide}));sh.rotation.z=Math.PI/2;scene.add(sh);
+      const shn=new THREE.Object3D();shn.position.set(-44,10,0);scene.add(shn);obj("t2shkadov","シュカドフ推進器（もしも）",shn,50,"太陽の片側を巨大な鏡で覆い、光の圧力の差で太陽系ごと少しずつ動かす（1987年、シュカドフが提案）。何億年もかけて、危険な恒星を避けたり、別の場所へ移ったりできる。","太陽のそば");}}
+  // 外太陽系：木星・土星の資源、カイパーベルトの町
+  function t2Outer(g,id){const Y=window.KYEAR;
+    if(id==="jupiter"&&Y>=2600){const sc=new THREE.Group();g.add(sc);for(let i=0;i<10;i++){const q=sprite("#9fe8ff",1.2,1);const a=i/10*6.283;q.position.set(Math.cos(a)*7.8,(R()-.5)*1.5,Math.sin(a)*7.8);sc.add(q);}anims.push(t=>sc.rotation.y=t*.7);
+      obj("t2jupiter","木星の大気の採掘船（もしも）",sc,30,"木星の上層の大気に浮かぶ採掘船が、核融合の燃料になる水素やヘリウム3を集める。木星には地球の約300倍の質量のガスがある。","木星");
+      const cl=new THREE.Object3D();g.add(cl);cl.add(sprite("#ffd27a",2.5,.9));anims.push(t=>cl.position.set(Math.cos(t*1.3+2)*18,1,Math.sin(t*1.3+2)*18));obj("t2galilean","木星の衛星の都市群（もしも）",cl,24,"ガニメデやカリストの氷の地下に都市が広がる。木星の強い放射線は氷や水の層でさえぎる。","木星の衛星");}
+    if(id==="saturn"&&Y>=2700){const rg=new THREE.Group();g.add(rg);rg.rotation.z=26.7*Math.PI/180;for(let i=0;i<8;i++){const q=sprite("#ffe6a0",1.1,1);rg.add(q);const a=i/8*6.283;anims.push(t=>{const b=a+t*.3;q.position.set(Math.cos(b)*11,.2,Math.sin(b)*11);});}
+      obj("t2rings","土星の環の氷の採掘（もしも）",rg,30,"土星の環は大部分が水の氷のかけら。外太陽系の水と燃料の倉庫になる。","土星");}
+    if(id==="neptune"&&Y>=2700){const nb=new THREE.Object3D();g.add(nb);nb.add(sprite("#9fe8ff",2,.9));nb.position.set(0,6,0);obj("t2neptune","海王星の燃料基地（もしも）",nb,24,"天王星や海王星の大気から重水素やヘリウム3を集め、太陽系の外へ向かう船に補給する。","海王星");}}
+  function t2Kuiper(){const n=[];for(let i=0;i<24;i++){const a=R()*6.283,r=320+R()*160;const q=sprite("#ffd27a",4,.8);q.position.set(Math.cos(a)*r,(R()-.5)*30,Math.sin(a)*r);scene.add(q);n.push(q);}
+    obj("t2kuiper","カイパーベルトの氷の町（もしも）",n[0],120,"冥王星のような氷の天体の地下に、核融合の熱で暮らす町が点在する。太陽の光は地球の約1000分の1しか届かない。","30〜50天文単位");}
   function t2Helio(){const sh=sprite("#7ee0ff",6,1);scene.add(sh);const dir=V(.6,.15,-.78).normalize();anims.push(t=>{const k=(t*.02)%1;sh.position.copy(dir).multiplyScalar(80+k*3000);});
-    const n=new THREE.Object3D();n.position.copy(dir).multiplyScalar(1500);scene.add(n);obj("t2ship","世代宇宙船（もしも）",n,600,"何世代もの人が船の中で生まれ育ちながら、数百年かけて近くの恒星系へ向かう巨大な宇宙船。光帆（レーザーで押す薄い帆）の小型探査機は光速の約20%で、20年ほどでケンタウルス座α星に届く構想もある。","太陽から遠ざかる");}
-  function t2Stars(){const a=14.66/24*6.283,b=-60.8*Math.PI/180;const p=V(Math.cos(b)*Math.cos(a),Math.sin(b),Math.cos(b)*Math.sin(a)).multiplyScalar(43.7);const c=sprite("#7ee0ff",4,1);c.position.copy(p).add(V(1.2,1,0));scene.add(c);
-    const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),c.position]),new THREE.LineDashedMaterial({color:"#7ee0ff",dashSize:1,gapSize:.6}));ln.computeLineDistances();scene.add(ln);
-    obj("t2colony","ケンタウルス座α星の植民地（もしも）",c,12,"太陽に最も近い恒星系への最初の植民地。光でも4.4年かかるので、地球との会話は往復9年近い。文明は太陽系の外へ広がり始める。","約4.4光年");}
+    const n=new THREE.Object3D();n.position.copy(dir).multiplyScalar(1500);scene.add(n);obj("t2ship","世代宇宙船（もしも）",n,600,"何世代もの人が船の中で生まれ育ちながら、数百年かけて近くの恒星系へ向かう巨大な宇宙船。人工の生態系をまるごと積み、数千人〜数万人が暮らす。","太陽から遠ざかる");
+    if(window.KYEAR>=4000){const oc=[];for(let i=0;i<40;i++){const v=V(R()-.5,R()-.5,R()-.5).normalize().multiplyScalar(30+R()*600);const q=sprite("#cfe9ff",3,.8);q.position.copy(v);scene.add(q);oc.push(q);}
+      obj("t2oort","オールトの雲の彗星の町（もしも）",oc[0],300,"数兆個あるとされる彗星の核に住む。氷を溶かして水と燃料にし、核融合で暮らす。太陽系の「いちばん外側の村」で、恒星間への出発点にもなる。","2000〜10万天文単位");}}
+  // 近くの恒星：植民地と交易路
+  function t2Stars(){const Y=window.KYEAR;const sp=(ra,dec,d)=>{const [l,b]=eq2gal(ra*15,dec);return gal(l,b).multiplyScalar(d*10);};
+    const C=[["alphacen","ケンタウルス座α星",14.66,-60.8,4.37,3300,"太陽に最も近い恒星系。2つの太陽が空を回る。"],["barnard","バーナード星",17.96,4.7,5.96,3600,"小さく暗い赤色矮星。周りの小天体を資源にする。"],["epseri","エリダヌス座ε星",3.55,-9.5,10.5,3800,"若い恒星で、小惑星帯やちりの円盤がある。"],["tauceti","くじら座τ星",1.73,-15.9,11.9,3900,"太陽によく似た恒星。惑星の候補がいくつか見つかっている。"],["trappist","TRAPPIST-1",23.1,-5.0,40.7,4000,"7つの地球サイズの惑星を持つ赤色矮星。惑星どうしが近く、互いの空に大きく見える。"]];
+    const col=C.filter(c=>Y>=c[5]);let rmax=0;
+    col.forEach(([id,nm,ra,dec,d,y0,dsc])=>{const p=sp(ra,dec,d);rmax=Math.max(rmax,d);const c=sprite("#7ee0ff",d>20?6:3,1);c.position.copy(p).add(V(.8,.8,0));scene.add(c);
+      const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),p]),new THREE.LineDashedMaterial({color:"#7ee0ff",dashSize:2,gapSize:1.5,transparent:true,opacity:.6}));ln.computeLineDistances();scene.add(ln);
+      for(let k=0;k<2;k++){const q=sprite("#ffd27a",.7,1);scene.add(q);anims.push(t=>q.position.copy(p).multiplyScalar(((t*.02+k*.5)%1)));}
+      obj("t2c_"+id,nm+"の植民地（もしも）",c,d>20?40:14,`${dsc} 西暦${y0}年ごろに最初の入植（もしも）。光の速さでも片道約${d}年かかるので、地球との会話は往復約${Math.round(d*2)}年。`,`約${d}光年`);});
+    if(!col.length){const p=sp(14.66,-60.8,4.37);const c=sprite("#7ee0ff",3,1);c.position.copy(p);scene.add(c);obj("t2c_probe","ケンタウルス座α星へ向かう移民船（もしも）",c,14,"最初の移民船は、光速の数%〜10%で数十年〜百年かけて向かう。","約4.4光年");return;}
+    const bub=new THREE.Mesh(new THREE.SphereGeometry(rmax*10+15,32,16),new THREE.MeshBasicMaterial({color:"#7ee0ff",transparent:true,opacity:.05,depthWrite:false,side:THREE.DoubleSide}));scene.add(bub);
+    const bn=new THREE.Object3D();bn.position.set(0,-(rmax*10+15),0);scene.add(bn);obj("t2sphere","人類の植民圏（もしも）",bn,rmax*10,`人類が住む恒星系の広がり（この時代は半径約${Math.round(rmax+1.5)}光年）。光より速くは進めないので、文明は何百年もかけて少しずつ広がる。星ごとに言葉や文化が分かれていく。`,`半径 約${Math.round(rmax+1.5)}光年`);
+    if(col.length>=3){const a=sp(14.66,-60.8,4.37),b=sp(17.96,4.7,5.96);const tl=new THREE.Line(new THREE.BufferGeometry().setFromPoints([a,b]),new THREE.LineDashedMaterial({color:"#ffd27a",dashSize:2,gapSize:1.5,transparent:true,opacity:.5}));tl.computeLineDistances();scene.add(tl);
+      const rm=new THREE.Object3D();rm.position.copy(a).add(b).multiplyScalar(.5);scene.add(rm);obj("t2ram","恒星間ラムジェット船（もしも）",rm,20,"宇宙空間の薄い水素を大きな磁場ですくい集め、核融合の燃料にしながら加速する船（1960年、バサードが提案）。燃料を積まずに光速に近づける夢の推進法だが、実現できるかは疑問視されている。","恒星系どうしの航路");}}
   // ---- Type III（もしも） ----
   function t3Galaxy(g,sn){const Y=window.KYEAR;const rly=Math.min(60000,Math.max(30,(Y-6000)*.1));const r=rly/1000;
     const b=new THREE.Mesh(new THREE.SphereGeometry(1,32,16),new THREE.MeshBasicMaterial({color:"#7ee0ff",transparent:true,opacity:.1,depthWrite:false}));b.scale.set(r,Math.min(r,2.5),r);b.position.copy(sn.position);g.add(b);
@@ -2086,7 +2131,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
       const ec=orbit(ZR,"#f4b942",.18);scene.add(ec);Z.forEach(([id,nm,lon,st,ln,info])=>constellation(id,nm,lon,st,ln,ZR,info+"（星の並びは簡略化した模式図。占いの期間と、実際に太陽がその星座の方向にある期間は約1か月ずれている）"));
       const ophn=new THREE.Object3D();ophn.position.set(Math.cos(262*Math.PI/180)*ZR,ZR*.14,Math.sin(262*Math.PI/180)*ZR);scene.add(ophn);obj("ophiuchus","へびつかい座（13番目）",ophn,ZR*.35,"実際には太陽はへびつかい座も通る（11月末〜12月中旬）。占いの十二星座には含まれない。","黄経 約262°");
       const ab=[];for(let i=0;i<5000;i++){const a=R()*6.283,r=220+R()*100;ab.push(Math.cos(a)*r,(R()-.5)*8,Math.sin(a)*r);}const belt=points(ab,"#c9b28f",1.6,.7);scene.add(belt);anims.push(t=>belt.rotation.y=t*.02);
-      const bn=new THREE.Object3D();bn.position.set(0,0,270);scene.add(bn);obj("belt","小惑星帯",bn,160,"火星と木星の間に数百万個の小天体。","2.2〜3.2天文単位");if(T1())t1Inner(PL,ce);
+      const bn=new THREE.Object3D();bn.position.set(0,0,270);scene.add(bn);obj("belt","小惑星帯",bn,160,"火星と木星の間に数百万個の小天体。","2.2〜3.2天文単位");if(T1())t1Inner(PL,ce);if(T2(2400))t2Planets(PL,ce,s);
     }},
    {id:"outer",name:"外太陽系",unit:"1目盛＝15億km（10天文単位）",desc:"木星・土星・天王星・海王星、冥王星とカイパーベルト。ボイジャー1号・2号は太陽系の外へ向かっている。",dist:1500,min:15,max:5000,
     build(){scene.add(new THREE.PointLight("#fff3dc",2.6,0,0));scene.add(new THREE.AmbientLight("#334466",.35));
@@ -2100,7 +2145,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
           const rs=new THREE.Object3D();rs.position.set(4,-2.6,5.2);p.add(rs);obj("grs","大赤斑（木星）",rs,22,"地球がすっぽり入る大きさの巨大な嵐。300年以上前から観測されている。","木星");
           const gm=new THREE.Object3D();g.add(gm);anims.push(t=>gm.position.set(Math.cos(t*1.3+2)*18,0,Math.sin(t*1.3+2)*18));obj("europa","木星の衛星（イオ・エウロパなど）",gm,30,"ガリレオが1610年に発見した4つの大きな衛星。エウロパの氷の下には海があり、生命の可能性が探られている。","木星");}
         if(id==="saturn"){const ti=planetGPU(.9,"titan",V(0,0,0),24);g.add(ti);anims.push(t=>ti.position.set(Math.cos(t*.6)*20,0,Math.sin(t*.6)*20));obj("titan","タイタン（土星の衛星）",ti,12,"厚い大気とメタンの湖を持つ。2028年にドローン探査機ドラゴンフライが打ち上げ予定。","土星");}
-        if(T1())t1Outer(g,id);const ph=i*1.3;anims.push(t=>{const q=ph+t*.6/per;g.position.set(Math.cos(q)*a,0,Math.sin(q)*a);p.rotation.y=t*.4;});scene.add(g);obj(id,nm,g,r*8,d,(a/10).toFixed(1)+"天文単位");});
+        if(T1())t1Outer(g,id);if(T2(2600))t2Outer(g,id);const ph=i*1.3;anims.push(t=>{const q=ph+t*.6/per;g.position.set(Math.cos(q)*a,0,Math.sin(q)*a);p.rotation.y=t*.4;});scene.add(g);obj(id,nm,g,r*8,d,(a/10).toFixed(1)+"天文単位");});
       // ハレー彗星（早回し）
       const ha=(350+5.9)/2,he=(350-5.9)/(350+5.9);const hor=orbit(ha,"#9fe0ff",.5,.3,512,he,Math.PI);hor.rotation.y=1.0;scene.add(hor);
       const hc=new THREE.Group();hor.add(hc);const nuc=sphere(1.2,smat({color:"#bfc8d6"}),10);hc.add(nuc);hc.add(sprite("#cfe9ff",8,.9));
@@ -2111,14 +2156,14 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
       obj("halley","ハレー彗星",hc,40,"約76年周期で太陽に近づく彗星。前回は1986年、次は2061年。太陽に近づくと、太陽と反対側に尾が伸びる（ここでは動きを早回し）。","0.6〜35天文単位");
       const pl=orbit(395,"#6a6a8a",.5,.3,256,.25);scene.add(pl);const pp=planetGPU(1.6,"pluto",V(0,0,0),32,Math.PI);pl.add(pp);pp.position.set(296,0,0);obj("pluto","冥王星",pp,25,"2006年に準惑星に分類された。2015年にニューホライズンズが接近観測。","約39天文単位");
       const kb=[];for(let i=0;i<6000;i++){const a=R()*6.283,r=300+R()*200;kb.push(Math.cos(a)*r,(R()-.5)*40,Math.sin(a)*r);}scene.add(points(kb,"#8fa0c8",2.2,.5));
-      const kbn=new THREE.Object3D();kbn.position.set(-420,0,0);scene.add(kbn);obj("kuiper","カイパーベルト",kbn,250,"海王星の外側に広がる氷の小天体の帯。","30〜50天文単位");
+      if(T2(2700))t2Kuiper();const kbn=new THREE.Object3D();kbn.position.set(-420,0,0);scene.add(kbn);obj("kuiper","カイパーベルト",kbn,250,"海王星の外側に広がる氷の小天体の帯。","30〜50天文単位");
       const vo=(id,nm,dir,dist,d)=>{const end=dir.clone().normalize().multiplyScalar(dist);const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0,0,0),V(52,0,0),end]),new THREE.LineBasicMaterial({color:"#7fb2ff",transparent:true,opacity:.7}));scene.add(l);
         const m=sphere(4,new THREE.MeshBasicMaterial({color:"#7fb2ff"}),10);m.position.copy(end);scene.add(m);m.add(sprite("#7fb2ff",30,.6));obj(id,nm,m,120,d,(dist/10).toFixed(0)+"天文単位");};
       vo("voyager1","ボイジャー1号",V(.4,.6,.7),1690,"1977年打ち上げ。人工物で最も遠くにある。2026年11月18日に地球から1光日に達する予定。");
       vo("voyager2","ボイジャー2号",V(.5,-.55,-.65),1420,"天王星と海王星を訪れた唯一の探査機。");if(T1())t1OuterEnd();
     }},
    {id:"helio",name:"太陽圏とオールトの雲",unit:"1目盛＝1万5000億km（100天文単位）",desc:"太陽風が届く範囲（太陽圏）の外は恒星間空間。その外側を、彗星のふるさとオールトの雲が数万天文単位にわたって包む（存在は推定）。",dist:2400,min:3,max:5000,
-    build(){scene.add(new THREE.AmbientLight("#ffffff",.6));const s=sprite("#ffd27a",6,1);scene.add(s);obj("sun","太陽",s,8,"","—");if(T2(2800))t2Helio();if(T1()&&!T2(2800))t1Helio();
+    build(){scene.add(new THREE.AmbientLight("#ffffff",.6));const s=sprite("#ffd27a",6,1);scene.add(s);obj("sun","太陽",s,8,"","—");if(T2(2700))t2Helio();if(T1())t1Helio();
       const hm=new THREE.MeshBasicMaterial({color:"#5aa0ff",transparent:true,opacity:.14,side:THREE.DoubleSide,depthWrite:false});const h=sphere(1.2,hm,48);h.scale.set(1,1,2.6);h.position.z=1.6;scene.add(h);
       const ts=sphere(.9,new THREE.MeshBasicMaterial({color:"#7fd3ff",transparent:true,opacity:.1,wireframe:true}),24);ts.scale.set(1,1,1.8);ts.position.z=.7;scene.add(ts);
       const hp=new THREE.Object3D();hp.position.set(0,0,-1.2);scene.add(hp);obj("heliopause","太陽圏の境界（ヘリオポーズ）",hp,5,"太陽風と恒星間の物質がぶつかる境界。ボイジャー1号は2012年、2号は2018年に越えた。","約120天文単位");
@@ -2137,7 +2182,7 @@ void main(){float r=length(vL)/uR;float op=0.;vec3 c=vec3(.85,.78,.62);
         ["epseri","エリダヌス座ε星",3.55,-9.5,10.5,"#ffcf8a",1,"若い恒星で、ちりの円盤を持つ。"],["procyon","プロキオン",7.65,5.2,11.5,"#fff4d8",1.3,"冬の大三角の一つ。"],["tauceti","くじら座τ星",1.73,-15.9,11.9,"#ffe7a0",1,"太陽に似た恒星。SFの舞台にもよく登場する。"],
         ["altair","アルタイル（彦星）",19.85,8.9,16.7,"#f2f6ff",1.3,"夏の大三角の一つ。七夕の彦星。"],["vega","ベガ（織姫星）",18.62,38.8,25,"#cfe0ff",1.5,"夏の大三角の一つ。七夕の織姫星。約1万2000年後には北極星になる。"],
         ["trappist","TRAPPIST-1",23.1,-5.0,40.7,"#ff6a4a",.6,"地球サイズの惑星が7つ見つかった赤色矮星。そのうち3つは液体の水が存在しうる位置にある。"]];
-      if(T2(5000))t2Stars();
+      if(T2(2700))t2Stars();
       S.forEach(([id,nm,ra,dec,d,col,sz,ds])=>{const [gl0,gb0]=eq2gal(ra*15,dec);const p=gal(gl0,gb0).multiplyScalar(d*10);
         const c=star(sz*.5,col,9);c.position.copy(p);scene.add(c);
         if(d>0){scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(p.x,0,p.z),p]),new THREE.LineBasicMaterial({color:"#4a5a80",transparent:true,opacity:.6})));}
