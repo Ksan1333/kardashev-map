@@ -1,0 +1,2 @@
+<!-- 共通ルール（消さない） -->
+> **共通ルール：** 作業の前に、Ksan1333 の全プロジェクト共通のルール（非公開リポジトリ `Ksan1333/AgentRules` の `AGENTS.md`）を読み、それに従うこと。この PC では `%USERPROFILE%\Documents\Claude\AgentRules\AGENTS.md`、ない環境では `gh api repos/Ksan1333/AgentRules/contents/AGENTS.md -H "Accept: application/vnd.github.raw"` で読める。特に、GitHub Actions は使わない（ワークフローを作らない・動かさない。テストとビルドはこの PC で行う）。Release（`gh release create`）はユーザーが実行し、エージェントは実行しない。このファイルには、このプロジェクトだけの決まりを書く。
