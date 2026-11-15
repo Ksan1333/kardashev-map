@@ -1,11 +1,9 @@
 /* ---------- 全体検索（／・Ctrl+K）・ショートカット・使い方・はじめてガイド ---------- */
 (function(){
-  const nav=document.getElementById("views");if(!nav)return;
   const $=id=>document.getElementById(id);
-  nav.insertAdjacentHTML("beforeend",`<span class="navera" id="navera" title="スライダーの時代（押すと上へ）"></span><button class="navsearch" id="navsearch" aria-label="全体を検索"><span aria-hidden="true">🔍</span>検索<kbd>/</kbd></button><button class="navhelp" id="navhelp" aria-label="使い方とショートカット">?</button>`);
   document.body.insertAdjacentHTML("beforeend",`
   <div class="sx" id="sx" hidden><div class="sxbox" role="dialog" aria-modal="true" aria-label="全体検索">
-    <div class="sxin"><span aria-hidden="true">🔍</span><input id="sxq" type="search" placeholder="出来事・国・元素・生き物・天体・発明… なんでも" autocomplete="off" spellcheck="false" aria-controls="sxres"><kbd>Esc</kbd></div>
+    <div class="sxin"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input id="sxq" type="search" placeholder="出来事・国・元素・生き物・天体・発明… なんでも" autocomplete="off" spellcheck="false" aria-controls="sxres"><button type="button" class="sxx" data-sxclose="1" aria-label="検索を閉じる"><kbd>Esc</kbd><span>閉じる</span></button></div>
     <div class="sxfil" id="sxfil"></div><div class="sxres" id="sxres" role="listbox"></div>
     <div class="sxfoot"><span><kbd>↑</kbd><kbd>↓</kbd> 選ぶ</span><span><kbd>Enter</kbd> 開く</span><span><kbd>Esc</kbd> 閉じる</span><span id="sxcount"></span></div></div></div>
   <div class="sx" id="hx" hidden><div class="sxbox hxbox" role="dialog" aria-modal="true" aria-label="使い方"><button class="gclose" data-hclose="1" aria-label="閉じる">×</button><div id="hxbody"></div></div></div>
@@ -39,7 +37,7 @@
     book(id){goHash("earth-book");later(()=>{const el=$("eb-"+id);if(el){el.scrollIntoView({behavior:"smooth"});flash(el);}},120);},
     view(h){goHash(h);later(()=>window.scrollTo({top:0,behavior:"smooth"}),60);},
     tg(k){goHash("overview");later(()=>{window.TG_SHOW&&TG_SHOW(k);const el=$("tguide");el.scrollIntoView({behavior:"smooth",block:"start"});flash(el);});},
-    era(i){later(()=>{KSET(i);window.scrollTo({top:0,behavior:"smooth"});},10);},
+    era(i){later(()=>{KSET(i);window.KSHELL&&KSHELL.flashEra();},10);},
     field(f){goHash("lineage");later(()=>openTreeField(FIELD2TREE[f]),120);},
   };
   // ---- 索引 ----
@@ -97,23 +95,25 @@
   res.addEventListener("click",e=>{const b=e.target.closest("[data-i]");if(b){pick(+b.dataset.i);return;}const s=e.target.closest("[data-s]");if(s){q.value=s.dataset.s;ai=0;render();q.focus();}});
   fil.addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(!b)return;curF=b.dataset.f;ai=0;render();q.focus();});
   sx.addEventListener("mousedown",e=>{if(e.target===sx)close();});
-  $("navsearch").addEventListener("click",open);
+  sx.addEventListener("click",e=>{if(e.target.closest("[data-sxclose]"))close();});
+  document.querySelectorAll("[data-act=\"search\"]").forEach(b=>b.addEventListener("click",open));
   // ---- 使い方・ショートカット ----
   const HELP=()=>`<h3>使い方</h3>
-    <ol class="hxsteps"><li><b>時代を選ぶ</b>：上の「カルダシェフ・スライダー」を動かすと、宇宙誕生（138億年前）からType IV（約10億年後・構想）まで、すべてのページがその時代の姿に変わります。</li>
-    <li><b>見方を選ぶ</b>：タブで「全体マップ・年表・宇宙/地球/ミクロ・系統樹・宇宙の法則・地球大全」を切り替えます。</li>
+    <ol class="hxsteps"><li><b>時代を選ぶ</b>：画面上の「時代バー」（スマホは上の時代ボタン）で、宇宙誕生（138億年前）からType IV（約10億年後・構想）まで選べます。すべてのページがその時代の姿に変わります。つまみのドラッグ、‹ › ボタン、時代名を押して出る一覧のどれでも選べます。</li>
+    <li><b>見方を選ぶ</b>：左のメニュー（スマホは画面下のタブ）で「全体マップ・年表・宇宙/地球/ミクロ・系統樹・宇宙の法則・地球大全」を切り替えます。</li>
+    <li><b>図を動かす</b>：年表・系統樹・地図・3Dは、ドラッグで移動、ホイール（スマホは2本指のピンチ）で拡大縮小。右上の <span class="hxfs">⤢</span> で全画面にできます。スマホでは、押したものの詳細が画面の下から出ます（上下にスワイプで広げる／たたむ）。</li>
     <li><b>なんでも検索</b>：🔍（<kbd>/</kbd>キー）で、出来事・国・元素・生き物・天体など約${(IDX||[]).length.toLocaleString()}件から探して、その場所へ飛べます。</li>
     <li><b>地球の外から来た方へ</b>：まず「地球大全」を読むと、地球と人類の全体像がつかめます。</li></ol>
-    <h3>キーボード</h3><table class="ltable hxkeys"><tbody>
+    <h3 class="hx-kbd">キーボード</h3><table class="ltable hxkeys hx-kbd"><tbody>
     <tr><th><kbd>/</kbd> または <kbd>Ctrl</kbd>+<kbd>K</kbd></th><td>全体検索</td></tr><tr><th><kbd>1</kbd>〜<kbd>6</kbd></th><td>タブを切り替え（1＝全体マップ … 6＝地球大全）</td></tr>
-    <tr><th><kbd>[</kbd> <kbd>]</kbd></th><td>ひとつ前／次の時代へ</td></tr><tr><th><kbd>0</kbd></th><td>現在（2026年）に戻る</td></tr><tr><th><kbd>?</kbd></th><td>この使い方を開く</td></tr><tr><th><kbd>Esc</kbd></th><td>閉じる</td></tr></tbody></table>
+    <tr><th><kbd>[</kbd> <kbd>]</kbd></th><td>ひとつ前／次の時代へ</td></tr><tr><th><kbd>0</kbd></th><td>現在（2026年）に戻る</td></tr><tr><th><kbd>←</kbd> <kbd>→</kbd></th><td>時代バーを選んでいるとき：前／次の時代</td></tr><tr><th><kbd>F</kbd></th><td>図・地図・3Dを全画面に（もう一度押すと戻る）</td></tr><tr><th><kbd>?</kbd></th><td>この使い方を開く</td></tr><tr><th><kbd>Esc</kbd></th><td>閉じる（検索・全画面・時代の一覧・詳細パネル）</td></tr></tbody></table>
     <h3>記号の意味</h3><table class="ltable hxkeys"><tbody>
     <tr><th><span class="hxstar">★</span></th><td>年表：その出来事専用の3D映像がある</td></tr><tr><th><span class="hxdot"></span></th><td>年表：ふつうの出来事（3Dは時代と地域の風景）</td></tr>
     <tr><th><span class="hxdia"></span></th><td>年表：ブランチ（国・系統）の終わり</td></tr><tr><th>点線</th><td>仮説・予測・想定</td></tr>
     <tr><th>暗い表示</th><td>スライダーの時代にはまだ存在しない・知られていない</td></tr><tr><th>もや</th><td>世界地図：その時代に文明がない／人がいない地域</td></tr></tbody></table>
     <p class="note">数値は2026年時点の概数です。2026年より先の内容は、予測・目標・想像（近未来〜Type IVの想定）です。</p>`;
   function help(){if(!IDX)build();$("hxbody").innerHTML=HELP();hx.hidden=false;}
-  $("navhelp").addEventListener("click",help);hx.addEventListener("click",e=>{if(e.target===hx||e.target.closest("[data-hclose]"))hx.hidden=true;});
+  document.querySelectorAll("[data-act=\"help\"]").forEach(b=>b.addEventListener("click",help));hx.addEventListener("click",e=>{if(e.target===hx||e.target.closest("[data-hclose]"))hx.hidden=true;});
   const typing=e=>{const t=e.target;return t&&(t.tagName==="INPUT"&&!["range","checkbox","radio","button"].includes(t.type)||t.tagName==="TEXTAREA"||t.tagName==="SELECT"||t.isContentEditable);};
   window.addEventListener("keydown",e=>{
     if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();sx.hidden?open():close();return;}
@@ -124,13 +124,9 @@
     else if(/^[1-6]$/.test(e.key)){const v=VIEWS[+e.key-1];if(v){location.hash=v[0];}}
     else if(e.key==="["){$("kprev")?.click();}else if(e.key==="]"){$("knext")?.click();}else if(e.key==="0"){$("know")?.click();}
   });
-  // ---- ナビの時代表示 ----
-  const era=$("navera");
-  function syncEra(){const E=window.KERA;if(!E){era.hidden=true;return;}era.hidden=false;era.className="navera"+(E.now?" now":E.kind==="future"?" fut":E.kind==="pre"?" pre":" past");era.innerHTML=`<i></i>${E.when}`;}
-  window.addEventListener("k-year",syncEra);syncEra();era.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
   // ---- はじめての人へ ----
   let seen=false;try{seen=localStorage.getItem("kmap.hello")==="1";}catch(e){}
   const head=document.querySelector("#v-overview .view-head");
-  if(!seen&&head){head.insertAdjacentHTML("afterend",`<div class="hello" id="hello"><div><b>はじめての方へ</b><span>① 上のスライダーで時代を動かす（宇宙誕生〜Type III）　② タブで見方を切り替える　③ <kbd>/</kbd> キーや🔍で何でも検索　─　地球の外から来た方は「06 地球大全」からどうぞ。</span></div><div class="hellob"><button class="chip" data-h="book">📘 地球大全を読む</button><button class="chip" data-h="help">使い方</button><button class="chip" data-h="x">閉じる</button></div></div>`);
+  if(!seen&&head){head.insertAdjacentHTML("afterend",`<div class="hello" id="hello"><div><b>はじめての方へ</b><span>① <span class="pc-only">上の時代バー</span><span class="sp-only">上の時代ボタン</span>で、宇宙誕生〜Type IVまで時代を選ぶ　② <span class="pc-only">左のメニュー</span><span class="sp-only">下のタブ</span>でページを切り替える　③ 🔍（<kbd>/</kbd> キー）で何でも検索　─　地球の外から来た方は「地球大全」からどうぞ。</span></div><div class="hellob"><button class="chip" data-h="book">📘 地球大全を読む</button><button class="chip" data-h="help">使い方</button><button class="chip" data-h="x">閉じる</button></div></div>`);
     $("hello").addEventListener("click",e=>{const b=e.target.closest("[data-h]");if(!b)return;const k=b.dataset.h;if(k==="book")location.hash="earth-book";if(k==="help")help();if(k==="x"){$("hello").remove();try{localStorage.setItem("kmap.hello","1");}catch(e){}}});}
 })();

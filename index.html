@@ -2,8 +2,12 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b16">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="宇宙誕生からType I〜IIIの「もしもの」未来文明までを、ひとつの時代スライダーで行き来できるインタラクティブ・ガイドブック。">
 <title>カルダシェフ文明マップ</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23070b16'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23f4b942'/%3E%3Ccircle cx='16' cy='16' r='8.5' fill='none' stroke='%237fb2ff' stroke-width='1.8'/%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23b48cff' stroke-width='1.8' opacity='.8'/%3E%3Ccircle cx='24.5' cy='16' r='2.2' fill='%237fb2ff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Murecho:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -36,10 +40,6 @@ body{background:radial-gradient(1200px 700px at 50% 30%,#15204099 0%,transparent
 button{font-family:inherit}
 :focus-visible{outline:2px solid var(--cool);outline-offset:2px}
 
-header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
-h1{font-family:var(--font-display);font-weight:900;font-size:28px;margin:0;letter-spacing:.02em;text-wrap:balance}
-.sub{color:var(--muted);font-size:13px;margin:4px 0 0}
-body.t1 .top h1::after{content:"Type I（想定）";font:600 11px var(--font-body);color:#06222c;background:#7ee0ff;border-radius:99px;padding:3px 9px;margin-left:10px;vertical-align:middle}
 body.t1 .whev[data-fut="1"]{border-style:dashed}
 .view .note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6}
 .thwrap{position:relative;height:min(70vh,640px);min-height:420px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#02030a}
@@ -133,16 +133,11 @@ body.t1 .whev[data-fut="1"]{border-style:dashed}
 .whc{border:1px solid var(--line);border-radius:12px;padding:12px;background:linear-gradient(135deg,#ffffff08,#ffffff02)}.whch{display:flex;gap:10px;align-items:center;margin-bottom:8px}.whch b{font-size:14px;line-height:1.4}
 .whct{font-size:11.5px;font-weight:700;color:var(--muted)}.whcemb{flex:0 0 34px;height:34px;border-radius:50%;border:2.5px solid var(--wc,#8e98b5);display:grid;place-items:center}.whcemb i{width:15px;height:15px;border:2.5px solid var(--wc,#8e98b5);transform:rotate(45deg)}.whcemb.off{opacity:.35}
 .whc dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:0;font-size:12.5px}.whc dt{color:var(--muted)}.whcc{display:block;line-height:1.55}.whcc b{color:var(--accent);margin-right:5px}.whcn{font-size:12px;color:var(--muted);margin:8px 0 0;line-height:1.6}
-.ktype{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.ktsteps{display:flex;gap:4px}.ktsteps span{font:500 11.5px var(--font-body);color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:3px 10px}
-.ktsteps span.on{background:var(--accent);color:#1a1204;border-color:var(--accent);font-weight:700}.ktnow{font-size:12.5px;color:var(--muted);display:flex;gap:8px;align-items:baseline}.ktnow b{color:var(--text);font-size:15px}
 .thpiplab{position:absolute;right:14px;font-size:11.5px;color:#fff;background:#0a0f1fcc;padding:4px 8px;border-radius:8px 8px 0 0;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .thlinks{margin-top:8px;pointer-events:auto}.thcap .chip{pointer-events:auto}
 .ev3d{position:relative;width:100%;aspect-ratio:16/10;border-radius:10px;overflow:hidden;background:#05070f;flex:0 0 auto;cursor:grab}.ev3d canvas{display:block;width:100%!important;height:100%!important}
 .ev3dcap{position:absolute;left:0;right:0;bottom:0;font-size:11.5px;line-height:1.5;color:#fff;background:linear-gradient(transparent,#000c);padding:16px 10px 6px;pointer-events:none}
 .thgo{align-self:flex-start}
-.kglobal{margin:6px 0 4px;padding:6px 18px 8px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#121a30,#0c1224)}
-.kglabel{display:flex;gap:12px;align-items:baseline;font-size:12px;color:var(--muted);margin-bottom:-6px}.kglabel b{color:var(--text);font-size:13px}
-.kglobal .krange{margin:10px 0 2px}.kglobal .kbtns{margin-top:2px}
 .c3d{display:block;width:100%;aspect-ratio:36/22;border-radius:9px;background:#0a0f1f;margin-bottom:10px}.c3d.sm{margin:-2px 0 6px;border-radius:6px}
 .lmol .c3d{margin-bottom:6px}
 .ctabs{display:flex;gap:2px;align-items:flex-end;border-bottom:1px solid #3a4466;overflow-x:auto;padding:0 6px;scrollbar-width:thin}
@@ -208,13 +203,7 @@ body.t1 .whev[data-fut="1"]{border-style:dashed}
 .lvmyth{margin:0}.lvmyth dt{font-size:12.5px;color:#ff9a8a;margin-top:4px}.lvmyth dd{margin:2px 0 6px 0;font-size:12.5px;color:#a8e6a0;line-height:1.7}
 /* 検索・ナビ・使い方 */
 :root{--navh:48px}
-nav.views{position:sticky;top:0;z-index:50;background:rgba(10,15,31,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:center}
-.navera{flex:none;margin-left:auto;display:inline-flex;align-items:center;gap:6px;font:600 11.5px var(--font-num);color:var(--muted);padding:4px 10px;border:1px solid var(--line);border-radius:99px;cursor:pointer;white-space:nowrap}
-.navera i{width:8px;height:8px;border-radius:50%;background:#8e98b5}.navera.now i{background:var(--accent)}.navera.fut i{background:#7fb2ff}.navera.pre i{background:#b48cff}
-.navsearch{flex:none;display:inline-flex;align-items:center;gap:6px;margin-left:8px;font:500 13px var(--font-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:6px 10px;cursor:pointer}
-.navsearch:hover,.navhelp:hover{border-color:var(--accent)}
 kbd{font:600 10.5px var(--font-num);padding:1px 6px;border-radius:5px;border:1px solid #3a4670;background:#0b1122;color:#cfd7ea;white-space:nowrap}
-.navhelp{flex:none;width:30px;height:30px;margin:0 2px 0 6px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:700;cursor:pointer}
 .sx{position:fixed;inset:0;z-index:200;background:rgba(3,5,12,.66);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;justify-content:center;align-items:flex-start;padding:9vh 16px 16px}
 .sxbox{width:min(720px,100%);max-height:80vh;display:flex;flex-direction:column;background:#0e1529;border:1px solid #33416b;border-radius:16px;box-shadow:0 30px 80px #000a;overflow:hidden}
 .sxin{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);font-size:18px}
@@ -240,10 +229,6 @@ body.sxopen{overflow:hidden}
 .hello{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:12px 16px;border:1px solid #f4b94266;border-radius:14px;background:linear-gradient(90deg,#f4b94214,#7fb2ff10)}
 .hello b{display:block;color:var(--accent);font-size:14px;margin-bottom:2px}.hello span{font-size:13px;color:#d4dbec;line-height:1.7}.hellob{display:flex;gap:6px;flex-wrap:wrap}
 .fieldnav{top:var(--navh)!important}.detail{top:calc(var(--navh) + 10px)!important}.ebtoc{top:calc(var(--navh) + 10px)!important;max-height:calc(100vh - var(--navh) - 20px)!important}.ebch{scroll-margin-top:calc(var(--navh) + 10px)!important}
-@media (max-width:720px){.navsearch kbd,.navera{display:none}}
-@media (max-width:720px){.tkw{display:none}.klegend{flex-wrap:wrap;white-space:nowrap}.klegend i+*{white-space:nowrap}
-  .navsearch{position:fixed;right:14px;bottom:18px;z-index:120;border-radius:99px;padding:12px 16px;box-shadow:0 8px 24px #000a;border-color:#f4b94288;background:#1b2647}
-  nav.views{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(10,15,31,.97)}.navhelp{display:none}.ebbar{font-size:12px}.sx{padding:4vh 10px 10px}.sxbox{max-height:88vh}}
 
 .pill.fut{color:#c9b6ff;border-color:#8f7ad8;border-style:dashed}
 .levels{display:flex;gap:6px;flex-wrap:wrap}
@@ -253,12 +238,6 @@ body.sxopen{overflow:hidden}
 .levels button[aria-current="true"]{color:#1a1204;background:var(--accent);border-color:var(--accent);font-weight:700}
 .levels button[disabled]{opacity:.5;cursor:not-allowed}
 
-nav.views{display:flex;gap:2px;overflow-x:auto;border-bottom:1px solid var(--line);scrollbar-width:thin}
-nav.views a{flex:none;color:var(--muted);text-decoration:none;padding:10px 14px 9px;font-size:14px;font-weight:500;
-  border-bottom:2px solid transparent;display:flex;gap:7px;align-items:baseline}
-nav.views a .n{font-family:var(--font-num);font-size:11px;opacity:.7}
-nav.views a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
-nav.views a:hover{color:var(--ink)}
 
 section.view{display:none;flex-direction:column;gap:18px}
 section.view.on{display:flex}
@@ -275,11 +254,6 @@ section.view.on{display:flex}
 .num{font-family:var(--font-num);font-variant-numeric:tabular-nums}
 
 /* ゲージ */
-.track{position:relative;height:46px;margin:6px 6px 0}
-.bar{position:absolute;left:0;right:0;top:16px;height:8px;border-radius:4px;background:#26314f}
-.fill{position:absolute;left:0;top:16px;height:8px;border-radius:4px;background:linear-gradient(90deg,#8a6420,var(--accent))}
-.tick{position:absolute;top:10px;width:1px;height:20px;background:var(--muted);opacity:.6}
-.tick-label{position:absolute;top:32px;transform:translateX(-50%);font-size:11.5px;color:var(--muted);white-space:nowrap;font-family:var(--font-num)}
 .gauge-head{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:space-between;align-items:baseline}
 .gauge-head b{font-family:var(--font-display)}
 .gauge-head span,.gauge-foot{color:var(--muted);font-size:12.5px}
@@ -660,17 +634,6 @@ svg.links circle{fill:var(--accent)}
 .kcard p{margin:0;font-size:13.5px;color:#d4dbec}
 .kcard .knote{font-size:11.5px;color:var(--muted)}
 .klinks{display:flex;gap:6px;flex-wrap:wrap}.klinks a{text-decoration:none}
-.ktrack{margin:26px 8px 4px;cursor:pointer;touch-action:none}
-.kstop{position:absolute;top:13px;width:12px;height:12px;margin-left:-6px;border-radius:50%;border:2px solid #0b1124;background:#8e98b5;cursor:pointer;padding:0;z-index:1}
-.kstop.is-now{background:var(--accent)}.kstop.fut{background:var(--cool)}.kstop.pre{background:#b48cff}
-.kstop.on{box-shadow:0 0 0 3px #ffffff55}
-.knob{position:absolute;top:2px;transform:translateX(-50%);cursor:grab;z-index:2;touch-action:none}
-.knob i{display:block;width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid var(--accent);box-shadow:0 0 14px #f4b942aa;margin-top:8px}
-.knob em{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);font-style:normal;font-family:var(--font-num);font-size:12px;color:var(--accent);white-space:nowrap}
-.krange{width:100%;margin:22px 0 4px;accent-color:#f4b942}
-.kbtns{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.klegend{margin-left:auto;font-size:11.5px;color:var(--muted);display:flex;gap:6px;align-items:center}
-.klegend .d{width:10px;height:10px;border-radius:50%;display:inline-block}.d.past{background:#8e98b5}.d.isnow{background:var(--accent)}.d.fut{background:var(--cool)}.d.pre{background:#b48cff}
 @media (max-width:860px){.kgrid{grid-template-columns:1fr}.kstat{grid-template-columns:1fr}}
 .mnode.fut{border-color:#4a6aa8;background:#121c38}.mnode.fut .v{color:var(--cool)}.mnode.past .v{color:#e8c98a}
 .core.fut{background:radial-gradient(circle at 38% 32%,#4a7ad0 0%,#2a3f8a 40%,#141c48 75%,#0a0f2a 100%);border-color:#6a8ad8}
@@ -705,34 +668,475 @@ footer p{margin:0 0 6px;max-width:120ch}
 .view.staged .whpanel{max-height:none}
 #v-micro.staged>.mclist{flex-direction:row;flex-wrap:wrap;max-height:150px;overflow-y:auto;margin:0 0 10px}
 #v-micro.staged>.mclist button{flex-direction:row;align-items:baseline;gap:6px;padding:5px 10px;border-radius:999px}
+/* ===================== UI 2.0（2026-11）：画面の枠・部品・スマホ対応 =====================
+   PC（1100px〜）：左のメニュー＋上に固定の時代バー／タブレット（768〜1099px）：アイコンのメニュー
+   スマホ（〜767px）：上のバー（時代ボタン・検索）＋下のタブ＋下から出るシート（時代・詳細） */
+:root{
+  --bg:#070b16;--surface:#10182c;--surface-2:#172038;--surface-3:#1e2a48;
+  --line:#25304d;--line-2:#35436c;--ink:#eef2fb;--text:#eef2fb;--ink-2:#cdd5e8;--muted:#9ba6c3;
+  --accent:#f4b942;--accent-ink:#1a1204;--cool:#7fb2ff;--pre:#b48cff;--past:#a3acc6;--fut:#7fb2ff;
+  --r-lg:16px;--r:12px;--sideW:252px;--tabH:62px;--stickyH:66px;
+  --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
+  --shadow:0 12px 32px rgba(0,0,0,.4);
+}
+html{scroll-padding-top:calc(var(--stickyH) + 14px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{padding:0;min-height:100vh;font-size:15px;line-height:1.7;
+  background:radial-gradient(1100px 640px at 72% -12%,#1b2b5a30 0%,transparent 62%),radial-gradient(900px 600px at -10% 110%,#2a1a4a22 0%,transparent 60%),var(--bg) fixed}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:fixed;left:12px;top:-60px;z-index:600;background:var(--accent);color:var(--accent-ink);padding:8px 14px;border-radius:10px;font-weight:700;text-decoration:none}
+.skip:focus{top:12px}
+a{color:var(--cool)}
+:focus-visible{outline:2px solid var(--cool);outline-offset:2px}
+.sni svg,.tb svg,.sbtn svg,.ibtn svg,.chev,.ed-b svg,.ed-close svg,.fsbtn svg,.ds-x svg,.jumppill svg,.sxin svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sni svg .f,.tb svg .f{fill:currentColor;stroke:none}
+.l-sm{display:none}
+
+/* ---- 左のメニュー ---- */
+.side{position:fixed;left:0;top:0;bottom:0;width:var(--sideW);z-index:60;display:flex;flex-direction:column;gap:4px;padding:16px 14px 14px;background:linear-gradient(180deg,#0b1224,#080d1a 70%);border-right:1px solid var(--line);overflow-y:auto;scrollbar-width:thin}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;padding:4px 8px 14px;border-radius:12px}
+.brand .logo{width:36px;height:36px;flex:none}
+.brand .bt{display:flex;flex-direction:column;line-height:1.15}
+.brand .bt b{font:900 17px var(--font-display);letter-spacing:.05em}
+.brand .bt small{font-size:12px;color:var(--muted);letter-spacing:.16em;margin-top:2px}
+.sidenav{display:flex;flex-direction:column;gap:2px}
+.sn{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;color:var(--ink-2);text-decoration:none;position:relative;transition:background .15s,color .15s}
+.sn:hover{background:#ffffff0a;color:var(--ink)}
+.sn.on{background:linear-gradient(90deg,#f4b94224,#f4b94206);color:var(--ink)}
+.sn.on::before{content:"";position:absolute;left:-14px;top:9px;bottom:9px;width:4px;border-radius:0 4px 4px 0;background:var(--accent)}
+.sni{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:#ffffff07;border:1px solid var(--line);color:var(--ink-2);transition:all .15s}
+.sni svg{width:21px;height:21px}
+.sn.on .sni{color:var(--accent);border-color:#f4b94270;background:#f4b94216}
+.snt{display:flex;flex-direction:column;min-width:0;line-height:1.3}
+.snt b{font-size:14.5px;font-weight:700}
+.snt small{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.snr{display:none}
+.snn{font-size:11px;color:#6d7896}
+.snsub{display:flex;flex-wrap:wrap;gap:4px;padding:0 4px 8px 58px}
+.snsub a{font-size:12.5px;color:var(--ink-2);text-decoration:none;padding:2px 9px;border-radius:99px;border:1px solid var(--line-2);line-height:1.6}
+.snsub a:hover{color:var(--ink);border-color:#56679b}
+.snsub a.on{color:var(--accent-ink);background:var(--accent);border-color:var(--accent);font-weight:700}
+.sidefoot{margin-top:auto;display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid var(--line)}
+.sbtn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border-radius:11px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 14px var(--font-body);cursor:pointer;text-align:left}
+.sbtn:hover{border-color:var(--accent)}
+.sbtn svg{width:18px;height:18px;color:var(--muted)}
+.sbtn span{flex:1}
+
+/* ---- 本文の枠 ---- */
+.main{margin-left:var(--sideW);min-width:0;min-height:100vh;display:flex;flex-direction:column}
+.wrap{width:100%;max-width:1320px;margin:0 auto;padding:22px 28px 64px;display:flex;flex-direction:column;gap:20px;outline:none}
+.topbar,.tabbar{display:none}
+
+/* ---- 時代バー（カルダシェフ・スライダー） ---- */
+.eradock{position:sticky;top:0;z-index:55;background:rgba(8,12,24,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.ed-grip,.ed-shead{display:none}
+.ed-bar{max-width:1320px;margin:0 auto;padding:10px 28px;display:flex;align-items:center;gap:20px}
+.ed-now{flex:none;display:flex;align-items:center;gap:10px;width:310px;min-width:0;padding:6px 10px 6px 13px;border-radius:13px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);cursor:pointer;text-align:left;font:inherit;transition:border-color .15s,background .15s}
+.ed-now:hover,.eradock.pop .ed-now{border-color:#56679b;background:var(--surface-2)}
+.ed-txt{display:flex;flex-direction:column;min-width:0;flex:1;line-height:1.25}
+.ed-when{font-size:12px;color:var(--muted)}
+.ed-name{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ed-type{flex:none;font:700 11.5px var(--font-body);padding:3px 9px;border-radius:99px;background:#ffffff0d;color:var(--ink-2);border:1px solid var(--line-2);white-space:nowrap}
+.chev{width:16px;height:16px;flex:none;color:var(--muted);transition:transform .2s}
+.eradock.pop .ed-now .chev{transform:rotate(180deg)}
+.edot{width:10px;height:10px;border-radius:50%;flex:none;display:inline-block;background:var(--past)}
+.edot.k-pre{background:var(--pre)}.edot.k-past{background:var(--past)}.edot.k-now{background:var(--accent);box-shadow:0 0 0 3px #f4b94233}.edot.k-future{background:var(--fut);box-shadow:0 0 0 3px #7fb2ff2a}
+.ed-track{position:relative;flex:1;min-width:240px;height:48px;cursor:pointer;touch-action:none;outline:none;border-radius:10px;-webkit-tap-highlight-color:transparent}
+.ed-track:focus-visible{box-shadow:0 0 0 2px var(--cool)}
+.ed-track .bar{position:absolute;left:0;right:0;top:19px;height:6px;border-radius:99px;background:#212b47}
+.ed-track .fill{position:absolute;left:0;top:19px;height:6px;border-radius:99px;background:linear-gradient(90deg,#7a5bc4,#8e98b5 45%,var(--accent));transition:width .25s ease}
+.ed-track.previewing .fill,.ed-track.previewing .knob{transition:none}
+.kseg{position:absolute;top:15px;height:14px;border-radius:99px;opacity:.15;pointer-events:none}
+.kseg.k-pre{background:var(--pre)}.kseg.k-past{background:var(--past)}.kseg.k-now{background:var(--accent);opacity:.3}.kseg.k-future{background:var(--fut)}
+.kseglab{position:absolute;top:31px;transform:translateX(-50%);font-size:11.5px;color:var(--muted);white-space:nowrap;pointer-events:none}
+.kseglab.k-pre{color:#c3a9ff}.kseglab.k-now{color:var(--accent);font-weight:700}.kseglab.k-future{color:#9cc4ff}
+.kstop{position:absolute;top:22px;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:#5a6585;pointer-events:none}
+.kstop.k-pre{background:#9478d6}.kstop.k-past{background:#8e98b5}.kstop.k-now{background:var(--accent)}.kstop.k-future{background:#76a3ea}
+.kstop.kty{width:10px;height:10px;margin:-5px 0 0 -5px;box-shadow:0 0 0 2px #0b1124,0 0 0 3.5px #7fb2ff99}
+.kstop.on{opacity:0}
+.ktylab{position:absolute;top:1px;transform:translateX(-50%);font:700 10.5px var(--font-num);color:#9cc4ff;pointer-events:none}
+.ktylab.off,.kseglab.off{visibility:hidden}
+.knob{position:absolute;top:22px;left:0;width:0;height:0;transition:left .25s ease;pointer-events:none;z-index:2}
+.knob i{position:absolute;left:-11px;top:-11px;width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid var(--accent);box-shadow:0 0 0 5px #f4b94230,0 2px 10px #000a}
+.ed-track:active .knob i{box-shadow:0 0 0 8px #f4b94238,0 2px 10px #000a}
+.ktip{position:absolute;top:calc(100% + 6px);transform:translateX(-50%);background:#0e1630;border:1px solid var(--line-2);border-radius:9px;padding:5px 11px;font-size:12.5px;white-space:nowrap;pointer-events:none;z-index:5;box-shadow:var(--shadow);display:flex;gap:8px;align-items:baseline}
+.ktip[hidden]{display:none}
+.ktip b{color:var(--accent);font-weight:600;font-size:12px}
+.ed-btns{flex:none;display:flex;gap:6px}
+.ed-b{height:38px;min-width:38px;padding:0 10px;border-radius:11px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font:700 13.5px var(--font-body);cursor:pointer;display:grid;place-items:center;transition:border-color .15s}
+.ed-b svg{width:18px;height:18px}
+.ed-b:hover{border-color:var(--accent)}
+.ed-home{padding:0 14px}
+.ed-pop{display:none}
+.eradock.pop .ed-pop{display:block;position:absolute;left:max(14px,calc((100% - 1320px)/2 + 28px));top:calc(100% + 6px);width:min(460px,calc(100% - 28px));max-height:min(72vh,660px);overflow:auto;background:#0d1428;border:1px solid var(--line-2);border-radius:16px;box-shadow:0 24px 60px #000c;padding:8px 8px 10px;z-index:70;overscroll-behavior:contain}
+.ed-note{margin:6px 8px 8px;font-size:13px;color:var(--muted);line-height:1.65}
+.edg{margin-bottom:4px}
+.edgh{font-size:12px;font-weight:700;color:var(--muted);padding:8px 10px 4px;letter-spacing:.06em}
+.edgh.k-pre{color:#c3a9ff}.edgh.k-now{color:var(--accent)}.edgh.k-future{color:#9cc4ff}
+.edi{display:grid;grid-template-columns:10px 116px minmax(0,1fr) auto;align-items:center;gap:10px;width:100%;padding:8px 10px;border:0;border-radius:10px;background:transparent;color:var(--ink);font:inherit;font-size:14px;text-align:left;cursor:pointer;line-height:1.4}
+.edi:hover{background:#ffffff0c}
+.edi.on{background:#f4b9421c;box-shadow:inset 0 0 0 1px #f4b94270}
+.edi i{width:9px;height:9px;border-radius:50%;background:var(--past)}
+.edi.k-pre i{background:var(--pre)}.edi.k-now i{background:var(--accent)}.edi.k-future i{background:var(--fut)}
+.edi .w{font-size:12.5px;color:var(--muted)}
+.edi b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.edi .t{font-size:11.5px;color:var(--muted);white-space:nowrap}
+.flash{animation:flashk 1.3s ease}
+@keyframes flashk{0%,35%{box-shadow:0 0 0 3px var(--accent),0 0 26px #f4b942aa}100%{box-shadow:0 0 0 0 transparent}}
+.scrim{position:fixed;inset:0;z-index:325;background:rgba(2,4,10,.55)}
+.scrim[hidden]{display:none}
+
+/* ---- 各ページの見出し ---- */
+section.view{gap:16px}
+.view.staged>.view-head,.view-head{display:flex;flex-direction:column;align-items:flex-start;gap:4px;margin:0}
+.view-head h2{font:900 25px/1.25 var(--font-display);letter-spacing:.02em;margin:0}
+.view-head h2 small{font:600 13px var(--font-body);color:var(--muted);margin-left:10px;letter-spacing:0}
+.view-head p{margin:0;color:var(--ink-2);font-size:14px;max-width:80ch}
+.vh-more{margin-top:4px;max-width:96ch;width:100%}
+.vh-more>summary{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:#a9c8ff;list-style:none;padding:3px 11px 3px 6px;border-radius:99px;border:1px solid #7fb2ff40;background:#7fb2ff0e;user-select:none;-webkit-user-select:none}
+.vh-more>summary::-webkit-details-marker{display:none}
+.vh-more>summary::before{content:"i";display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#7fb2ff38;font:700 11px/1 var(--font-num);color:#e3eeff}
+.vh-more>summary::after{content:"";width:6px;height:6px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:rotate(45deg) translate(-2px,-2px);margin-left:2px;transition:transform .2s}
+.vh-more[open]>summary::after{transform:rotate(-135deg) translate(-1px,-1px)}
+.vh-more>summary:hover{border-color:#7fb2ff88}
+.vh-more>p{margin:10px 0 4px;color:var(--ink-2);font-size:13.5px;line-height:1.85;max-width:none}
+.vh-more .tllegend{margin:10px 0 2px}
+
+/* ---- 部品：パネル・チップ・切り替え・注記 ---- */
+.panel{background:linear-gradient(180deg,var(--surface),#0d1427);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px}
+.gauge-head b{font-size:16px}
+.gauge-head span,.gauge-foot{font-size:13px;color:var(--muted)}
+.view .note{font-size:13px;color:var(--muted);line-height:1.75}
+.legend,.tllegend{font-size:13px;color:var(--muted)}
+.tllegend{border-color:var(--line-2);background:#ffffff04}
+.chip{font:500 13px var(--font-body);color:var(--ink-2);background:#ffffff06;border:1px solid var(--line-2);border-radius:999px;padding:5px 13px;min-height:32px;line-height:1.4;transition:border-color .15s,background .15s,color .15s}
+.chip:hover{border-color:#5d6ea3;color:var(--ink)}
+.chip[aria-pressed="true"]{color:var(--ink);background:#26355e;border-color:#6d80bb}
+a.chip{text-decoration:none}
+.tlswitch,.histsw{display:inline-flex;align-self:flex-start;gap:4px;padding:4px;border-radius:14px;background:#0c1325;border:1px solid var(--line);margin:0;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.tlswitch::-webkit-scrollbar,.histsw::-webkit-scrollbar,.ctabs::-webkit-scrollbar{display:none}
+.tlswitch button,.scaleswitch a,.histsw button{flex:none;font:600 14px var(--font-body);color:var(--muted);background:transparent;border:0;border-radius:10px;padding:7px 16px;cursor:pointer;text-decoration:none;white-space:nowrap;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;line-height:1.35;transition:background .15s,color .15s}
+.tlswitch button:hover,.scaleswitch a:hover,.histsw button:hover{color:var(--ink);background:#ffffff0a}
+.tlswitch button[aria-pressed="true"],.scaleswitch a.on,.histsw button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.tlswitch button small{font-size:11.5px;font-weight:500;opacity:.85}
+.histsw{margin-bottom:10px}
+.ctabs{gap:4px;border-bottom:1px solid var(--line-2);padding:0 4px;scrollbar-width:none}
+.ctabs button{font:600 13.5px var(--font-body);border-radius:11px 11px 0 0;padding:9px 16px;background:transparent;border:1px solid transparent;border-bottom:0;color:var(--muted)}
+.ctabs button:hover{background:#ffffff0a;color:var(--ink)}
+.ctabs button[aria-selected="true"]{background:var(--surface-2);color:var(--ink);border-color:var(--line-2);padding-top:9px}
+.ctabbody{background:var(--surface-2);border:1px solid var(--line-2);border-top:0;border-radius:0 0 var(--r-lg) var(--r-lg)}
+.thdock{border-radius:var(--r-lg);border-color:var(--line);background:linear-gradient(180deg,#0f1730,#0b1122);padding:6px 16px}
+.thdock summary{padding:8px 0;font-size:15px;list-style:none;display:block}
+.thdock summary::-webkit-details-marker{display:none}
+.thdock summary::before{content:"▶";display:inline-block;font-size:11px;color:var(--accent);margin-right:10px;transition:transform .2s;vertical-align:2px}
+.thdock[open] summary::before{transform:rotate(90deg)}
+.thdock summary small{font-size:13px;margin-left:8px}
+.thdock[open]{padding-bottom:14px}
+.erabar{border-radius:var(--r);font-size:13.5px;padding:10px 14px}
+.erabtns{display:flex;gap:6px;flex-wrap:wrap}
+.hello{border-radius:var(--r-lg);padding:14px 18px}
+.hello span{font-size:13.5px}
+.sp-only{display:none}
+.kstep{display:none}
+.mnode{border-radius:14px}
+.mnode .l{font-size:13px}
+.mnode .go{font-size:12px}
+.core .facts{font-size:12.5px}
+.kcard p{font-size:14px}
+.kstat span{font-size:12.5px}
+.foot{margin-top:14px;border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:13px}
+.foot summary{cursor:pointer;color:var(--ink-2);font-weight:600;font-size:13.5px;padding:4px 0;width:fit-content}
+.foot p{margin:8px 0 0;max-width:120ch;line-height:1.8}
+
+/* ---- 図の上の操作ボタン（ズーム・全画面など）をそろえる ---- */
+.gtools,.mapctl{background:rgba(9,13,26,.9);border:1px solid var(--line-2);border-radius:13px;padding:5px;gap:5px;box-shadow:0 8px 24px #0008;max-width:calc(100% - 20px);overflow-x:auto;scrollbar-width:none}
+.gtools::-webkit-scrollbar,.mapctl::-webkit-scrollbar,.sptools::-webkit-scrollbar,.scenectl::-webkit-scrollbar{display:none}
+.gtools button,.mapctl button,.sptools button,.bgtools button,.gntools button,.thbz button,.spbtools button,.whtools button{height:32px;min-width:32px;padding:0 11px;border-radius:9px;border:1px solid var(--line-2);background:#141d36;color:var(--ink);font:600 13px var(--font-body);cursor:pointer;white-space:nowrap;flex:none;transition:border-color .15s,color .15s}
+.gtools button:hover,.mapctl button:hover,.sptools button:hover,.bgtools button:hover,.gntools button:hover,.thbz button:hover,.spbtools button:hover,.whtools button:hover{border-color:var(--accent)}
+.sptools{gap:6px}.sptools button{background:rgba(9,13,26,.88);height:34px}
+.bgtools{gap:5px;right:10px;top:10px;align-items:center}
+.bgwrap{touch-action:pan-y}
+.gtoggle{white-space:nowrap;font-size:12.5px}
+.ghint{font-size:12.5px;bottom:auto;top:50px}
+.mapctl span{white-space:nowrap}
+.fsbtn{position:absolute;top:10px;right:10px;z-index:6;width:36px;height:36px;display:grid;place-items:center;padding:0;border-radius:10px;border:1px solid var(--line-2);background:rgba(9,13,26,.88);color:var(--ink);cursor:pointer;box-shadow:0 4px 14px #0007;transition:border-color .15s,color .15s}
+.fsbtn svg{width:18px!important;height:18px!important;min-width:0!important;display:block}
+.fsbtn:hover,.fsbtn.on{border-color:var(--accent);color:var(--accent)}
+.bgtools .fsbtn{position:static;width:32px;height:32px;box-shadow:none}
+.thwrap .thlog{top:58px}
+.is-fs{position:fixed!important;inset:0!important;z-index:300!important;width:auto!important;height:auto!important;max-height:none!important;min-height:0!important;margin:0!important;border-radius:0!important;border:0!important}
+body.fs-on{overflow:hidden}
+.bgwrap.is-fs{overflow:auto!important;background:#070b18;padding-top:4px}
+.loc3d.is-fs .scene{height:100%!important;min-height:0!important}
+.is-fs .fsbtn{top:calc(10px + var(--sat))}
+
+/* ---- PC：詳細が画面外に出たときの「詳細を見る」 ---- */
+.jumppill{position:fixed;left:calc(50% + var(--sideW)/2);bottom:24px;transform:translateX(-50%);z-index:150;display:flex;align-items:center;gap:8px;padding:10px 18px 10px 14px;border-radius:99px;border:1px solid #f4b94288;background:#1b2647;color:var(--ink);font:600 14px var(--font-body);box-shadow:0 12px 30px #000a;cursor:pointer;animation:pillin .3s ease}
+.jumppill svg{width:18px;height:18px;color:var(--accent)}
+.jumppill[hidden]{display:none}
+@keyframes pillin{from{opacity:0;transform:translate(-50%,10px)}}
+.dsheet[hidden]{display:none!important}
+/* 詳細パネル（PCは図の下に全幅）：閉じるボタンは右上、図版と本文は読みやすい幅に */
+.detail>.gclose{align-self:flex-end;float:none;position:sticky;top:8px;margin:0 0 -40px;width:34px;height:34px;border-radius:50%;font-size:16px;z-index:3;flex:none}
+.view.staged .gpanel>.plate,.view.staged .whpanel>.ev3d{max-width:560px}
+.view.staged .gpanel>*,.view.staged .whpanel>*{max-width:920px}
+.toast{bottom:24px;left:calc(50% + var(--sideW)/2);font-size:13.5px}
+
+/* ---- 検索・使い方 ---- */
+.sx{background:rgba(3,5,12,.72)}
+.sxbox{border-radius:18px;border-color:var(--line-2);background:#0d1428}
+.sxin svg{width:20px;height:20px;flex:none;color:var(--muted)}
+.sxx{display:inline-flex;align-items:center;gap:6px;background:transparent;border:0;padding:4px;color:var(--muted);cursor:pointer;font:500 13px var(--font-body)}
+.sxx span{display:none}
+.sxt small{font-size:12px}
+.hxsteps li{font-size:14px}
+.hxbox .gclose{align-self:flex-end;position:sticky;top:0;float:none;margin:0 -6px -34px 0;width:36px;height:36px;border-radius:50%;font-size:18px;flex:none}
+.hxfs{display:inline-grid;place-items:center;width:20px;height:20px;border:1px solid var(--line-2);border-radius:5px;font-size:12px}
+
+/* ---- 全体の説明文を読みやすい大きさに（13px以上） ---- */
+.whhint,.ccount,.dayhint,.spbarhead,.thbarhead,.whcount,.sphint,.pmhead span,.cshape p,.lun p,.spshd,.tgbody p,.tgbody li,.slot p,.card p{font-size:13px!important}
+.lvbody li,.lvbody p,.lvmyth dt,.lvmyth dd{font-size:13px!important}
+.lvmore summary{font-size:13px}
+
+/* ===== タブレット（768〜1099px）：メニューはアイコンだけの細い列に ===== */
+@media (max-width:1099px){
+  :root{--sideW:86px}
+  .side{padding:12px 8px;gap:2px}
+  .brand{justify-content:center;padding:4px 0 12px}
+  .brand .bt{display:none}
+  .sn{grid-template-columns:1fr;justify-items:center;gap:3px;padding:8px 2px;text-align:center}
+  .snt,.snn{display:none}
+  .snr{display:block;font-size:11px;font-weight:600;line-height:1.25;color:inherit}
+  .sn.on::before{left:-8px}
+  .snsub{display:none}
+  .sbtn{justify-content:center;padding:10px 0}.sbtn span,.sbtn kbd{display:none}
+  .ed-bar{padding:10px 20px;gap:14px}
+  .ed-now{width:220px}
+  .ed-home{padding:0 10px}
+  .wrap{padding:20px 20px 56px}
+  .kstat{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+/* ===== スマホ（〜767px） ===== */
+@media (max-width:767px){
+  html{scroll-padding-top:calc(var(--stickyH) + 10px)}
+  body{padding-bottom:calc(var(--tabH) + var(--sab));background-attachment:scroll}
+  .side{display:none}
+  .main{margin-left:0}
+  .topbar{display:flex;position:sticky;top:0;z-index:58;align-items:center;gap:8px;height:calc(56px + var(--sat));padding:var(--sat) 10px 0;background:#080c18;border-bottom:1px solid var(--line)}
+  .topbar .brand{display:none}
+  .erachip{flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:42px;padding:0 10px 0 12px;border-radius:13px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font:600 14px var(--font-body);cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .ec-when{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+  .ec-type{flex:none;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:99px;background:#ffffff10;border:1px solid var(--line-2);color:var(--ink-2)}
+  .ibtn{flex:none;width:42px;height:42px;border-radius:13px;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .ibtn svg{width:21px;height:21px}
+  /* 時代：下から出るシート */
+  .eradock{position:fixed;left:0;right:0;top:auto;bottom:0;z-index:330;display:flex;flex-direction:column;max-height:88svh;padding:0 0 calc(10px + var(--sab));background:#0e1529;border:1px solid var(--line-2);border-bottom:0;border-radius:22px 22px 0 0;box-shadow:0 -18px 50px #000c;transform:translateY(105%);visibility:hidden;transition:transform .28s ease,visibility 0s .28s;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .eradock.open{transform:none;visibility:visible;transition:transform .28s ease}
+  .ed-grip{display:block;width:44px;height:5px;border-radius:99px;background:#4a5884;margin:8px auto 0;flex:none}
+  .ed-shead{display:flex;align-items:center;gap:10px;padding:6px 14px 6px 18px;flex:none}
+  .ed-shead b{font:900 18px var(--font-display)}
+  .ed-shead span{font-size:12.5px;color:var(--muted)}
+  .ed-close{margin-left:auto;width:38px;height:38px;border-radius:50%;border:1px solid var(--line-2);background:#141d36;color:var(--ink);display:grid;place-items:center;cursor:pointer}
+  .ed-close svg{width:16px;height:16px}
+  .ed-bar{flex-wrap:wrap;padding:4px 16px 6px;gap:10px;flex:none}
+  .ed-now{width:100%;cursor:default;padding:8px 12px}
+  .ed-now .chev{display:none}
+  .ed-name{font-size:16px}
+  .ed-track{order:3;flex-basis:100%;min-width:0;height:56px;margin:2px 8px 0}
+  .ed-track .bar,.ed-track .fill{top:23px}
+  .kseg{top:19px}.kstop{top:26px}.knob{top:26px}.kseglab{top:36px;font-size:11px}.ktylab{top:4px}
+  .knob i{left:-13px;top:-13px;width:26px;height:26px}
+  .ktip{top:auto;bottom:calc(100% + 2px)}
+  .ed-btns{order:4;width:100%;display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:8px}
+  .ed-b{height:44px;font-size:14px}
+  .ed-pop{display:block;flex:1;min-height:0;overflow-y:auto;padding:0 10px 4px;margin-top:4px;border-top:1px solid var(--line);overscroll-behavior:contain}
+  .ed-note{margin:10px 8px 6px}
+  .edi{grid-template-columns:10px 100px minmax(0,1fr) auto;padding:11px 10px;font-size:14.5px}
+  body.sheet-lock{overflow:hidden}
+  /* 下のタブ */
+  .tabbar{display:grid;position:fixed;left:0;right:0;bottom:0;z-index:100;grid-template-columns:repeat(6,1fr);height:calc(var(--tabH) + var(--sab));padding:0 2px var(--sab);background:#080c18;border-top:1px solid var(--line)}
+  .tb{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);text-decoration:none;font-size:11px;font-weight:600;position:relative;letter-spacing:-.02em;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+  .tb svg{width:24px;height:24px}
+  .tb.on{color:var(--accent)}
+  .tb.on::before{content:"";position:absolute;top:0;left:22%;right:22%;height:3px;border-radius:0 0 3px 3px;background:var(--accent)}
+  /* 本文 */
+  .wrap{padding:14px 12px 28px;gap:16px}
+  section.view{gap:14px}
+  .view-head h2{font-size:21px}
+  .view-head h2 small{display:block;margin:2px 0 0}
+  .thdock summary small{display:block;margin:4px 0 0 21px}
+  .thdock:not([open]) summary small{display:none}
+  .panel{padding:14px;border-radius:14px}
+  .chip{min-height:36px;padding:6px 14px}
+  .sp-only{display:inline}.pc-only{display:none}
+  /* 横に流れる列（折り返さず横スクロール。右端を薄くして続きがあることを示す） */
+  #gchips,#maplayers,#mapchips,#bodysel,#tlregions,#thview,#thspeed,#thjumps,.ptlegend,#v-micro.staged>.mclist,.ebtoc,.tlswitch,.histsw,.scaleswitch,.ctabs{flex-wrap:nowrap!important;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent)}
+  #gchips::-webkit-scrollbar,#maplayers::-webkit-scrollbar,#mapchips::-webkit-scrollbar,#bodysel::-webkit-scrollbar,#tlregions::-webkit-scrollbar,#thview::-webkit-scrollbar,#thspeed::-webkit-scrollbar,#thjumps::-webkit-scrollbar,.ptlegend::-webkit-scrollbar,.mclist::-webkit-scrollbar,.ebtoc::-webkit-scrollbar{display:none}
+  #gchips>*,#maplayers>*,#mapchips>*,#bodysel>*,#tlregions>*,#thview>*,#thspeed>*,#thjumps>*,.ptlegend>*,.mclist>*,.ebtoc>*{flex:none}
+  .tlswitch,.histsw,.scaleswitch{align-self:stretch}
+  .tlswitch button,.scaleswitch a,.histsw button{padding:7px 14px}
+  #v-micro.staged>.mclist{max-height:none;padding-bottom:2px}
+  .throw{flex-wrap:nowrap;gap:8px}.throw>.chips{min-width:0;flex:1}
+  .throw .lab{flex:none;white-space:nowrap;width:4.2em}
+  .thbarhead{flex-direction:column;align-items:flex-start;gap:6px}
+  .thbz{flex-wrap:wrap}
+  .thcap{left:10px;right:auto;bottom:10px;max-width:calc(64% - 14px)!important;padding:9px 11px}
+  .thcap h3{font-size:17px;margin:0 0 4px}
+  .thcap p{font-size:13px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .thpiplab{font-size:11px;padding:3px 6px}
+  .thcap .chip{min-height:30px;padding:3px 10px;font-size:12.5px}
+  /* 図・地図・3Dの高さ（画面の外で縦スクロールできる余白を残す） */
+  .gcanvas{height:clamp(340px,60svh,560px);min-height:0}
+  .spscene{height:clamp(300px,56svh,520px);min-height:0}
+  #mapbox{height:clamp(260px,78vw,50svh);min-height:0}
+  .scene{height:clamp(260px,46svh,420px);min-height:0}
+  .thwrap{height:clamp(280px,52svh,480px);min-height:0}
+  .gitnav{max-height:34svh}
+  .whscroll{height:min(62svh,560px)}
+  .info{max-height:50svh}
+  .spinfo,.locinfo{max-height:none}
+  .kcanvas{height:230px}
+  /* 図の上の操作ボタン */
+  .gtools{left:8px;right:auto;top:auto;bottom:8px;max-width:calc(100% - 16px)}
+  .gtools button{height:34px;padding:0 10px}
+  .ghint,.gzoom{display:none}
+  .mapctl{right:8px;bottom:8px;max-width:calc(100% - 16px)}
+  .mapctl button{height:34px}
+  .mapctl span,.mapctl .l-lg,.sptools .l-lg{display:none}
+  .sptools .l-sm{display:inline}
+  .sptools{left:8px;right:8px;bottom:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .scenectl{left:8px;top:8px;right:54px;flex-direction:row;flex-wrap:nowrap;align-items:center;overflow-x:auto;gap:6px;scrollbar-width:none}
+  .scenectl .chips{flex-wrap:nowrap;gap:4px}
+  .scenectl .chip{min-height:30px;padding:3px 10px;font-size:12.5px;flex:none}
+  .threset{right:12px;top:54px}
+  .thbar{flex-wrap:wrap;gap:8px 12px}
+  .thscrubw{order:3;flex-basis:100%}
+  .thyear{min-width:0;text-align:left;flex:1}
+  .thplay{min-width:0}
+  .whhint{display:none}
+  .whh{--whc0:96px;--whc:200px}
+  .whreg{padding:8px}.whreg b{font-size:12.5px}
+  .bgtools button{height:34px}
+  /* 全体マップ */
+  .kgrid{grid-template-columns:1fr}
+  .kstat{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .kstat div{padding:7px 8px}
+  .kstat b{font-size:14px}
+  .kcard{min-height:0}
+  .kstep{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:8px;margin-top:10px}
+  .kstep .chip{justify-content:center}
+  .kstep .kpick{border-color:#f4b94288;color:var(--accent)}
+  .mm{grid-template-columns:1fr 1fr;gap:10px}
+  .mm .core{grid-column:1/-1;width:min(250px,100%)}
+  .mnode{padding:10px 11px}
+  .mnode .v{font-size:15.5px}
+  .mnode .t{font-size:14px}
+  /* 宇宙の法則・地球大全 */
+  .lpgrid{grid-template-columns:1fr}
+  .ctabbody{padding:14px}
+  .ebtoc{position:sticky!important;top:calc(var(--stickyH) + 6px)!important;z-index:8;flex-direction:row!important;max-height:none!important;padding:6px!important;background:#111a30!important;-webkit-mask-image:none!important;mask-image:none!important;box-shadow:0 6px 16px #0009}
+  .ebtoc a{white-space:nowrap;font-size:13px!important;padding:6px 10px!important}
+  .ebch{padding:16px 14px}
+  /* 詳細：画面の下から出るシート */
+  .dsheet{position:fixed;left:0;right:0;bottom:calc(var(--tabH) + var(--sab));z-index:320;display:flex;flex-direction:column;max-height:min(64svh,calc(100svh - var(--stickyH) - var(--tabH) - var(--sab) - 18px));background:#0e1529;border:1px solid var(--line-2);border-bottom:0;border-radius:20px 20px 0 0;box-shadow:0 -14px 40px #000b;transition:max-height .28s ease}
+  .dsheet[data-state="peek"]{max-height:156px}
+  body.fs-on .dsheet{bottom:0;padding-bottom:var(--sab)}
+  .ds-bar{flex:none;position:relative;height:34px;touch-action:none}
+  .ds-grip{width:100%;height:100%;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;padding:0}
+  .ds-grip i{width:46px;height:5px;border-radius:99px;background:#4f5e8d}
+  .ds-x{position:absolute;right:8px;top:6px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line-2);background:#141d36;color:var(--ink);display:grid;place-items:center;cursor:pointer;z-index:2;padding:0}
+  .ds-x svg{width:16px;height:16px}
+  .ds-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 14px 16px}
+  .dsheet[data-state="peek"] .ds-body{overflow:hidden;-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)}
+  .ds-body>aside:not([hidden]){position:static!important;width:auto!important;height:auto!important;max-height:none!important;min-height:0!important;border:0!important;background:transparent!important;box-shadow:none!important;padding:0 2px!important;margin:0!important;overflow:visible!important;display:flex!important;flex-direction:column;gap:10px}
+  .ds-body>#info:not([hidden]){display:block!important}
+  .ds-body .gclose,.ds-body .backlist{display:none!important}
+  .ds-body h3{padding-right:40px}
+  body.ds-on .wrap{padding-bottom:180px}
+  body.ds-on .is-fs .gtools,body.ds-on .is-fs .mapctl,body.ds-on .is-fs .sptools{bottom:166px}
+  .jumppill{display:none!important}
+  .toast{left:50%;bottom:calc(var(--tabH) + var(--sab) + 14px)}
+  body.ds-on .toast{bottom:calc(var(--tabH) + var(--sab) + 170px)}
+  /* 検索・使い方：画面いっぱい */
+  .sx{padding:0!important;align-items:stretch}
+  .sxbox{width:100%;max-height:none!important;height:100%;border-radius:0;border:0;padding-top:var(--sat)}
+  .sxin{padding:10px 12px}
+  .sxx kbd{display:none}.sxx span{display:inline;padding:6px 4px}
+  .sxfoot span:not(#sxcount){display:none}
+  .sxr{padding:10px 8px}
+  .hxbox{padding:18px 16px calc(24px + var(--sab))}
+  .hx-kbd{display:none}
+}
+@media (max-width:380px){
+  .tb span{font-size:10px}
+  .ec-type{display:none}
+  .edi{grid-template-columns:10px 88px minmax(0,1fr)}
+  .edi .t{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .ed-track .fill,.knob,.eradock,.dsheet,.chev{transition:none!important}
+  .flash{animation:none}
+}
 </style>
 </head>
 <body>
 <div class="veil" id="veil"></div>
-<div class="wrap">
-  <header class="top">
-    <div>
-      <h1>カルダシェフ文明マップ</h1>
-      <p class="sub" id="modesub">文明レベルごとに、同じビューで世界を描くガイドブック。いまは「現在の地球」を表示中。</p>
-    </div>
-    <div class="ktype" id="ktype" aria-live="polite"></div>
-  </header>
-
-  <div class="kglobal" aria-label="カルダシェフ・スライダー（全ビュー共通）"><div class="kglabel"><b>カルダシェフ・スライダー</b><span>動かすと全ビューの時代が切り替わります</span></div>
-      <div class="track ktrack" id="track"><div class="bar"></div><div class="fill" id="fill"></div><div class="knob" id="knob" role="slider" aria-label="時代"><em></em><i></i></div></div>
-      <input type="range" id="krange" min="-0.6" max="4" step="0.01" class="krange" aria-label="カルダシェフ値">
-      <div class="kbtns"><button class="chip" id="kprev">◀ 前の時代</button><button class="chip" id="know">現在に戻る</button><button class="chip" id="knext">次の時代 ▶</button><span class="klegend"><i class="d pre"></i>宇宙・地球史<i class="d past"></i>過去（推定）<i class="d isnow"></i>現在<i class="d fut"></i>未来（想定）</span></div>
+<a class="skip" href="#content">本文へ移動</a>
+<!-- 画面の枠：PC＝左のメニュー＋上の時代バー／スマホ＝上のバー＋下のタブ＋時代のシート -->
+<aside class="side" id="side" aria-label="メニュー">
+  <a class="brand" href="#overview" aria-label="カルダシェフ文明マップ（全体マップへ）">
+    <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="4" fill="#f4b942"/><circle cx="16" cy="16" r="8.5" fill="none" stroke="#7fb2ff" stroke-width="1.8"/><circle cx="16" cy="16" r="13" fill="none" stroke="#b48cff" stroke-width="1.8" opacity=".8"/><circle cx="24.5" cy="16" r="2.2" fill="#7fb2ff"/><circle cx="7.4" cy="10.6" r="1.7" fill="#b48cff"/></svg>
+    <span class="bt"><b>カルダシェフ</b><small>文明マップ</small></span>
+  </a>
+  <nav class="sidenav" id="views" aria-label="ページ"></nav>
+  <div class="sidefoot">
+    <button type="button" class="sbtn" data-act="search" aria-label="全体を検索（/ キー）"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span>検索</span><kbd>/</kbd></button>
+    <button type="button" class="sbtn" data-act="help" aria-label="使い方とショートカット（? キー）"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.5"/><circle cx="12" cy="16.9" r=".6"/></svg><span>使い方</span><kbd>?</kbd></button>
   </div>
-  <nav class="views" id="views" aria-label="ビュー"></nav>
+</aside>
+<div class="main">
+  <h1 class="sr-only">カルダシェフ文明マップ</h1>
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#overview" aria-label="全体マップへ"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="4" fill="#f4b942"/><circle cx="16" cy="16" r="8.5" fill="none" stroke="#7fb2ff" stroke-width="1.8"/><circle cx="16" cy="16" r="13" fill="none" stroke="#b48cff" stroke-width="1.8" opacity=".8"/><circle cx="24.5" cy="16" r="2.2" fill="#7fb2ff"/><circle cx="7.4" cy="10.6" r="1.7" fill="#b48cff"/></svg></a>
+    <button type="button" class="erachip" id="erachip" aria-haspopup="dialog" aria-controls="eradock" aria-label="時代を選ぶ"><i class="edot k-now" data-era-dot></i><span class="ec-when" data-era-when>2025年（現在）</span><span class="ec-type" data-era-type>Type 0</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+    <button type="button" class="ibtn" data-act="search" aria-label="全体を検索"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button>
+    <button type="button" class="ibtn" data-act="help" aria-label="使い方"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.5"/><circle cx="12" cy="16.9" r=".6"/></svg></button>
+  </header>
+  <!-- カルダシェフ・スライダー（すべてのページに共通の時代）。PCは上に固定のバー、スマホは下から出るシート -->
+  <section class="eradock" id="eradock" aria-label="時代（カルダシェフ・スライダー）">
+    <div class="ed-grip" aria-hidden="true"></div>
+    <div class="ed-shead"><b>時代を選ぶ</b><span>カルダシェフ・スライダー</span><button type="button" class="ed-close" id="edClose" aria-label="閉じる"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="ed-bar">
+      <button type="button" class="ed-now" id="edNow" aria-expanded="false" aria-controls="edPop" title="時代の一覧を開く">
+        <i class="edot k-now" data-era-dot></i>
+        <span class="ed-txt"><span class="ed-when num" data-era-when>2025年（現在）</span><b class="ed-name" data-era-name>現在の地球</b></span>
+        <span class="ed-type" data-era-type>Type 0</span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="ed-track" id="track" role="slider" tabindex="0" aria-label="時代（カルダシェフ・スライダー）。左右キーで前後の時代へ"><div class="bar"></div><div class="fill" id="fill"></div><div class="knob" id="knob" aria-hidden="true"><i></i></div></div>
+      <div class="ed-btns">
+        <button type="button" class="ed-b" id="kprev" aria-label="前の時代" title="前の時代（[ キー）"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button type="button" class="ed-b ed-home" id="know" title="現在に戻る（0 キー）">現在</button>
+        <button type="button" class="ed-b" id="knext" aria-label="次の時代" title="次の時代（] キー）"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+    <div class="ed-pop" id="edPop">
+      <p class="ed-note" id="edNote"></p>
+      <div class="ed-list" id="edList" role="listbox" aria-label="時代の一覧"></div>
+    </div>
+  </section>
+  <div class="scrim" id="scrim" hidden></div>
+<main class="wrap" id="content" tabindex="-1">
 
   <!-- ① 全体マップ -->
   <section class="view" id="v-overview">
     <div class="panel kpanel">
-      <div class="gauge-head"><b>エネルギー利用量で見る文明の歩み</b><span>つまみをスライドすると時代が動きます。セーガンの式 K = (log₁₀P − 6) / 10　P＝文明全体の消費電力（W）</span></div>
+      <div class="gauge-head"><b>エネルギー利用量で見る文明の歩み</b><span>時代を切り替えると、文明の姿と数値が変わります。セーガンの式 K = (log₁₀P − 6) / 10　P＝文明全体の消費電力（W）</span></div>
       <div class="kgrid">
         <canvas id="kcanvas" class="kcanvas" aria-label="選んだ時代の文明のイメージ"></canvas>
         <div class="kcard" id="kcard" aria-live="polite"></div>
       </div>
+      <div class="kstep" aria-label="時代の切り替え"><button type="button" class="chip" data-kstep="-1">‹ 前の時代</button><button type="button" class="chip kpick" data-kstep="0">時代を選ぶ</button><button type="button" class="chip" data-kstep="1">次の時代 ›</button></div>
 
     </div>
     <div class="view-head"><h2>全体マップ</h2><p id="mmnote">12分野の現在地。カードを押すと、その分野の系統樹へ移動します。</p></div>
@@ -752,9 +1156,19 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ② 年表 -->
   <section class="view" id="v-timeline">
-    <div class="view-head"><h2 id="tlhead">宇宙年表</h2><p>宇宙・地球史・世界史の3つの年表を切り替えられます。宇宙と地球史はGitHubのブランチのように、枝分かれ（分岐）と合流で表示。点線は仮説や予測です。ホイールでズーム、ドラッグで移動、線や点を押すと詳細。</p></div>
+    <div class="view-head"><h2 id="tlhead">宇宙年表</h2><p class="lead">宇宙・地球史・世界史の3つの年表。出来事（点）を押すと、説明とその場面の3Dが出ます。</p>
+      <details class="vh-more" id="tlmore"><summary>見方と操作</summary><p>宇宙・地球史・世界史の3つの年表を切り替えられます。宇宙と地球史はGitHubのブランチのように、枝分かれ（分岐）と合流で表示。点線は仮説や予測です。ホイール（スマホは2本指のピンチ）でズーム、ドラッグで横に移動、線や点を押すと詳細。</p>
+      <div class="tllegend"><b>点の見方</b>
+      <span><svg width="16" height="16"><circle cx="8" cy="8" r="5" fill="#0a0f1f" stroke="#7fb2ff" stroke-width="2.4"/></svg>出来事（押すと説明と3D）</span>
+      <span><svg width="18" height="18"><polygon points="9,1 11,6.5 17,7 12.4,10.6 14,16.5 9,13.2 4,16.5 5.6,10.6 1,7 7,6.5" fill="#f4d06a"/></svg>特別な3D映像あり（専用の場面・小道具）</span>
+      <span><svg width="16" height="16"><circle cx="8" cy="8" r="4.5" fill="#7fb2ff" stroke="#0a0f1f" stroke-width="1.5"/></svg>枝の始まり（ここで分かれた）</span>
+      <span><svg width="16" height="16"><rect x="4" y="4" width="8" height="8" fill="#0a0f1f" stroke="#7fb2ff" stroke-width="2" transform="rotate(45 8 8)"/></svg>枝の終わり（消滅・滅亡）</span>
+      <span><svg width="26" height="12"><path d="M1,10 C10,10 8,2 25,2" fill="none" stroke="#7fb2ff" stroke-width="2"/></svg>分岐・合流の線</span>
+      <span><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#c99cf2" stroke-width="2" stroke-dasharray="5 3"/></svg>点線：仮説・予測</span>
+      <span><svg width="14" height="16"><line x1="7" y1="0" x2="7" y2="16" stroke="#f4b942" stroke-width="2"/></svg>今いる位置（シアターの再生位置）</span>
+      <span>シアターのバーの点の色：地域（ヨーロッパ＝青、東アジア＝赤…）、紫＝宇宙、緑＝地球と生命、橙＝人類の誕生、水色＝未来</span></div></details></div>
     <div class="tlswitch" id="tlswitch"><button data-m="cosmos">宇宙<small>138億年＋未来</small></button><button data-m="earth">地球史<small>46億年＋未来</small></button><button data-m="hist">世界史<small>30万年</small></button></div>
-    <details class="thdock" id="thdock"><summary>🎬 3Dシアター（地球全体の映像で通し再生） <small>開くと再生プレーヤーが出ます。年表の点を押すと、その出来事の3Dが右のパネルに出ます</small></summary>
+    <details class="thdock" id="thdock"><summary>🎬 3Dシアター（地球全体の映像で通し再生） <small>開くと再生プレーヤーが出ます。年表の点を押すと、その出来事の3Dが詳細パネルに出ます</small></summary>
 <div class="thwrap">
       <div class="thstage" id="thstage" aria-label="歴史シアターの3D表示"></div>
       <div class="thphase" id="thphase"></div><div class="thpaleo" id="thpaleo"></div>
@@ -766,24 +1180,14 @@ footer p{margin:0 0 6px;max-width:120ch}
       <div class="thscrubw"><input type="range" id="thscrub" min="0" max="1000" value="0" aria-label="再生位置" hidden><div class="thticks" id="thticks" hidden></div><div class="thbarhead"><span id="thzoom"></span><span class="thbz" id="thbz"><button data-z="in">＋</button><button data-z="out">−</button><button data-z="follow">再生位置へ</button><button data-z="all">全体</button></span></div><svg id="thbar2" class="thbar2" role="img" aria-label="出来事のバー（ホイールで拡大、ドラッグで移動、点を押すとそこへ）"></svg></div>
       <span class="thyear num" id="thyear"></span>
     </div>
-    <div class="throw"><span class="lab">表示</span><div class="chips" id="thview"></div></div><div class="throw"><span class="lab">速さ</span><div class="chips" id="thspeed"></div><span class="lab">ジャンプ</span><div class="chips" id="thjumps"></div></div>
+    <div class="throw"><span class="lab">表示</span><div class="chips" id="thview"></div></div><div class="throw"><span class="lab">速さ</span><div class="chips" id="thspeed"></div></div><div class="throw"><span class="lab">ジャンプ</span><div class="chips" id="thjumps"></div></div>
     <p class="note">場所の表示：世界史の出来事は、本文の地名から位置を推定し、見つからない場合は地域内の陸地に置いています（目安）。大陸の配置は、5.4億年前から現在までは PALEOMAP（Scotese 2016、Scotese & Wright 2018、CC BY 4.0）の古地理データを2°格子にしたもの（500万年ごと）。それより古い時代は、プレートを回転させた大まかな推定です。年代には諸説あるものを含みます。</p>
       </details>
-    <div class="tllegend"><b>点の見方</b>
-      <span><svg width="16" height="16"><circle cx="8" cy="8" r="5" fill="#0a0f1f" stroke="#7fb2ff" stroke-width="2.4"/></svg>出来事（押すと説明と3D）</span>
-      <span><svg width="18" height="18"><polygon points="9,1 11,6.5 17,7 12.4,10.6 14,16.5 9,13.2 4,16.5 5.6,10.6 1,7 7,6.5" fill="#f4d06a"/></svg>特別な3D映像あり（専用の場面・小道具）</span>
-      <span><svg width="16" height="16"><circle cx="8" cy="8" r="4.5" fill="#7fb2ff" stroke="#0a0f1f" stroke-width="1.5"/></svg>枝の始まり（ここで分かれた）</span>
-      <span><svg width="16" height="16"><rect x="4" y="4" width="8" height="8" fill="#0a0f1f" stroke="#7fb2ff" stroke-width="2" transform="rotate(45 8 8)"/></svg>枝の終わり（消滅・滅亡）</span>
-      <span><svg width="26" height="12"><path d="M1,10 C10,10 8,2 25,2" fill="none" stroke="#7fb2ff" stroke-width="2"/></svg>分岐・合流の線</span>
-      <span><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#c99cf2" stroke-width="2" stroke-dasharray="5 3"/></svg>点線：仮説・予測</span>
-      <span><svg width="14" height="16"><line x1="7" y1="0" x2="7" y2="16" stroke="#f4b942" stroke-width="2"/></svg>今いる位置（シアターの再生位置）</span>
-      <span>シアターのバーの点の色：地域（ヨーロッパ＝青、東アジア＝赤…）、紫＝宇宙、緑＝地球と生命、橙＝人類の誕生、水色＝未来</span></div>
     <div id="tlw-cosmos" class="tlpane"><div class="bgrow"><div id="bg-cosmos" class="bghost"></div></div>
       <p class="note">宇宙の形の説（平坦・球・双曲・トーラス・多元宇宙）は、<a href="#space-map" onclick="setTimeout(()=>SPZ.go(SPZ.LEVELS.length-1),300)">「宇宙・地球・ミクロ」のスケール12</a>で3Dで切り替えて見られます。</p>
       <p class="note">横軸は「ビッグバンからの時間」の対数（1目盛りごとに10倍）。ごく初期の一瞬から10¹⁰⁰年後までを1本に並べるためです。ビッグバン以前と宇宙の終わり方は、確かめられていない仮説・予測です。</p></div>
     <div id="tlw-earth" class="tlpane" hidden><div class="bgrow"><div id="bg-earth" class="bghost"></div></div>
       <p class="note">横軸は区間ごとに縮尺を変えています（古い時代ほど縮めて表示）。✕は大量絶滅。大陸の系譜の古い部分（30億年以上前）は証拠が少なく、議論があります。</p></div>
-    <aside class="panel whpanel detail bgpanel" id="bgpanel" hidden></aside>
     <div id="tlw-hist" class="tlpane" hidden>
       <div class="histsw" id="histsw"><button data-hv="branch">🌿 ブランチ表示（文明の系譜）</button><button data-hv="grid">▦ 表（地域×時代）</button></div>
       <div id="hist-branch"><div class="bgrow"><div id="bg-hist" class="bghost"></div></div><p class="note">文明や国家が分かれ、合流していく流れを枝で表示。点は出来事（押すと3Dと説明）。横軸は時代ごとに縮尺を変えています。国家の系譜は代表的なものに絞った簡略図です。</p></div>
@@ -805,11 +1209,13 @@ footer p{margin:0 0 6px;max-width:120ch}
     </div>
     </div>
     </div>
+    <aside class="panel whpanel detail bgpanel" id="bgpanel" hidden></aside>
   </section>
 
   <!-- ③ 世界地図 -->
   <section class="view" id="v-world-map">
-    <div class="view-head"><h2>世界地図</h2><p>ホイール・ピンチでズーム、ドラッグで移動。国やランドマークを押すと右に情報、下にその土地の3Dの風景が出ます。全体表示からさらにズームアウトすると宇宙へ上がります。</p></div>
+    <div class="view-head"><h2>世界地図</h2><p class="lead">国やランドマークを押すと、くわしい情報とその土地の3Dの風景が出ます。</p>
+      <details class="vh-more"><summary>見方と操作</summary><p>ホイール・ピンチでズーム、ドラッグで移動。国やランドマークを押すと、地図の下（スマホは画面の下から出るパネル）に情報、その下にその土地の3Dの風景が出ます。全体表示からさらにズームアウトすると宇宙へ上がり、ズームインし続けるとミクロの世界へ進みます。</p></details></div>
     <div class="chips bodysel" id="bodysel"></div>
     <div id="pmap" class="pmap" hidden></div>
     <div class="chips" id="maplayers"></div>
@@ -817,7 +1223,7 @@ footer p{margin:0 0 6px;max-width:120ch}
     <div class="maprow">
       <div class="mapbox" id="mapbox">
         <svg id="world" role="img" aria-label="ズームできる世界地図" preserveAspectRatio="xMidYMid meet"></svg>
-        <div class="mapctl"><button id="mz-in" aria-label="ズームイン">＋</button><button id="mz-out" aria-label="ズームアウト">−</button><button id="mz-fit">全体</button><button id="mz-space">🚀 宇宙へ</button><button id="mz-micro">🔬 ミクロへ</button><span id="mapzoom" class="num"></span></div>
+        <div class="mapctl"><button id="mz-in" aria-label="ズームイン">＋</button><button id="mz-out" aria-label="ズームアウト">−</button><button id="mz-fit">全体</button><button id="mz-space">🚀<span class="l-lg"> 宇宙へ</span></button><button id="mz-micro">🔬<span class="l-lg"> ミクロへ</span></button><span id="mapzoom" class="num"></span></div>
         <div id="maptip" class="maptip" hidden></div>
       </div>
       <aside class="panel info" id="info">
@@ -838,11 +1244,12 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ④ 宇宙マップ -->
   <section class="view space" id="v-space-map">
-    <div class="view-head"><h2>宇宙と地球</h2><p>地球のまわりから宇宙の形まで5段階の「本線」（6〜10は空想の上位層。いちばん外の「無」からさらに出ると、ミクロのいちばん底「描けない底」につながります）と、そこから枝分かれする「天体の中」「銀河の中」「別の宇宙」「法則の海の島」「オムニバースの世界」。上の枝分かれ図（ホイール・ドラッグでズーム）から選ぶか、天体を選んでズームインし続けると中に入れます。惑星・月・太陽にズームインし続けると世界地図のページでその天体の地図が開き、地球なら世界地図に降ります。</p></div>
+    <div class="view-head"><h2>宇宙と地球</h2><p class="lead">地球のまわりから宇宙の形まで。天体を選んでズームインし続けると、その中へ入れます。</p>
+      <details class="vh-more"><summary>見方と操作</summary><p>地球のまわりから宇宙の形まで5段階の「本線」（6〜10は空想の上位層。いちばん外の「無」からさらに出ると、ミクロのいちばん底「描けない底」につながります）と、そこから枝分かれする「天体の中」「銀河の中」「別の宇宙」「法則の海の島」「オムニバースの世界」。上の枝分かれ図（ホイール・ドラッグでズーム）から選ぶか、天体を選んでズームインし続けると中に入れます。惑星・月・太陽にズームインし続けると世界地図のページでその天体の地図が開き、地球なら世界地図に降ります。</p></details></div>
     <div class="chips" id="splevels"></div>
     <div class="spwrap">
       <div id="spscene" class="spscene"><div id="splabels" class="splabels"></div><div id="spfade" class="spfade"></div>
-        <div class="sptools"><button id="sp-in">◀ 内側のスケールへ</button><button id="sp-out">外側のスケールへ ▶</button><button id="sp-home">🌏 地球へ戻る</button></div></div>
+        <div class="sptools"><button id="sp-in">◀ <span class="l-lg">内側のスケールへ</span><span class="l-sm">内側へ</span></button><button id="sp-out"><span class="l-lg">外側のスケールへ</span><span class="l-sm">外側へ</span> ▶</button><button id="sp-home">🌏 <span class="l-lg">地球へ戻る</span><span class="l-sm">地球</span></button></div></div>
       <aside id="spinfo" class="panel spinfo"></aside>
     </div>
     <div class="spbarhead"><span>地球からの距離（対数目盛り）— ホイールで拡大縮小、ドラッグで移動</span><span class="spbtools"><button id="spb-in">＋</button><button id="spb-out">−</button><button id="spb-all">全体</button></span></div><div class="mapbox spbarbox" id="spbarbox"><svg id="spbar" role="img" aria-label="地球からの距離の目盛り"></svg></div>
@@ -850,7 +1257,8 @@ footer p{margin:0 0 6px;max-width:120ch}
   </section>
 
   <section class="view space" id="v-micro">
-    <div class="view-head"><h2>ミクロの世界</h2><p>生き物→体と器官→細胞→生体分子→分子→物質→原子→原子核→クオーク→素粒子→量子の「本線」11段階と、その先のプランク長より下（仮説→空想）の3段階。枝分かれは「細胞の中」「微生物・ウイルス」「理論（超ひも・1〜11次元）」。選んでいるものにズームインし続けると、その「中」へ入っていきます（例：人→体→細胞→核→DNA→…）。いちばん底からさらに進むと、宇宙マップのいちばん外側「無」につながります。</p></div>
+    <div class="view-head"><h2>ミクロの世界</h2><p class="lead">生き物から素粒子・量子まで。選んだものにズームインし続けると、その「中」へ進みます。</p>
+      <details class="vh-more"><summary>見方と操作</summary><p>生き物→体と器官→細胞→生体分子→分子→物質→原子→原子核→クオーク→素粒子→量子の「本線」11段階と、その先のプランク長より下（仮説→空想）の3段階。枝分かれは「細胞の中」「微生物・ウイルス」「理論（超ひも・1〜11次元）」。選んでいるものにズームインし続けると、その「中」へ入っていきます（例：人→体→細胞→核→DNA→…）。いちばん底からさらに進むと、宇宙マップのいちばん外側「無」につながります。</p></details></div>
     <div class="chips" id="mclevels"></div>
     <div class="spwrap mcwrap">
       <div class="mclist" id="mclist"></div>
@@ -863,7 +1271,8 @@ footer p{margin:0 0 6px;max-width:120ch}
 
   <!-- ⑧ 系統樹 -->
   <section class="view" id="v-lineage">
-    <div class="view-head"><h2>系統樹（分野ごと）</h2><p>分野を1つ選ぶと、その分野だけの系統樹を独立した時間軸で表示する（分野どうしは混ぜない）。2026年より先（点線）は「近未来〜Type IVの想定」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線と、SFノートの構想（【SF】）に分かれて並ぶ。消えた要素は後継に合流（マージ）する。</p></div>
+    <div class="view-head"><h2>系統樹（分野ごと）</h2><p class="lead">分野を1つ選ぶと、その分野の系譜（誕生・分岐・合流・消滅）を時間軸で表示。要素を押すと詳細が出ます。</p>
+      <details class="vh-more"><summary>見方と操作</summary><p>分野を1つ選ぶと、その分野だけの系統樹を独立した時間軸で表示する（分野どうしは混ぜない）。2026年より先（点線）は「近未来〜Type IVの想定」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線と、SFノートの構想（【SF】）に分かれて並ぶ。消えた要素は後継に合流（マージ）する。ホイール・ピンチでズーム、ドラッグで移動、ダブルクリックで拡大。右下（スマホは下）のボタンで期間と目盛り（時代ごと・実際の年数）を切り替えられます。</p></details></div>
     <div class="chips" id="gchips"></div>
     <div class="gwrap">
       <div class="gcanvas" id="gcanvas" tabindex="0" aria-label="系統樹のキャンバス。ホイールまたはピンチでズーム、ドラッグで移動">
@@ -890,7 +1299,8 @@ footer p{margin:0 0 6px;max-width:120ch}
     </div>
   </section>
   <section class="view" id="v-laws">
-    <div class="view-head"><h2>宇宙の法則</h2><p>宇宙を動かす4つの力、主な公式と定数、物質のいちばん小さな部品（素粒子）、118の元素、身近な分子。元素・素粒子・分子を押すと説明が出て、「ミクロの世界」で3Dモデルを見られます。</p></div>
+    <div class="view-head"><h2>宇宙の法則</h2><p class="lead">宇宙を動かす4つの力、素粒子、118の元素、分子、公式、定数、未解決問題。</p>
+      <details class="vh-more"><summary>見方と操作</summary><p>宇宙を動かす4つの力、主な公式と定数、物質のいちばん小さな部品（素粒子）、118の元素、身近な分子。元素・素粒子・分子を押すと説明が出て、「ミクロの世界」で3Dモデルを見られます。</p></details></div>
     <div class="ctabs" id="ltabs" role="tablist"><button data-t="forces">⚛ 4つの力</button><button data-t="parts">● 素粒子</button><button data-t="pt">▦ 周期表</button><button data-t="mols">⬡ 分子</button><button data-t="formulas">∑ 公式</button><button data-t="consts">π 物理定数</button><button data-t="unsolved">？ 未解決問題</button></div>
     <div class="ctabbody">
     <div class="ltab" data-t="forces"><div class="lforces" id="lforces"></div></div>
@@ -905,17 +1315,23 @@ footer p{margin:0 0 6px;max-width:120ch}
   </section>
   <!-- ⑥ 地球大全 -->
   <section class="view" id="v-earth-book">
-    <div class="view-head"><h2>地球大全 ── 宇宙人のための地球ガイド</h2><p>地球の外から来た知的存在が、地球と人類を理解するための手引き。数と単位から始めて、住所・惑星・生命・人類・社会・技術・課題へ。目次から章へ飛べます。</p></div>
+    <div class="view-head"><h2>地球大全 <small>宇宙人のための地球ガイド</small></h2><p class="lead">地球の外から来た知的存在のための、地球と人類の手引き（全12章）。</p>
+      <details class="vh-more"><summary>見方と操作</summary><p>地球の外から来た知的存在が、地球と人類を理解するための手引き。数と単位から始めて、住所・惑星・生命・人類・社会・技術・課題へ。目次から章へ飛べます。</p></details></div>
     <div class="ebwrap"><nav class="ebtoc" id="ebtoc" aria-label="地球大全の目次"></nav><div class="ebook" id="ebook"></div></div>
   </section>
 
 
 
-  <footer>
+  <footer class="foot">
+    <details>
+    <summary>数値の扱いと出典</summary>
     <p>数値は概数。K値は2025年の世界の総エネルギー供給「600 EJ超」を秒あたりに換算（約1.9×10¹³ W）してセーガンの式に当てはめたもの。Type I＝10¹⁶ W、Type II＝10²⁶ W、Type III＝10³⁶ W。</p>
     <p>主な出典：Energy Institute「Statistical Review of World Energy 2026」／SIPRI（2026年4月、軍事費）／UCDP・ウプサラ大学（2026年6月、紛争）／FAOほか「SOFI 2026」（飢餓・食料）／ITU「Facts and Figures 2025」（インターネット）／UN Tourism（2026年1月、観光）／UNESCO世界遺産委員会（2026年7月）／日本動画協会「アニメ産業レポート2025」／NASA（アルテミスII、ボイジャー1号）／国連「World Population Prospects 2024」。地球大全・スケール解説：WMO（2025年の気温、2026年1月）／NOAA マウナロア観測所（CO₂）／SIPRI Yearbook 2026（核弾頭）／IUCNレッドリスト（2025年10月）／NASA Exoplanet Archive（系外惑星）／Ethnologue 2025（言語）／Pew Research Center（2020年の宗教人口）／KeepTrack・CelesTrak（衛星数、2026年10月）。上記以外の一般的な数値（言語数、識字率、穀物生産など）は国際機関の公表値をもとにした概数です。</p>
+    </details>
   </footer>
+</main>
 </div>
+<nav class="tabbar" id="tabbar" aria-label="ページ"></nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -5824,13 +6240,11 @@ const INV = [
 
 /* ---------- ビューの切り替え ---------- */
 const VIEWS = [["overview","全体マップ"],["timeline","年表（宇宙・地球・世界史）"],["space-map","宇宙・地球・ミクロ"],["lineage","系統樹（分野別）"],["laws","宇宙の法則"],["earth-book","地球大全"]];
-const nav = document.getElementById("views");
-nav.innerHTML = VIEWS.map(([id,t],i)=>`<a href="#${id}" data-v="${id}"><span class="n">${String(i+1).padStart(2,"0")}</span>${t}</a>`).join("");
 function show(){
   let h = (location.hash||"").slice(1);if(h==="theater"){h="timeline";history.replaceState(null,"","#timeline");}
   const id = (VIEWS.some(v=>v[0]===h)||h==="world-map"||h==="micro") ? h : "overview";
   document.querySelectorAll("section.view").forEach(s=>s.classList.toggle("on", s.id==="v-"+id));
-  nav.querySelectorAll("a").forEach(a=>a.setAttribute("aria-current", a.dataset.v===(id==="world-map"||id==="micro"?"space-map":id)?"page":"false"));
+  window.KSHELL&&KSHELL.onView(id);
   if(id==="overview") requestAnimationFrame(drawLinks);
 }
 window.addEventListener("hashchange", show);
@@ -5922,13 +6336,6 @@ const ERA_PRE=[
 ERA_FIELDS.unshift(...ERA_PRE);
 
 
-/* ---------- 右上：現在のタイプ表示（スライダーに連動） ---------- */
-window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=document.getElementById("ktype");
-  const k=+(document.getElementById("krange")||{}).value||.73;const T=E.kind==="pre"?"pre":k>=3?3:k>=2?2:k>=1?1:0;
-  const nm=["Type 0","Type I","Type II","Type III"];
-  el.innerHTML=`<div class="ktsteps">${["文明以前",...nm].map((t,i)=>`<span class="${(T==="pre"?0:T+1)===i?"on":""}">${t}</span>`).join("")}</div><div class="ktnow"><b>${T==="pre"?"文明以前":nm[T]}</b><span>${E.when}・${E.name}${E.kind==="future"&&!/想定|構想/.test(E.when+E.name)?"（想定）":""}</span></div>`;
-  document.getElementById("modesub").textContent=E.now?"文明レベルごとに、同じビューで世界を描くガイドブック。いまは「現在の地球」を表示中。":`いまは「${E.when}・${E.name}」の世界を表示中。${E.kind==="future"?"2026年より先は予測・目標と想像です。":E.kind==="pre"?"人類が登場する前の宇宙・地球です。":"その時代までに起きたこと・知られていたことだけを表示します。"}`;});
-
 /* 宇宙・地図・ミクロの切り替え */
 (function(){const T=[["space-map","🌌 宇宙"],["world-map","🌏 世界地図"],["micro","🔬 ミクロの世界"]];
   T.forEach(([id])=>{const sec=document.getElementById("v-"+id);if(!sec)return;const d=document.createElement("div");d.className="tlswitch scaleswitch";d.innerHTML=T.map(([h,t])=>`<a href="#${h}" class="${h===id?"on":""}">${t}</a>`).join("");sec.querySelector(".view-head").after(d);});})();
@@ -5968,8 +6375,8 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
   const yfmt=y=>y< -1e8?(-y/1e8).toFixed(1).replace(/\.0$/,"")+"億年前":y< -1e4?Math.round(-y/1e4).toLocaleString()+"万年前":y<0?"紀元前"+(-y).toLocaleString()+"年":y>1e9?"":y+"年";
   function upd(){const E=window.KERA;if(!E)return;const now=E.now;
     Object.entries(bars).forEach(([id,b])=>{b.hidden=now||E.kind==="future"&&window.KYEAR>1e9;if(b.hidden)return;
-      b.innerHTML=`<span class="erapill ${E.kind}">${E.when}</span><b>「${E.name}」の時点</b><span class="eramsg">${MSG[id]}</span><button class="chip" data-now="1">現在に戻す</button><button class="chip" data-top="1">↑ 上のスライダーで変える</button>`;});}
-  document.addEventListener("click",e=>{if(e.target.closest(".erabar [data-top]"))window.scrollTo({top:0,behavior:"smooth"});if(e.target.closest(".erabar [data-now]"))window.KSETK&&window.KSETK(.73);});
+      b.innerHTML=`<span class="erapill ${E.kind}">${E.when}</span><b>「${E.name}」の時点</b><span class="eramsg">${MSG[id]}</span><span class="erabtns"><button class="chip" data-now="1">現在に戻す</button><button class="chip" data-top="1">時代を変える</button></span>`;});}
+  document.addEventListener("click",e=>{if(e.target.closest(".erabar [data-top]")){if(window.KSHELL)KSHELL.openEra();else window.scrollTo({top:0,behavior:"smooth"});}if(e.target.closest(".erabar [data-now]"))window.KSETK&&window.KSETK(.73);});
   window.addEventListener("k-year",upd);
   // 宇宙マップ：時代が変わったら今のスケールを作り直す
   window.addEventListener("k-year",()=>{try{if(typeof SPZ!=="undefined"&&SPZ.level!==undefined&&document.querySelector("#spscene canvas"))SPZ.go(SPZ.level);}catch(e){}});
@@ -6004,42 +6411,76 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
    [-.1,"約300万年前","道具を使う人類",null,"数万人？","人の筋肉","アフリカのサバンナ","二本足で歩く人類が石を割って道具を作り始める。まだ火も言葉も確かではない。","pre"]];
   S.unshift(...PRE);window.KSTAGES=S;
   const YEAR=[-13.8e9,-13e9,-4.54e9,-3.8e9,-2e8,-3e6,-10000,-3000,1,1500,1800,1900,1950,2000,2026,2100,2250,2700,4000,50000,1000000,1e9];
-  const KMIN=-.65,NOWI=S.findIndex(s=>s[8]==="now");
-  const track=document.getElementById("track"), fill=document.getElementById("fill"), knob=document.getElementById("knob"), card=document.getElementById("kcard"), rng=document.getElementById("krange"), cv=document.getElementById("kcanvas");
-  const pct=k=>((k-KMIN)/(4-KMIN)*100)+"%";
-  // 目盛り
-  [[KMIN,"宇宙・地球史"],[0,"0"],[1,"Type I 10¹⁶W"],[2,"Type II 10²⁶W"],[3,"Type III 10³⁶W"],[4,"Type IV 10⁴⁶W"]].forEach(([k,t])=>{const tk=document.createElement("div");tk.className="tick";tk.style.left=pct(k);track.appendChild(tk);
-    const lb=document.createElement("div");lb.className="tick-label";lb.style.left=pct(k);lb.innerHTML=t.replace(/^(Type [IV]+) (.*)$/,"$1<span class=\"tkw\"> $2</span>");if(k===KMIN)lb.style.transform="none";if(k===4)lb.style.transform="translateX(-100%)";track.appendChild(lb);});
-  S.forEach((s,i)=>{const d=document.createElement("button");d.className="kstop"+(s[8]==="now"?" is-now":s[8]==="future"?" fut":s[8]==="pre"?" pre":"");d.style.left=pct(s[0]);d.title=s[1]+"　"+s[2];d.dataset.i=i;d.setAttribute("aria-label",s[1]+" "+s[2]);track.appendChild(d);});
+  const N=S.length,NOWI=S.findIndex(s=>s[8]==="now");
+  const $=id=>document.getElementById(id);
+  const track=$("track"), fill=$("fill"), knob=$("knob"), card=$("kcard"), cv=$("kcanvas"), list=$("edList");
+  // 時代の止まる場所は等間隔に並べる（どの時代も同じ幅で選べるように）。K値は表示に使う
+  const pos=i=>i/(N-1)*100;
+  const KIND={pre:"宇宙・地球史",past:"人類の歴史",now:"現在",future:"未来（想定）"};
+  const typeOf=s=>s[8]==="pre"?"文明以前":s[0]>=4?"Type IV":s[0]>=3?"Type III":s[0]>=2?"Type II":s[0]>=1?"Type I":"Type 0";
+  const typeShort=s=>s[8]==="pre"?"文明以前":typeOf(s).replace("Type ","T");
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  // ---- つまみの通り道：区間（宇宙・地球史／人類の歴史／現在／未来）と、止まる点 ----
+  const segs=Object.keys(KIND).map(kind=>{const is=S.map((s,i)=>s[8]===kind?i:-1).filter(i=>i>=0);return [kind,is[0],is[is.length-1]];});
+  track.insertAdjacentHTML("beforeend",
+    segs.map(([kind,a,b])=>`<div class="kseg k-${kind}" style="left:calc(${pos(a)}% - 7px);width:calc(${pos(b)-pos(a)}% + 14px)"></div><div class="kseglab k-${kind}" style="left:${pos((a+b)/2)}%">${KIND[kind]}</div>`).join("")+
+    S.map((s,i)=>{const ty=s[8]!=="pre"&&s[0]>=1&&Number.isInteger(s[0]);return `<span class="kstop k-${s[8]}${ty?" kty":""}" style="left:${pos(i)}%" data-i="${i}" title="${esc(s[1]+"　"+s[2])}"></span>${ty?`<span class="ktylab" style="left:${pos(i)}%">${typeOf(s).replace("Type ","")}</span>`:""}`;}).join("")+
+    `<div class="ktip" id="ktip" hidden></div>`);
+  const tip=$("ktip");
+  // ---- 時代の一覧（PCは読み出しを押すと開く／スマホはシートの中） ----
+  list.innerHTML=Object.keys(KIND).map(kind=>`<div class="edg"><div class="edgh k-${kind}">${KIND[kind]}</div>${S.map((s,i)=>s[8]!==kind?"":`<button type="button" class="edi k-${kind}" role="option" data-i="${i}" aria-selected="false"><i></i><span class="w">${esc(s[1])}</span><b>${esc(s[2])}</b><span class="t">${typeOf(s)}</span></button>`).join("")}</div>`).join("");
   const sup=n=>String(n).split("").map(c=>"⁰¹²³⁴⁵⁶⁷⁸⁹⁻"["0123456789-".indexOf(c)]).join("");
   const fmtW=w=>{const e=Math.floor(Math.log10(w)),m=w/10**e;return `${m.toFixed(1).replace(/\.0$/,"")}×10${sup(e)} W`;};
   const ratio=w=>{const r=w/1.9e13;return r>=1?(r<1e4?`現在の約${Math.round(r).toLocaleString()}倍`:`現在の約10${sup(Math.round(Math.log10(r)))}倍`):`現在の約${(1/r)<100?(1/r).toFixed(0):Math.round(1/r).toLocaleString()}分の1`;};
-  let K=.73, idx=NOWI, lastIdx=-1;
-  function set(k,snap){K=Math.max(KMIN+.05,Math.min(4,k));let best=0;S.forEach((s,i)=>{if(Math.abs(s[0]-K)<Math.abs(S[best][0]-K))best=i;});idx=best;if(snap)K=S[best][0];
-    fill.style.width=pct(K);knob.style.left=pct(K);rng.value=K;knob.querySelector("em").textContent=K<.2?S[idx][1]:`K=${K.toFixed(2)}`;
-    track.querySelectorAll(".kstop").forEach((b,i)=>b.classList.toggle("on",i===idx));updateMap();window.dispatchEvent(new CustomEvent("k-stage",{detail:idx}));
-    if(idx!==lastIdx){lastIdx=idx;window.KYEAR=YEAR[idx];window.KERA={i:idx,name:S[idx][2],when:S[idx][1],kind:S[idx][8],now:idx===NOWI};window.dispatchEvent(new CustomEvent("k-year",{detail:YEAR[idx]}));}
+  let K=.73, Kd=.73, idx=NOWI, lastIdx=-1;
+  // 読み出し（PCの時代バー・スマホの上バーのボタン）を書き換える
+  function readout(i,preview){const s=S[i];
+    const dot=`k-${s[8]}`;
+    document.querySelectorAll("[data-era-when]").forEach(el=>el.textContent=s[1]);
+    document.querySelectorAll("[data-era-name]").forEach(el=>el.textContent=s[2]);
+    document.querySelectorAll("[data-era-type]").forEach(el=>{el.textContent=el.dataset.eraType==="short"?typeShort(s):typeOf(s);});
+    document.querySelectorAll("[data-era-dot]").forEach(el=>el.className="edot "+dot);
+    const note=$("edNote");if(note&&!preview)note.textContent=s[8]==="now"?"いまは「現在の地球（2025〜26年）」を表示中。スライダーを動かすと、すべてのページがその時代の姿に変わります。":s[8]==="future"?"2026年より先は、予測・目標と想像（もしもの世界）です。":s[8]==="pre"?"人類が登場する前の宇宙・地球です。":"その時代までに起きたこと・知られていたことだけを表示します。";
+    track.classList.toggle("previewing",!!preview);
+  }
+  function place(p){fill.style.width=p+"%";knob.style.left=p+"%";}
+  function set(i,o){i=Math.max(0,Math.min(N-1,Math.round(i)));idx=i;K=S[i][0];place(pos(i));readout(i);
+    track.setAttribute("aria-valuenow",i);track.setAttribute("aria-valuetext",`${S[i][1]}　${S[i][2]}（${typeOf(S[i])}）`);
+    track.querySelectorAll(".kstop").forEach((b,j)=>b.classList.toggle("on",j===i));
+    list.querySelectorAll(".edi").forEach(b=>{const on=+b.dataset.i===i;b.classList.toggle("on",on);b.setAttribute("aria-selected",on);});
+    updateMap();window.dispatchEvent(new CustomEvent("k-stage",{detail:idx}));
+    if(idx!==lastIdx){lastIdx=idx;window.KYEAR=YEAR[idx];window.KERA={i:idx,name:S[idx][2],when:S[idx][1],kind:S[idx][8],now:idx===NOWI,k:S[idx][0],type:typeOf(S[idx])};window.dispatchEvent(new CustomEvent("k-year",{detail:YEAR[idx]}));}
     const s=S[idx], fut=s[8]==="future", pre=s[8]==="pre";
     card.innerHTML=`<div class="kera k-${s[8]}">${s[1]}${fut?'<span class="kif">推測・想定の世界</span>':""}</div><h3>${s[2]}</h3>
       <div class="kstat"><div><b class="num">${pre?"—":"K≈"+s[0].toFixed(2)}</b><span>${pre?"文明はまだない":"カルダシェフ値"}</span></div><div><b class="num">${pre?"—":fmtW(s[3])}</b><span>文明全体の消費電力（${s[8]==="past"?"推定":fut?"定義上の目安":"2025年"}）</span></div><div><b>${s[8]==="now"||pre?"—":ratio(s[3])}</b><span>現在と比べて</span></div></div>
       <dl class="kdl"><dt>人口</dt><dd>${s[4]}</dd><dt>主な動力</dt><dd>${s[5]}</dd><dt>活動範囲</dt><dd>${s[6]}</dd></dl><p>${s[7]}</p>
-      ${s[8]==="now"?`<div class="klinks"><a href="#timeline" class="chip">世界史年表</a><a href="#space-map" class="chip">宇宙と地球</a><a href="#lineage" class="chip">系統樹</a></div>`:fut?(s[0]===1?(true?`<div class="klinks"><a href="#timeline" class="chip">未来の年表</a><a href="#world-map" class="chip">Type Iの世界地図</a><a href="#space-map" class="chip">軌道エレベーターと宇宙</a><a href="#lineage" class="chip">系統樹（未来の枝）</a><a href="#timeline" class="chip">歴史シアター</a></div>`:`<div class="klinks"><button class="chip" onclick="document.querySelector('.levels [data-mode=t1]').click()">Type I の世界を開く →</button></div>`):`<div class="klinks">${s[0]<1?`<p class="knote">Type Iへ向かう途中の段階（予測と想像）。</p>`:`<button class="chip" onclick="document.getElementById('tguide').scrollIntoView({behavior:'smooth'})">📘 文明タイプ・ガイドを読む ↓</button><a href="#timeline" class="chip">未来の年表</a><a href="#space-map" class="chip">宇宙マップ</a>`}</div>`):pre?`<div class="klinks"><a href="#timeline" class="chip">宇宙・地球の年表</a><a href="#timeline" class="chip">歴史シアターで見る</a></div>`:`<p class="knote">過去の値は人口と1人あたりのエネルギー消費からの大まかな推定。</p>`}`;
+      ${s[8]==="now"?`<div class="klinks"><a href="#timeline" class="chip">世界史年表</a><a href="#space-map" class="chip">宇宙と地球</a><a href="#lineage" class="chip">系統樹</a></div>`:fut?(s[0]===1?`<div class="klinks"><a href="#timeline" class="chip">未来の年表</a><a href="#world-map" class="chip">Type Iの世界地図</a><a href="#space-map" class="chip">軌道エレベーターと宇宙</a><a href="#lineage" class="chip">系統樹（未来の枝）</a><a href="#timeline" class="chip">歴史シアター</a></div>`:`<div class="klinks">${s[0]<1?`<p class="knote">Type Iへ向かう途中の段階（予測と想像）。</p>`:`<button class="chip" onclick="document.getElementById('tguide').scrollIntoView({behavior:'smooth'})">📘 文明タイプ・ガイドを読む ↓</button><a href="#timeline" class="chip">未来の年表</a><a href="#space-map" class="chip">宇宙マップ</a>`}</div>`):pre?`<div class="klinks"><a href="#timeline" class="chip">宇宙・地球の年表</a><a href="#timeline" class="chip">歴史シアターで見る</a></div>`:`<p class="knote">過去の値は人口と1人あたりのエネルギー消費からの大まかな推定。</p>`}`;
+    if(o&&o.from)window.dispatchEvent(new CustomEvent("k-picked",{detail:{i:idx,from:o.from}}));
   }
   function updateMap(){const s=S[idx],data=ERA_FIELDS[idx];const nodes=document.querySelectorAll("#mm .mnode");
     nodes.forEach((n,i)=>{const [v,l]=data?data[i]:[FIELDS[i].v,FIELDS[i].l];n.querySelector(".v").textContent=v;n.querySelector(".l").textContent=l;n.classList.toggle("fut",s[8]==="future");n.classList.toggle("past",s[8]==="past"||s[8]==="pre");});
-    const core=document.getElementById("core");core.querySelector(".eyebrow").textContent=s[1];core.querySelector("h3").textContent=s[2];core.querySelector(".big").innerHTML=s[8]==="pre"?`— <small>文明以前`:`K≈${s[0].toFixed(2)} <small>${s[0]>=4?"Type IV":s[0]>=3?"Type III":s[0]>=2?"Type II":s[0]>=1?"Type I":"Type 0"}</small>`;
+    const core=document.getElementById("core");core.querySelector(".eyebrow").textContent=s[1];core.querySelector("h3").textContent=s[2];core.querySelector(".big").innerHTML=s[8]==="pre"?`— <small>文明以前`:`K≈${s[0].toFixed(2)} <small>${typeOf(s)}</small>`;
     core.querySelector(".facts").innerHTML=`人口 ${s[4]}<br>活動範囲 ${s[6].length>14?s[6].slice(0,14)+"…":s[6]}<br>主な動力 ${s[5].length>14?s[5].slice(0,14)+"…":s[5]}`;
-    core.classList.toggle("fut",s[8]==="future");document.getElementById("mmnote").textContent=s[8]==="now"?"12分野の現在地。カードを押すと、その分野の系統樹へ移動します。":s[8]==="pre"?`${s[1]}：人類の文明はまだありません。各カードは、その時代の宇宙・地球のようすです。`:s[8]==="past"?`${s[1]}の12分野（大まかな概要）。スライダーを「現在」に戻すと今の地球に戻ります。`:`${s[1]}の12分野（推測・想定の世界）。`;}
-  rng.addEventListener("input",()=>set(+rng.value,false));rng.addEventListener("change",()=>set(+rng.value,true));
-  track.addEventListener("click",e=>{const b=e.target.closest(".kstop");if(b){set(S[+b.dataset.i][0],true);}});
-  let drag=false;const fromX=x=>{const r=track.getBoundingClientRect();return KMIN+(x-r.left)/r.width*(4-KMIN);};
-  knob.addEventListener("pointerdown",e=>{drag=true;knob.setPointerCapture(e.pointerId);e.preventDefault();});
-  knob.addEventListener("pointermove",e=>{if(drag)set(fromX(e.clientX),false);});
-  knob.addEventListener("pointerup",e=>{drag=false;set(K,true);});
-  track.addEventListener("pointerdown",e=>{if(e.target.closest(".kstop,#knob"))return;set(fromX(e.clientX),true);});
-  document.getElementById("kprev").onclick=()=>set(S[Math.max(0,idx-1)][0],true);
-  document.getElementById("knext").onclick=()=>set(S[Math.min(S.length-1,idx+1)][0],true);
-  document.getElementById("know").onclick=()=>set(.73,true);
+    core.classList.toggle("fut",s[8]==="future");document.getElementById("mmnote").textContent=s[8]==="now"?"12分野の現在地。カードを押すと、その分野の系統樹へ移動します。":s[8]==="pre"?`${s[1]}：人類の文明はまだありません。各カードは、その時代の宇宙・地球のようすです。`:s[8]==="past"?`${s[1]}の12分野（大まかな概要）。時代を「現在」に戻すと今の地球に戻ります。`:`${s[1]}の12分野（推測・想定の世界）。`;}
+  // ---- 操作：ドラッグ（離したところで決定）・クリック・キーボード ----
+  const fromX=x=>{const r=track.getBoundingClientRect();return Math.max(0,Math.min(N-1,(x-r.left)/r.width*(N-1)));};
+  let drag=null;
+  function showTip(i){const s=S[i];tip.hidden=false;tip.innerHTML=`<b>${esc(s[1])}</b>${esc(s[2])}`;tip.style.left=pos(i)+"%";}
+  track.addEventListener("pointerdown",e=>{if(e.button)return;e.preventDefault();track.setPointerCapture(e.pointerId);drag={id:e.pointerId,f:fromX(e.clientX)};place(pos(drag.f));readout(Math.round(drag.f),true);showTip(Math.round(drag.f));track.focus({preventScroll:true});});
+  track.addEventListener("pointermove",e=>{const f=fromX(e.clientX);if(drag&&e.pointerId===drag.id){drag.f=f;place(pos(f));readout(Math.round(f),true);showTip(Math.round(f));return;}if(e.pointerType==="mouse")showTip(Math.round(f));});
+  const end=e=>{if(!drag||e.pointerId!==drag.id)return;const i=Math.round(drag.f);drag=null;tip.hidden=true;set(i,{from:"track"});};
+  track.addEventListener("pointerup",end);track.addEventListener("pointercancel",e=>{if(drag&&e.pointerId===drag.id){drag=null;tip.hidden=true;set(idx);}});
+  track.addEventListener("pointerleave",e=>{if(!drag)tip.hidden=true;});
+  track.addEventListener("keydown",e=>{const m={ArrowLeft:-1,ArrowDown:-1,ArrowRight:1,ArrowUp:1,PageDown:-3,PageUp:3}[e.key];
+    if(m!==undefined){e.preventDefault();set(idx+m,{from:"key"});}else if(e.key==="Home"){e.preventDefault();set(0,{from:"key"});}else if(e.key==="End"){e.preventDefault();set(N-1,{from:"key"});}});
+  list.addEventListener("click",e=>{const b=e.target.closest(".edi");if(b)set(+b.dataset.i,{from:"list"});});
+  $("kprev").onclick=()=>set(idx-1,{from:"btn"});
+  $("knext").onclick=()=>set(idx+1,{from:"btn"});
+  $("know").onclick=()=>set(NOWI,{from:"btn"});
+  track.setAttribute("aria-valuemin",0);track.setAttribute("aria-valuemax",N-1);
+  // 目盛りの文字が重なるときは、重なった方を隠す（狭い画面で「III」「IV」がくっつかないように）
+  function declutter(){[".kseglab",".ktylab"].forEach(sel=>{let last=-1e9;track.querySelectorAll(sel).forEach(el=>{el.classList.remove("off");const r=el.getBoundingClientRect();if(!r.width)return;if(r.left<last+4)el.classList.add("off");else last=r.right;});});}
+  new ResizeObserver(declutter).observe(track);
   // ---- イラスト（2D canvas） ----
   const g=cv.getContext("2d");let W=0,H=0;const stars=[...Array(220)].map(()=>[Math.random(),Math.random(),Math.random()]);
   const lights=[...Array(900)].map(()=>{const a=Math.random()*6.283,r=Math.sqrt(Math.random());return [Math.cos(a)*r,Math.sin(a)*r*.98,Math.random()];});
@@ -6053,7 +6494,7 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
     const n=Math.floor(lights.length*lit);for(let i=0;i<n;i++){const [x,y,b]=lights[i];const fl=.6+.4*Math.sin(t*2+b*20);g.fillStyle=`rgba(255,${190+b*50|0},110,${(.35+b*.6)*fl})`;const s=1+b*1.6*(lit>.6?1.4:1);g.fillRect(cx+x*R*.95-s/2,cy+y*R*.95-s/2,s,s);}}
   function draw(t){if(!W)return;g.clearRect(0,0,W,H);g.fillStyle="#02040c";g.fillRect(0,0,W,H);
     stars.forEach(([x,y,b])=>{g.fillStyle=`rgba(220,230,255,${.2+b*.6})`;g.fillRect(x*W,y*H,1+b,1+b);});
-    const cx=W/2,cy=H/2,k=K;
+    const cx=W/2,cy=H/2,k=Kd;
     if(S[idx][8]==="pre"){drawPre(idx,cx,cy,t);g.fillStyle="rgba(233,237,247,.75)";g.font="12px 'Noto Sans JP',sans-serif";g.fillText(S[idx][1]+"　"+S[idx][2],12,H-12);return;}
     const aE=1-sm(1.15,1.45,k), aS=sm(1.15,1.45,k)*(1-sm(2.6,2.85,k)), aG=sm(2.6,2.85,k)*(1-sm(3.3,3.8,k)), aV=sm(3.3,3.8,k);
     if(aE>0){g.globalAlpha=aE;const R=Math.min(W,H)*.32;
@@ -6097,10 +6538,13 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
     g.strokeStyle="rgba(120,180,255,.35)";g.lineWidth=2;g.beginPath();g.arc(cx,cy,R+2,0,7);g.stroke();
     if(i===3){g.fillStyle="rgba(120,255,170,.6)";for(let j=0;j<80;j++){const [x,y]=lights[j];g.fillRect(cx+x*R*.9,cy+y*R*.9,1.5,1.5);}}
   }
-  let run=false;function loop(now){if(!run)return;draw(now/1000);requestAnimationFrame(loop);}
-  function sync(){const on=!location.hash||location.hash==="#overview";if(on&&!run){run=true;requestAnimationFrame(loop);}else if(!on)run=false;}
-  window.KSET=(i)=>set(S[i][0],true);window.KSETK=(k)=>set(k,true);
-  window.addEventListener("hashchange",sync);set(.73,true);sync();
+  const still=matchMedia("(prefers-reduced-motion: reduce)");
+  let run=false;function loop(now){if(!run)return;Kd=still.matches?K:Kd+(K-Kd)*.12;if(Math.abs(K-Kd)<.002)Kd=K;draw(now/1000);requestAnimationFrame(loop);}
+  function sync(){const on=!location.hash||location.hash==="#overview";if(on&&!run){run=true;Kd=K;requestAnimationFrame(loop);}else if(!on)run=false;}
+  window.KSET=(i,o)=>set(i,o||{from:"api"});
+  window.KSETK=(k)=>{let best=0;S.forEach((s,i)=>{if(Math.abs(s[0]-k)<Math.abs(S[best][0]-k))best=i;});set(best,{from:"api"});};
+  window.KSTEP=d=>set(idx+d,{from:"api"});
+  window.addEventListener("hashchange",sync);set(NOWI);sync();
 })();
 
 /* ---------- 文明タイプ・ガイド（Type I／II／III） ---------- */
@@ -6155,7 +6599,7 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
   function show(k){tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===k));const t=T[k];body.innerHTML=`<h3>${t.h}</h3><p class="tglead">${t.lead}</p>${t.body}`;}
   tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(b)show(b.dataset.t);});window.TG_SHOW=show;
   show("t2");
-  window.addEventListener("k-year",()=>{const k=+(document.getElementById("krange")||{}).value;if(k>=2.5)show("t3");else if(k>=1.5)show("t2");else if(k>=.8)show("t1");});
+  window.addEventListener("k-year",()=>{const k=window.KERA?KERA.k:.73;if(k>=2.5)show("t3");else if(k>=1.5)show("t2");else if(k>=.8)show("t1");});
 })();
 
 
@@ -6172,7 +6616,7 @@ window.addEventListener("k-year",()=>{const E=window.KERA;if(!E)return;const el=
   function renderChips(){rc.innerHTML=`<button class="chip" data-all="1" aria-pressed="${!only.size}">すべて</button>`+WH_REGIONS.map(r=>`<button class="chip" aria-pressed="${only.has(r)}" data-r="${r}"><span class="dot" style="background:${RCOL[r]}"></span>${r}</button>`).join("");}
   let render=function(){
     const regs=visRegs(), eras=WH_ERAS.filter(e=>e[1]<=KY());
-    let h=`<div class="whh" style="grid-template-columns:150px repeat(${eras.length},minmax(250px,1fr))"><div class="whcorner">地域 ＼ 時代</div>${eras.map(([nm,a,b])=>`<div class="whhead">${nm}<small>${a<-1e8?"〜前3500年":a>2026?(a>=10000?(a/1e4)+"万年〜":Math.floor(a)+"〜")+(b>=1e6?"":b>=10000?(b/1e4)+"万年":Math.floor(b)+"年"):b>2050?"1945年〜":(a<0?"前"+(-a):a)+"〜"+(b<0?"前"+(-b):Math.floor(b))+"年"}</small></div>`).join("")}`;
+    let h=`<div class="whh" style="grid-template-columns:var(--whc0,150px) repeat(${eras.length},minmax(var(--whc,250px),1fr))"><div class="whcorner">地域 ＼ 時代</div>${eras.map(([nm,a,b])=>`<div class="whhead">${nm}<small>${a<-1e8?"〜前3500年":a>2026?(a>=10000?(a/1e4)+"万年〜":Math.floor(a)+"〜")+(b>=1e6?"":b>=10000?(b/1e4)+"万年":Math.floor(b)+"年"):b>2050?"1945年〜":(a<0?"前"+(-a):a)+"〜"+(b<0?"前"+(-b):Math.floor(b))+"年"}</small></div>`).join("")}`;
     regs.forEach(r=>{h+=`<div class="whreg" style="--rc:${RCOL[r]}"><b>${r}</b><small>${WHV().filter(e=>e[2]===r).length}件</small></div>`;
       eras.forEach(([nm,a,b])=>{const evs=WHV().filter(e=>e[2]===r&&e[1]>=a&&e[1]<b).sort((x,y)=>x[1]-y[1]);
         h+=`<div class="whcell">${evs.map(e=>`<button class="whev${e.id===selId?" sel":""}" data-fut="${e[1]>2026.4?1:0}" data-id="${e.id}" style="--rc:${RCOL[r]}"><span class="y num">${e[0]}</span><b>${typeof EV3D!=="undefined"&&EV3D&&EV3D.isSpecial({title:e[3],desc:e[4],y:e[1],tags:e[5],kind:"hist"})?'<i class="spstar">★</i>':""}${e[3]}</b></button>`).join("")}</div>`;});});
@@ -6462,9 +6906,16 @@ function BranchGraph(host,D,panel){
   const zoomAt=(x,f)=>{const nk=Math.min(40,Math.max(1,k*f));tx=x-(x-tx-LX)*(nk/k)-LX;k=nk;clampX();render();};
   const clampX=()=>{const w=wrap.clientWidth;tx=Math.min(0,Math.max(tx,w-30-W0*k));};
   wrap.addEventListener("wheel",e=>{if(e.shiftKey){tx-=e.deltaY;clampX();render();e.preventDefault();return;}e.preventDefault();const r=wrap.getBoundingClientRect();zoomAt(e.clientX-r.left,e.deltaY<0?1.2:1/1.2);},{passive:false});
-  let drag=null,moved=0;wrap.addEventListener("pointerdown",e=>{if(e.target.closest(".bgtools"))return;drag={x:e.clientX,tx};moved=0;});
-  window.addEventListener("pointermove",e=>{if(!drag)return;moved=Math.abs(e.clientX-drag.x);tx=drag.tx+(e.clientX-drag.x);clampX();render();});
-  window.addEventListener("pointerup",()=>{drag=null;});
+  // ドラッグで横に移動／2本指のピンチで拡大縮小（スマホ）。縦のスワイプはページのスクロールに使う（touch-action:pan-y）
+  let drag=null,moved=0,pin=null;const pts=new Map();
+  wrap.addEventListener("pointerdown",e=>{if(e.target.closest(".bgtools,.fsbtn")||e.button>0)return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size>=2){const [p,q]=[...pts.values()];pin={d:Math.max(8,Math.hypot(p.x-q.x,p.y-q.y))};drag=null;moved=99;}
+    else{drag={x:e.clientX,tx,id:e.pointerId};moved=0;}});
+  window.addEventListener("pointermove",e=>{if(pts.has(e.pointerId))pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pin&&pts.size>=2){const [p,q]=[...pts.values()],d=Math.max(8,Math.hypot(p.x-q.x,p.y-q.y)),r=wrap.getBoundingClientRect();zoomAt((p.x+q.x)/2-r.left,d/pin.d);pin.d=d;return;}
+    if(!drag||e.pointerId!==drag.id)return;moved=Math.max(moved,Math.abs(e.clientX-drag.x));tx=drag.tx+(e.clientX-drag.x);clampX();render();});
+  const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pin=null;if(drag&&(e.pointerId===drag.id||!pts.size))drag=null;};
+  window.addEventListener("pointerup",up);window.addEventListener("pointercancel",up);
   wrap.querySelector(".bgtools").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const w=wrap.clientWidth/2;if(b.dataset.z==="in")zoomAt(w,1.5);else if(b.dataset.z==="out")zoomAt(w,1/1.5);else{fit();render();}});
   new ResizeObserver(()=>{if(wrap.clientWidth){const rel=k;fit();k=rel;clampX();render();}}).observe(wrap);
   window.addEventListener("k-year",render);
@@ -9364,12 +9815,10 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
 
 /* ---------- 全体検索（／・Ctrl+K）・ショートカット・使い方・はじめてガイド ---------- */
 (function(){
-  const nav=document.getElementById("views");if(!nav)return;
   const $=id=>document.getElementById(id);
-  nav.insertAdjacentHTML("beforeend",`<span class="navera" id="navera" title="スライダーの時代（押すと上へ）"></span><button class="navsearch" id="navsearch" aria-label="全体を検索"><span aria-hidden="true">🔍</span>検索<kbd>/</kbd></button><button class="navhelp" id="navhelp" aria-label="使い方とショートカット">?</button>`);
   document.body.insertAdjacentHTML("beforeend",`
   <div class="sx" id="sx" hidden><div class="sxbox" role="dialog" aria-modal="true" aria-label="全体検索">
-    <div class="sxin"><span aria-hidden="true">🔍</span><input id="sxq" type="search" placeholder="出来事・国・元素・生き物・天体・発明… なんでも" autocomplete="off" spellcheck="false" aria-controls="sxres"><kbd>Esc</kbd></div>
+    <div class="sxin"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input id="sxq" type="search" placeholder="出来事・国・元素・生き物・天体・発明… なんでも" autocomplete="off" spellcheck="false" aria-controls="sxres"><button type="button" class="sxx" data-sxclose="1" aria-label="検索を閉じる"><kbd>Esc</kbd><span>閉じる</span></button></div>
     <div class="sxfil" id="sxfil"></div><div class="sxres" id="sxres" role="listbox"></div>
     <div class="sxfoot"><span><kbd>↑</kbd><kbd>↓</kbd> 選ぶ</span><span><kbd>Enter</kbd> 開く</span><span><kbd>Esc</kbd> 閉じる</span><span id="sxcount"></span></div></div></div>
   <div class="sx" id="hx" hidden><div class="sxbox hxbox" role="dialog" aria-modal="true" aria-label="使い方"><button class="gclose" data-hclose="1" aria-label="閉じる">×</button><div id="hxbody"></div></div></div>
@@ -9403,7 +9852,7 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
     book(id){goHash("earth-book");later(()=>{const el=$("eb-"+id);if(el){el.scrollIntoView({behavior:"smooth"});flash(el);}},120);},
     view(h){goHash(h);later(()=>window.scrollTo({top:0,behavior:"smooth"}),60);},
     tg(k){goHash("overview");later(()=>{window.TG_SHOW&&TG_SHOW(k);const el=$("tguide");el.scrollIntoView({behavior:"smooth",block:"start"});flash(el);});},
-    era(i){later(()=>{KSET(i);window.scrollTo({top:0,behavior:"smooth"});},10);},
+    era(i){later(()=>{KSET(i);window.KSHELL&&KSHELL.flashEra();},10);},
     field(f){goHash("lineage");later(()=>openTreeField(FIELD2TREE[f]),120);},
   };
   // ---- 索引 ----
@@ -9461,23 +9910,25 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
   res.addEventListener("click",e=>{const b=e.target.closest("[data-i]");if(b){pick(+b.dataset.i);return;}const s=e.target.closest("[data-s]");if(s){q.value=s.dataset.s;ai=0;render();q.focus();}});
   fil.addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(!b)return;curF=b.dataset.f;ai=0;render();q.focus();});
   sx.addEventListener("mousedown",e=>{if(e.target===sx)close();});
-  $("navsearch").addEventListener("click",open);
+  sx.addEventListener("click",e=>{if(e.target.closest("[data-sxclose]"))close();});
+  document.querySelectorAll("[data-act=\"search\"]").forEach(b=>b.addEventListener("click",open));
   // ---- 使い方・ショートカット ----
   const HELP=()=>`<h3>使い方</h3>
-    <ol class="hxsteps"><li><b>時代を選ぶ</b>：上の「カルダシェフ・スライダー」を動かすと、宇宙誕生（138億年前）からType IV（約10億年後・構想）まで、すべてのページがその時代の姿に変わります。</li>
-    <li><b>見方を選ぶ</b>：タブで「全体マップ・年表・宇宙/地球/ミクロ・系統樹・宇宙の法則・地球大全」を切り替えます。</li>
+    <ol class="hxsteps"><li><b>時代を選ぶ</b>：画面上の「時代バー」（スマホは上の時代ボタン）で、宇宙誕生（138億年前）からType IV（約10億年後・構想）まで選べます。すべてのページがその時代の姿に変わります。つまみのドラッグ、‹ › ボタン、時代名を押して出る一覧のどれでも選べます。</li>
+    <li><b>見方を選ぶ</b>：左のメニュー（スマホは画面下のタブ）で「全体マップ・年表・宇宙/地球/ミクロ・系統樹・宇宙の法則・地球大全」を切り替えます。</li>
+    <li><b>図を動かす</b>：年表・系統樹・地図・3Dは、ドラッグで移動、ホイール（スマホは2本指のピンチ）で拡大縮小。右上の <span class="hxfs">⤢</span> で全画面にできます。スマホでは、押したものの詳細が画面の下から出ます（上下にスワイプで広げる／たたむ）。</li>
     <li><b>なんでも検索</b>：🔍（<kbd>/</kbd>キー）で、出来事・国・元素・生き物・天体など約${(IDX||[]).length.toLocaleString()}件から探して、その場所へ飛べます。</li>
     <li><b>地球の外から来た方へ</b>：まず「地球大全」を読むと、地球と人類の全体像がつかめます。</li></ol>
-    <h3>キーボード</h3><table class="ltable hxkeys"><tbody>
+    <h3 class="hx-kbd">キーボード</h3><table class="ltable hxkeys hx-kbd"><tbody>
     <tr><th><kbd>/</kbd> または <kbd>Ctrl</kbd>+<kbd>K</kbd></th><td>全体検索</td></tr><tr><th><kbd>1</kbd>〜<kbd>6</kbd></th><td>タブを切り替え（1＝全体マップ … 6＝地球大全）</td></tr>
-    <tr><th><kbd>[</kbd> <kbd>]</kbd></th><td>ひとつ前／次の時代へ</td></tr><tr><th><kbd>0</kbd></th><td>現在（2026年）に戻る</td></tr><tr><th><kbd>?</kbd></th><td>この使い方を開く</td></tr><tr><th><kbd>Esc</kbd></th><td>閉じる</td></tr></tbody></table>
+    <tr><th><kbd>[</kbd> <kbd>]</kbd></th><td>ひとつ前／次の時代へ</td></tr><tr><th><kbd>0</kbd></th><td>現在（2026年）に戻る</td></tr><tr><th><kbd>←</kbd> <kbd>→</kbd></th><td>時代バーを選んでいるとき：前／次の時代</td></tr><tr><th><kbd>F</kbd></th><td>図・地図・3Dを全画面に（もう一度押すと戻る）</td></tr><tr><th><kbd>?</kbd></th><td>この使い方を開く</td></tr><tr><th><kbd>Esc</kbd></th><td>閉じる（検索・全画面・時代の一覧・詳細パネル）</td></tr></tbody></table>
     <h3>記号の意味</h3><table class="ltable hxkeys"><tbody>
     <tr><th><span class="hxstar">★</span></th><td>年表：その出来事専用の3D映像がある</td></tr><tr><th><span class="hxdot"></span></th><td>年表：ふつうの出来事（3Dは時代と地域の風景）</td></tr>
     <tr><th><span class="hxdia"></span></th><td>年表：ブランチ（国・系統）の終わり</td></tr><tr><th>点線</th><td>仮説・予測・想定</td></tr>
     <tr><th>暗い表示</th><td>スライダーの時代にはまだ存在しない・知られていない</td></tr><tr><th>もや</th><td>世界地図：その時代に文明がない／人がいない地域</td></tr></tbody></table>
     <p class="note">数値は2026年時点の概数です。2026年より先の内容は、予測・目標・想像（近未来〜Type IVの想定）です。</p>`;
   function help(){if(!IDX)build();$("hxbody").innerHTML=HELP();hx.hidden=false;}
-  $("navhelp").addEventListener("click",help);hx.addEventListener("click",e=>{if(e.target===hx||e.target.closest("[data-hclose]"))hx.hidden=true;});
+  document.querySelectorAll("[data-act=\"help\"]").forEach(b=>b.addEventListener("click",help));hx.addEventListener("click",e=>{if(e.target===hx||e.target.closest("[data-hclose]"))hx.hidden=true;});
   const typing=e=>{const t=e.target;return t&&(t.tagName==="INPUT"&&!["range","checkbox","radio","button"].includes(t.type)||t.tagName==="TEXTAREA"||t.tagName==="SELECT"||t.isContentEditable);};
   window.addEventListener("keydown",e=>{
     if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();sx.hidden?open():close();return;}
@@ -9488,15 +9939,170 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
     else if(/^[1-6]$/.test(e.key)){const v=VIEWS[+e.key-1];if(v){location.hash=v[0];}}
     else if(e.key==="["){$("kprev")?.click();}else if(e.key==="]"){$("knext")?.click();}else if(e.key==="0"){$("know")?.click();}
   });
-  // ---- ナビの時代表示 ----
-  const era=$("navera");
-  function syncEra(){const E=window.KERA;if(!E){era.hidden=true;return;}era.hidden=false;era.className="navera"+(E.now?" now":E.kind==="future"?" fut":E.kind==="pre"?" pre":" past");era.innerHTML=`<i></i>${E.when}`;}
-  window.addEventListener("k-year",syncEra);syncEra();era.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
   // ---- はじめての人へ ----
   let seen=false;try{seen=localStorage.getItem("kmap.hello")==="1";}catch(e){}
   const head=document.querySelector("#v-overview .view-head");
-  if(!seen&&head){head.insertAdjacentHTML("afterend",`<div class="hello" id="hello"><div><b>はじめての方へ</b><span>① 上のスライダーで時代を動かす（宇宙誕生〜Type III）　② タブで見方を切り替える　③ <kbd>/</kbd> キーや🔍で何でも検索　─　地球の外から来た方は「06 地球大全」からどうぞ。</span></div><div class="hellob"><button class="chip" data-h="book">📘 地球大全を読む</button><button class="chip" data-h="help">使い方</button><button class="chip" data-h="x">閉じる</button></div></div>`);
+  if(!seen&&head){head.insertAdjacentHTML("afterend",`<div class="hello" id="hello"><div><b>はじめての方へ</b><span>① <span class="pc-only">上の時代バー</span><span class="sp-only">上の時代ボタン</span>で、宇宙誕生〜Type IVまで時代を選ぶ　② <span class="pc-only">左のメニュー</span><span class="sp-only">下のタブ</span>でページを切り替える　③ 🔍（<kbd>/</kbd> キー）で何でも検索　─　地球の外から来た方は「地球大全」からどうぞ。</span></div><div class="hellob"><button class="chip" data-h="book">📘 地球大全を読む</button><button class="chip" data-h="help">使い方</button><button class="chip" data-h="x">閉じる</button></div></div>`);
     $("hello").addEventListener("click",e=>{const b=e.target.closest("[data-h]");if(!b)return;const k=b.dataset.h;if(k==="book")location.hash="earth-book";if(k==="help")help();if(k==="x"){$("hello").remove();try{localStorage.setItem("kmap.hello","1");}catch(e){}}});}
+})();
+
+/* ---------- 画面の枠：左のメニュー（PC）・下のタブ（スマホ）・時代のシート・詳細シート・全画面・ピンチ操作 ---------- */
+(()=>{
+  const $=id=>document.getElementById(id);
+  const root=document.documentElement, body=document.body;
+  const mqM=matchMedia("(max-width: 767px)");
+  const isM=()=>mqM.matches;
+  const IC={
+    ov:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.3"/><ellipse cx="12" cy="12" rx="9.6" ry="4.3" transform="rotate(-24 12 12)"/><circle cx="20.2" cy="8.7" r="1.4" class="f"/></svg>',
+    tl:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6H21M6.5 6c3.4 0 3 6 7 6H21M10.5 12c3 0 2.6 6 6 6H21"/><circle cx="3.6" cy="6" r="1.5" class="f"/></svg>',
+    sp:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5.2"/><ellipse cx="12" cy="12" rx="10.3" ry="3.4" transform="rotate(-18 12 12)"/></svg>',
+    tr:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-9M12 12 6.6 6.4M12 12l5.4-5.6M12 16.4 8.3 13.5M12 16.4l3.7-2.9"/><circle cx="6" cy="5.7" r="1.7"/><circle cx="18" cy="5.7" r="1.7"/></svg>',
+    lw:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="1.6" class="f"/><ellipse cx="12" cy="12" rx="9.6" ry="3.7"/><ellipse cx="12" cy="12" rx="9.6" ry="3.7" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.6" ry="3.7" transform="rotate(120 12 12)"/></svg>',
+    bk:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.6C10 5.1 7 4.6 3.5 5.1v13.2c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5.1C17 4.6 14 5.1 12 6.6zM12 6.6v13.2"/></svg>',
+    fs:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
+    fsx:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>',
+    x:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    down:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>'};
+  window.KICON=IC;
+
+  // ---- 1) ページのメニュー（PCの左）と下のタブ（スマホ） ----
+  const NAV=[
+    {id:"overview",n:"01",t:"全体マップ",s:"12分野と文明タイプ",ic:"ov",tab:"全体"},
+    {id:"timeline",n:"02",t:"年表",s:"宇宙・地球史・世界史",ic:"tl",tab:"年表",sub:[["tl:cosmos","宇宙"],["tl:earth","地球史"],["tl:hist","世界史"]]},
+    {id:"space-map",n:"03",t:"宇宙・地球・ミクロ",s:"スケールを行き来する",ic:"sp",tab:"宇宙・地球",also:["world-map","micro"],sub:[["space-map","宇宙"],["world-map","世界地図"],["micro","ミクロ"]]},
+    {id:"lineage",n:"04",t:"系統樹",s:"17分野・約1,600要素",ic:"tr",tab:"系統樹"},
+    {id:"laws",n:"05",t:"宇宙の法則",s:"力・素粒子・元素",ic:"lw",tab:"法則"},
+    {id:"earth-book",n:"06",t:"地球大全",s:"宇宙人のための地球ガイド",ic:"bk",tab:"地球大全"}];
+  const TITLE={overview:"全体マップ",timeline:"年表","space-map":"宇宙と地球","world-map":"世界地図",micro:"ミクロの世界",lineage:"系統樹",laws:"宇宙の法則","earth-book":"地球大全"};
+  const groupOf=id=>NAV.find(v=>v.id===id||(v.also||[]).includes(id));
+  const side=$("views"), tabbar=$("tabbar");
+  side.innerHTML=NAV.map(v=>`<a class="sn" href="#${v.id}" data-v="${v.id}"><span class="sni">${IC[v.ic]}</span><span class="snt"><b>${v.t}</b><small>${v.s}</small></span><span class="snr">${v.tab}</span><span class="snn num">${v.n}</span></a>`+
+    (v.sub?`<div class="snsub" data-for="${v.id}">${v.sub.map(([k,t])=>`<a href="#${k.startsWith("tl:")?"timeline":k}" data-sub="${k}">${t}</a>`).join("")}</div>`:"")).join("");
+  tabbar.innerHTML=NAV.map(v=>`<a class="tb" href="#${v.id}" data-v="${v.id}">${IC[v.ic]}<span>${v.tab}</span></a>`).join("");
+  side.addEventListener("click",e=>{const a=e.target.closest("[data-sub^='tl:']");if(!a)return;e.preventDefault();const m=a.dataset.sub.slice(3);
+    const go=()=>{window.TL_SET&&TL_SET(m);syncSub();};if(location.hash!=="#timeline"){location.hash="timeline";setTimeout(go,60);}else go();});
+  let curView=null;
+  function syncSub(){side.querySelectorAll("[data-sub]").forEach(a=>{const k=a.dataset.sub;const on=k.startsWith("tl:")?curView==="timeline"&&window.TLMODE===k.slice(3):curView===k;a.classList.toggle("on",on);if(on)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});}
+  function onView(id){const prev=curView;curView=id;const g=groupOf(id);
+    document.querySelectorAll(".sn,.tb").forEach(a=>{const on=g&&a.dataset.v===g.id;a.classList.toggle("on",on);if(on)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});
+    syncSub();document.title=`${TITLE[id]||"カルダシェフ文明マップ"}｜カルダシェフ文明マップ`;
+    if(prev&&prev!==id){window.scrollTo(0,0);closeEra();if(fsEl&&!fsEl.closest("section.view.on"))toggleFs(fsEl,false);}
+    requestAnimationFrame(()=>{syncSheets();centerActive(document.querySelector("section.view.on"));});}
+  document.addEventListener("click",()=>requestAnimationFrame(syncSub));
+  window.addEventListener("k-year",()=>requestAnimationFrame(syncSub));
+
+  // ---- 2) 時代（PC＝上のバーと一覧／スマホ＝下から出るシート） ----
+  const dock=$("eradock"), chip=$("erachip"), nowBtn=$("edNow"), scrim=$("scrim"), list=$("edList");
+  function scrollListToCurrent(){const cur=list.querySelector(".edi.on");if(cur){const pop=$("edPop");pop.scrollTop=Math.max(0,cur.offsetTop-pop.clientHeight/2+cur.offsetHeight/2);}}
+  function setPop(on){dock.classList.toggle("pop",on);nowBtn.setAttribute("aria-expanded",on);if(on)requestAnimationFrame(scrollListToCurrent);}
+  function openEra(){if(isM()){dock.classList.add("open");scrim.hidden=false;body.classList.add("sheet-lock");chip.setAttribute("aria-expanded","true");requestAnimationFrame(()=>{scrollListToCurrent();$("track").focus({preventScroll:true});});}else{setPop(true);$("track").focus({preventScroll:true});}}
+  function closeEra(){const was=dock.classList.contains("open");dock.classList.remove("open");scrim.hidden=true;body.classList.remove("sheet-lock");chip.setAttribute("aria-expanded","false");setPop(false);if(was)chip.focus({preventScroll:true});}
+  chip.addEventListener("click",openEra);
+  nowBtn.addEventListener("click",()=>{if(!isM())setPop(!dock.classList.contains("pop"));});
+  $("edClose").addEventListener("click",closeEra);
+  scrim.addEventListener("click",closeEra);
+  document.addEventListener("pointerdown",e=>{if(dock.classList.contains("pop")&&!dock.contains(e.target))setPop(false);});
+  window.addEventListener("k-picked",e=>{if(e.detail.from==="list"){if(isM())closeEra();else setPop(false);}});
+  function flashEra(){const E=window.KERA;[chip,nowBtn].forEach(el=>{el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");});if(E&&window.KTOAST)KTOAST(`時代を「${E.when}・${E.name}」に切り替えました。`);}
+  // 高さ（固定のバー）を CSS に渡す：見出しへ飛んだときに隠れないように
+  function setSticky(){const h=isM()?$("topbar").offsetHeight:dock.offsetHeight;root.style.setProperty("--stickyH",h+"px");}
+  new ResizeObserver(setSticky).observe(dock);new ResizeObserver(setSticky).observe($("topbar"));
+
+  // ---- 3) 詳細パネル：スマホでは画面の下から出るシートに、PCでは画面外なら「詳細を見る」を出す ----
+  const PANELS=[
+    {id:"gpanel",view:"lineage",close:p=>p.querySelector("[data-close]"),prefer:p=>p.querySelector(".plate")?"full":"peek"},
+    {id:"bgpanel",view:"timeline",close:p=>p.querySelector("[data-close]")},
+    {id:"whpanel",view:"timeline",close:p=>p.querySelector("[data-close]")},
+    {id:"lpanel",view:"laws",close:p=>p.querySelector("[data-close]")},
+    {id:"info",view:"world-map",active:p=>p.classList.contains("detail-mode"),close:p=>p.querySelector("[data-back]")}].map(o=>({...o,el:$(o.id)})).filter(o=>o.el);
+  const ds=document.createElement("div");ds.className="dsheet";ds.id="dsheet";ds.hidden=true;ds.setAttribute("role","region");ds.setAttribute("aria-label","詳細");
+  ds.innerHTML=`<div class="ds-bar"><button type="button" class="ds-grip" aria-label="パネルを広げる／たたむ"><i></i></button><button type="button" class="ds-x" aria-label="閉じる">${IC.x}</button></div><div class="ds-body"></div>`;
+  body.appendChild(ds);
+  const dsBody=ds.querySelector(".ds-body");
+  PANELS.forEach(p=>{p.mark=document.createComment("panel:"+p.id);p.el.before(p.mark);p.t=0;});
+  let lastUser=0;["pointerup","keydown"].forEach(t=>window.addEventListener(t,()=>{lastUser=Date.now();},true));
+  const userish=()=>Date.now()-lastUser<1500;
+  const isOpen=p=>!p.el.hidden&&(!p.active||p.active(p.el))&&curView===p.view;
+  let inSheet=null;
+  function sheetOpen(){return !ds.hidden;}
+  function setState(s){ds.dataset.state=s;ds.querySelector(".ds-grip").setAttribute("aria-expanded",s==="full");}
+  const pill=document.createElement("button");pill.type="button";pill.className="jumppill";pill.hidden=true;pill.innerHTML=`${IC.down}<span>下に詳細を表示しました</span>`;body.appendChild(pill);
+  let pillFor=null,pillT=0;
+  pill.addEventListener("click",()=>{if(pillFor)pillFor.scrollIntoView({behavior:"smooth",block:"start"});pill.hidden=true;});
+  function syncSheets(changed){
+    const open=PANELS.filter(isOpen).sort((a,b)=>b.t-a.t);
+    if(isM()){
+      const p=open[0]||null;
+      PANELS.forEach(q=>{if(q!==p&&q.el.parentNode===dsBody)q.mark.after(q.el);});
+      if(p){if(p.el.parentNode!==dsBody){dsBody.appendChild(p.el);}inSheet=p;ds.hidden=false;body.classList.add("ds-on");
+        if(changed===p||!ds.dataset.state){const want=userish()?(p.prefer?p.prefer(p.el):"full"):"peek";setState(want);dsBody.scrollTop=0;}}
+      else{inSheet=null;ds.hidden=true;body.classList.remove("ds-on");}
+      pill.hidden=true;
+    }else{
+      PANELS.forEach(q=>{if(q.el.parentNode===dsBody)q.mark.after(q.el);});inSheet=null;ds.hidden=true;body.classList.remove("ds-on");
+      if(changed&&isOpen(changed)&&userish()){const r=changed.el.getBoundingClientRect();if(r.top>innerHeight-90||r.bottom<0){pillFor=changed.el;pill.hidden=false;clearTimeout(pillT);pillT=setTimeout(()=>pill.hidden=true,6000);}}
+    }
+  }
+  const mo=new MutationObserver(recs=>{const seen=new Set();recs.forEach(r=>{const p=PANELS.find(q=>q.el===r.target||q.el.contains(r.target));if(p&&!seen.has(p)){seen.add(p);if(r.type==="childList"||!p.el.hidden)p.t=performance.now();}});
+    let last=null;seen.forEach(p=>{if(!last||p.t>last.t)last=p;});syncSheets(last);});
+  PANELS.forEach(p=>mo.observe(p.el,{attributes:true,attributeFilter:["hidden","class"],childList:true}));
+  ds.querySelector(".ds-grip").addEventListener("click",()=>setState(ds.dataset.state==="full"?"peek":"full"));
+  ds.querySelector(".ds-x").addEventListener("click",()=>{if(!inSheet)return;const b=inSheet.close(inSheet.el);if(b)b.click();else inSheet.el.hidden=true;});
+  // バーを上下にスワイプして広げる／たたむ
+  {let sy=null;const bar=ds.querySelector(".ds-bar");
+    bar.addEventListener("pointerdown",e=>{sy=e.clientY;});
+    bar.addEventListener("pointerup",e=>{if(sy===null)return;const d=e.clientY-sy;sy=null;if(d>40){if(ds.dataset.state==="peek")ds.querySelector(".ds-x").click();else setState("peek");}else if(d<-40)setState("full");});
+    bar.addEventListener("pointercancel",()=>{sy=null;});}
+  // たたんだ状態でパネルの中身を押したら広げる（リンクやボタンはそのまま動かす）
+  dsBody.addEventListener("click",e=>{if(ds.dataset.state==="peek"&&!e.target.closest("button,a,input,summary,canvas"))setState("full");});
+  const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting&&en.target===pillFor)pill.hidden=true;});},{threshold:.15});
+  PANELS.forEach(p=>io.observe(p.el));
+  mqM.addEventListener("change",()=>{closeEra();syncSheets();setSticky();});
+
+  // ---- 4) 全画面（図・地図・3Dを画面いっぱいに） ----
+  let fsEl=null;
+  function addFs(box,into){if(!box||box._fs)return;box._fs=true;const b=document.createElement("button");b.type="button";b.className="fsbtn";b.innerHTML=IC.fs;b.setAttribute("aria-label","全画面で表示");b.title="全画面で表示（F キー）";
+    (into||box).appendChild(b);b.addEventListener("pointerdown",e=>e.stopPropagation());b.addEventListener("click",e=>{e.stopPropagation();toggleFs(box);});box._fsb=b;}
+  function toggleFs(box,on){on=on===undefined?!box.classList.contains("is-fs"):on;
+    if(on){if(fsEl&&fsEl!==box)toggleFs(fsEl,false);fsEl=box;box.classList.add("is-fs");}else{box.classList.remove("is-fs");if(fsEl===box)fsEl=null;}
+    body.classList.toggle("fs-on",!!fsEl);const b=box._fsb;if(b){b.innerHTML=on?IC.fsx:IC.fs;b.setAttribute("aria-label",on?"全画面を閉じる":"全画面で表示");b.title=on?"全画面を閉じる（Esc）":"全画面で表示（F キー）";b.classList.toggle("on",on);}
+    requestAnimationFrame(()=>{window.dispatchEvent(new Event("resize"));syncSheets();});}
+  addFs($("gcanvas"));addFs($("spscene"));addFs($("mcscene"));addFs($("mapbox"));addFs(document.querySelector(".thwrap"));addFs(document.querySelector(".loc3d"));
+  const hookBranch=el=>{const w=el.matches&&el.matches(".bgwrap")?el:null;if(w)addFs(w,w.querySelector(".bgtools"));};
+  document.querySelectorAll(".bgwrap").forEach(hookBranch);
+  new MutationObserver(rs=>rs.forEach(r=>r.addedNodes.forEach(n=>{if(n.nodeType===1){hookBranch(n);n.querySelectorAll&&n.querySelectorAll(".bgwrap").forEach(hookBranch);}}))).observe($("v-timeline"),{childList:true,subtree:true});
+  function mainCanvas(){const v=document.querySelector("section.view.on");if(!v)return null;
+    return {lineage:$("gcanvas"),"space-map":$("spscene"),micro:$("mcscene"),"world-map":$("mapbox")}[curView]||[...v.querySelectorAll(".bgwrap")].find(w=>w.offsetParent)||null;}
+
+  // ---- 5) ピンチで拡大（ホイールだけに対応していた3Dに、2本指の操作を足す） ----
+  function pinch(el,k,step,sel){if(!el)return;const pts=new Map();let d0=0,acc=0,on=false;
+    const tgt=()=>(sel?el.querySelector(sel):el.querySelector("canvas"))||el;
+    el.addEventListener("pointerdown",e=>{if(e.pointerType!=="touch")return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pts.size>=2){on=true;d0=0;acc=0;e.stopImmediatePropagation();}},true);
+    el.addEventListener("pointermove",e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});if(!on)return;e.stopImmediatePropagation();e.preventDefault();if(pts.size<2)return;
+      const [a,b]=[...pts.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(!d0){d0=d;return;}const lr=Math.log(d/d0);d0=d;const cx=(a.x+b.x)/2,cy=(a.y+b.y)/2;
+      const fire=dy=>tgt().dispatchEvent(new WheelEvent("wheel",{deltaY:dy,clientX:cx,clientY:cy,bubbles:true,cancelable:true}));
+      if(step){acc+=lr;const s=Math.log(step);while(Math.abs(acc)>=s){fire(acc>0?-100:100);acc-=Math.sign(acc)*s;}}else fire(-lr*k);},true);
+    const up=e=>{pts.delete(e.pointerId);if(!pts.size)on=false;};el.addEventListener("pointerup",up,true);el.addEventListener("pointercancel",up,true);}
+  pinch($("mcscene"),1/.0012);pinch($("scene"),1/.001);pinch($("thstage"),0,1.1);pinch($("pmap"),1/.0015,0,".pmbox");
+
+  // ---- 6) 横に流れるチップ・切り替え：選んでいるものを見える位置へ ----
+  const ROWS="#gchips,#maplayers,#mapchips,#bodysel,#tlregions,#thview,#thspeed,#thjumps,.tlswitch,.histsw,.ctabs,.ptlegend";
+  function centerActive(scope){if(!scope)return;scope.querySelectorAll(ROWS).forEach(row=>{if(row.scrollWidth<=row.clientWidth+2)return;const a=row.querySelector('[aria-pressed="true"],[aria-selected="true"],.on');if(!a)return;row.scrollLeft=Math.max(0,a.offsetLeft-row.clientWidth/2+a.offsetWidth/2);});}
+  document.addEventListener("click",e=>{const row=e.target.closest(ROWS);if(row)requestAnimationFrame(()=>centerActive(row.parentElement||row));});
+
+  // ---- 7) キー操作：Esc で閉じる・F で全画面 ----
+  window.addEventListener("keydown",e=>{
+    const dlg=!$("sx")?.hidden||!$("hx")?.hidden;
+    if(e.key==="Escape"&&!dlg){if(fsEl){e.preventDefault();toggleFs(fsEl,false);return;}if(dock.classList.contains("open")||dock.classList.contains("pop")){e.preventDefault();closeEra();return;}if(isM()&&sheetOpen()){e.preventDefault();ds.querySelector(".ds-x").click();return;}}
+    const t=e.target;if(dlg||e.ctrlKey||e.metaKey||e.altKey||(t&&(t.tagName==="INPUT"&&!["range","checkbox","radio","button"].includes(t.type)||t.tagName==="TEXTAREA"||t.isContentEditable)))return;
+    if(e.key==="f"||e.key==="F"){const c=mainCanvas();if(c){e.preventDefault();toggleFs(c);}}
+  });
+
+  // 全体マップの「前の時代／時代を選ぶ／次の時代」
+  document.addEventListener("click",e=>{const b=e.target.closest("[data-kstep]");if(!b)return;const d=+b.dataset.kstep;if(d)window.KSTEP&&KSTEP(d);else openEra();});
+
+  window.KSHELL={onView,openEra,closeEra,flashEra,toggleFs,addFs,syncSheets,isMobile:isM};
+  setSticky();
 })();
 
 show();
@@ -9506,7 +10112,7 @@ document.fonts?.ready.then(drawLinks);
 /* ---------- 画面の共通レイアウト：見出し → 切り替え・チップ → 操作できる画面（中央・全幅）→ 情報パネル（下） ---------- */
 (()=>{const sec=id=>document.getElementById("v-"+id);
   // 全体マップ：見出しを先頭に
-  const ov=sec("overview");if(ov){const h=ov.querySelector(":scope>.view-head");if(h)ov.prepend(h);}
+  const ov=sec("overview");if(ov){const h=ov.querySelector(":scope>.view-head");if(h){ov.prepend(h);const hl=document.getElementById("hello");if(hl)h.after(hl);}}
   // ミクロ：左の縦リストを画面の上のチップ列に
   const mi=sec("micro");if(mi){const l=mi.querySelector("#mclist"),w=mi.querySelector(".mcwrap");if(l&&w)w.before(l);}
   document.querySelectorAll(".view").forEach(v=>v.classList.add("staged"));

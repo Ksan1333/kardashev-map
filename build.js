@@ -57,6 +57,7 @@ const r={
   "__ERA__":"era.js",
   "__WHC__":"whc.js",
   "__KSLIDER__":"kslider.js",
+  "__SHELL__":"shell.js",
   "__TGUIDE__":"typeguide.js",
   "__ERADATA__":"eradata.js",
   "__COUNTRIES__":"countries.json",

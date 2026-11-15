@@ -34,8 +34,8 @@
   const yfmt=y=>y< -1e8?(-y/1e8).toFixed(1).replace(/\.0$/,"")+"億年前":y< -1e4?Math.round(-y/1e4).toLocaleString()+"万年前":y<0?"紀元前"+(-y).toLocaleString()+"年":y>1e9?"":y+"年";
   function upd(){const E=window.KERA;if(!E)return;const now=E.now;
     Object.entries(bars).forEach(([id,b])=>{b.hidden=now||E.kind==="future"&&window.KYEAR>1e9;if(b.hidden)return;
-      b.innerHTML=`<span class="erapill ${E.kind}">${E.when}</span><b>「${E.name}」の時点</b><span class="eramsg">${MSG[id]}</span><button class="chip" data-now="1">現在に戻す</button><button class="chip" data-top="1">↑ 上のスライダーで変える</button>`;});}
-  document.addEventListener("click",e=>{if(e.target.closest(".erabar [data-top]"))window.scrollTo({top:0,behavior:"smooth"});if(e.target.closest(".erabar [data-now]"))window.KSETK&&window.KSETK(.73);});
+      b.innerHTML=`<span class="erapill ${E.kind}">${E.when}</span><b>「${E.name}」の時点</b><span class="eramsg">${MSG[id]}</span><span class="erabtns"><button class="chip" data-now="1">現在に戻す</button><button class="chip" data-top="1">時代を変える</button></span>`;});}
+  document.addEventListener("click",e=>{if(e.target.closest(".erabar [data-top]")){if(window.KSHELL)KSHELL.openEra();else window.scrollTo({top:0,behavior:"smooth"});}if(e.target.closest(".erabar [data-now]"))window.KSETK&&window.KSETK(.73);});
   window.addEventListener("k-year",upd);
   // 宇宙マップ：時代が変わったら今のスケールを作り直す
   window.addEventListener("k-year",()=>{try{if(typeof SPZ!=="undefined"&&SPZ.level!==undefined&&document.querySelector("#spscene canvas"))SPZ.go(SPZ.level);}catch(e){}});

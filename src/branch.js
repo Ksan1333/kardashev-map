@@ -71,9 +71,16 @@ function BranchGraph(host,D,panel){
   const zoomAt=(x,f)=>{const nk=Math.min(40,Math.max(1,k*f));tx=x-(x-tx-LX)*(nk/k)-LX;k=nk;clampX();render();};
   const clampX=()=>{const w=wrap.clientWidth;tx=Math.min(0,Math.max(tx,w-30-W0*k));};
   wrap.addEventListener("wheel",e=>{if(e.shiftKey){tx-=e.deltaY;clampX();render();e.preventDefault();return;}e.preventDefault();const r=wrap.getBoundingClientRect();zoomAt(e.clientX-r.left,e.deltaY<0?1.2:1/1.2);},{passive:false});
-  let drag=null,moved=0;wrap.addEventListener("pointerdown",e=>{if(e.target.closest(".bgtools"))return;drag={x:e.clientX,tx};moved=0;});
-  window.addEventListener("pointermove",e=>{if(!drag)return;moved=Math.abs(e.clientX-drag.x);tx=drag.tx+(e.clientX-drag.x);clampX();render();});
-  window.addEventListener("pointerup",()=>{drag=null;});
+  // ドラッグで横に移動／2本指のピンチで拡大縮小（スマホ）。縦のスワイプはページのスクロールに使う（touch-action:pan-y）
+  let drag=null,moved=0,pin=null;const pts=new Map();
+  wrap.addEventListener("pointerdown",e=>{if(e.target.closest(".bgtools,.fsbtn")||e.button>0)return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size>=2){const [p,q]=[...pts.values()];pin={d:Math.max(8,Math.hypot(p.x-q.x,p.y-q.y))};drag=null;moved=99;}
+    else{drag={x:e.clientX,tx,id:e.pointerId};moved=0;}});
+  window.addEventListener("pointermove",e=>{if(pts.has(e.pointerId))pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pin&&pts.size>=2){const [p,q]=[...pts.values()],d=Math.max(8,Math.hypot(p.x-q.x,p.y-q.y)),r=wrap.getBoundingClientRect();zoomAt((p.x+q.x)/2-r.left,d/pin.d);pin.d=d;return;}
+    if(!drag||e.pointerId!==drag.id)return;moved=Math.max(moved,Math.abs(e.clientX-drag.x));tx=drag.tx+(e.clientX-drag.x);clampX();render();});
+  const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pin=null;if(drag&&(e.pointerId===drag.id||!pts.size))drag=null;};
+  window.addEventListener("pointerup",up);window.addEventListener("pointercancel",up);
   wrap.querySelector(".bgtools").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const w=wrap.clientWidth/2;if(b.dataset.z==="in")zoomAt(w,1.5);else if(b.dataset.z==="out")zoomAt(w,1/1.5);else{fit();render();}});
   new ResizeObserver(()=>{if(wrap.clientWidth){const rel=k;fit();k=rel;clampX();render();}}).observe(wrap);
   window.addEventListener("k-year",render);

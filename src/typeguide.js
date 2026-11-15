@@ -50,5 +50,5 @@
   function show(k){tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===k));const t=T[k];body.innerHTML=`<h3>${t.h}</h3><p class="tglead">${t.lead}</p>${t.body}`;}
   tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(b)show(b.dataset.t);});window.TG_SHOW=show;
   show("t2");
-  window.addEventListener("k-year",()=>{const k=+(document.getElementById("krange")||{}).value;if(k>=2.5)show("t3");else if(k>=1.5)show("t2");else if(k>=.8)show("t1");});
+  window.addEventListener("k-year",()=>{const k=window.KERA?KERA.k:.73;if(k>=2.5)show("t3");else if(k>=1.5)show("t2");else if(k>=.8)show("t1");});
 })();
