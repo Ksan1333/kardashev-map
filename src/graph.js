@@ -146,7 +146,7 @@
     });
     // 時間軸（上に固定）
     let grid="", ax=`<rect x="0" y="0" width="${vw}" height="${AX}" fill="#0a0f1f"/><line x1="0" x2="${vw}" y1="${AX}" y2="${AX}" stroke="var(--line)"/>`;
-    ERA.forEach(([nm,a,b])=>{const x1=Math.max(sx(a),0),x2=Math.min(sx(b),vw);if(x2-x1<30)return;ax+=`<text x="${(x1+x2)/2}" y="15" text-anchor="middle" font-size="12" font-weight="700" fill="#e9edf7" font-family="Murecho,sans-serif">${nm}</text>`;});
+    ERA.forEach(([nm,a,b])=>{const x1=Math.max(sx(a),0),x2=Math.min(sx(b),vw);const tw=t=>[...t].reduce((n,c)=>n+(c.charCodeAt(0)>255?12:7.4),0)+8;let t=nm;if(x2-x1<tw(t)){t=nm.replace(/^Type (I{1,3}|IV)へ$/,"$1");if(t===nm||x2-x1<tw(t))return;}ax+=`<text x="${(x1+x2)/2}" y="15" text-anchor="middle" font-size="12" font-weight="700" fill="#e9edf7" font-family="Murecho,sans-serif">${t}</text>`;});
     const ua=(0-tx)/kx, ub=(vw-tx)/kx, steps=[1,2,5,10,20,50,100,200,500,1000,2000,5000,10000,20000,50000,100000,200000,500000,1e6,2e6,5e6,1e7,2e7,5e7], cand=[];
     SEG.forEach(([a,b,u0,u1])=>{if(u1<ua||u0>ub)return;const ppy=kx*(u1-u0)/(b-a);const step=steps.find(s=>s*ppy>=72)||1e6;const ya=Math.max(a,Yof(ua)),yb=Math.min(b,Yof(ub),EY);for(let y=Math.ceil(ya/step)*step;y<=yb;y+=step)if(!cand.includes(y))cand.push(y);});
     cand.sort((p,q)=>p-q);

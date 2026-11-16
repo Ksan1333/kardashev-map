@@ -46,7 +46,7 @@
     <h4>8. Type I・II・IIIの比較</h4>
     <table class="ltable"><tr><th></th><th>Type I</th><th>Type II</th><th>Type III</th></tr><tr><th>エネルギー</th><td>10¹⁶W</td><td>3.8×10²⁶W</td><td>10³⁶〜10³⁷W</td></tr><tr><th>範囲</th><td>1つの惑星</td><td>1つの恒星系</td><td>1つの銀河</td></tr><tr><th>このマップの時期</th><td>2250年ごろ</td><td>4000年ごろ</td><td>100万年ごろ</td></tr><tr><th>代表的な技術</th><td>核融合・軌道エレベーター</td><td>ダイソン・スウォーム</td><td>自己複製探査機・ブラックホール</td></tr><tr><th>見つけ方</th><td>電波・大気の汚染物質</td><td>恒星の赤外線余剰</td><td>銀河の赤外線余剰</td></tr></table>
     <p>この先には、宇宙全体を使う「Type IV」や、多元宇宙を行き来する「Type V」という想像もあるが、物理学で語れる範囲を大きく超えている。スライダーを「Type III」に合わせると、年表（1万〜100万年）、系統樹、宇宙マップ（天の川銀河に広がる文明圏、アンドロメダへの探査）に反映されます。</p>`}};
-  const tabs=box.querySelector(".ctabs"),body=box.querySelector(".tgbody");
+  const tabs=box.querySelector(".ui-seg"),body=box.querySelector(".tgbody");
   function show(k){tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===k));const t=T[k];body.innerHTML=`<h3>${t.h}</h3><p class="tglead">${t.lead}</p>${t.body}`;}
   tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(b)show(b.dataset.t);});window.TG_SHOW=show;
   show("t2");

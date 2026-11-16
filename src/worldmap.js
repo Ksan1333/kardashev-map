@@ -76,7 +76,7 @@
   const layerBox=document.getElementById("maplayers"), chipBox=document.getElementById("mapchips");
   function renderCtl(){
     layerBox.innerHTML=[["country","国境・国"],["landmark","ランドマーク"],["tourism","観光の流れ（2025年）"]].map(([k2,t])=>`<button class="chip" aria-pressed="${layers[k2]}" data-l="${k2}">${t}</button>`).join("");
-    chipBox.style.display=layers.landmark?"flex":"none";
+    (chipBox.closest(".ui-filter")||chipBox).style.display=layers.landmark?"":"none";
     const ALL=cats.size===Object.keys(CAT).length;chipBox.innerHTML=`<button class="chip" data-c="__all" aria-pressed="${ALL}">すべて</button>`+Object.entries(CAT).map(([k2,[t,c]])=>`<button class="chip" aria-pressed="${!ALL&&cats.has(k2)}" data-c="${k2}"><span class="dot" style="background:${c}"></span>${t}</button>`).join("");
   }
   layerBox.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;layers[b.dataset.l]=!layers[b.dataset.l];renderCtl();decorate();});

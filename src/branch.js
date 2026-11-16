@@ -11,8 +11,8 @@ function BranchGraph(host,D,panel){
   order.forEach((l,i)=>l.row=i);
   const seg=D.seg, X01=t=>{if(t<=seg[0][0])return 0;for(let i=1;i<seg.length;i++)if(t<=seg[i][0]){const[a,fa]=seg[i-1],[b,fb]=seg[i];return fa+(fb-fa)*(t-a)/(b-a);}return 1;};
   const T0=seg[0][0],T1=seg[seg.length-1][0];
-  host.innerHTML=`<div class="bgwrap"><svg class="bgsvg"></svg><div class="bgtools"><button data-z="in">＋</button><button data-z="out">−</button><button data-z="fit">全体</button></div></div>`;
-  const wrap=host.firstChild,svg=wrap.querySelector("svg");
+  host.innerHTML=`<div class="ui-stage bgstage" data-fs="1"><div class="ui-bar"><div class="ui-opts"><span class="ui-stat">${D.title}の年表</span></div><div class="ui-tools bgtools"><span class="ui-stat num bgzoom"></span><button type="button" data-z="out" aria-label="縮小" title="縮小"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><button type="button" data-z="in" aria-label="拡大" title="拡大"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><button type="button" data-z="fit" title="全体を表示">全体</button></div></div><div class="bgwrap ui-fig"><svg class="bgsvg"></svg></div></div>`;
+  const wrap=host.querySelector(".bgwrap"),svg=wrap.querySelector("svg"),zl=host.querySelector(".bgzoom");
   let W0=1200,k=1,tx=0,sel=null;
   const cut=()=>null;
   const markY=()=>{const Y=window.KYEAR;if(typeof Y!=="number")return null;if(D.unit==="yr")return Y>1e9?null:Y;if(D.unit==="ma"){if(Y>=2026)return null;return Y/1e6;}
@@ -46,6 +46,7 @@ function BranchGraph(host,D,panel){
     {const m=markY();if(m!==null&&m!==undefined){const x=sx(m);if(x>0&&x<w)g.push(`<line x1="${x}" x2="${x}" y1="0" y2="${h}" stroke="#b48cff" stroke-width="1.5" stroke-dasharray="4 4" opacity=".8"/><text x="${x+6}" y="${TOP+14}" class="bgcut">◀ スライダーの時代</text>`);}}
     if(D.now!==undefined){const x=sx(D.now);g.push(`<line x1="${x}" x2="${x}" y1="42" y2="${h}" stroke="#f4b942" stroke-width="1.6" stroke-dasharray="4 3"/>`);}
     svg.innerHTML=g.join("")+con.join("")+lines.join("")+labs.join("");
+    if(zl)zl.textContent="×"+k.toFixed(1);
   }
   function detail(l,ei){sel=l;render();const e=ei!=null?l.ev[ei]:null;
     const kidsL=(kids[l.id]||[]).map(x=>`<button class="linkbtn" data-l="${x.id}">${x.name}</button>`).join("");
@@ -81,8 +82,9 @@ function BranchGraph(host,D,panel){
     if(!drag||e.pointerId!==drag.id)return;moved=Math.max(moved,Math.abs(e.clientX-drag.x));tx=drag.tx+(e.clientX-drag.x);clampX();render();});
   const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pin=null;if(drag&&(e.pointerId===drag.id||!pts.size))drag=null;};
   window.addEventListener("pointerup",up);window.addEventListener("pointercancel",up);
-  wrap.querySelector(".bgtools").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const w=wrap.clientWidth/2;if(b.dataset.z==="in")zoomAt(w,1.5);else if(b.dataset.z==="out")zoomAt(w,1/1.5);else{fit();render();}});
-  new ResizeObserver(()=>{if(wrap.clientWidth){const rel=k;fit();k=rel;clampX();render();}}).observe(wrap);
+  host.querySelector(".bgtools").addEventListener("click",e=>{const b=e.target.closest("[data-z]");if(!b)return;const w=wrap.clientWidth/2;if(b.dataset.z==="in")zoomAt(w,1.5);else if(b.dataset.z==="out")zoomAt(w,1/1.5);else{fit();render();}});
+  // 幅が変わったとき（詳細パネルの開閉・全画面など）は、真ん中に見えていた位置を保つ
+  let lastW=0;new ResizeObserver(()=>{const w=wrap.clientWidth;if(!w)return;const rel=k;if(lastW&&w!==lastW){const u=(lastW/2-LX-tx)/(W0*k);fit();k=rel;tx=w/2-LX-u*W0*k;}else{fit();k=rel;}lastW=w;clampX();render();}).observe(wrap);
   window.addEventListener("k-year",render);
   fit();render();
   function focus(lid,ei){const l=byId[lid];if(!l)return false;const t=ei!=null&&l.ev&&l.ev[ei]?l.ev[ei][0]:l.a;const w=wrap.clientWidth||1000;if(!wrap.clientWidth)return false;fit();k=Math.max(k,3);tx=w*.4-(LX+X01(t)*W0*k);clampX();panel.dataset.owner=D.title;detail(l,ei);

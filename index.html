@@ -115,7 +115,7 @@ body.t1 .whev[data-fut="1"]{border-style:dashed}
 .lpgrid{display:grid;grid-template-columns:2fr 2fr 1fr 1fr;gap:14px}.lpcol h4{margin:0 0 8px;font-size:13px;color:var(--muted)}.lp2{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.lp1{display:grid;gap:8px}
 .lpart{position:relative;text-align:left;border:1px solid var(--line);border-top:3px solid var(--pc);border-radius:10px;background:#ffffff08;padding:8px 10px;color:var(--text);cursor:pointer;display:flex;flex-direction:column;gap:1px;font-family:var(--font-body)}
 .lpart:hover{background:#ffffff14}.lps{font:700 22px "Times New Roman",serif;color:var(--pc)}.lpn{font-size:12px;font-weight:600}.lpm,.lpq{font-size:10.5px;color:var(--muted)}.lpart.off,.pt.off{opacity:.25;filter:grayscale(1)}
-.ptwrap{overflow-x:auto;padding-bottom:6px}.ptable{display:grid;grid-template-columns:repeat(18,minmax(52px,1fr));grid-template-rows:repeat(7,auto) 14px repeat(2,auto);gap:3px;min-width:980px}
+.ptwrap{overflow-x:auto;padding-bottom:6px;container-type:inline-size}.ptable{display:grid;grid-template-columns:repeat(18,minmax(52px,1fr));grid-template-rows:repeat(7,auto) 14px repeat(2,auto);gap:3px;min-width:980px}
 .pt{border:0;border-radius:6px;background:color-mix(in srgb,var(--ec) 22%,#0b1124);border-top:2px solid var(--ec);color:var(--text);padding:4px 3px 5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;line-height:1.1;font-family:var(--font-body)}
 .pt:hover{background:color-mix(in srgb,var(--ec) 45%,#0b1124)}.pt b{font-size:16px}.ptz{font-size:9.5px;color:var(--muted);align-self:flex-start}.ptn{font-size:9.5px;color:#cfd7ea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .ptgap{font-size:10px;color:var(--muted);display:flex;align-items:center;justify-content:center;border:1px dashed var(--line);border-radius:6px}
@@ -687,7 +687,7 @@ body{padding:0;min-height:100vh;font-size:15px;line-height:1.7;
 .skip:focus{top:12px}
 a{color:var(--cool)}
 :focus-visible{outline:2px solid var(--cool);outline-offset:2px}
-.sni svg,.tb svg,.sbtn svg,.ibtn svg,.chev,.ed-b svg,.ed-close svg,.fsbtn svg,.ds-x svg,.jumppill svg,.sxin svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sni svg,.tb svg,.sbtn svg,.ibtn svg,.chev,.ed-b svg,.ed-close svg,.ds-x svg,.sxin svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .sni svg .f,.tb svg .f{fill:currentColor;stroke:none}
 .l-sm{display:none}
 
@@ -799,31 +799,47 @@ section.view{gap:16px}
 .vh-more[open]>summary::after{transform:rotate(-135deg) translate(-1px,-1px)}
 .vh-more>summary:hover{border-color:#7fb2ff88}
 .vh-more>p{margin:10px 0 4px;color:var(--ink-2);font-size:13.5px;line-height:1.85;max-width:none}
-.vh-more .tllegend{margin:10px 0 2px}
 
 /* ---- 部品：パネル・チップ・切り替え・注記 ---- */
 .panel{background:linear-gradient(180deg,var(--surface),#0d1427);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px}
 .gauge-head b{font-size:16px}
 .gauge-head span,.gauge-foot{font-size:13px;color:var(--muted)}
 .view .note{font-size:13px;color:var(--muted);line-height:1.75}
-.legend,.tllegend{font-size:13px;color:var(--muted)}
-.tllegend{border-color:var(--line-2);background:#ffffff04}
+.legend{font-size:13px;color:var(--muted)}
 .chip{font:500 13px var(--font-body);color:var(--ink-2);background:#ffffff06;border:1px solid var(--line-2);border-radius:999px;padding:5px 13px;min-height:32px;line-height:1.4;transition:border-color .15s,background .15s,color .15s}
 .chip:hover{border-color:#5d6ea3;color:var(--ink)}
 .chip[aria-pressed="true"]{color:var(--ink);background:#26355e;border-color:#6d80bb}
 a.chip{text-decoration:none}
-.tlswitch,.histsw{display:inline-flex;align-self:flex-start;gap:4px;padding:4px;border-radius:14px;background:#0c1325;border:1px solid var(--line);margin:0;max-width:100%;overflow-x:auto;scrollbar-width:none}
-.tlswitch::-webkit-scrollbar,.histsw::-webkit-scrollbar,.ctabs::-webkit-scrollbar{display:none}
-.tlswitch button,.scaleswitch a,.histsw button{flex:none;font:600 14px var(--font-body);color:var(--muted);background:transparent;border:0;border-radius:10px;padding:7px 16px;cursor:pointer;text-decoration:none;white-space:nowrap;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;line-height:1.35;transition:background .15s,color .15s}
-.tlswitch button:hover,.scaleswitch a:hover,.histsw button:hover{color:var(--ink);background:#ffffff0a}
-.tlswitch button[aria-pressed="true"],.scaleswitch a.on,.histsw button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
-.tlswitch button small{font-size:11.5px;font-weight:500;opacity:.85}
-.histsw{margin-bottom:10px}
-.ctabs{gap:4px;border-bottom:1px solid var(--line-2);padding:0 4px;scrollbar-width:none}
-.ctabs button{font:600 13.5px var(--font-body);border-radius:11px 11px 0 0;padding:9px 16px;background:transparent;border:1px solid transparent;border-bottom:0;color:var(--muted)}
-.ctabs button:hover{background:#ffffff0a;color:var(--ink)}
-.ctabs button[aria-selected="true"]{background:var(--surface-2);color:var(--ink);border-color:var(--line-2);padding-top:9px}
-.ctabbody{background:var(--surface-2);border:1px solid var(--line-2);border-top:0;border-radius:0 0 var(--r-lg) var(--r-lg)}
+/* 切り替え：どのページでも同じ形（年表・宇宙/世界地図/ミクロ・世界史の表示・宇宙の法則・文明タイプ） */
+.ui-seg{display:inline-flex;flex-wrap:nowrap;align-self:flex-start;gap:4px;margin:0;padding:4px;border-radius:14px;background:#0c1325;border:1px solid var(--line);max-width:100%;overflow-x:auto;scrollbar-width:none}
+.ui-seg::-webkit-scrollbar{display:none}
+.ui-seg>button,.ui-seg>a{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;min-height:38px;padding:6px 16px;border:0;border-radius:10px;background:transparent;color:var(--muted);font:600 14px var(--font-body);line-height:1.35;white-space:nowrap;text-decoration:none;cursor:pointer;transition:background .15s,color .15s}
+.ui-seg>button:hover,.ui-seg>a:hover{color:var(--ink);background:#ffffff0a}
+.ui-seg>[aria-pressed="true"],.ui-seg>[aria-selected="true"],.ui-seg>.on{background:var(--accent);color:var(--accent-ink)}
+.ui-seg small{font-size:12.5px;font-weight:500;opacity:.85}
+.ctabbody{background:linear-gradient(180deg,var(--surface),#0d1427);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px}
+.tguide .ui-seg{margin-top:8px}
+.tguide .ctabbody{background:none;border:0;border-radius:0;padding:0;margin-top:12px}
+/* 絞り込みの行：左に何を選ぶ行かのラベル、右にチップ */
+.ui-filters{display:flex;flex-direction:column;gap:8px}
+.ui-filter{display:flex;align-items:center;gap:12px;min-width:0}
+.ui-filter[hidden],.ui-filter:has(>.chips[hidden]){display:none!important}
+.ui-flab{flex:none;min-width:4.6em;font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.05em}
+@media (min-width:768px){.ui-filter{align-items:flex-start}.ui-flab{line-height:32px}
+  /* ミクロの「見るもの」は数が多いので、3行ぶんで止めて中をスクロール（図が画面の下に押し出されないように） */
+  .ui-filter>.mclist{max-height:124px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#3a4870 transparent;padding-right:6px}}
+.ui-filter>.chips,.ui-filter>.mclist{flex:1;min-width:0;margin:0}
+.ui-filter>.bodysel{margin:0}
+.mclist{display:flex;flex-direction:row;flex-wrap:wrap;gap:6px;max-height:none;overflow:visible;padding:0}
+.mclist button{display:inline-flex;flex-direction:row;align-items:baseline;gap:6px;font:500 13px var(--font-body);color:var(--ink-2);background:#ffffff06;border:1px solid var(--line-2);border-radius:999px;padding:5px 13px;min-height:32px;line-height:1.4;text-align:left;cursor:pointer}
+.mclist button small{font-size:11.5px;color:var(--muted)}
+.mclist button:hover{border-color:#5d6ea3;color:var(--ink)}
+.mclist button[aria-pressed="true"]{color:var(--ink);background:#26355e;border-color:#6d80bb}
+.mclist button[aria-pressed="true"] small{color:var(--ink-2)}
+@container (min-width:540px) and (max-width:979px){.ptable{min-width:0;grid-template-columns:repeat(18,minmax(0,1fr));gap:2px}.pt{padding:3px 1px 4px}.pt b{font-size:clamp(12px,2.3cqi,16px)}.ptn{display:none}.ptz{font-size:9px}}
+/* 凡例：図のすぐ下に、どのページも同じ形 */
+.ui-leglab{flex:none;font-size:12px;font-weight:700;color:var(--ink-2);padding:1px 9px;border:1px solid var(--line-2);border-radius:6px;letter-spacing:.05em}
+.legend{gap:6px 16px}
 .thdock{border-radius:var(--r-lg);border-color:var(--line);background:linear-gradient(180deg,#0f1730,#0b1122);padding:6px 16px}
 .thdock summary{padding:8px 0;font-size:15px;list-style:none;display:block}
 .thdock summary::-webkit-details-marker{display:none}
@@ -847,38 +863,76 @@ a.chip{text-decoration:none}
 .foot summary{cursor:pointer;color:var(--ink-2);font-weight:600;font-size:13.5px;padding:4px 0;width:fit-content}
 .foot p{margin:8px 0 0;max-width:120ch;line-height:1.8}
 
-/* ---- 図の上の操作ボタン（ズーム・全画面など）をそろえる ---- */
-.gtools,.mapctl{background:rgba(9,13,26,.9);border:1px solid var(--line-2);border-radius:13px;padding:5px;gap:5px;box-shadow:0 8px 24px #0008;max-width:calc(100% - 20px);overflow-x:auto;scrollbar-width:none}
-.gtools::-webkit-scrollbar,.mapctl::-webkit-scrollbar,.sptools::-webkit-scrollbar,.scenectl::-webkit-scrollbar{display:none}
-.gtools button,.mapctl button,.sptools button,.bgtools button,.gntools button,.thbz button,.spbtools button,.whtools button{height:32px;min-width:32px;padding:0 11px;border-radius:9px;border:1px solid var(--line-2);background:#141d36;color:var(--ink);font:600 13px var(--font-body);cursor:pointer;white-space:nowrap;flex:none;transition:border-color .15s,color .15s}
-.gtools button:hover,.mapctl button:hover,.sptools button:hover,.bgtools button:hover,.gntools button:hover,.thbz button:hover,.spbtools button:hover,.whtools button:hover{border-color:var(--accent)}
-.sptools{gap:6px}.sptools button{background:rgba(9,13,26,.88);height:34px}
-.bgtools{gap:5px;right:10px;top:10px;align-items:center}
+/* ---- 図の枠と操作バー：どの図も、上のバーの左にそのページの切り替え、右に −・＋・全体・全画面 ---- */
+.ui-stage{position:relative;display:flex;flex-direction:column;min-width:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#070b18}
+.ui-stage>.ui-fig{border:0!important;border-radius:0!important;margin:0!important}
+.ui-bar{flex:none;display:flex;align-items:center;gap:10px;min-height:50px;padding:7px 8px 7px 10px;background:#0b1225;border-bottom:1px solid var(--line)}
+.ui-bar .ui-opts,.ui-bar .ui-tools{position:static!important;inset:auto!important;transform:none!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;max-width:none!important}
+.ui-opts{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none}
+.ui-opts::-webkit-scrollbar{display:none}
+.ui-tools{flex:none;display:flex;align-items:center;gap:6px}
+.ui-bar button,.ui-bar .chip{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;min-width:34px;min-height:0;padding:0 12px;border-radius:9px;border:1px solid var(--line-2);background:#141d36;color:var(--ink);font:600 13px var(--font-body);line-height:1;cursor:pointer;white-space:nowrap;transition:border-color .15s,background .15s,color .15s}
+.ui-bar button:hover,.ui-bar .chip:hover{border-color:var(--accent)}
+.ui-bar [aria-pressed="true"]{background:#26355e;border-color:#6d80bb;color:var(--ink)}
+.ui-bar .chips{display:flex;flex:none;flex-wrap:nowrap;gap:6px}
+.ui-stat{flex:none;font-size:13px;color:var(--muted);white-space:nowrap;padding:0 4px}
+.ui-sep{flex:none;width:1px;height:22px;background:var(--line-2);margin:0 2px}
+.ui-check{flex:none;display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2);white-space:nowrap;padding:0 4px;cursor:pointer}
+.ui-check input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.ui-fs{padding:0!important}
+.ui-bar svg,.ds-bar svg{min-width:0!important;max-width:none}
+.ui-tools>button:has(>svg.ui-zi){width:34px;padding:0}
+svg.ui-zi{display:block;width:16px!important;height:16px!important;min-width:0!important;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.thbz button:has(>svg.ui-zi){width:32px;padding:0;display:grid;place-items:center}
+.ui-bar .ui-fs svg{display:block;width:18px!important;height:18px!important;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ui-bar .ui-fs[aria-pressed="true"]{color:var(--accent);border-color:var(--accent);background:#141d36}
+.ghint{display:none!important}
+.thwrap .thlog{top:14px}
+.ui-stage .whscroll{border:0;border-radius:0}
+.whwrap.open{grid-template-columns:minmax(0,1fr)}
+.gnwrap.ui-stage{margin:0}
+.thbz button{height:32px;min-width:32px;padding:0 11px;border-radius:9px;border:1px solid var(--line-2);background:#141d36;color:var(--ink);font:600 13px var(--font-body);cursor:pointer;white-space:nowrap;flex:none}
+.thbz button:hover{border-color:var(--accent)}
 .bgwrap{touch-action:pan-y}
-.gtoggle{white-space:nowrap;font-size:12.5px}
-.ghint{font-size:12.5px;bottom:auto;top:50px}
-.mapctl span{white-space:nowrap}
-.fsbtn{position:absolute;top:10px;right:10px;z-index:6;width:36px;height:36px;display:grid;place-items:center;padding:0;border-radius:10px;border:1px solid var(--line-2);background:rgba(9,13,26,.88);color:var(--ink);cursor:pointer;box-shadow:0 4px 14px #0007;transition:border-color .15s,color .15s}
-.fsbtn svg{width:18px!important;height:18px!important;min-width:0!important;display:block}
-.fsbtn:hover,.fsbtn.on{border-color:var(--accent);color:var(--accent)}
-.bgtools .fsbtn{position:static;width:32px;height:32px;box-shadow:none}
-.thwrap .thlog{top:58px}
-.is-fs{position:fixed!important;inset:0!important;z-index:300!important;width:auto!important;height:auto!important;max-height:none!important;min-height:0!important;margin:0!important;border-radius:0!important;border:0!important}
+/* 全画面：バーごと画面いっぱいに */
+.ui-stage.is-fs{position:fixed!important;inset:0!important;z-index:300!important;width:auto!important;height:auto!important;max-height:none!important;margin:0!important;border:0!important;border-radius:0!important}
+.ui-stage.is-fs>.ui-bar{padding-top:calc(7px + var(--sat))}
+.ui-stage.is-fs>.ui-fig{flex:1 1 auto;min-height:0!important;height:auto!important;max-height:none!important;aspect-ratio:auto!important}
+.ui-stage.is-fs>.bgwrap{overflow:auto!important}
+.ui-stage.is-fs .whscroll{height:100%!important}
+.ui-stage.is-fs #world{height:100%!important}
 body.fs-on{overflow:hidden}
-.bgwrap.is-fs{overflow:auto!important;background:#070b18;padding-top:4px}
-.loc3d.is-fs .scene{height:100%!important;min-height:0!important}
-.is-fs .fsbtn{top:calc(10px + var(--sat))}
 
-/* ---- PC：詳細が画面外に出たときの「詳細を見る」 ---- */
-.jumppill{position:fixed;left:calc(50% + var(--sideW)/2);bottom:24px;transform:translateX(-50%);z-index:150;display:flex;align-items:center;gap:8px;padding:10px 18px 10px 14px;border-radius:99px;border:1px solid #f4b94288;background:#1b2647;color:var(--ink);font:600 14px var(--font-body);box-shadow:0 12px 30px #000a;cursor:pointer;animation:pillin .3s ease}
-.jumppill svg{width:18px;height:18px;color:var(--accent)}
-.jumppill[hidden]{display:none}
-@keyframes pillin{from{opacity:0;transform:translate(-50%,10px)}}
+/* ---- 詳細パネル（全ページ共通）：PC・タブレットは画面の右、スマホは画面の下から出る ---- */
 .dsheet[hidden]{display:none!important}
-/* 詳細パネル（PCは図の下に全幅）：閉じるボタンは右上、図版と本文は読みやすい幅に */
-.detail>.gclose{align-self:flex-end;float:none;position:sticky;top:8px;margin:0 0 -40px;width:34px;height:34px;border-radius:50%;font-size:16px;z-index:3;flex:none}
-.view.staged .gpanel>.plate,.view.staged .whpanel>.ev3d{max-width:560px}
-.view.staged .gpanel>*,.view.staged .whpanel>*{max-width:920px}
+.dsheet{display:flex;flex-direction:column;background:#0d1428;color:var(--ink)}
+.ds-bar{flex:none;position:relative;display:flex;align-items:center;gap:10px;min-height:58px;padding:10px 12px 10px 20px;border-bottom:1px solid var(--line)}
+.ds-title{flex:1;min-width:0;position:relative;z-index:1;pointer-events:none;font:700 14px var(--font-body);color:var(--ink-2);letter-spacing:.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ds-x{flex:none;position:relative;z-index:2;width:36px;height:36px;padding:0;border-radius:50%;border:1px solid var(--line-2);background:#141d36;color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.ds-x:hover{border-color:var(--accent)}
+.ds-x svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.ds-grip{display:none}
+.ds-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:16px 20px 28px}
+.ds-body>aside:not([hidden]){position:static!important;width:auto!important;height:auto!important;max-height:none!important;min-height:0!important;border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;margin:0!important;overflow:visible!important;display:flex!important;flex-direction:column;gap:10px}
+.ds-body>#info:not([hidden]){display:block!important}
+.ds-body .gclose,.ds-body .backlist{display:none!important}
+.ds-body h3{font-family:var(--font-display);font-size:21px;line-height:1.35;margin:0}
+.ds-body h4{font-size:12.5px;color:var(--muted);font-weight:600}
+.ds-body p{font-size:14px;line-height:1.75}
+@media (min-width:768px){
+  :root{--dockW:clamp(340px,28vw,440px)}
+  /* 上の時代バーは幅を保ったまま（パネルはその下から）。図と本文だけを左に寄せる */
+  .dsheet{position:fixed;top:var(--stickyH,69px);right:0;bottom:0;width:var(--dockW);z-index:80;border-left:1px solid var(--line-2);box-shadow:-18px 0 44px #0008;clip-path:inset(0 0 0 -64px);animation:dockin .2s ease}
+  body.dock-push .main{margin-right:var(--dockW)}
+  body.dock-push .eradock{margin-right:calc(-1 * var(--dockW))}
+  .eradock.pop{z-index:90}
+  body.fs-on .dsheet{z-index:310;top:0}
+  body.dock-push.fs-on .ui-stage.is-fs{right:var(--dockW)!important}
+  body.dock-push .toast{left:calc(50% + var(--sideW)/2 - var(--dockW)/2)}
+  #mapbox{min-height:300px;height:clamp(300px,calc(var(--stw,1130px) * .52),min(64vh,620px))}
+}
+@media (min-width:1280px) and (max-width:1499px){body.dock-push .loc,body.dock-push .pmrow{grid-template-columns:minmax(0,1fr)}body.dock-push .lpgrid{grid-template-columns:1fr 1fr}}
+@keyframes dockin{from{transform:translateX(28px);opacity:0}}
 .toast{bottom:24px;left:calc(50% + var(--sideW)/2);font-size:13.5px}
 
 /* ---- 検索・使い方 ---- */
@@ -970,14 +1024,13 @@ body.fs-on{overflow:hidden}
   .chip{min-height:36px;padding:6px 14px}
   .sp-only{display:inline}.pc-only{display:none}
   /* 横に流れる列（折り返さず横スクロール。右端を薄くして続きがあることを示す） */
-  #gchips,#maplayers,#mapchips,#bodysel,#tlregions,#thview,#thspeed,#thjumps,.ptlegend,#v-micro.staged>.mclist,.ebtoc,.tlswitch,.histsw,.scaleswitch,.ctabs{flex-wrap:nowrap!important;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent)}
-  #gchips::-webkit-scrollbar,#maplayers::-webkit-scrollbar,#mapchips::-webkit-scrollbar,#bodysel::-webkit-scrollbar,#tlregions::-webkit-scrollbar,#thview::-webkit-scrollbar,#thspeed::-webkit-scrollbar,#thjumps::-webkit-scrollbar,.ptlegend::-webkit-scrollbar,.mclist::-webkit-scrollbar,.ebtoc::-webkit-scrollbar{display:none}
-  #gchips>*,#maplayers>*,#mapchips>*,#bodysel>*,#tlregions>*,#thview>*,#thspeed>*,#thjumps>*,.ptlegend>*,.mclist>*,.ebtoc>*{flex:none}
-  .tlswitch,.histsw,.scaleswitch{align-self:stretch}
-  .tlswitch button,.scaleswitch a,.histsw button{padding:7px 14px}
-  #v-micro.staged>.mclist{max-height:none;padding-bottom:2px}
-  .throw{flex-wrap:nowrap;gap:8px}.throw>.chips{min-width:0;flex:1}
-  .throw .lab{flex:none;white-space:nowrap;width:4.2em}
+  .ui-filter>.chips,.ui-filter>.mclist,.ptlegend,.ebtoc,.ui-seg{flex-wrap:nowrap!important;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent)}
+  .ui-filter>.chips::-webkit-scrollbar,.ui-filter>.mclist::-webkit-scrollbar,.ptlegend::-webkit-scrollbar,.ebtoc::-webkit-scrollbar{display:none}
+  .ui-filter>.chips>*,.ui-filter>.mclist>*,.ptlegend>*,.ebtoc>*{flex:none}
+  .ui-seg{align-self:stretch}
+  .ui-seg>button,.ui-seg>a{padding:6px 14px}
+  .ui-filter{gap:8px}
+  .ui-flab{min-width:3.6em;font-size:13px}
   .thbarhead{flex-direction:column;align-items:flex-start;gap:6px}
   .thbz{flex-wrap:wrap}
   .thcap{left:10px;right:auto;bottom:10px;max-width:calc(64% - 14px)!important;padding:9px 11px}
@@ -996,27 +1049,18 @@ body.fs-on{overflow:hidden}
   .info{max-height:50svh}
   .spinfo,.locinfo{max-height:none}
   .kcanvas{height:230px}
-  /* 図の上の操作ボタン */
-  .gtools{left:8px;right:auto;top:auto;bottom:8px;max-width:calc(100% - 16px)}
-  .gtools button{height:34px;padding:0 10px}
-  .ghint,.gzoom{display:none}
-  .mapctl{right:8px;bottom:8px;max-width:calc(100% - 16px)}
-  .mapctl button{height:34px}
-  .mapctl span,.mapctl .l-lg,.sptools .l-lg{display:none}
-  .sptools .l-sm{display:inline}
-  .sptools{left:8px;right:8px;bottom:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
-  .scenectl{left:8px;top:8px;right:54px;flex-direction:row;flex-wrap:nowrap;align-items:center;overflow-x:auto;gap:6px;scrollbar-width:none}
-  .scenectl .chips{flex-wrap:nowrap;gap:4px}
-  .scenectl .chip{min-height:30px;padding:3px 10px;font-size:12.5px;flex:none}
-  .threset{right:12px;top:54px}
+  /* 図の操作バー：左は横にスクロール、右の −・＋・全体・全画面はいつも見える */
+  .ui-bar{min-height:48px;padding:6px;gap:6px}
+  .ui-bar button,.ui-bar .chip{height:34px;padding:0 10px;font-size:12.5px}
+  .ui-tools{gap:5px}
+  .ui-tools .ui-stat{display:none}
+  .ui-opts{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent)}
   .thbar{flex-wrap:wrap;gap:8px 12px}
   .thscrubw{order:3;flex-basis:100%}
   .thyear{min-width:0;text-align:left;flex:1}
   .thplay{min-width:0}
-  .whhint{display:none}
   .whh{--whc0:96px;--whc:200px}
   .whreg{padding:8px}.whreg b{font-size:12.5px}
-  .bgtools button{height:34px}
   /* 全体マップ */
   .kgrid{grid-template-columns:1fr}
   .kstat{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
@@ -1037,24 +1081,17 @@ body.fs-on{overflow:hidden}
   .ebtoc{position:sticky!important;top:calc(var(--stickyH) + 6px)!important;z-index:8;flex-direction:row!important;max-height:none!important;padding:6px!important;background:#111a30!important;-webkit-mask-image:none!important;mask-image:none!important;box-shadow:0 6px 16px #0009}
   .ebtoc a{white-space:nowrap;font-size:13px!important;padding:6px 10px!important}
   .ebch{padding:16px 14px}
-  /* 詳細：画面の下から出るシート */
-  .dsheet{position:fixed;left:0;right:0;bottom:calc(var(--tabH) + var(--sab));z-index:320;display:flex;flex-direction:column;max-height:min(64svh,calc(100svh - var(--stickyH) - var(--tabH) - var(--sab) - 18px));background:#0e1529;border:1px solid var(--line-2);border-bottom:0;border-radius:20px 20px 0 0;box-shadow:0 -14px 40px #000b;transition:max-height .28s ease}
-  .dsheet[data-state="peek"]{max-height:156px}
+  /* 詳細：画面の下から出るシート（PCの右パネルと同じ中身・同じ閉じ方） */
+  .dsheet{position:fixed;left:0;right:0;bottom:calc(var(--tabH) + var(--sab));z-index:320;max-height:min(64svh,calc(100svh - var(--stickyH) - var(--tabH) - var(--sab) - 18px));border:1px solid var(--line-2);border-bottom:0;border-radius:20px 20px 0 0;box-shadow:0 -14px 40px #000b;transition:max-height .28s ease}
+  .dsheet[data-state="peek"]{max-height:164px}
   body.fs-on .dsheet{bottom:0;padding-bottom:var(--sab)}
-  .ds-bar{flex:none;position:relative;height:34px;touch-action:none}
-  .ds-grip{width:100%;height:100%;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;padding:0}
-  .ds-grip i{width:46px;height:5px;border-radius:99px;background:#4f5e8d}
-  .ds-x{position:absolute;right:8px;top:6px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line-2);background:#141d36;color:var(--ink);display:grid;place-items:center;cursor:pointer;z-index:2;padding:0}
-  .ds-x svg{width:16px;height:16px}
-  .ds-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 14px 16px}
+  .ds-bar{min-height:0;padding:20px 10px 6px 18px;border-bottom:0;touch-action:none}
+  .ds-grip{display:block;position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;cursor:pointer;padding:0;z-index:0}
+  .ds-grip i{position:absolute;top:7px;left:50%;width:46px;height:5px;margin-left:-23px;border-radius:99px;background:#4f5e8d}
+  .ds-title{font-size:12.5px;color:var(--muted)}
+  .ds-body{padding:4px 16px 16px}
   .dsheet[data-state="peek"] .ds-body{overflow:hidden;-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)}
-  .ds-body>aside:not([hidden]){position:static!important;width:auto!important;height:auto!important;max-height:none!important;min-height:0!important;border:0!important;background:transparent!important;box-shadow:none!important;padding:0 2px!important;margin:0!important;overflow:visible!important;display:flex!important;flex-direction:column;gap:10px}
-  .ds-body>#info:not([hidden]){display:block!important}
-  .ds-body .gclose,.ds-body .backlist{display:none!important}
-  .ds-body h3{padding-right:40px}
-  body.ds-on .wrap{padding-bottom:180px}
-  body.ds-on .is-fs .gtools,body.ds-on .is-fs .mapctl,body.ds-on .is-fs .sptools{bottom:166px}
-  .jumppill{display:none!important}
+  body.ds-on .wrap{padding-bottom:190px}
   .toast{left:50%;bottom:calc(var(--tabH) + var(--sab) + 14px)}
   body.ds-on .toast{bottom:calc(var(--tabH) + var(--sab) + 170px)}
   /* 検索・使い方：画面いっぱい */
@@ -1139,7 +1176,8 @@ body.fs-on{overflow:hidden}
       <div class="kstep" aria-label="時代の切り替え"><button type="button" class="chip" data-kstep="-1">‹ 前の時代</button><button type="button" class="chip kpick" data-kstep="0">時代を選ぶ</button><button type="button" class="chip" data-kstep="1">次の時代 ›</button></div>
 
     </div>
-    <div class="view-head"><h2>全体マップ</h2><p id="mmnote">12分野の現在地。カードを押すと、その分野の系統樹へ移動します。</p></div>
+    <div class="view-head"><h2>全体マップ</h2><p class="lead" id="mmnote">12分野の現在地。カードを押すと、その分野の系統樹へ移動します。</p>
+      <details class="vh-more"><summary>見方と操作</summary><p>上の時代バー（スマホは上の時代ボタン）で時代を切り替えると、文明のイメージと数値、12分野のカードがその時代の姿に変わります。カードを押すと、その分野の系統樹へ移動します。下の「文明タイプ・ガイド」では、Type I〜IIIの文明を想定の世界として解説しています。</p></details></div>
     <div class="mm" id="mm">
       <svg class="links" id="links" aria-hidden="true"></svg>
       <div class="core" id="core">
@@ -1150,37 +1188,31 @@ body.fs-on{overflow:hidden}
       </div>
     </div>
     <div class="panel tguide" id="tguide"><div class="gauge-head"><b>文明タイプ・ガイド（想定の世界）</b><span>スライダーの位置に合わせて自動で切り替わります</span></div>
-      <div class="ctabs"><button data-t="t1">Type I 惑星</button><button data-t="t2">Type II 恒星</button><button data-t="t3">Type III 銀河</button></div><div class="ctabbody tgbody"></div></div>
+      <div class="ui-seg" role="tablist" aria-label="文明タイプ"><button data-t="t1">Type I 惑星</button><button data-t="t2">Type II 恒星</button><button data-t="t3">Type III 銀河</button></div><div class="ctabbody tgbody"></div></div>
     <div class="panel sfnote" id="sfnote"></div>
   </section>
 
   <!-- ② 年表 -->
   <section class="view" id="v-timeline">
     <div class="view-head"><h2 id="tlhead">宇宙年表</h2><p class="lead">宇宙・地球史・世界史の3つの年表。出来事（点）を押すと、説明とその場面の3Dが出ます。</p>
-      <details class="vh-more" id="tlmore"><summary>見方と操作</summary><p>宇宙・地球史・世界史の3つの年表を切り替えられます。宇宙と地球史はGitHubのブランチのように、枝分かれ（分岐）と合流で表示。点線は仮説や予測です。ホイール（スマホは2本指のピンチ）でズーム、ドラッグで横に移動、線や点を押すと詳細。</p>
-      <div class="tllegend"><b>点の見方</b>
-      <span><svg width="16" height="16"><circle cx="8" cy="8" r="5" fill="#0a0f1f" stroke="#7fb2ff" stroke-width="2.4"/></svg>出来事（押すと説明と3D）</span>
-      <span><svg width="18" height="18"><polygon points="9,1 11,6.5 17,7 12.4,10.6 14,16.5 9,13.2 4,16.5 5.6,10.6 1,7 7,6.5" fill="#f4d06a"/></svg>特別な3D映像あり（専用の場面・小道具）</span>
-      <span><svg width="16" height="16"><circle cx="8" cy="8" r="4.5" fill="#7fb2ff" stroke="#0a0f1f" stroke-width="1.5"/></svg>枝の始まり（ここで分かれた）</span>
-      <span><svg width="16" height="16"><rect x="4" y="4" width="8" height="8" fill="#0a0f1f" stroke="#7fb2ff" stroke-width="2" transform="rotate(45 8 8)"/></svg>枝の終わり（消滅・滅亡）</span>
-      <span><svg width="26" height="12"><path d="M1,10 C10,10 8,2 25,2" fill="none" stroke="#7fb2ff" stroke-width="2"/></svg>分岐・合流の線</span>
-      <span><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#c99cf2" stroke-width="2" stroke-dasharray="5 3"/></svg>点線：仮説・予測</span>
-      <span><svg width="14" height="16"><line x1="7" y1="0" x2="7" y2="16" stroke="#f4b942" stroke-width="2"/></svg>今いる位置（シアターの再生位置）</span>
-      <span>シアターのバーの点の色：地域（ヨーロッパ＝青、東アジア＝赤…）、紫＝宇宙、緑＝地球と生命、橙＝人類の誕生、水色＝未来</span></div></details></div>
-    <div class="tlswitch" id="tlswitch"><button data-m="cosmos">宇宙<small>138億年＋未来</small></button><button data-m="earth">地球史<small>46億年＋未来</small></button><button data-m="hist">世界史<small>30万年</small></button></div>
+      <details class="vh-more" id="tlmore"><summary>見方と操作</summary><p>宇宙・地球史・世界史の3つの年表を切り替えられます。宇宙と地球史はGitHubのブランチのように、枝分かれ（分岐）と合流で表示。点線は仮説や予測です。ホイール（スマホは2本指のピンチ）でズーム、ドラッグで横に移動、線や点を押すと詳細。図の上のバーの −・＋・全体 でも拡大縮小できます。</p></details></div>
+    <div class="ui-seg" id="tlswitch" role="group" aria-label="年表の切り替え"><button data-m="cosmos">宇宙<small>138億年＋未来</small></button><button data-m="earth">地球史<small>46億年＋未来</small></button><button data-m="hist">世界史<small>30万年</small></button></div>
     <details class="thdock" id="thdock"><summary>🎬 3Dシアター（地球全体の映像で通し再生） <small>開くと再生プレーヤーが出ます。年表の点を押すと、その出来事の3Dが詳細パネルに出ます</small></summary>
-<div class="thwrap">
+<div class="ui-stage" data-fs="1" data-wheel="#thstage">
+      <div class="ui-bar"><div class="ui-opts"><span class="ui-stat">ドラッグで視点を回せます</span></div><div class="ui-tools"><button type="button" data-wheel-dir="1" aria-label="縮小" title="縮小"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><button type="button" data-wheel-dir="-1" aria-label="拡大" title="拡大"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><button type="button" id="threset">視点を戻す</button></div></div>
+      <div class="thwrap ui-fig">
       <div class="thstage" id="thstage" aria-label="歴史シアターの3D表示"></div>
       <div class="thphase" id="thphase"></div><div class="thpaleo" id="thpaleo"></div>
-      <div class="thcap" id="thcap"></div><div class="thpiplab" id="thpiplab">👤 人の目線</div><button class="threset" id="threset">↺ 視点を戻す</button>
+      <div class="thcap" id="thcap"></div><div class="thpiplab" id="thpiplab">👤 人の目線</div>
       <ol class="thlog" id="thlog" aria-label="直前の出来事"></ol>
+      </div>
     </div>
     <div class="thbar">
       <button class="thplay" id="thplay">▶ 再生</button>
-      <div class="thscrubw"><input type="range" id="thscrub" min="0" max="1000" value="0" aria-label="再生位置" hidden><div class="thticks" id="thticks" hidden></div><div class="thbarhead"><span id="thzoom"></span><span class="thbz" id="thbz"><button data-z="in">＋</button><button data-z="out">−</button><button data-z="follow">再生位置へ</button><button data-z="all">全体</button></span></div><svg id="thbar2" class="thbar2" role="img" aria-label="出来事のバー（ホイールで拡大、ドラッグで移動、点を押すとそこへ）"></svg></div>
+      <div class="thscrubw"><input type="range" id="thscrub" min="0" max="1000" value="0" aria-label="再生位置" hidden><div class="thticks" id="thticks" hidden></div><div class="thbarhead"><span id="thzoom"></span><span class="thbz" id="thbz"><button type="button" data-z="out" aria-label="縮小" title="縮小"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><button type="button" data-z="in" aria-label="拡大" title="拡大"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><button data-z="follow">再生位置へ</button><button data-z="all">全体</button></span></div><svg id="thbar2" class="thbar2" role="img" aria-label="出来事のバー（ホイールで拡大、ドラッグで移動、点を押すとそこへ）"></svg></div>
       <span class="thyear num" id="thyear"></span>
     </div>
-    <div class="throw"><span class="lab">表示</span><div class="chips" id="thview"></div></div><div class="throw"><span class="lab">速さ</span><div class="chips" id="thspeed"></div></div><div class="throw"><span class="lab">ジャンプ</span><div class="chips" id="thjumps"></div></div>
+    <div class="ui-filters"><div class="ui-filter"><span class="ui-flab">表示</span><div class="chips" id="thview"></div></div><div class="ui-filter"><span class="ui-flab">速さ</span><div class="chips" id="thspeed"></div></div><div class="ui-filter"><span class="ui-flab">ジャンプ</span><div class="chips" id="thjumps"></div></div></div>
     <p class="note">場所の表示：世界史の出来事は、本文の地名から位置を推定し、見つからない場合は地域内の陸地に置いています（目安）。大陸の配置は、5.4億年前から現在までは PALEOMAP（Scotese 2016、Scotese & Wright 2018、CC BY 4.0）の古地理データを2°格子にしたもの（500万年ごと）。それより古い時代は、プレートを回転させた大まかな推定です。年代には諸説あるものを含みます。</p>
       </details>
     <div id="tlw-cosmos" class="tlpane"><div class="bgrow"><div id="bg-cosmos" class="bghost"></div></div>
@@ -1189,7 +1221,7 @@ body.fs-on{overflow:hidden}
     <div id="tlw-earth" class="tlpane" hidden><div class="bgrow"><div id="bg-earth" class="bghost"></div></div>
       <p class="note">横軸は区間ごとに縮尺を変えています（古い時代ほど縮めて表示）。✕は大量絶滅。大陸の系譜の古い部分（30億年以上前）は証拠が少なく、議論があります。</p></div>
     <div id="tlw-hist" class="tlpane" hidden>
-      <div class="histsw" id="histsw"><button data-hv="branch">🌿 ブランチ表示（文明の系譜）</button><button data-hv="grid">▦ 表（地域×時代）</button></div>
+      <div class="ui-seg" id="histsw" role="group" aria-label="世界史の表示"><button data-hv="branch">ブランチ（文明の系譜）</button><button data-hv="grid">表（地域×時代）</button></div>
       <div id="hist-branch"><div class="bgrow"><div id="bg-hist" class="bghost"></div></div><p class="note">文明や国家が分かれ、合流していく流れを枝で表示。点は出来事（押すと3Dと説明）。横軸は時代ごとに縮尺を変えています。国家の系譜は代表的なものに絞った簡略図です。</p></div>
       <div id="hist-grid" hidden>
     <div class="panel">
@@ -1201,30 +1233,46 @@ body.fs-on{overflow:hidden}
         <div><b>23:59:50</b><span>Webの公開（1991年）</span></div>
       </div>
     </div>
-    <div class="chips" id="tlregions"></div>
-    <div class="whbar"><span id="whcount"></span><span class="whhint">ホイールでズーム／ドラッグで移動／Shift＋ホイールで横移動／出来事を押すと詳細</span><span class="whtools"><button id="whz-out" aria-label="縮小">−</button><span id="whzoom" class="num">100%</span><button id="whz-in" aria-label="拡大">＋</button><button id="whz-reset">100%に戻す</button></span></div>
-    <div class="whwrap" id="whwrap">
-      <div id="tl" class="whscroll"></div>
-      <aside class="panel whpanel detail" id="whpanel" hidden></aside>
+    <div class="ui-filter"><span class="ui-flab">地域</span><div class="chips" id="tlregions"></div></div>
+    <div class="ui-stage" data-fs="1">
+      <div class="ui-bar"><div class="ui-opts"><span class="ui-stat" id="whcount"></span></div><div class="ui-tools whtools"><span id="whzoom" class="ui-stat num">100%</span><button type="button" id="whz-out" aria-label="縮小" title="縮小"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><button type="button" id="whz-in" aria-label="拡大" title="拡大"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><button type="button" id="whz-reset" title="100%に戻す">元の大きさ</button></div></div>
+      <div class="whwrap ui-fig" id="whwrap">
+        <div id="tl" class="whscroll"></div>
+        <aside class="panel whpanel detail" id="whpanel" hidden></aside>
+      </div>
     </div>
     </div>
     </div>
+    <div class="legend tl-legend"><b class="ui-leglab">凡例</b>
+      <span><svg width="16" height="16"><circle cx="8" cy="8" r="5" fill="#0a0f1f" stroke="#7fb2ff" stroke-width="2.4"/></svg>出来事（押すと説明と3D）</span>
+      <span><svg width="18" height="18"><polygon points="9,1 11,6.5 17,7 12.4,10.6 14,16.5 9,13.2 4,16.5 5.6,10.6 1,7 7,6.5" fill="#f4d06a"/></svg>特別な3D映像あり（専用の場面・小道具）</span>
+      <span><svg width="16" height="16"><circle cx="8" cy="8" r="4.5" fill="#7fb2ff" stroke="#0a0f1f" stroke-width="1.5"/></svg>枝の始まり（ここで分かれた）</span>
+      <span><svg width="16" height="16"><rect x="4" y="4" width="8" height="8" fill="#0a0f1f" stroke="#7fb2ff" stroke-width="2" transform="rotate(45 8 8)"/></svg>枝の終わり（消滅・滅亡）</span>
+      <span><svg width="26" height="12"><path d="M1,10 C10,10 8,2 25,2" fill="none" stroke="#7fb2ff" stroke-width="2"/></svg>分岐・合流の線</span>
+      <span><svg width="26" height="8"><line x1="1" y1="4" x2="25" y2="4" stroke="#c99cf2" stroke-width="2" stroke-dasharray="5 3"/></svg>点線：仮説・予測</span>
+      <span><svg width="14" height="16"><line x1="7" y1="0" x2="7" y2="16" stroke="#f4b942" stroke-width="2"/></svg>今いる位置（シアターの再生位置）</span>
+      <span>シアターのバーの点の色：地域（ヨーロッパ＝青、東アジア＝赤…）、紫＝宇宙、緑＝地球と生命、橙＝人類の誕生、水色＝未来</span></div>
     <aside class="panel whpanel detail bgpanel" id="bgpanel" hidden></aside>
   </section>
 
   <!-- ③ 世界地図 -->
   <section class="view" id="v-world-map">
     <div class="view-head"><h2>世界地図</h2><p class="lead">国やランドマークを押すと、くわしい情報とその土地の3Dの風景が出ます。</p>
-      <details class="vh-more"><summary>見方と操作</summary><p>ホイール・ピンチでズーム、ドラッグで移動。国やランドマークを押すと、地図の下（スマホは画面の下から出るパネル）に情報、その下にその土地の3Dの風景が出ます。全体表示からさらにズームアウトすると宇宙へ上がり、ズームインし続けるとミクロの世界へ進みます。</p></details></div>
-    <div class="chips bodysel" id="bodysel"></div>
+      <details class="vh-more"><summary>見方と操作</summary><p>ホイール・ピンチでズーム、ドラッグで移動。国やランドマークを押すと、画面の右（スマホは画面の下から出るパネル）に情報が出て、地図の下にその土地の3Dの風景が出ます。図の上のバーの −・＋・全体 でも拡大縮小できます。全体表示からさらにズームアウトすると宇宙へ上がり、ズームインし続けるとミクロの世界へ進みます。</p></details></div>
+    <div class="ui-filters">
+      <div class="ui-filter"><span class="ui-flab">天体</span><div class="chips bodysel" id="bodysel"></div></div>
+      <div class="ui-filter"><span class="ui-flab">表示</span><div class="chips" id="maplayers"></div></div>
+      <div class="ui-filter"><span class="ui-flab">種類</span><div class="chips" id="mapchips"></div></div>
+    </div>
     <div id="pmap" class="pmap" hidden></div>
-    <div class="chips" id="maplayers"></div>
-    <div class="chips" id="mapchips"></div>
+    <aside class="panel detail pmpanel" id="pmpanel" hidden></aside>
     <div class="maprow">
-      <div class="mapbox" id="mapbox">
-        <svg id="world" role="img" aria-label="ズームできる世界地図" preserveAspectRatio="xMidYMid meet"></svg>
-        <div class="mapctl"><button id="mz-in" aria-label="ズームイン">＋</button><button id="mz-out" aria-label="ズームアウト">−</button><button id="mz-fit">全体</button><button id="mz-space">🚀<span class="l-lg"> 宇宙へ</span></button><button id="mz-micro">🔬<span class="l-lg"> ミクロへ</span></button><span id="mapzoom" class="num"></span></div>
-        <div id="maptip" class="maptip" hidden></div>
+      <div class="ui-stage" data-fs="1">
+        <div class="ui-bar"><div class="ui-opts"><button type="button" id="mz-space" title="ズームアウトして宇宙へ">宇宙へ</button><button type="button" id="mz-micro" title="ズームインしてミクロの世界へ">ミクロへ</button></div><div class="ui-tools"><span id="mapzoom" class="ui-stat num"></span><button type="button" id="mz-out" aria-label="縮小" title="縮小"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><button type="button" id="mz-in" aria-label="拡大" title="拡大"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><button type="button" id="mz-fit" title="世界全体を表示">全体</button></div></div>
+        <div class="mapbox ui-fig" id="mapbox">
+          <svg id="world" role="img" aria-label="ズームできる世界地図" preserveAspectRatio="xMidYMid meet"></svg>
+          <div id="maptip" class="maptip" hidden></div>
+        </div>
       </div>
       <aside class="panel info" id="info">
         <div id="clistpanel"><input id="csearch" type="search" placeholder="国名・首都で検索（日本語・英語）" aria-label="国を検索"><div id="ccount" class="ccount"></div><ul id="clist" class="clist"></ul></div>
@@ -1233,9 +1281,9 @@ body.fs-on{overflow:hidden}
     <div id="locsec" class="locsec">
       <div class="view-head"><h2 id="locname"></h2><p id="locsub"></p></div>
       <div class="loc">
-        <div class="loc3d">
-          <div id="scene" class="scene"></div>
-          <div class="scenectl" id="scenectl"><div class="chips" id="todbtns"></div><div class="chips" id="wxbtns"></div><button class="chip" data-reset="1">視点を戻す</button></div>
+        <div class="ui-stage loc3d" data-fs="1" data-wheel="#scene canvas">
+          <div class="ui-bar" id="scenectl"><div class="ui-opts"><div class="chips" id="todbtns"></div><span class="ui-sep"></span><div class="chips" id="wxbtns"></div></div><div class="ui-tools"><button type="button" data-wheel-dir="1" aria-label="縮小" title="縮小"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><button type="button" data-wheel-dir="-1" aria-label="拡大" title="拡大"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><button type="button" data-reset="1">視点を戻す</button></div></div>
+          <div id="scene" class="scene ui-fig"></div>
         </div>
         <aside class="panel locinfo"><div id="locinfo"></div><div id="daybox"><h4>そこに暮らす人の1日</h4><p class="dayhint">時刻を押すと3Dの時間帯が切り替わります</p><div class="daytl" id="daytl"></div></div></aside>
       </div>
@@ -1248,22 +1296,29 @@ body.fs-on{overflow:hidden}
       <details class="vh-more"><summary>見方と操作</summary><p>地球のまわりから宇宙の形まで5段階の「本線」（6〜10は空想の上位層。いちばん外の「無」からさらに出ると、ミクロのいちばん底「描けない底」につながります）と、そこから枝分かれする「天体の中」「銀河の中」「別の宇宙」「法則の海の島」「オムニバースの世界」。上の枝分かれ図（ホイール・ドラッグでズーム）から選ぶか、天体を選んでズームインし続けると中に入れます。惑星・月・太陽にズームインし続けると世界地図のページでその天体の地図が開き、地球なら世界地図に降ります。</p></details></div>
     <div class="chips" id="splevels"></div>
     <div class="spwrap">
-      <div id="spscene" class="spscene"><div id="splabels" class="splabels"></div><div id="spfade" class="spfade"></div>
-        <div class="sptools"><button id="sp-in">◀ <span class="l-lg">内側のスケールへ</span><span class="l-sm">内側へ</span></button><button id="sp-out"><span class="l-lg">外側のスケールへ</span><span class="l-sm">外側へ</span> ▶</button><button id="sp-home">🌏 <span class="l-lg">地球へ戻る</span><span class="l-sm">地球</span></button></div></div>
+      <div class="ui-stage" data-fs="1">
+        <div class="ui-bar"><div class="ui-opts"><button type="button" id="sp-in" title="ひとつ内側（小さい）のスケールへ">◀ 内側へ</button><button type="button" id="sp-out" title="ひとつ外側（大きい）のスケールへ">外側へ ▶</button><button type="button" id="sp-home">地球へ戻る</button></div><div class="ui-tools"><button type="button" data-wheel-dir="1" aria-label="縮小" title="縮小"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><button type="button" data-wheel-dir="-1" aria-label="拡大" title="拡大"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><button type="button" class="ui-dockbtn" data-dock="spinfo" title="詳細パネルを開く／閉じる">詳細</button></div></div>
+        <div id="spscene" class="spscene ui-fig"><div id="splabels" class="splabels"></div><div id="spfade" class="spfade"></div></div>
+      </div>
       <aside id="spinfo" class="panel spinfo"></aside>
     </div>
-    <div class="spbarhead"><span>地球からの距離（対数目盛り）— ホイールで拡大縮小、ドラッグで移動</span><span class="spbtools"><button id="spb-in">＋</button><button id="spb-out">−</button><button id="spb-all">全体</button></span></div><div class="mapbox spbarbox" id="spbarbox"><svg id="spbar" role="img" aria-label="地球からの距離の目盛り"></svg></div>
-    <div class="legend"><span><i style="background:var(--accent)"></i>人が行った範囲</span><span><i style="background:var(--cool)"></i>無人探査機が届いた範囲</span><span><i style="background:#8e98b5"></i>未到達</span><span>惑星や探査機の大きさは見やすいよう誇張しています</span></div>
+    <div class="ui-stage">
+      <div class="ui-bar"><div class="ui-opts"><span class="ui-stat">地球からの距離（対数目盛り）</span></div><div class="ui-tools spbtools"><button type="button" id="spb-out" aria-label="縮小" title="縮小"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><button type="button" id="spb-in" aria-label="拡大" title="拡大"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><button type="button" id="spb-all" title="すべての距離を表示">全体</button></div></div>
+      <div class="mapbox spbarbox ui-fig" id="spbarbox"><svg id="spbar" role="img" aria-label="地球からの距離の目盛り"></svg></div>
+    </div>
+    <div class="legend"><b class="ui-leglab">凡例</b><span><i style="background:var(--accent)"></i>人が行った範囲</span><span><i style="background:var(--cool)"></i>無人探査機が届いた範囲</span><span><i style="background:#8e98b5"></i>未到達</span><span>惑星や探査機の大きさは見やすいよう誇張しています</span></div>
   </section>
 
   <section class="view space" id="v-micro">
     <div class="view-head"><h2>ミクロの世界</h2><p class="lead">生き物から素粒子・量子まで。選んだものにズームインし続けると、その「中」へ進みます。</p>
       <details class="vh-more"><summary>見方と操作</summary><p>生き物→体と器官→細胞→生体分子→分子→物質→原子→原子核→クオーク→素粒子→量子の「本線」11段階と、その先のプランク長より下（仮説→空想）の3段階。枝分かれは「細胞の中」「微生物・ウイルス」「理論（超ひも・1〜11次元）」。選んでいるものにズームインし続けると、その「中」へ入っていきます（例：人→体→細胞→核→DNA→…）。いちばん底からさらに進むと、宇宙マップのいちばん外側「無」につながります。</p></details></div>
     <div class="chips" id="mclevels"></div>
+    <div class="ui-filter"><span class="ui-flab">見るもの</span><div class="mclist" id="mclist"></div></div>
     <div class="spwrap mcwrap">
-      <div class="mclist" id="mclist"></div>
-      <div id="mcscene" class="spscene"><div id="mcfade" class="spfade"></div>
-        <div class="sptools"><button id="mc-out">◀ 大きな世界へ</button><button id="mc-in">小さな世界へ ▶</button></div></div>
+      <div class="ui-stage" data-fs="1">
+        <div class="ui-bar"><div class="ui-opts"><button type="button" id="mc-out">◀ 大きな世界へ</button><button type="button" id="mc-in">小さな世界へ ▶</button></div><div class="ui-tools"><button type="button" data-wheel-dir="1" aria-label="縮小" title="縮小"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><button type="button" data-wheel-dir="-1" aria-label="拡大" title="拡大"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><button type="button" class="ui-dockbtn" data-dock="mcinfo" title="詳細パネルを開く／閉じる">詳細</button></div></div>
+        <div id="mcscene" class="spscene ui-fig"><div id="mcfade" class="spfade"></div></div>
+      </div>
       <aside id="mcinfo" class="panel spinfo"></aside>
     </div>
     <p class="note">3Dモデルは特徴をつかむための簡略表現で、色や大きさの比率は実物どおりではありません。原子・原子核・クオークの姿は、量子力学的な実体を「目に見える形」に置き換えたイメージです。</p>
@@ -1272,25 +1327,20 @@ body.fs-on{overflow:hidden}
   <!-- ⑧ 系統樹 -->
   <section class="view" id="v-lineage">
     <div class="view-head"><h2>系統樹（分野ごと）</h2><p class="lead">分野を1つ選ぶと、その分野の系譜（誕生・分岐・合流・消滅）を時間軸で表示。要素を押すと詳細が出ます。</p>
-      <details class="vh-more"><summary>見方と操作</summary><p>分野を1つ選ぶと、その分野だけの系統樹を独立した時間軸で表示する（分野どうしは混ぜない）。2026年より先（点線）は「近未来〜Type IVの想定」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線と、SFノートの構想（【SF】）に分かれて並ぶ。消えた要素は後継に合流（マージ）する。ホイール・ピンチでズーム、ドラッグで移動、ダブルクリックで拡大。右下（スマホは下）のボタンで期間と目盛り（時代ごと・実際の年数）を切り替えられます。</p></details></div>
-    <div class="chips" id="gchips"></div>
+      <details class="vh-more"><summary>見方と操作</summary><p>分野を1つ選ぶと、その分野だけの系統樹を独立した時間軸で表示する（分野どうしは混ぜない）。2026年より先（点線）は「近未来〜Type IVの想定」で、【協調】【分断】【加速】【再建】【宇宙】の5つの世界線と、SFノートの構想（【SF】）に分かれて並ぶ。消えた要素は後継に合流（マージ）する。ホイール・ピンチでズーム、ドラッグで移動、ダブルクリックで拡大。図の上のバーで、期間（文明以降・近現代・全体）と目盛り（時代ごと・実際の年数）を切り替えられます。</p></details></div>
+    <div class="ui-filter"><span class="ui-flab">分野</span><div class="chips" id="gchips"></div></div>
     <div class="gwrap">
-      <div class="gcanvas" id="gcanvas" tabindex="0" aria-label="系統樹のキャンバス。ホイールまたはピンチでズーム、ドラッグで移動">
-        <svg id="gsvg" role="img" aria-label="全分野の系統樹"></svg>
-        <div class="gtools">
-          <button id="gz-in" title="ズームイン">＋</button>
-          <button id="gz-out" title="ズームアウト">−</button>
-          <button id="gz-fit" title="30万年すべて">全期間</button><button id="gz-civ" title="文明の誕生以降">文明以降</button><button id="gz-mod" title="産業革命以降">近現代</button>
-          <button id="gz-read" title="名前が読める大きさに">読める大きさ</button>
-          <button id="gz-scale" title="時間軸の目盛りを切り替え（時代ごとに幅をそろえる／実際の年数どおり）">目盛り：時代ごと</button>
-          <label class="gtoggle"><input type="checkbox" id="gdead" checked> 消えた要素</label>
+      <div class="ui-stage" data-fs="1">
+        <div class="ui-bar"><div class="ui-opts"><button type="button" id="gz-civ" title="文明の誕生以降を表示">文明以降</button><button type="button" id="gz-mod" title="産業革命以降を表示">近現代</button><button type="button" id="gz-read" title="名前が読める大きさにする">読める大きさ</button><span class="ui-sep"></span><button type="button" id="gz-scale" title="時間軸の目盛りを切り替え（時代ごとに幅をそろえる／実際の年数どおり）">目盛り：時代ごと</button><label class="ui-check"><input type="checkbox" id="gdead" checked> 消えた要素</label></div><div class="ui-tools"><span class="ui-stat num" id="gzoom"></span><button type="button" id="gz-out" aria-label="縮小" title="縮小"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><button type="button" id="gz-in" aria-label="拡大" title="拡大"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><button type="button" id="gz-fit" title="30万年すべてを表示">全体</button></div></div>
+        <div class="gcanvas ui-fig" id="gcanvas" tabindex="0" aria-label="系統樹のキャンバス。ホイールまたはピンチでズーム、ドラッグで移動">
+          <svg id="gsvg" role="img" aria-label="全分野の系統樹"></svg>
+          <div class="ghint" id="ghint" hidden></div>
         </div>
-        <div class="ghint" id="ghint">ホイール・ピンチでズーム／ドラッグで移動／Alt＋ホイールで時間軸だけ伸縮／右下で期間と目盛り（時代ごと・実際の年数）を切り替え</div>
-        <div class="gzoom num" id="gzoom"></div>
       </div>
       <aside class="gpanel detail" id="gpanel" aria-live="polite" hidden></aside>
     </div>
     <div class="legend">
+      <b class="ui-leglab">凡例</b>
       <span><i style="background:var(--accent)"></i>現役のブランチ</span>
       <span><i style="background:linear-gradient(90deg,var(--accent),transparent)"></i>衰退中</span>
       <span><i style="background:#59607a"></i>消滅（✕）</span>
@@ -1301,7 +1351,7 @@ body.fs-on{overflow:hidden}
   <section class="view" id="v-laws">
     <div class="view-head"><h2>宇宙の法則</h2><p class="lead">宇宙を動かす4つの力、素粒子、118の元素、分子、公式、定数、未解決問題。</p>
       <details class="vh-more"><summary>見方と操作</summary><p>宇宙を動かす4つの力、主な公式と定数、物質のいちばん小さな部品（素粒子）、118の元素、身近な分子。元素・素粒子・分子を押すと説明が出て、「ミクロの世界」で3Dモデルを見られます。</p></details></div>
-    <div class="ctabs" id="ltabs" role="tablist"><button data-t="forces">⚛ 4つの力</button><button data-t="parts">● 素粒子</button><button data-t="pt">▦ 周期表</button><button data-t="mols">⬡ 分子</button><button data-t="formulas">∑ 公式</button><button data-t="consts">π 物理定数</button><button data-t="unsolved">？ 未解決問題</button></div>
+    <div class="ui-seg" id="ltabs" role="tablist" aria-label="宇宙の法則の切り替え"><button data-t="forces">4つの力</button><button data-t="parts">素粒子</button><button data-t="pt">周期表</button><button data-t="mols">分子</button><button data-t="formulas">公式</button><button data-t="consts">物理定数</button><button data-t="unsolved">未解決問題</button></div>
     <div class="ctabbody">
     <div class="ltab" data-t="forces"><div class="lforces" id="lforces"></div></div>
     <div class="ltab" data-t="parts"><p class="note" style="margin-top:0">物質を作る粒子（クオーク・レプトン）と、力を伝える粒子。スライダーの時代にまだ見つかっていない粒子は暗く表示します。</p><div id="lparts"></div></div>
@@ -6337,8 +6387,8 @@ ERA_FIELDS.unshift(...ERA_PRE);
 
 
 /* 宇宙・地図・ミクロの切り替え */
-(function(){const T=[["space-map","🌌 宇宙"],["world-map","🌏 世界地図"],["micro","🔬 ミクロの世界"]];
-  T.forEach(([id])=>{const sec=document.getElementById("v-"+id);if(!sec)return;const d=document.createElement("div");d.className="tlswitch scaleswitch";d.innerHTML=T.map(([h,t])=>`<a href="#${h}" class="${h===id?"on":""}">${t}</a>`).join("");sec.querySelector(".view-head").after(d);});})();
+(function(){const T=[["space-map","宇宙"],["world-map","世界地図"],["micro","ミクロ"]];
+  T.forEach(([id])=>{const sec=document.getElementById("v-"+id);if(!sec)return;const d=document.createElement("nav");d.className="ui-seg scaleswitch";d.setAttribute("aria-label","スケールの切り替え");d.innerHTML=T.map(([h,t])=>`<a href="#${h}"${h===id?' class="on" aria-current="page"':""}>${t}</a>`).join("");sec.querySelector(".view-head").after(d);});})();
 /* ---------- 時代フィルター（スライダーの時代に合わせて各ビューを絞る） ---------- */
 (function(){
   // 宇宙の天体・人工物が「知られた／作られた」年（目安）
@@ -6595,7 +6645,7 @@ ERA_FIELDS.unshift(...ERA_PRE);
     <h4>8. Type I・II・IIIの比較</h4>
     <table class="ltable"><tr><th></th><th>Type I</th><th>Type II</th><th>Type III</th></tr><tr><th>エネルギー</th><td>10¹⁶W</td><td>3.8×10²⁶W</td><td>10³⁶〜10³⁷W</td></tr><tr><th>範囲</th><td>1つの惑星</td><td>1つの恒星系</td><td>1つの銀河</td></tr><tr><th>このマップの時期</th><td>2250年ごろ</td><td>4000年ごろ</td><td>100万年ごろ</td></tr><tr><th>代表的な技術</th><td>核融合・軌道エレベーター</td><td>ダイソン・スウォーム</td><td>自己複製探査機・ブラックホール</td></tr><tr><th>見つけ方</th><td>電波・大気の汚染物質</td><td>恒星の赤外線余剰</td><td>銀河の赤外線余剰</td></tr></table>
     <p>この先には、宇宙全体を使う「Type IV」や、多元宇宙を行き来する「Type V」という想像もあるが、物理学で語れる範囲を大きく超えている。スライダーを「Type III」に合わせると、年表（1万〜100万年）、系統樹、宇宙マップ（天の川銀河に広がる文明圏、アンドロメダへの探査）に反映されます。</p>`}};
-  const tabs=box.querySelector(".ctabs"),body=box.querySelector(".tgbody");
+  const tabs=box.querySelector(".ui-seg"),body=box.querySelector(".tgbody");
   function show(k){tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===k));const t=T[k];body.innerHTML=`<h3>${t.h}</h3><p class="tglead">${t.lead}</p>${t.body}`;}
   tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(b)show(b.dataset.t);});window.TG_SHOW=show;
   show("t2");
@@ -6846,8 +6896,8 @@ function BranchGraph(host,D,panel){
   order.forEach((l,i)=>l.row=i);
   const seg=D.seg, X01=t=>{if(t<=seg[0][0])return 0;for(let i=1;i<seg.length;i++)if(t<=seg[i][0]){const[a,fa]=seg[i-1],[b,fb]=seg[i];return fa+(fb-fa)*(t-a)/(b-a);}return 1;};
   const T0=seg[0][0],T1=seg[seg.length-1][0];
-  host.innerHTML=`<div class="bgwrap"><svg class="bgsvg"></svg><div class="bgtools"><button data-z="in">＋</button><button data-z="out">−</button><button data-z="fit">全体</button></div></div>`;
-  const wrap=host.firstChild,svg=wrap.querySelector("svg");
+  host.innerHTML=`<div class="ui-stage bgstage" data-fs="1"><div class="ui-bar"><div class="ui-opts"><span class="ui-stat">${D.title}の年表</span></div><div class="ui-tools bgtools"><span class="ui-stat num bgzoom"></span><button type="button" data-z="out" aria-label="縮小" title="縮小"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><button type="button" data-z="in" aria-label="拡大" title="拡大"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><button type="button" data-z="fit" title="全体を表示">全体</button></div></div><div class="bgwrap ui-fig"><svg class="bgsvg"></svg></div></div>`;
+  const wrap=host.querySelector(".bgwrap"),svg=wrap.querySelector("svg"),zl=host.querySelector(".bgzoom");
   let W0=1200,k=1,tx=0,sel=null;
   const cut=()=>null;
   const markY=()=>{const Y=window.KYEAR;if(typeof Y!=="number")return null;if(D.unit==="yr")return Y>1e9?null:Y;if(D.unit==="ma"){if(Y>=2026)return null;return Y/1e6;}
@@ -6881,6 +6931,7 @@ function BranchGraph(host,D,panel){
     {const m=markY();if(m!==null&&m!==undefined){const x=sx(m);if(x>0&&x<w)g.push(`<line x1="${x}" x2="${x}" y1="0" y2="${h}" stroke="#b48cff" stroke-width="1.5" stroke-dasharray="4 4" opacity=".8"/><text x="${x+6}" y="${TOP+14}" class="bgcut">◀ スライダーの時代</text>`);}}
     if(D.now!==undefined){const x=sx(D.now);g.push(`<line x1="${x}" x2="${x}" y1="42" y2="${h}" stroke="#f4b942" stroke-width="1.6" stroke-dasharray="4 3"/>`);}
     svg.innerHTML=g.join("")+con.join("")+lines.join("")+labs.join("");
+    if(zl)zl.textContent="×"+k.toFixed(1);
   }
   function detail(l,ei){sel=l;render();const e=ei!=null?l.ev[ei]:null;
     const kidsL=(kids[l.id]||[]).map(x=>`<button class="linkbtn" data-l="${x.id}">${x.name}</button>`).join("");
@@ -6916,8 +6967,9 @@ function BranchGraph(host,D,panel){
     if(!drag||e.pointerId!==drag.id)return;moved=Math.max(moved,Math.abs(e.clientX-drag.x));tx=drag.tx+(e.clientX-drag.x);clampX();render();});
   const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pin=null;if(drag&&(e.pointerId===drag.id||!pts.size))drag=null;};
   window.addEventListener("pointerup",up);window.addEventListener("pointercancel",up);
-  wrap.querySelector(".bgtools").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const w=wrap.clientWidth/2;if(b.dataset.z==="in")zoomAt(w,1.5);else if(b.dataset.z==="out")zoomAt(w,1/1.5);else{fit();render();}});
-  new ResizeObserver(()=>{if(wrap.clientWidth){const rel=k;fit();k=rel;clampX();render();}}).observe(wrap);
+  host.querySelector(".bgtools").addEventListener("click",e=>{const b=e.target.closest("[data-z]");if(!b)return;const w=wrap.clientWidth/2;if(b.dataset.z==="in")zoomAt(w,1.5);else if(b.dataset.z==="out")zoomAt(w,1/1.5);else{fit();render();}});
+  // 幅が変わったとき（詳細パネルの開閉・全画面など）は、真ん中に見えていた位置を保つ
+  let lastW=0;new ResizeObserver(()=>{const w=wrap.clientWidth;if(!w)return;const rel=k;if(lastW&&w!==lastW){const u=(lastW/2-LX-tx)/(W0*k);fit();k=rel;tx=w/2-LX-u*W0*k;}else{fit();k=rel;}lastW=w;clampX();render();}).observe(wrap);
   window.addEventListener("k-year",render);
   fit();render();
   function focus(lid,ei){const l=byId[lid];if(!l)return false;const t=ei!=null&&l.ev&&l.ev[ei]?l.ev[ei][0]:l.a;const w=wrap.clientWidth||1000;if(!wrap.clientWidth)return false;fit();k=Math.max(k,3);tx=w*.4-(LX+X01(t)*W0*k);clampX();panel.dataset.owner=D.title;detail(l,ei);
@@ -7030,7 +7082,7 @@ function BranchGraph(host,D,panel){
   const layerBox=document.getElementById("maplayers"), chipBox=document.getElementById("mapchips");
   function renderCtl(){
     layerBox.innerHTML=[["country","国境・国"],["landmark","ランドマーク"],["tourism","観光の流れ（2025年）"]].map(([k2,t])=>`<button class="chip" aria-pressed="${layers[k2]}" data-l="${k2}">${t}</button>`).join("");
-    chipBox.style.display=layers.landmark?"flex":"none";
+    (chipBox.closest(".ui-filter")||chipBox).style.display=layers.landmark?"":"none";
     const ALL=cats.size===Object.keys(CAT).length;chipBox.innerHTML=`<button class="chip" data-c="__all" aria-pressed="${ALL}">すべて</button>`+Object.entries(CAT).map(([k2,[t,c]])=>`<button class="chip" aria-pressed="${!ALL&&cats.has(k2)}" data-c="${k2}"><span class="dot" style="background:${c}"></span>${t}</button>`).join("");
   }
   layerBox.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;layers[b.dataset.l]=!layers[b.dataset.l];renderCtl();decorate();});
@@ -7160,7 +7212,7 @@ window.GITNAV=(function(){
         (n.num!=null?`<text x="${x}" y="${y+4}" text-anchor="middle" class="gn-num"${on?' fill="#0b1020"':""}>${n.num}</text>`:"")+
         lines.map((t,k)=>`<text x="${x}" y="${y+r+13+k*12}" text-anchor="middle" class="gn-lab${on?" on":""}">${esc(t)}</text>`).join("")+`</g>`;});
     const sc=host._gz||(host._gz=spec.zoom||1);
-    host.innerHTML=`<div class="gnwrap"><div class="gitnav"><svg width="${W*sc}" height="${H*sc}" viewBox="0 0 ${W} ${H}">${edges}${tags}${nodes}</svg></div><div class="gntools"><button data-gz="in" title="拡大">＋</button><button data-gz="out" title="縮小">−</button><button data-gz="fit" title="全体を表示">全体</button></div></div>`;
+    host.innerHTML=`<div class="gnwrap ui-stage"><div class="ui-bar"><div class="ui-opts"><span class="ui-stat">スケールの枝分かれ図（押すとそのスケールへ）</span></div><div class="ui-tools gntools"><button type="button" data-gz="out" aria-label="縮小" title="縮小"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><button type="button" data-gz="in" aria-label="拡大" title="拡大"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><button type="button" data-gz="fit" title="全体を表示">全体</button></div></div><div class="gitnav ui-fig"><svg width="${W*sc}" height="${H*sc}" viewBox="0 0 ${W} ${H}">${edges}${tags}${nodes}</svg></div></div>`;
     const box=host.querySelector(".gitnav"),sv=box.querySelector("svg");
     const setZ=(ns,mx,my)=>{ns=Math.max(.3,Math.min(2.5,ns));const k=ns/host._gz;const cx=box.scrollLeft+mx,cy=box.scrollTop+my;host._gz=ns;sv.setAttribute("width",W*ns);sv.setAttribute("height",H*ns);box.scrollLeft=cx*k-mx;box.scrollTop=cy*k-my;};
     box.addEventListener("wheel",e=>{if(e.shiftKey)return;e.preventDefault();const r=box.getBoundingClientRect();setZ(host._gz*Math.exp(-e.deltaY*.0015),e.clientX-r.left,e.clientY-r.top);},{passive:false});
@@ -7249,22 +7301,26 @@ window.GITNAV=(function(){
 /* ---------- 世界地図のページ：地球以外の天体の地図 ---------- */
 (()=>{const sec=document.getElementById("v-world-map");const bar=document.getElementById("bodysel"),pm=document.getElementById("pmap");if(!sec||!bar||!pm||typeof SPZ==="undefined"||!SPZ)return;
   const ORDER=[["earth","🌏 地球"],["moon","月"],["mercury","水星"],["venus","金星"],["mars","火星"],["jupiter","木星"],["saturn","土星"],["uranus","天王星"],["neptune","海王星"],["pluto","冥王星"],["sun","太陽"]];
-  const earthEls=[document.getElementById("maplayers"),document.getElementById("mapchips"),sec.querySelector(".maprow"),document.getElementById("locsec")];
+  const row=id=>{const e=document.getElementById(id);return e?(e.closest(".ui-filter")||e):null;};
+  const earthEls=[row("maplayers"),row("mapchips"),sec.querySelector(".maprow"),document.getElementById("locsec")];
+  const pp=document.getElementById("pmpanel");
+  const unpick=()=>{sel=null;if(pp)pp.hidden=true;pm.querySelectorAll(".pmpin.on,.pmlist li.on").forEach(x=>x.classList.remove("on"));};
+  if(pp)pp.addEventListener("click",e=>{if(e.target.closest("[data-close]"))unpick();});
   let cur="earth",z={s:1,x:0,y:0},sel=null;
   const esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;");
   function drawBar(){bar.innerHTML=ORDER.map(([k,n])=>`<button class="chip" data-b="${k}" aria-pressed="${k===cur}">${n}</button>`).join("");}
-  function show(k){cur=k;drawBar();const earth=k==="earth";earthEls.forEach(e=>{if(e)e.hidden=!earth;});pm.hidden=earth;if(!earth)render(k);}
+  function show(k){cur=k;drawBar();const earth=k==="earth";unpick();earthEls.forEach(e=>{if(e)e.hidden=!earth;});pm.hidden=earth;if(!earth)render(k);}
   function apply(){const inn=document.getElementById("pmin"),box=document.getElementById("pmbox");if(!inn||!box)return;const W=box.clientWidth,H=box.clientHeight,w=W*z.s,h=w/2;
     z.x=Math.min(0,Math.max(W-w,z.x));z.y=h<H?(H-h)/2:Math.min(0,Math.max(H-h,z.y));inn.style.width=w+"px";inn.style.height=h+"px";inn.style.transform=`translate(${z.x}px,${z.y}px)`;}
   function zoomAt(f,cx,cy){const box=document.getElementById("pmbox");const ns=Math.min(12,Math.max(1,z.s*f));const k=ns/z.s;z.x=cx-(cx-z.x)*k;z.y=cy-(cy-z.y)*k;z.s=ns;apply();}
   function pick(id){const B=SPZ.BODY[cur];const f=(B.feat||[]).find(x=>x[0]===id);sel=id;pm.querySelectorAll(".pmpin").forEach(p=>p.classList.toggle("on",p.dataset.f===id));pm.querySelectorAll(".pmlist li").forEach(l=>l.classList.toggle("on",l.dataset.f===id));
-    const d=document.getElementById("pmdet");if(d&&f)d.innerHTML=`<h4>${esc(f[1])}</h4><div class="num">${Math.abs(f[2])}°${f[2]<0?"S":"N"} ${Math.abs(f[3])}°${f[3]<0?"W":"E"}</div><p>${esc(f[4])}</p>`;}
+    if(pp&&f){pp.innerHTML=`<button class="gclose" data-close="1" aria-label="閉じる">×</button><div class="meta"><span class="pill">${esc(B.name)}の地名</span></div><h3>${esc(f[1])}</h3><div class="num" style="color:var(--muted)">${Math.abs(f[2])}°${f[2]<0?"S":"N"} ${Math.abs(f[3])}°${f[3]<0?"W":"E"}</div><p>${esc(f[4])}</p>`;pp.hidden=false;}}
   function render(k){const B=SPZ.BODY[k];if(!B)return;z={s:1,x:0,y:0};sel=null;const url=SPZ.planetMapURL(k);let grid="";for(let lo=-150;lo<=150;lo+=30)grid+=`<line x1="${lo+180}" y1="0" x2="${lo+180}" y2="180"/>`;for(let la=-60;la<=60;la+=30)grid+=`<line x1="0" y1="${90-la}" x2="360" y2="${90-la}"${la===0?' class="eq"':""}/>`;
     const pins=(B.feat||[]).map(([id,nm,la,lo])=>`<button class="pmpin" data-f="${id}" style="left:${(lo+180)/360*100}%;top:${(90-la)/180*100}%"><i></i><span>${esc(nm)}</span></button>`).join("");
-    pm.innerHTML=`<div class="pmhead"><h3>${esc(B.name)}の地図</h3><span>半径 ${esc(B.R)}・正距円筒図法（横：経度 −180°〜180°、縦：緯度 −90°〜90°）。ホイール・ピンチでズーム、ドラッグで移動。</span></div>
-      <div class="pmrow"><div class="pmbox" id="pmbox"><div class="pmin" id="pmin"><img src="${url}" alt="${esc(B.name)}の地図" draggable="false"><svg viewBox="0 0 360 180" preserveAspectRatio="none" aria-hidden="true">${grid}</svg>${pins}</div>
-        <div class="mapctl"><button data-z="in">＋</button><button data-z="out">−</button><button data-z="fit">全体</button><button data-z="space">🚀 宇宙で見る</button><button data-z="cut">🔍 中（断面）</button></div></div>
-      <aside class="panel pminfo"><p>${esc(B.desc)}</p><div id="pmdet" class="pmdet"><p class="dayhint">地名を押すと説明が出ます</p></div><h4>主な地名（${(B.feat||[]).length}）</h4><ul class="pmlist">${(B.feat||[]).map(([id,nm,la,lo])=>`<li data-f="${id}">${esc(nm)}<small>${Math.abs(la)}°${la<0?"S":"N"} ${Math.abs(lo)}°${lo<0?"W":"E"}</small></li>`).join("")}</ul><p class="note">主な地名の位置は実際の緯度・経度。細かい模様は再現した想像図です。</p></aside></div>`;
+    pm.innerHTML=`<div class="pmhead"><h3>${esc(B.name)}の地図</h3><span>半径 ${esc(B.R)}・正距円筒図法（横：経度 −180°〜180°、縦：緯度 −90°〜90°）。</span></div>
+      <div class="pmrow"><div class="ui-stage" data-fs="1"><div class="ui-bar"><div class="ui-opts"><button type="button" data-z="space">宇宙で見る</button><button type="button" data-z="cut">中（断面）を見る</button></div><div class="ui-tools"><button type="button" data-z="out" aria-label="縮小" title="縮小"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><button type="button" data-z="in" aria-label="拡大" title="拡大"><svg class="ui-zi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button><button type="button" data-z="fit" title="全体を表示">全体</button></div></div><div class="pmbox ui-fig" id="pmbox"><div class="pmin" id="pmin"><img src="${url}" alt="${esc(B.name)}の地図" draggable="false"><svg viewBox="0 0 360 180" preserveAspectRatio="none" aria-hidden="true">${grid}</svg>${pins}</div>
+        </div></div>
+      <aside class="panel pminfo"><p>${esc(B.desc)}</p><p class="dayhint">地図の点や下の一覧で地名を押すと、くわしい説明が出ます。</p><h4>主な地名（${(B.feat||[]).length}）</h4><ul class="pmlist">${(B.feat||[]).map(([id,nm,la,lo])=>`<li data-f="${id}">${esc(nm)}<small>${Math.abs(la)}°${la<0?"S":"N"} ${Math.abs(lo)}°${lo<0?"W":"E"}</small></li>`).join("")}</ul><p class="note">主な地名の位置は実際の緯度・経度。細かい模様は再現した想像図です。</p></aside></div>`;
     requestAnimationFrame(apply);const box=document.getElementById("pmbox");
     box.addEventListener("wheel",e=>{e.preventDefault();const r=box.getBoundingClientRect();zoomAt(Math.exp(-e.deltaY*.0015),e.clientX-r.left,e.clientY-r.top);},{passive:false});
     let dr=null;box.addEventListener("pointerdown",e=>{if(e.target.closest("button"))return;dr={x:e.clientX,y:e.clientY,ox:z.x,oy:z.y};box.setPointerCapture(e.pointerId);});
@@ -7429,7 +7485,7 @@ window.GITNAV=(function(){
     });
     // 時間軸（上に固定）
     let grid="", ax=`<rect x="0" y="0" width="${vw}" height="${AX}" fill="#0a0f1f"/><line x1="0" x2="${vw}" y1="${AX}" y2="${AX}" stroke="var(--line)"/>`;
-    ERA.forEach(([nm,a,b])=>{const x1=Math.max(sx(a),0),x2=Math.min(sx(b),vw);if(x2-x1<30)return;ax+=`<text x="${(x1+x2)/2}" y="15" text-anchor="middle" font-size="12" font-weight="700" fill="#e9edf7" font-family="Murecho,sans-serif">${nm}</text>`;});
+    ERA.forEach(([nm,a,b])=>{const x1=Math.max(sx(a),0),x2=Math.min(sx(b),vw);const tw=t=>[...t].reduce((n,c)=>n+(c.charCodeAt(0)>255?12:7.4),0)+8;let t=nm;if(x2-x1<tw(t)){t=nm.replace(/^Type (I{1,3}|IV)へ$/,"$1");if(t===nm||x2-x1<tw(t))return;}ax+=`<text x="${(x1+x2)/2}" y="15" text-anchor="middle" font-size="12" font-weight="700" fill="#e9edf7" font-family="Murecho,sans-serif">${t}</text>`;});
     const ua=(0-tx)/kx, ub=(vw-tx)/kx, steps=[1,2,5,10,20,50,100,200,500,1000,2000,5000,10000,20000,50000,100000,200000,500000,1e6,2e6,5e6,1e7,2e7,5e7], cand=[];
     SEG.forEach(([a,b,u0,u1])=>{if(u1<ua||u0>ub)return;const ppy=kx*(u1-u0)/(b-a);const step=steps.find(s=>s*ppy>=72)||1e6;const ya=Math.max(a,Yof(ua)),yb=Math.min(b,Yof(ub),EY);for(let y=Math.ceil(ya/step)*step;y<=yb;y+=step)if(!cand.includes(y))cand.push(y);});
     cand.sort((p,q)=>p-q);
@@ -9916,7 +9972,7 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
   const HELP=()=>`<h3>使い方</h3>
     <ol class="hxsteps"><li><b>時代を選ぶ</b>：画面上の「時代バー」（スマホは上の時代ボタン）で、宇宙誕生（138億年前）からType IV（約10億年後・構想）まで選べます。すべてのページがその時代の姿に変わります。つまみのドラッグ、‹ › ボタン、時代名を押して出る一覧のどれでも選べます。</li>
     <li><b>見方を選ぶ</b>：左のメニュー（スマホは画面下のタブ）で「全体マップ・年表・宇宙/地球/ミクロ・系統樹・宇宙の法則・地球大全」を切り替えます。</li>
-    <li><b>図を動かす</b>：年表・系統樹・地図・3Dは、ドラッグで移動、ホイール（スマホは2本指のピンチ）で拡大縮小。右上の <span class="hxfs">⤢</span> で全画面にできます。スマホでは、押したものの詳細が画面の下から出ます（上下にスワイプで広げる／たたむ）。</li>
+    <li><b>図を動かす</b>：年表・系統樹・地図・3Dは、どのページでも図の上に同じ操作バーがあります。左がそのページの切り替え、右が −・＋・全体・<span class="hxfs">⤢</span>（全画面）。ドラッグで移動、ホイール（スマホは2本指のピンチ）でも拡大縮小できます。</li><li><b>詳細を読む</b>：出来事・国・要素などを押すと、PCでは画面の右、スマホでは画面の下に詳細パネルが出ます。× か Esc で閉じます（スマホは上下にスワイプで広げる／たたむ）。宇宙・ミクロの「いま見ているもの」は、図の操作バーの「詳細」で出す／しまうを切り替えます（しまうと図の下に出ます）。</li>
     <li><b>なんでも検索</b>：🔍（<kbd>/</kbd>キー）で、出来事・国・元素・生き物・天体など約${(IDX||[]).length.toLocaleString()}件から探して、その場所へ飛べます。</li>
     <li><b>地球の外から来た方へ</b>：まず「地球大全」を読むと、地球と人類の全体像がつかめます。</li></ol>
     <h3 class="hx-kbd">キーボード</h3><table class="ltable hxkeys hx-kbd"><tbody>
@@ -9961,8 +10017,7 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
     bk:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.6C10 5.1 7 4.6 3.5 5.1v13.2c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5.1C17 4.6 14 5.1 12 6.6zM12 6.6v13.2"/></svg>',
     fs:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
     fsx:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>',
-    x:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
-    down:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>'};
+    x:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>'};
   window.KICON=IC;
 
   // ---- 1) ページのメニュー（PCの左）と下のタブ（スマホ） ----
@@ -10008,71 +10063,82 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
   function setSticky(){const h=isM()?$("topbar").offsetHeight:dock.offsetHeight;root.style.setProperty("--stickyH",h+"px");}
   new ResizeObserver(setSticky).observe(dock);new ResizeObserver(setSticky).observe($("topbar"));
 
-  // ---- 3) 詳細パネル：スマホでは画面の下から出るシートに、PCでは画面外なら「詳細を見る」を出す ----
+  // ---- 3) 詳細パネル（全ページ共通）：PCは画面の右、スマホは画面の下から出る ----
+  // 押したもの（出来事・国・要素など）の詳細は、ページに関係なく同じ場所・同じ見た目・同じ閉じ方にする
+  const mqPush=matchMedia("(min-width: 1280px)");
   const PANELS=[
-    {id:"gpanel",view:"lineage",close:p=>p.querySelector("[data-close]"),prefer:p=>p.querySelector(".plate")?"full":"peek"},
-    {id:"bgpanel",view:"timeline",close:p=>p.querySelector("[data-close]")},
-    {id:"whpanel",view:"timeline",close:p=>p.querySelector("[data-close]")},
-    {id:"lpanel",view:"laws",close:p=>p.querySelector("[data-close]")},
-    {id:"info",view:"world-map",active:p=>p.classList.contains("detail-mode"),close:p=>p.querySelector("[data-back]")}].map(o=>({...o,el:$(o.id)})).filter(o=>o.el);
+    {id:"gpanel",view:"lineage",title:"系統樹の要素",close:p=>p.querySelector("[data-close]"),prefer:p=>p.querySelector(".plate")?"full":"peek"},
+    {id:"bgpanel",view:"timeline",title:"年表の出来事",close:p=>p.querySelector("[data-close]")},
+    {id:"whpanel",view:"timeline",title:"年表の出来事",active:()=>!$("hist-grid").hidden&&!$("tlw-hist").hidden,close:p=>p.querySelector("[data-close]")},
+    {id:"lpanel",view:"laws",title:"宇宙の法則",close:p=>p.querySelector("[data-close]")},
+    {id:"info",view:"world-map",title:"国・場所",active:p=>p.classList.contains("detail-mode")&&!document.querySelector("#v-world-map .maprow").hidden,close:p=>p.querySelector("[data-back]")},
+    {id:"pmpanel",view:"world-map",title:"地名",active:()=>!$("pmap").hidden,close:p=>p.querySelector("[data-close]")},
+    {id:"spinfo",view:"space-map",title:"いま見ているスケール",always:true},
+    {id:"mcinfo",view:"micro",title:"いま見ているもの",always:true}].map(o=>({...o,el:$(o.id)})).filter(o=>o.el);
   const ds=document.createElement("div");ds.className="dsheet";ds.id="dsheet";ds.hidden=true;ds.setAttribute("role","region");ds.setAttribute("aria-label","詳細");
-  ds.innerHTML=`<div class="ds-bar"><button type="button" class="ds-grip" aria-label="パネルを広げる／たたむ"><i></i></button><button type="button" class="ds-x" aria-label="閉じる">${IC.x}</button></div><div class="ds-body"></div>`;
+  ds.innerHTML=`<div class="ds-bar"><button type="button" class="ds-grip" aria-label="パネルを広げる／たたむ"><i></i></button><b class="ds-title">詳細</b><button type="button" class="ds-x" aria-label="詳細を閉じる" title="閉じる（Esc）">${IC.x}</button></div><div class="ds-body"></div>`;
   body.appendChild(ds);
-  const dsBody=ds.querySelector(".ds-body");
+  const dsBody=ds.querySelector(".ds-body"),dsTitle=ds.querySelector(".ds-title");
   PANELS.forEach(p=>{p.mark=document.createComment("panel:"+p.id);p.el.before(p.mark);p.t=0;});
   let lastUser=0;["pointerup","keydown"].forEach(t=>window.addEventListener(t,()=>{lastUser=Date.now();},true));
   const userish=()=>Date.now()-lastUser<1500;
-  const isOpen=p=>!p.el.hidden&&(!p.active||p.active(p.el))&&curView===p.view;
+  // always：そのページにいる間は開いておくパネル（宇宙・ミクロの「いま見ているもの」）。× で閉じたら、次に自分で選ぶまで閉じたまま。
+  // タブレットの幅（図に重ねて出す）では自動では開かず、「詳細」を押したときだけ開く（図と操作バーを隠さないため。閉じている間は図の下に出る）
+  const isOpen=p=>curView===p.view&&(p.always?!p.dismissed&&(modeOf()!=="over"||p.pinned)&&p.el.childElementCount>0:!p.el.hidden&&(!p.active||p.active(p.el)));
+  const modeOf=()=>isM()?"sheet":mqPush.matches?"push":"over";
   let inSheet=null;
   function sheetOpen(){return !ds.hidden;}
   function setState(s){ds.dataset.state=s;ds.querySelector(".ds-grip").setAttribute("aria-expanded",s==="full");}
-  const pill=document.createElement("button");pill.type="button";pill.className="jumppill";pill.hidden=true;pill.innerHTML=`${IC.down}<span>下に詳細を表示しました</span>`;body.appendChild(pill);
-  let pillFor=null,pillT=0;
-  pill.addEventListener("click",()=>{if(pillFor)pillFor.scrollIntoView({behavior:"smooth",block:"start"});pill.hidden=true;});
   function syncSheets(changed){
-    const open=PANELS.filter(isOpen).sort((a,b)=>b.t-a.t);
-    if(isM()){
-      const p=open[0]||null;
-      PANELS.forEach(q=>{if(q!==p&&q.el.parentNode===dsBody)q.mark.after(q.el);});
-      if(p){if(p.el.parentNode!==dsBody){dsBody.appendChild(p.el);}inSheet=p;ds.hidden=false;body.classList.add("ds-on");
-        if(changed===p||!ds.dataset.state){const want=userish()?(p.prefer?p.prefer(p.el):"full"):"peek";setState(want);dsBody.scrollTop=0;}}
-      else{inSheet=null;ds.hidden=true;body.classList.remove("ds-on");}
-      pill.hidden=true;
-    }else{
-      PANELS.forEach(q=>{if(q.el.parentNode===dsBody)q.mark.after(q.el);});inSheet=null;ds.hidden=true;body.classList.remove("ds-on");
-      if(changed&&isOpen(changed)&&userish()){const r=changed.el.getBoundingClientRect();if(r.top>innerHeight-90||r.bottom<0){pillFor=changed.el;pill.hidden=false;clearTimeout(pillT);pillT=setTimeout(()=>pill.hidden=true,6000);}}
-    }
+    if(changed&&changed.always&&userish())changed.dismissed=false;
+    const m=modeOf(),p=PANELS.filter(isOpen).sort((a,b)=>b.t-a.t)[0]||null;
+    PANELS.forEach(q=>{if(q!==p&&q.el.parentNode===dsBody)q.mark.after(q.el);});
+    if(p){const switched=inSheet!==p;if(p.el.parentNode!==dsBody)dsBody.appendChild(p.el);inSheet=p;ds.hidden=false;dsTitle.textContent=p.title;
+      if(m==="sheet"){const fresh=ds.dataset.state!=="full"&&ds.dataset.state!=="peek";if(p.always){if(switched||fresh)setState("peek");}else if(changed===p||switched||fresh)setState(userish()?(p.prefer?p.prefer(p.el):"full"):"peek");}
+      else setState("full");
+      if(changed===p||switched)dsBody.scrollTop=0;}
+    else{inSheet=null;ds.hidden=true;}
+    body.classList.toggle("ds-on",!!p&&m==="sheet");body.classList.toggle("dock-on",!!p&&m!=="sheet");body.classList.toggle("dock-push",!!p&&m==="push");
+    document.querySelectorAll("[data-dock]").forEach(b=>{const q=PANELS.find(x=>x.id===b.dataset.dock);b.setAttribute("aria-pressed",String(!!q&&isOpen(q)));});
   }
   const mo=new MutationObserver(recs=>{const seen=new Set();recs.forEach(r=>{const p=PANELS.find(q=>q.el===r.target||q.el.contains(r.target));if(p&&!seen.has(p)){seen.add(p);if(r.type==="childList"||!p.el.hidden)p.t=performance.now();}});
     let last=null;seen.forEach(p=>{if(!last||p.t>last.t)last=p;});syncSheets(last);});
   PANELS.forEach(p=>mo.observe(p.el,{attributes:true,attributeFilter:["hidden","class"],childList:true}));
-  ds.querySelector(".ds-grip").addEventListener("click",()=>setState(ds.dataset.state==="full"?"peek":"full"));
-  ds.querySelector(".ds-x").addEventListener("click",()=>{if(!inSheet)return;const b=inSheet.close(inSheet.el);if(b)b.click();else inSheet.el.hidden=true;});
-  // バーを上下にスワイプして広げる／たたむ
+  // ページの中の表示が切り替わったら（天体・年表・世界史の表示）、出していた詳細が今も有効か見直す
+  {const wo=new MutationObserver(()=>syncSheets());[$("pmap"),$("hist-grid"),$("tlw-hist"),document.querySelector("#v-world-map .maprow")].forEach(el=>{if(el)wo.observe(el,{attributes:true,attributeFilter:["hidden"]});});}
+  function closeSheet(){const p=inSheet;if(!p)return;if(p.always){p.dismissed=true;p.pinned=false;syncSheets();return;}const b=p.close&&p.close(p.el);if(b)b.click();else p.el.hidden=true;}
+  ds.querySelector(".ds-x").addEventListener("click",closeSheet);
+  ds.querySelector(".ds-grip").addEventListener("click",()=>{if(isM())setState(ds.dataset.state==="full"?"peek":"full");});
+  // 図の操作バーの「詳細」ボタン（いつも開いておくパネルを開く／閉じる）
+  document.addEventListener("click",e=>{const b=e.target.closest("[data-dock]");if(!b)return;const p=PANELS.find(x=>x.id===b.dataset.dock);if(!p)return;
+    if(isOpen(p)){p.dismissed=true;p.pinned=false;syncSheets();}else{p.dismissed=false;p.pinned=true;p.t=performance.now();syncSheets(p);if(isM())setState("full");}});
+  // スマホ：バーを上下にスワイプして広げる／たたむ
   {let sy=null;const bar=ds.querySelector(".ds-bar");
-    bar.addEventListener("pointerdown",e=>{sy=e.clientY;});
-    bar.addEventListener("pointerup",e=>{if(sy===null)return;const d=e.clientY-sy;sy=null;if(d>40){if(ds.dataset.state==="peek")ds.querySelector(".ds-x").click();else setState("peek");}else if(d<-40)setState("full");});
+    bar.addEventListener("pointerdown",e=>{sy=isM()&&!e.target.closest(".ds-x")?e.clientY:null;});
+    bar.addEventListener("pointerup",e=>{if(sy===null)return;const d=e.clientY-sy;sy=null;if(d>40){if(ds.dataset.state==="peek")closeSheet();else setState("peek");}else if(d<-40)setState("full");});
     bar.addEventListener("pointercancel",()=>{sy=null;});}
-  // たたんだ状態でパネルの中身を押したら広げる（リンクやボタンはそのまま動かす）
-  dsBody.addEventListener("click",e=>{if(ds.dataset.state==="peek"&&!e.target.closest("button,a,input,summary,canvas"))setState("full");});
-  const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting&&en.target===pillFor)pill.hidden=true;});},{threshold:.15});
-  PANELS.forEach(p=>io.observe(p.el));
+  // スマホ：たたんだ状態でパネルの中身を押したら広げる（リンクやボタンはそのまま動かす）
+  dsBody.addEventListener("click",e=>{if(isM()&&ds.dataset.state==="peek"&&!e.target.closest("button,a,input,summary,canvas"))setState("full");});
   mqM.addEventListener("change",()=>{closeEra();syncSheets();setSticky();});
+  mqPush.addEventListener("change",()=>syncSheets());
 
-  // ---- 4) 全画面（図・地図・3Dを画面いっぱいに） ----
+  // ---- 4) 図の枠（共通）：操作バーに全画面ボタン、3Dの −／＋ ----
   let fsEl=null;
-  function addFs(box,into){if(!box||box._fs)return;box._fs=true;const b=document.createElement("button");b.type="button";b.className="fsbtn";b.innerHTML=IC.fs;b.setAttribute("aria-label","全画面で表示");b.title="全画面で表示（F キー）";
-    (into||box).appendChild(b);b.addEventListener("pointerdown",e=>e.stopPropagation());b.addEventListener("click",e=>{e.stopPropagation();toggleFs(box);});box._fsb=b;}
-  function toggleFs(box,on){on=on===undefined?!box.classList.contains("is-fs"):on;
-    if(on){if(fsEl&&fsEl!==box)toggleFs(fsEl,false);fsEl=box;box.classList.add("is-fs");}else{box.classList.remove("is-fs");if(fsEl===box)fsEl=null;}
-    body.classList.toggle("fs-on",!!fsEl);const b=box._fsb;if(b){b.innerHTML=on?IC.fsx:IC.fs;b.setAttribute("aria-label",on?"全画面を閉じる":"全画面で表示");b.title=on?"全画面を閉じる（Esc）":"全画面で表示（F キー）";b.classList.toggle("on",on);}
+  function initStage(st){if(!st||st._ui)return;st._ui=true;new ResizeObserver(()=>{if(st.clientWidth)st.style.setProperty("--stw",st.clientWidth+"px");}).observe(st);const tools=st.querySelector(":scope>.ui-bar>.ui-tools");
+    if(st.dataset.fs!==undefined&&tools){const b=document.createElement("button");b.type="button";b.className="ui-fs";b.innerHTML=IC.fs;b.setAttribute("aria-label","全画面で表示");b.setAttribute("aria-pressed","false");b.title="全画面で表示（F キー）";
+      b.addEventListener("click",e=>{e.stopPropagation();toggleFs(st);});tools.appendChild(b);st._fsb=b;}}
+  const scanStages=root=>{if(!root||root.nodeType!==1)return;if(root.matches(".ui-stage"))initStage(root);root.querySelectorAll(".ui-stage").forEach(initStage);};
+  scanStages(document.body);
+  {const so=new MutationObserver(rs=>rs.forEach(r=>r.addedNodes.forEach(scanStages)));["bg-cosmos","bg-earth","bg-hist","pmap"].forEach(id=>{const el=$(id);if(el)so.observe(el,{childList:true});});}
+  function toggleFs(st,on){if(!st)return;on=on===undefined?!st.classList.contains("is-fs"):on;
+    if(on){if(fsEl&&fsEl!==st)toggleFs(fsEl,false);fsEl=st;st.classList.add("is-fs");}else{st.classList.remove("is-fs");if(fsEl===st)fsEl=null;}
+    body.classList.toggle("fs-on",!!fsEl);const b=st._fsb;if(b){b.innerHTML=on?IC.fsx:IC.fs;b.setAttribute("aria-label",on?"全画面を閉じる":"全画面で表示");b.title=on?"全画面を閉じる（Esc）":"全画面で表示（F キー）";b.setAttribute("aria-pressed",String(on));}
     requestAnimationFrame(()=>{window.dispatchEvent(new Event("resize"));syncSheets();});}
-  addFs($("gcanvas"));addFs($("spscene"));addFs($("mcscene"));addFs($("mapbox"));addFs(document.querySelector(".thwrap"));addFs(document.querySelector(".loc3d"));
-  const hookBranch=el=>{const w=el.matches&&el.matches(".bgwrap")?el:null;if(w)addFs(w,w.querySelector(".bgtools"));};
-  document.querySelectorAll(".bgwrap").forEach(hookBranch);
-  new MutationObserver(rs=>rs.forEach(r=>r.addedNodes.forEach(n=>{if(n.nodeType===1){hookBranch(n);n.querySelectorAll&&n.querySelectorAll(".bgwrap").forEach(hookBranch);}}))).observe($("v-timeline"),{childList:true,subtree:true});
-  function mainCanvas(){const v=document.querySelector("section.view.on");if(!v)return null;
-    return {lineage:$("gcanvas"),"space-map":$("spscene"),micro:$("mcscene"),"world-map":$("mapbox")}[curView]||[...v.querySelectorAll(".bgwrap")].find(w=>w.offsetParent)||null;}
+  // −／＋：ホイールにだけ対応している図（3D）には、ホイールと同じ操作を送る
+  document.addEventListener("click",e=>{const b=e.target.closest("[data-wheel-dir]");if(!b)return;const st=b.closest(".ui-stage");if(!st)return;
+    const t=(st.dataset.wheel&&st.querySelector(st.dataset.wheel))||st.querySelector(".ui-fig");if(!t)return;const r=t.getBoundingClientRect();
+    t.dispatchEvent(new WheelEvent("wheel",{deltaY:+b.dataset.wheelDir*240,clientX:r.left+r.width/2,clientY:r.top+r.height/2,bubbles:true,cancelable:true}));});
+  function mainStage(){const v=document.querySelector("section.view.on");return v?[...v.querySelectorAll(".ui-stage[data-fs]")].find(s=>s.offsetParent)||null:null;}
 
   // ---- 5) ピンチで拡大（ホイールだけに対応していた3Dに、2本指の操作を足す） ----
   function pinch(el,k,step,sel){if(!el)return;const pts=new Map();let d0=0,acc=0,on=false;
@@ -10086,22 +10152,22 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
   pinch($("mcscene"),1/.0012);pinch($("scene"),1/.001);pinch($("thstage"),0,1.1);pinch($("pmap"),1/.0015,0,".pmbox");
 
   // ---- 6) 横に流れるチップ・切り替え：選んでいるものを見える位置へ ----
-  const ROWS="#gchips,#maplayers,#mapchips,#bodysel,#tlregions,#thview,#thspeed,#thjumps,.tlswitch,.histsw,.ctabs,.ptlegend";
+  const ROWS=".ui-filter>.chips,.ui-filter>.mclist,.ui-seg,.ui-opts,.ptlegend";
   function centerActive(scope){if(!scope)return;scope.querySelectorAll(ROWS).forEach(row=>{if(row.scrollWidth<=row.clientWidth+2)return;const a=row.querySelector('[aria-pressed="true"],[aria-selected="true"],.on');if(!a)return;row.scrollLeft=Math.max(0,a.offsetLeft-row.clientWidth/2+a.offsetWidth/2);});}
   document.addEventListener("click",e=>{const row=e.target.closest(ROWS);if(row)requestAnimationFrame(()=>centerActive(row.parentElement||row));});
 
   // ---- 7) キー操作：Esc で閉じる・F で全画面 ----
   window.addEventListener("keydown",e=>{
     const dlg=!$("sx")?.hidden||!$("hx")?.hidden;
-    if(e.key==="Escape"&&!dlg){if(fsEl){e.preventDefault();toggleFs(fsEl,false);return;}if(dock.classList.contains("open")||dock.classList.contains("pop")){e.preventDefault();closeEra();return;}if(isM()&&sheetOpen()){e.preventDefault();ds.querySelector(".ds-x").click();return;}}
+    if(e.key==="Escape"&&!dlg){if(fsEl){e.preventDefault();toggleFs(fsEl,false);return;}if(dock.classList.contains("open")||dock.classList.contains("pop")){e.preventDefault();closeEra();return;}if(sheetOpen()){e.preventDefault();closeSheet();return;}}
     const t=e.target;if(dlg||e.ctrlKey||e.metaKey||e.altKey||(t&&(t.tagName==="INPUT"&&!["range","checkbox","radio","button"].includes(t.type)||t.tagName==="TEXTAREA"||t.isContentEditable)))return;
-    if(e.key==="f"||e.key==="F"){const c=mainCanvas();if(c){e.preventDefault();toggleFs(c);}}
+    if(e.key==="f"||e.key==="F"){const s=mainStage();if(s){e.preventDefault();toggleFs(s);}}
   });
 
   // 全体マップの「前の時代／時代を選ぶ／次の時代」
   document.addEventListener("click",e=>{const b=e.target.closest("[data-kstep]");if(!b)return;const d=+b.dataset.kstep;if(d)window.KSTEP&&KSTEP(d);else openEra();});
 
-  window.KSHELL={onView,openEra,closeEra,flashEra,toggleFs,addFs,syncSheets,isMobile:isM};
+  window.KSHELL={onView,openEra,closeEra,flashEra,toggleFs,syncSheets,isMobile:isM};
   setSticky();
 })();
 
@@ -10113,8 +10179,6 @@ document.fonts?.ready.then(drawLinks);
 (()=>{const sec=id=>document.getElementById("v-"+id);
   // 全体マップ：見出しを先頭に
   const ov=sec("overview");if(ov){const h=ov.querySelector(":scope>.view-head");if(h){ov.prepend(h);const hl=document.getElementById("hello");if(hl)h.after(hl);}}
-  // ミクロ：左の縦リストを画面の上のチップ列に
-  const mi=sec("micro");if(mi){const l=mi.querySelector("#mclist"),w=mi.querySelector(".mcwrap");if(l&&w)w.before(l);}
   document.querySelectorAll(".view").forEach(v=>v.classList.add("staged"));
 })();
 

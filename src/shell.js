@@ -13,8 +13,7 @@
     bk:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.6C10 5.1 7 4.6 3.5 5.1v13.2c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5.1C17 4.6 14 5.1 12 6.6zM12 6.6v13.2"/></svg>',
     fs:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
     fsx:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>',
-    x:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
-    down:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>'};
+    x:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>'};
   window.KICON=IC;
 
   // ---- 1) ページのメニュー（PCの左）と下のタブ（スマホ） ----
@@ -60,71 +59,82 @@
   function setSticky(){const h=isM()?$("topbar").offsetHeight:dock.offsetHeight;root.style.setProperty("--stickyH",h+"px");}
   new ResizeObserver(setSticky).observe(dock);new ResizeObserver(setSticky).observe($("topbar"));
 
-  // ---- 3) 詳細パネル：スマホでは画面の下から出るシートに、PCでは画面外なら「詳細を見る」を出す ----
+  // ---- 3) 詳細パネル（全ページ共通）：PCは画面の右、スマホは画面の下から出る ----
+  // 押したもの（出来事・国・要素など）の詳細は、ページに関係なく同じ場所・同じ見た目・同じ閉じ方にする
+  const mqPush=matchMedia("(min-width: 1280px)");
   const PANELS=[
-    {id:"gpanel",view:"lineage",close:p=>p.querySelector("[data-close]"),prefer:p=>p.querySelector(".plate")?"full":"peek"},
-    {id:"bgpanel",view:"timeline",close:p=>p.querySelector("[data-close]")},
-    {id:"whpanel",view:"timeline",close:p=>p.querySelector("[data-close]")},
-    {id:"lpanel",view:"laws",close:p=>p.querySelector("[data-close]")},
-    {id:"info",view:"world-map",active:p=>p.classList.contains("detail-mode"),close:p=>p.querySelector("[data-back]")}].map(o=>({...o,el:$(o.id)})).filter(o=>o.el);
+    {id:"gpanel",view:"lineage",title:"系統樹の要素",close:p=>p.querySelector("[data-close]"),prefer:p=>p.querySelector(".plate")?"full":"peek"},
+    {id:"bgpanel",view:"timeline",title:"年表の出来事",close:p=>p.querySelector("[data-close]")},
+    {id:"whpanel",view:"timeline",title:"年表の出来事",active:()=>!$("hist-grid").hidden&&!$("tlw-hist").hidden,close:p=>p.querySelector("[data-close]")},
+    {id:"lpanel",view:"laws",title:"宇宙の法則",close:p=>p.querySelector("[data-close]")},
+    {id:"info",view:"world-map",title:"国・場所",active:p=>p.classList.contains("detail-mode")&&!document.querySelector("#v-world-map .maprow").hidden,close:p=>p.querySelector("[data-back]")},
+    {id:"pmpanel",view:"world-map",title:"地名",active:()=>!$("pmap").hidden,close:p=>p.querySelector("[data-close]")},
+    {id:"spinfo",view:"space-map",title:"いま見ているスケール",always:true},
+    {id:"mcinfo",view:"micro",title:"いま見ているもの",always:true}].map(o=>({...o,el:$(o.id)})).filter(o=>o.el);
   const ds=document.createElement("div");ds.className="dsheet";ds.id="dsheet";ds.hidden=true;ds.setAttribute("role","region");ds.setAttribute("aria-label","詳細");
-  ds.innerHTML=`<div class="ds-bar"><button type="button" class="ds-grip" aria-label="パネルを広げる／たたむ"><i></i></button><button type="button" class="ds-x" aria-label="閉じる">${IC.x}</button></div><div class="ds-body"></div>`;
+  ds.innerHTML=`<div class="ds-bar"><button type="button" class="ds-grip" aria-label="パネルを広げる／たたむ"><i></i></button><b class="ds-title">詳細</b><button type="button" class="ds-x" aria-label="詳細を閉じる" title="閉じる（Esc）">${IC.x}</button></div><div class="ds-body"></div>`;
   body.appendChild(ds);
-  const dsBody=ds.querySelector(".ds-body");
+  const dsBody=ds.querySelector(".ds-body"),dsTitle=ds.querySelector(".ds-title");
   PANELS.forEach(p=>{p.mark=document.createComment("panel:"+p.id);p.el.before(p.mark);p.t=0;});
   let lastUser=0;["pointerup","keydown"].forEach(t=>window.addEventListener(t,()=>{lastUser=Date.now();},true));
   const userish=()=>Date.now()-lastUser<1500;
-  const isOpen=p=>!p.el.hidden&&(!p.active||p.active(p.el))&&curView===p.view;
+  // always：そのページにいる間は開いておくパネル（宇宙・ミクロの「いま見ているもの」）。× で閉じたら、次に自分で選ぶまで閉じたまま。
+  // タブレットの幅（図に重ねて出す）では自動では開かず、「詳細」を押したときだけ開く（図と操作バーを隠さないため。閉じている間は図の下に出る）
+  const isOpen=p=>curView===p.view&&(p.always?!p.dismissed&&(modeOf()!=="over"||p.pinned)&&p.el.childElementCount>0:!p.el.hidden&&(!p.active||p.active(p.el)));
+  const modeOf=()=>isM()?"sheet":mqPush.matches?"push":"over";
   let inSheet=null;
   function sheetOpen(){return !ds.hidden;}
   function setState(s){ds.dataset.state=s;ds.querySelector(".ds-grip").setAttribute("aria-expanded",s==="full");}
-  const pill=document.createElement("button");pill.type="button";pill.className="jumppill";pill.hidden=true;pill.innerHTML=`${IC.down}<span>下に詳細を表示しました</span>`;body.appendChild(pill);
-  let pillFor=null,pillT=0;
-  pill.addEventListener("click",()=>{if(pillFor)pillFor.scrollIntoView({behavior:"smooth",block:"start"});pill.hidden=true;});
   function syncSheets(changed){
-    const open=PANELS.filter(isOpen).sort((a,b)=>b.t-a.t);
-    if(isM()){
-      const p=open[0]||null;
-      PANELS.forEach(q=>{if(q!==p&&q.el.parentNode===dsBody)q.mark.after(q.el);});
-      if(p){if(p.el.parentNode!==dsBody){dsBody.appendChild(p.el);}inSheet=p;ds.hidden=false;body.classList.add("ds-on");
-        if(changed===p||!ds.dataset.state){const want=userish()?(p.prefer?p.prefer(p.el):"full"):"peek";setState(want);dsBody.scrollTop=0;}}
-      else{inSheet=null;ds.hidden=true;body.classList.remove("ds-on");}
-      pill.hidden=true;
-    }else{
-      PANELS.forEach(q=>{if(q.el.parentNode===dsBody)q.mark.after(q.el);});inSheet=null;ds.hidden=true;body.classList.remove("ds-on");
-      if(changed&&isOpen(changed)&&userish()){const r=changed.el.getBoundingClientRect();if(r.top>innerHeight-90||r.bottom<0){pillFor=changed.el;pill.hidden=false;clearTimeout(pillT);pillT=setTimeout(()=>pill.hidden=true,6000);}}
-    }
+    if(changed&&changed.always&&userish())changed.dismissed=false;
+    const m=modeOf(),p=PANELS.filter(isOpen).sort((a,b)=>b.t-a.t)[0]||null;
+    PANELS.forEach(q=>{if(q!==p&&q.el.parentNode===dsBody)q.mark.after(q.el);});
+    if(p){const switched=inSheet!==p;if(p.el.parentNode!==dsBody)dsBody.appendChild(p.el);inSheet=p;ds.hidden=false;dsTitle.textContent=p.title;
+      if(m==="sheet"){const fresh=ds.dataset.state!=="full"&&ds.dataset.state!=="peek";if(p.always){if(switched||fresh)setState("peek");}else if(changed===p||switched||fresh)setState(userish()?(p.prefer?p.prefer(p.el):"full"):"peek");}
+      else setState("full");
+      if(changed===p||switched)dsBody.scrollTop=0;}
+    else{inSheet=null;ds.hidden=true;}
+    body.classList.toggle("ds-on",!!p&&m==="sheet");body.classList.toggle("dock-on",!!p&&m!=="sheet");body.classList.toggle("dock-push",!!p&&m==="push");
+    document.querySelectorAll("[data-dock]").forEach(b=>{const q=PANELS.find(x=>x.id===b.dataset.dock);b.setAttribute("aria-pressed",String(!!q&&isOpen(q)));});
   }
   const mo=new MutationObserver(recs=>{const seen=new Set();recs.forEach(r=>{const p=PANELS.find(q=>q.el===r.target||q.el.contains(r.target));if(p&&!seen.has(p)){seen.add(p);if(r.type==="childList"||!p.el.hidden)p.t=performance.now();}});
     let last=null;seen.forEach(p=>{if(!last||p.t>last.t)last=p;});syncSheets(last);});
   PANELS.forEach(p=>mo.observe(p.el,{attributes:true,attributeFilter:["hidden","class"],childList:true}));
-  ds.querySelector(".ds-grip").addEventListener("click",()=>setState(ds.dataset.state==="full"?"peek":"full"));
-  ds.querySelector(".ds-x").addEventListener("click",()=>{if(!inSheet)return;const b=inSheet.close(inSheet.el);if(b)b.click();else inSheet.el.hidden=true;});
-  // バーを上下にスワイプして広げる／たたむ
+  // ページの中の表示が切り替わったら（天体・年表・世界史の表示）、出していた詳細が今も有効か見直す
+  {const wo=new MutationObserver(()=>syncSheets());[$("pmap"),$("hist-grid"),$("tlw-hist"),document.querySelector("#v-world-map .maprow")].forEach(el=>{if(el)wo.observe(el,{attributes:true,attributeFilter:["hidden"]});});}
+  function closeSheet(){const p=inSheet;if(!p)return;if(p.always){p.dismissed=true;p.pinned=false;syncSheets();return;}const b=p.close&&p.close(p.el);if(b)b.click();else p.el.hidden=true;}
+  ds.querySelector(".ds-x").addEventListener("click",closeSheet);
+  ds.querySelector(".ds-grip").addEventListener("click",()=>{if(isM())setState(ds.dataset.state==="full"?"peek":"full");});
+  // 図の操作バーの「詳細」ボタン（いつも開いておくパネルを開く／閉じる）
+  document.addEventListener("click",e=>{const b=e.target.closest("[data-dock]");if(!b)return;const p=PANELS.find(x=>x.id===b.dataset.dock);if(!p)return;
+    if(isOpen(p)){p.dismissed=true;p.pinned=false;syncSheets();}else{p.dismissed=false;p.pinned=true;p.t=performance.now();syncSheets(p);if(isM())setState("full");}});
+  // スマホ：バーを上下にスワイプして広げる／たたむ
   {let sy=null;const bar=ds.querySelector(".ds-bar");
-    bar.addEventListener("pointerdown",e=>{sy=e.clientY;});
-    bar.addEventListener("pointerup",e=>{if(sy===null)return;const d=e.clientY-sy;sy=null;if(d>40){if(ds.dataset.state==="peek")ds.querySelector(".ds-x").click();else setState("peek");}else if(d<-40)setState("full");});
+    bar.addEventListener("pointerdown",e=>{sy=isM()&&!e.target.closest(".ds-x")?e.clientY:null;});
+    bar.addEventListener("pointerup",e=>{if(sy===null)return;const d=e.clientY-sy;sy=null;if(d>40){if(ds.dataset.state==="peek")closeSheet();else setState("peek");}else if(d<-40)setState("full");});
     bar.addEventListener("pointercancel",()=>{sy=null;});}
-  // たたんだ状態でパネルの中身を押したら広げる（リンクやボタンはそのまま動かす）
-  dsBody.addEventListener("click",e=>{if(ds.dataset.state==="peek"&&!e.target.closest("button,a,input,summary,canvas"))setState("full");});
-  const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting&&en.target===pillFor)pill.hidden=true;});},{threshold:.15});
-  PANELS.forEach(p=>io.observe(p.el));
+  // スマホ：たたんだ状態でパネルの中身を押したら広げる（リンクやボタンはそのまま動かす）
+  dsBody.addEventListener("click",e=>{if(isM()&&ds.dataset.state==="peek"&&!e.target.closest("button,a,input,summary,canvas"))setState("full");});
   mqM.addEventListener("change",()=>{closeEra();syncSheets();setSticky();});
+  mqPush.addEventListener("change",()=>syncSheets());
 
-  // ---- 4) 全画面（図・地図・3Dを画面いっぱいに） ----
+  // ---- 4) 図の枠（共通）：操作バーに全画面ボタン、3Dの −／＋ ----
   let fsEl=null;
-  function addFs(box,into){if(!box||box._fs)return;box._fs=true;const b=document.createElement("button");b.type="button";b.className="fsbtn";b.innerHTML=IC.fs;b.setAttribute("aria-label","全画面で表示");b.title="全画面で表示（F キー）";
-    (into||box).appendChild(b);b.addEventListener("pointerdown",e=>e.stopPropagation());b.addEventListener("click",e=>{e.stopPropagation();toggleFs(box);});box._fsb=b;}
-  function toggleFs(box,on){on=on===undefined?!box.classList.contains("is-fs"):on;
-    if(on){if(fsEl&&fsEl!==box)toggleFs(fsEl,false);fsEl=box;box.classList.add("is-fs");}else{box.classList.remove("is-fs");if(fsEl===box)fsEl=null;}
-    body.classList.toggle("fs-on",!!fsEl);const b=box._fsb;if(b){b.innerHTML=on?IC.fsx:IC.fs;b.setAttribute("aria-label",on?"全画面を閉じる":"全画面で表示");b.title=on?"全画面を閉じる（Esc）":"全画面で表示（F キー）";b.classList.toggle("on",on);}
+  function initStage(st){if(!st||st._ui)return;st._ui=true;new ResizeObserver(()=>{if(st.clientWidth)st.style.setProperty("--stw",st.clientWidth+"px");}).observe(st);const tools=st.querySelector(":scope>.ui-bar>.ui-tools");
+    if(st.dataset.fs!==undefined&&tools){const b=document.createElement("button");b.type="button";b.className="ui-fs";b.innerHTML=IC.fs;b.setAttribute("aria-label","全画面で表示");b.setAttribute("aria-pressed","false");b.title="全画面で表示（F キー）";
+      b.addEventListener("click",e=>{e.stopPropagation();toggleFs(st);});tools.appendChild(b);st._fsb=b;}}
+  const scanStages=root=>{if(!root||root.nodeType!==1)return;if(root.matches(".ui-stage"))initStage(root);root.querySelectorAll(".ui-stage").forEach(initStage);};
+  scanStages(document.body);
+  {const so=new MutationObserver(rs=>rs.forEach(r=>r.addedNodes.forEach(scanStages)));["bg-cosmos","bg-earth","bg-hist","pmap"].forEach(id=>{const el=$(id);if(el)so.observe(el,{childList:true});});}
+  function toggleFs(st,on){if(!st)return;on=on===undefined?!st.classList.contains("is-fs"):on;
+    if(on){if(fsEl&&fsEl!==st)toggleFs(fsEl,false);fsEl=st;st.classList.add("is-fs");}else{st.classList.remove("is-fs");if(fsEl===st)fsEl=null;}
+    body.classList.toggle("fs-on",!!fsEl);const b=st._fsb;if(b){b.innerHTML=on?IC.fsx:IC.fs;b.setAttribute("aria-label",on?"全画面を閉じる":"全画面で表示");b.title=on?"全画面を閉じる（Esc）":"全画面で表示（F キー）";b.setAttribute("aria-pressed",String(on));}
     requestAnimationFrame(()=>{window.dispatchEvent(new Event("resize"));syncSheets();});}
-  addFs($("gcanvas"));addFs($("spscene"));addFs($("mcscene"));addFs($("mapbox"));addFs(document.querySelector(".thwrap"));addFs(document.querySelector(".loc3d"));
-  const hookBranch=el=>{const w=el.matches&&el.matches(".bgwrap")?el:null;if(w)addFs(w,w.querySelector(".bgtools"));};
-  document.querySelectorAll(".bgwrap").forEach(hookBranch);
-  new MutationObserver(rs=>rs.forEach(r=>r.addedNodes.forEach(n=>{if(n.nodeType===1){hookBranch(n);n.querySelectorAll&&n.querySelectorAll(".bgwrap").forEach(hookBranch);}}))).observe($("v-timeline"),{childList:true,subtree:true});
-  function mainCanvas(){const v=document.querySelector("section.view.on");if(!v)return null;
-    return {lineage:$("gcanvas"),"space-map":$("spscene"),micro:$("mcscene"),"world-map":$("mapbox")}[curView]||[...v.querySelectorAll(".bgwrap")].find(w=>w.offsetParent)||null;}
+  // −／＋：ホイールにだけ対応している図（3D）には、ホイールと同じ操作を送る
+  document.addEventListener("click",e=>{const b=e.target.closest("[data-wheel-dir]");if(!b)return;const st=b.closest(".ui-stage");if(!st)return;
+    const t=(st.dataset.wheel&&st.querySelector(st.dataset.wheel))||st.querySelector(".ui-fig");if(!t)return;const r=t.getBoundingClientRect();
+    t.dispatchEvent(new WheelEvent("wheel",{deltaY:+b.dataset.wheelDir*240,clientX:r.left+r.width/2,clientY:r.top+r.height/2,bubbles:true,cancelable:true}));});
+  function mainStage(){const v=document.querySelector("section.view.on");return v?[...v.querySelectorAll(".ui-stage[data-fs]")].find(s=>s.offsetParent)||null:null;}
 
   // ---- 5) ピンチで拡大（ホイールだけに対応していた3Dに、2本指の操作を足す） ----
   function pinch(el,k,step,sel){if(!el)return;const pts=new Map();let d0=0,acc=0,on=false;
@@ -138,21 +148,21 @@
   pinch($("mcscene"),1/.0012);pinch($("scene"),1/.001);pinch($("thstage"),0,1.1);pinch($("pmap"),1/.0015,0,".pmbox");
 
   // ---- 6) 横に流れるチップ・切り替え：選んでいるものを見える位置へ ----
-  const ROWS="#gchips,#maplayers,#mapchips,#bodysel,#tlregions,#thview,#thspeed,#thjumps,.tlswitch,.histsw,.ctabs,.ptlegend";
+  const ROWS=".ui-filter>.chips,.ui-filter>.mclist,.ui-seg,.ui-opts,.ptlegend";
   function centerActive(scope){if(!scope)return;scope.querySelectorAll(ROWS).forEach(row=>{if(row.scrollWidth<=row.clientWidth+2)return;const a=row.querySelector('[aria-pressed="true"],[aria-selected="true"],.on');if(!a)return;row.scrollLeft=Math.max(0,a.offsetLeft-row.clientWidth/2+a.offsetWidth/2);});}
   document.addEventListener("click",e=>{const row=e.target.closest(ROWS);if(row)requestAnimationFrame(()=>centerActive(row.parentElement||row));});
 
   // ---- 7) キー操作：Esc で閉じる・F で全画面 ----
   window.addEventListener("keydown",e=>{
     const dlg=!$("sx")?.hidden||!$("hx")?.hidden;
-    if(e.key==="Escape"&&!dlg){if(fsEl){e.preventDefault();toggleFs(fsEl,false);return;}if(dock.classList.contains("open")||dock.classList.contains("pop")){e.preventDefault();closeEra();return;}if(isM()&&sheetOpen()){e.preventDefault();ds.querySelector(".ds-x").click();return;}}
+    if(e.key==="Escape"&&!dlg){if(fsEl){e.preventDefault();toggleFs(fsEl,false);return;}if(dock.classList.contains("open")||dock.classList.contains("pop")){e.preventDefault();closeEra();return;}if(sheetOpen()){e.preventDefault();closeSheet();return;}}
     const t=e.target;if(dlg||e.ctrlKey||e.metaKey||e.altKey||(t&&(t.tagName==="INPUT"&&!["range","checkbox","radio","button"].includes(t.type)||t.tagName==="TEXTAREA"||t.isContentEditable)))return;
-    if(e.key==="f"||e.key==="F"){const c=mainCanvas();if(c){e.preventDefault();toggleFs(c);}}
+    if(e.key==="f"||e.key==="F"){const s=mainStage();if(s){e.preventDefault();toggleFs(s);}}
   });
 
   // 全体マップの「前の時代／時代を選ぶ／次の時代」
   document.addEventListener("click",e=>{const b=e.target.closest("[data-kstep]");if(!b)return;const d=+b.dataset.kstep;if(d)window.KSTEP&&KSTEP(d);else openEra();});
 
-  window.KSHELL={onView,openEra,closeEra,flashEra,toggleFs,addFs,syncSheets,isMobile:isM};
+  window.KSHELL={onView,openEra,closeEra,flashEra,toggleFs,syncSheets,isMobile:isM};
   setSticky();
 })();
