@@ -22,14 +22,17 @@
     {id:"timeline",n:"02",t:"年表",s:"宇宙・地球史・世界史",ic:"tl",tab:"年表",sub:[["tl:cosmos","宇宙"],["tl:earth","地球史"],["tl:hist","世界史"]]},
     {id:"space-map",n:"03",t:"宇宙・地球・ミクロ",s:"スケールを行き来する",ic:"sp",tab:"宇宙・地球",also:["world-map","micro"],sub:[["space-map","宇宙"],["world-map","世界地図"],["micro","ミクロ"]]},
     {id:"lineage",n:"04",t:"系統樹",s:"17分野・約1,600要素",ic:"tr",tab:"系統樹"},
-    {id:"laws",n:"05",t:"宇宙の法則",s:"力・素粒子・元素",ic:"lw",tab:"法則"},
-    {id:"earth-book",n:"06",t:"地球大全",s:"宇宙人のための地球ガイド",ic:"bk",tab:"地球大全"}];
-  const TITLE={overview:"全体マップ",timeline:"年表","space-map":"宇宙と地球","world-map":"世界地図",micro:"ミクロの世界",lineage:"系統樹",laws:"宇宙の法則","earth-book":"地球大全"};
+    {id:"laws",n:"05",t:"宇宙の法則",s:"力・素粒子・元素",ic:"lw",tab:"法則"}];
+  const TITLE={overview:"全体マップ",timeline:"年表","space-map":"宇宙と地球","world-map":"世界地図",micro:"ミクロの世界",lineage:"系統樹",laws:"宇宙の法則"};
   const groupOf=id=>NAV.find(v=>v.id===id||(v.also||[]).includes(id));
   const side=$("views"), tabbar=$("tabbar");
   side.innerHTML=NAV.map(v=>`<a class="sn" href="#${v.id}" data-v="${v.id}"><span class="sni">${IC[v.ic]}</span><span class="snt"><b>${v.t}</b><small>${v.s}</small></span><span class="snr">${v.tab}</span><span class="snn num">${v.n}</span></a>`+
     (v.sub?`<div class="snsub" data-for="${v.id}">${v.sub.map(([k,t])=>`<a href="#${k.startsWith("tl:")?"timeline":k}" data-sub="${k}">${t}</a>`).join("")}</div>`:"")).join("");
   tabbar.innerHTML=NAV.map(v=>`<a class="tb" href="#${v.id}" data-v="${v.id}">${IC[v.ic]}<span>${v.tab}</span></a>`).join("");
+  // 地球大全は別の画面（earth.html）。PCは左のメニューの下、スマホは上のバーの📘から開く
+  {const EU=window.EARTH_URL||"earth.html",N=window.EBIDX?EBIDX.c.length:0;
+   side.insertAdjacentHTML("afterend",`<div class="sidebook"><span class="sbh">資料（別の画面）</span><a class="sn sn-book" href="${EU}" aria-label="地球大全を別の画面で開く"><span class="sni">${IC.bk}</span><span class="snt"><b>地球大全</b><small>この世のしくみ・全${N}章</small></span><span class="snr">地球大全</span><span class="snn" aria-hidden="true">↗</span></a></div>`);
+   const tb=$("topbar");const sb=tb&&tb.querySelector('[data-act="search"]');if(sb)sb.insertAdjacentHTML("afterend",`<a class="ibtn" href="${EU}" aria-label="地球大全を開く（別の画面）" title="地球大全">${IC.bk}</a>`);}
   side.addEventListener("click",e=>{const a=e.target.closest("[data-sub^='tl:']");if(!a)return;e.preventDefault();const m=a.dataset.sub.slice(3);
     const go=()=>{window.TL_SET&&TL_SET(m);syncSub();};if(location.hash!=="#timeline"){location.hash="timeline";setTimeout(go,60);}else go();});
   let curView=null;

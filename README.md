@@ -2,7 +2,12 @@
 
 宇宙誕生（138億年前）から、Type I〜III の「もしもの」未来文明までを、ひとつの時代スライダーで行き来できるインタラクティブ・ガイドブックです。基準は「現在の地球（2026年）」です。
 
-**▶ 公開ページ：https://ksan1333.github.io/kardashev-map/**
+画面は2つあります。
+
+- **文明マップ**（`index.html`）：時代スライダーで行き来する図・年表・地図・3D
+- **地球大全**（`earth.html`）：地球の外から来た知的存在のための「この世のしくみ」の読みもの（<!-- eb-count -->序＋10部・53章<!-- /eb-count -->）
+
+**▶ 公開ページ：https://ksan1333.github.io/kardashev-map/** ／ **地球大全：https://ksan1333.github.io/kardashev-map/earth.html**
 
 ## できること
 
@@ -13,7 +18,8 @@
 | 03 宇宙・地球・ミクロ | 宇宙の本線は5段階（地球と月→太陽系→近くの恒星から天の川銀河まで→大規模構造→宇宙の形）に統合し、その先を空想の上位層（マルチバース→法則の海→オムニバース→不可能世界→無）として点線で延長。分岐は、天体の中（断面）11、銀河の中7、別の宇宙15、法則の海の島4、オムニバースの世界6。枝分かれ図はホイール・ドラッグ・＋−全体でズームできる。星雲は立体（レイマーチング）。惑星・月・太陽・冥王星にズームインすると「世界地図」のページでその天体の地図（地名・ズーム付き）が開く。世界地図（3Dジオラマ40か所＋国別）、ミクロは本線11段階（生き物→体と器官→細胞→生体分子→分子→物質→原子→原子核→クオーク→素粒子→量子）＋プランク長より下（仮説→空想）3段階＋分岐（細胞の中／微生物・ウイルス／理論）。ズームインすると選んでいるものの「中」へ進み、ミクロの「描けない底」と宇宙の最外「無」が一周してつながる |
 | 04 系統樹 | 17分野・約1,600要素の系譜（誕生・分岐・合流・消滅）を、分野ごとに独立した時間軸で表示。時間軸は「時代ごと」（各時代に幅を割り当てる・既定）と「実際の年数」を切り替えられる。2026年より先は「もしも」（点線）で5つの世界線と、SFノートの構想【SF】に分かれる |
 | 05 宇宙の法則 | 4つの力、公式、物理定数、素粒子、周期表（118元素）、分子、未解決問題 |
-| 06 地球大全 | 地球の外から来た知的存在のための「地球の取扱説明書」（全12章） |
+
+地球大全は別の画面です。文明マップの左のメニュー「資料（別の画面）」、スマホの上のバーの📘、全体検索の「地球大全の本文から探す」、`B` キーで開きます。
 
 - 画面上の **時代バー（カルダシェフ・スライダー）** で時代を選ぶと、すべてのページがその時代の姿に切り替わります。時代は等間隔に並んでいて、つまみのドラッグ・‹ › ボタン・時代名を押して出る一覧のどれでも選べます。
 - **全体検索**：`/` キーまたは `Ctrl`+`K`（スマホは上の🔍）で、出来事・国・元素・生き物・天体・発明などを横断検索し、その場所へ移動できます。
@@ -45,7 +51,8 @@
 | キー | 動作 |
 |---|---|
 | `/` または `Ctrl`+`K` | 全体検索 |
-| `1`〜`6` | タブ切り替え |
+| `1`〜`5` | ページ切り替え |
+| `B` | 地球大全を開く（別の画面） |
 | `[` `]` | 前／次の時代 |
 | `←` `→` | 時代バーを選んでいるとき：前／次の時代（`Home` `End` で最初／最後） |
 | `0` | 現在に戻る |
@@ -53,13 +60,53 @@
 | `?` | 使い方と記号の凡例 |
 | `Esc` | 閉じる（検索・全画面・時代の一覧・詳細パネル） |
 
+## 地球大全
+
+| 部 | 章 |
+|---|---|
+<!-- eb-parts -->
+| 序 はじめに | このガイドの読み方 ／ 地球をひと目で |
+| 第1部 数・論理・情報 | 数と単位 ／ 数学のことば ／ 論理・確率・統計 ／ 情報とコンピュータ |
+| 第2部 物質とエネルギー | 物質のなりたち ／ 化学反応 ／ 力・運動・エネルギー ／ 光と電気・磁気 ／ 相対性理論と量子の世界 |
+| 第3部 宇宙 | 私たちの住所 ／ 太陽系 ／ 星の一生 ／ 銀河と宇宙の歴史 ／ 宇宙の仲間を探す |
+| 第4部 地球 | 地球という惑星 ／ 岩石・プレート・地震と火山 ／ 大気・天気・気候 ／ 海と水 ／ 地球の歴史 ／ 自然災害 |
+| 第5部 生命 | 生命 ／ 細胞と遺伝 ／ 進化 ／ 生き物の分類 ／ 植物と菌類 ／ 動物 ／ 生態系 |
+| 第6部 人間 | 人類（ホモ・サピエンス） ／ 人体のしくみ ／ 脳と心 ／ 病気と健康 ／ 食べ物と栄養 ／ 一生 |
+| 第7部 社会 | 言葉と文字 ／ 家族・人口・都市 ／ 国と政治 ／ 法とルール ／ 経済とお金 ／ 仕事と産業 ／ 教育と学問 ／ 戦争と平和 |
+| 第8部 文化 | 信仰と宗教 ／ 哲学と思想 ／ 芸術と表現 ／ 遊びとスポーツ ／ 衣・食・住と暮らし ／ 暦と時間・祭り |
+| 第9部 技術 | 知識と技術 |
+| 第10部 いま・これから | いま地球が抱える課題 ／ 私たちが宇宙へ送ったメッセージ ／ 人類に会ったら |
+<!-- /eb-parts -->
+
+- 目次（PCは左、スマホ・タブレットは左上の「目次」）、全章の本文検索（`/` キー。`earth.html?q=語` でも開ける）、前後の章（`←` `→`）、章の中の見出しへのリンク（`earth.html#章のid.番号`）。
+- 最後に読んでいた章を覚えていて、表紙の「続きから」で戻れます（ブラウザの localStorage）。
+- 立体図（three.js）は、立体図のある章を開いたときだけ読み込みます。
+- 時期で変わる数字（人口・GDP・死因・エネルギーなど）は、各章の終わりに出典と年を書いています。
+
+### 章の足し方
+
+`src/eb_pNN.js`（NN は部の番号。ファイル名の順に並ぶ）に書きます。
+
+```js
+EB.part("culture","文化","🎨","部の説明");          // 部を始める
+EB.add({id:"religion",ic:"🛐",t:"信仰と宗教",       // id は全章で重ならないこと
+        k:"検索用の言葉",c3d:"un|cell",            // c3d は立体図（なくてよい）
+        h:`<p class="eblead">…</p><h4>見出し</h4>${tbl([...],[...])}`});
+```
+
+部品は `src/eb_core.js` にあります：`tbl`（表）、`bar`（棒グラフ）、`fig`（図）、`cards`、`flow`、`note`、`src`（出典）、`see("章のid","文字")`（ほかの章へ）、`map("timeline","文字")`（文明マップへ）。`<h4>` が章の中の見出しになり、検索にも使われます。ビルドすると、id の重なりはエラーに、行き先のない `see()` は警告になります。
+
 ## ファイル構成
 
 ```
-index.html        ビルド済みの1ファイル（GitHub Pages で公開しているもの）
-build.js          src/ の部品を index.html にまとめるスクリプト
+index.html        文明マップ（ビルド済みの1ファイル。GitHub Pages で公開）
+earth.html        地球大全（ビルド済みの1ファイル）
+build.js          src/ の部品を index.html と earth.html にまとめるスクリプト
 src/
-  guide.template.html   ページの骨組み（HTML・CSS）。__PLACEHOLDER__ にJS・データを差し込む
+  guide.template.html   文明マップの骨組み（HTML・CSS）。__PLACEHOLDER__ にJS・データを差し込む
+  earth.template.html   地球大全の骨組み（目次・検索・表紙・章の表示）
+  eb_core.js            地球大全の部品（表・棒グラフ・リンク）と、部・章の登録
+  eb_p00.js〜           地球大全の本文（1ファイル＝1部）
   *.js                  各ビューの処理・3D（three.js）・データ
   *.json                地図・国・古地理などのデータ
 ```
@@ -73,7 +120,8 @@ src/
 | 年表・シアター | `branch.js` `branchdata.js` `histbranch.js` `newviews.js` `worldhist*.js` `theater.js` `ev3d.js` |
 | 宇宙・地図・ミクロ | `space3d.js`（`spacefx.js` 星雲・銀河・恒星のシェーダー、`spaceplanet.js` 惑星と断面、`spacebr.js` 分岐、`planetmap.js` 天体の地図）`gitnav.js` `spaceview.js` `worldmap.js` `scene3d.js` `paleo.js` `micro3d.js` `microx.js`（体と器官・細胞の中・生体分子・物質・プランク長より下） `microhq.js`（細胞・微生物・ウイルス）`cute.js`（生き物のデフォルメ3D）`org3d.js` `levelinfo.js` |
 | 系統樹 | `graph.js` `treedata.js` `treeadd*.js` |
-| 法則・地球大全・検索 | `laws.js` `laws3d.js` `microdata.js` `earthbook.js` `search.js` |
+| 法則・検索 | `laws.js` `laws3d.js` `microdata.js` `search.js`（地球大全の章と見出しも検索できる） |
+| 地球大全 | `earth.template.html` `eb_core.js` `eb_p*.js`（分子と法則の立体図は `microdata.js` `laws3d.js` を使う） |
 | SFノート | `sfnote.js`（文明の5段階・知性の分野・各分野の【SF】の枝） |
 | 未来（もしも） | `type1data.js` `t2data.js` `t3data.js` `t1pins.json` `futacad.js`（Type I・IIの学問150）`futtree.js`（文化・政治・国家・戦争・経済 各50） |
 
@@ -82,17 +130,17 @@ src/
 Node.js があれば追加のインストールは不要です。
 
 ```bash
-node build.js            # index.html を作る（three.js r128 は CDN から読み込み）
-node build.js --local    # index.local.html を作る（node_modules/three を使うオフライン確認用）
+node build.js            # index.html と earth.html を作る（three.js r128 は CDN から読み込み）
+node build.js --local    # index.local.html と earth.local.html を作る（node_modules/three を使うオフライン確認用）
 ```
 
-`src/` を編集したら `node build.js` を実行して、`index.html` も一緒にコミットしてください。
+`src/` を編集したら `node build.js` を実行して、`index.html` と `earth.html` も一緒にコミットしてください。`*.local.html` はコミットしません。
 
 ## データと出典
 
 - 古地理（大陸移動）：PALEOMAP（Scotese 2016、Scotese & Wright 2018、CC BY 4.0）を2°格子に変換して使用。5.4億年より前はプレート回転による大まかな推定です。
 - 3D描画：[three.js](https://threejs.org/) r128（MIT License、cdnjs から読み込み）
-- 統計（2025〜2026年）：Energy Institute、SIPRI、UCDP、FAO ほか、ITU、UN Tourism、UNESCO、国連人口推計、WMO、NOAA、IUCN、NASA Exoplanet Archive、Ethnologue、Pew Research Center、KeepTrack・CelesTrak など。詳細はページ下部の出典欄を参照してください。
+- 統計（2025〜2026年）：Energy Institute、Ember、IEA、IMF、世界銀行、WHO、UNICEF、UNHCR、SIPRI、UCDP、FAO ほか、ITU、UN Tourism、UNESCO、国連人口推計・都市化推計、国連SDGs報告、WMO、NOAA、IUCN、NASA Exoplanet Archive、Ethnologue、Pew Research Center、IATA、worldsteel、TOP500、Newzoo、KeepTrack・CelesTrak など。文明マップはページ下部、地球大全は各章の終わりの出典欄を参照してください。
 
 ## 注意
 
