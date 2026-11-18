@@ -34,7 +34,7 @@
     brv(id){goHash("space-map");later(()=>SPZ.goBr(id),320);},
     micro(k,v){goHash("micro");later(()=>MICRO.open(k,v),220);},
     law(tab,sel,idx){goHash("laws");later(()=>{LAWS_TAB(tab);let el=null;if(sel)el=document.querySelector(sel);else if(idx)el=document.querySelectorAll(idx[0])[idx[1]];if(!el)return;if(sel)el.click();el.scrollIntoView({block:"center",behavior:"smooth"});flash(el);});},
-    book(id){location.href=(window.EARTH_URL||"earth.html")+"#"+id;},
+    book(id){location.hash="eb-"+id;},
     view(h){goHash(h);later(()=>window.scrollTo({top:0,behavior:"smooth"}),60);},
     tg(k){goHash("overview");later(()=>{window.TG_SHOW&&TG_SHOW(k);const el=$("tguide");el.scrollIntoView({behavior:"smooth",block:"start"});flash(el);});},
     era(i){later(()=>{KSET(i);window.KSHELL&&KSHELL.flashEra();},10);},
@@ -45,10 +45,10 @@
   const fy=y=>typeof y!=="number"?"":y<=-10000?`約${Math.round(-y/1e4).toLocaleString()}万年前`:y<0?`紀元前${-y}年`:`${y}年`;
   function build(){IDX=[];const add=(k,t,s,txt,fn,y)=>{const nt=norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,""));IDX.push({k,t:String(t),s:s||"",nt,nb:norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,"").replace(/（.*?）|\(.*?\)/g,"")),h:norm((t||"")+" "+(s||"")+" "+(txt||"")),fn,y});};
     const T=(f)=>{try{f();}catch(e){console.warn("search index",e);}};
-    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（分野別）","17分野・約1,400要素の系譜（分野ごとに独立。未来は5つの世界線＋SFノート）"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド（別の画面）"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
+    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（分野別）","17分野・約1,400要素の系譜（分野ごとに独立。未来は5つの世界線＋SFノート）"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
     T(()=>{add("view","歴史シアター（3D）","年表の中の3D映像で通し再生","シアター 映像 再生",()=>{goHash("timeline");later(()=>{const d=$("thdock");if(d){d.open=true;d.scrollIntoView({behavior:"smooth"});}});});});
-    // 地球大全は別の画面（earth.html）。章と見出しから探し、押すとその画面の該当箇所を開く
-    T(()=>{const X=window.EBIDX;if(!X)return;X.c.forEach(([id,t,ic,pi,hs,k])=>{const P=X.p[pi]||["","",""];add("book",t,`${P[1]}の章（別の画面）`,hs.join(" ")+" "+(k||""),()=>go.book(id));hs.forEach((h,j)=>add("book",h,`「${t}」の見出し`,"",()=>go.book(id+"."+(j+1))));});});
+    // 地球大全（⑥のページ）の章と見出し。押すとその章・見出しを開く（#eb-章 / #eb-章.番号）
+    T(()=>{const X=window.EBIDX;if(!X)return;X.c.forEach(([id,t,ic,pi,hs,k])=>{const P=X.p[pi]||["","",""];add("book",t,`${P[1]}の章`,hs.join(" ")+" "+(k||""),()=>go.book(id));hs.forEach((h,j)=>add("book",h,`「${t}」の見出し`,"",()=>go.book(id+"."+(j+1))));});});
     T(()=>[["t1","Type I 文明ガイド（惑星文明）"],["t2","Type II 文明ガイド（恒星文明）"],["t3","Type III 文明ガイド（銀河文明）"]].forEach(([k,t])=>add("view",t,"全体マップ・想定の世界","タイプ カルダシェフ 文明",()=>go.tg(k))));
     T(()=>(window.KSTAGES||[]).forEach((st,i)=>add("era",st[2],`時代（スライダー）・${st[1]}`,st[7]||"",()=>go.era(i))));
     T(()=>FIELDS.forEach(f=>add("field",f.t,`分野・${f.v}（${f.l}）`,f.lead+" "+f.pts.join(" "),()=>go.field(f.id))));
@@ -84,7 +84,7 @@
   const SUG=["地球大全","ビッグバン","恐竜","ピラミッド","産業革命","アポロ","日本","水","金","ヒッグス粒子","シロナガスクジラ","ブラックホール","ダイソン球","未解決問題"];
   function render(){const str=q.value;fil.innerHTML=FIL.map(([k,n])=>`<button class="chip" data-f="${k}" aria-pressed="${curF===k}">${n}</button>`).join("");
     if(!str.trim()){res.innerHTML=`<div class="sxsug"><b>試しに検索：</b>${SUG.map(s=>`<button class="chip" data-s="${s}">${s}</button>`).join("")}</div>`;cur=[];$("sxcount").textContent=IDX?`索引 ${IDX.length.toLocaleString()}件`:"";return;}
-    cur=search(str);if(window.EBIDX)cur.push({k:"book",t:`「${str.trim()}」を地球大全の本文から探す`,s:"別の画面で、全章の本文を検索",fn:()=>{location.href=(window.EARTH_URL||"earth.html")+"?q="+encodeURIComponent(str.trim());}});ai=Math.min(ai,Math.max(0,cur.length-1));
+    cur=search(str);if(window.EBIDX)cur.push({k:"book",t:`「${str.trim()}」を地球大全の本文から探す`,s:"全章の本文を検索して、見つかった場所を並べる",fn:()=>{location.hash="eb-q="+encodeURIComponent(str.trim());}});ai=Math.min(ai,Math.max(0,cur.length-1));
     $("sxcount").textContent=`${cur.length>80?"80+":Math.max(0,cur.length-(window.EBIDX?1:0))}件`;
     res.innerHTML=cur.length?cur.map((it,i)=>`<button class="sxr${i===ai?" on":""}" role="option" aria-selected="${i===ai}" data-i="${i}"><span class="sxk" title="${KIND[it.k][1]}">${KIND[it.k][0]}</span><span class="sxt"><b>${hl(it.t,str)}</b><small>${KIND[it.k][1]}・${esc(it.s)}</small></span><span class="sxgo">↵</span></button>`).join(""):`<div class="sxnone">「${esc(str)}」は見つかりませんでした。ひらがな・カタカナ・漢字を変えるか、短い言葉で試してください。</div>`;}
   function open(){sx.hidden=false;document.body.classList.add("sxopen");if(!IDX)build();q.select();render();setTimeout(()=>q.focus(),20);}
@@ -101,12 +101,12 @@
   // ---- 使い方・ショートカット ----
   const HELP=()=>`<h3>使い方</h3>
     <ol class="hxsteps"><li><b>時代を選ぶ</b>：画面上の「時代バー」（スマホは上の時代ボタン）で、宇宙誕生（138億年前）からType IV（約10億年後・構想）まで選べます。すべてのページがその時代の姿に変わります。つまみのドラッグ、‹ › ボタン、時代名を押して出る一覧のどれでも選べます。</li>
-    <li><b>見方を選ぶ</b>：左のメニュー（スマホは画面下のタブ）で「全体マップ・年表・宇宙/地球/ミクロ・系統樹・宇宙の法則」を切り替えます。</li>
+    <li><b>見方を選ぶ</b>：左のメニュー（スマホは画面下のタブ）で「全体マップ・年表・宇宙/地球/ミクロ・系統樹・宇宙の法則・地球大全」を切り替えます。</li>
     <li><b>図を動かす</b>：年表・系統樹・地図・3Dは、どのページでも図の上に同じ操作バーがあります。左がそのページの切り替え、右が −・＋・全体・<span class="hxfs">⤢</span>（全画面）。ドラッグで移動、ホイール（スマホは2本指のピンチ）でも拡大縮小できます。</li><li><b>詳細を読む</b>：出来事・国・要素などを押すと、PCでは画面の右、スマホでは画面の下に詳細パネルが出ます。× か Esc で閉じます（スマホは上下にスワイプで広げる／たたむ）。宇宙・ミクロの「いま見ているもの」は、図の操作バーの「詳細」で出す／しまうを切り替えます（しまうと図の下に出ます）。</li>
     <li><b>なんでも検索</b>：🔍（<kbd>/</kbd>キー）で、出来事・国・元素・生き物・天体など約${(IDX||[]).length.toLocaleString()}件から探して、その場所へ飛べます。</li>
-    <li><b>地球の外から来た方へ</b>：まず「地球大全」（別の画面。PCは左のメニューの下、スマホは上の📘）を読むと、地球と人類の全体像がつかめます。数・物質・宇宙・地球・生命・人間・社会・文化・技術・歴史を${window.EBIDX?EBIDX.c.length:""}章で説明しています。</li></ol>
+    <li><b>地球の外から来た方へ</b>：まず「地球大全」（左のメニューの6番目、スマホは下のタブ）を読むと、地球と人類の全体像がつかめます。数・物質・宇宙・地球・生命・人間・社会・文化・技術・歴史を${window.EBIDX?EBIDX.c.length:""}章で説明しています。</li></ol>
     <h3 class="hx-kbd">キーボード</h3><table class="ltable hxkeys hx-kbd"><tbody>
-    <tr><th><kbd>/</kbd> または <kbd>Ctrl</kbd>+<kbd>K</kbd></th><td>全体検索</td></tr><tr><th><kbd>1</kbd>〜<kbd>5</kbd></th><td>ページを切り替え（1＝全体マップ … 5＝宇宙の法則）</td></tr><tr><th><kbd>B</kbd></th><td>地球大全（別の画面）を開く</td></tr>
+    <tr><th><kbd>/</kbd> または <kbd>Ctrl</kbd>+<kbd>K</kbd></th><td>全体検索</td></tr><tr><th><kbd>1</kbd>〜<kbd>6</kbd></th><td>ページを切り替え（1＝全体マップ … 6＝地球大全）</td></tr><tr><th><kbd>←</kbd> <kbd>→</kbd>（地球大全）</th><td>前／次の章</td></tr>
     <tr><th><kbd>[</kbd> <kbd>]</kbd></th><td>ひとつ前／次の時代へ</td></tr><tr><th><kbd>0</kbd></th><td>現在（2026年）に戻る</td></tr><tr><th><kbd>←</kbd> <kbd>→</kbd></th><td>時代バーを選んでいるとき：前／次の時代</td></tr><tr><th><kbd>F</kbd></th><td>図・地図・3Dを全画面に（もう一度押すと戻る）</td></tr><tr><th><kbd>?</kbd></th><td>この使い方を開く</td></tr><tr><th><kbd>Esc</kbd></th><td>閉じる（検索・全画面・時代の一覧・詳細パネル）</td></tr></tbody></table>
     <h3>記号の意味</h3><table class="ltable hxkeys"><tbody>
     <tr><th><span class="hxstar">★</span></th><td>年表：その出来事専用の3D映像がある</td></tr><tr><th><span class="hxdot"></span></th><td>年表：ふつうの出来事（3Dは時代と地域の風景）</td></tr>
@@ -122,13 +122,12 @@
     if(typing(e)||e.ctrlKey||e.metaKey||e.altKey||!sx.hidden)return;
     if(e.key==="/"){e.preventDefault();open();}
     else if(e.key==="?"){e.preventDefault();hx.hidden?help():(hx.hidden=true);}
-    else if(/^[1-5]$/.test(e.key)){const v=VIEWS[+e.key-1];if(v){location.hash=v[0];}}
-    else if(e.key==="b"||e.key==="B"){location.href=window.EARTH_URL||"earth.html";}
+    else if(/^[1-6]$/.test(e.key)){const v=VIEWS[+e.key-1];if(v){location.hash=v[0];}}
     else if(e.key==="["){$("kprev")?.click();}else if(e.key==="]"){$("knext")?.click();}else if(e.key==="0"){$("know")?.click();}
   });
   // ---- はじめての人へ ----
   let seen=false;try{seen=localStorage.getItem("kmap.hello")==="1";}catch(e){}
   const head=document.querySelector("#v-overview .view-head");
-  if(!seen&&head){head.insertAdjacentHTML("afterend",`<div class="hello" id="hello"><div><b>はじめての方へ</b><span>① <span class="pc-only">上の時代バー</span><span class="sp-only">上の時代ボタン</span>で、宇宙誕生〜Type IVまで時代を選ぶ　② <span class="pc-only">左のメニュー</span><span class="sp-only">下のタブ</span>でページを切り替える　③ 🔍（<kbd>/</kbd> キー）で何でも検索　─　地球の外から来た方は「地球大全」からどうぞ。</span></div><div class="hellob"><a class="chip" href="__EARTH_URL__" data-h="book">📘 地球大全を読む（別の画面）</a><button class="chip" data-h="help">使い方</button><button class="chip" data-h="x">閉じる</button></div></div>`);
+  if(!seen&&head){head.insertAdjacentHTML("afterend",`<div class="hello" id="hello"><div><b>はじめての方へ</b><span>① <span class="pc-only">上の時代バー</span><span class="sp-only">上の時代ボタン</span>で、宇宙誕生〜Type IVまで時代を選ぶ　② <span class="pc-only">左のメニュー</span><span class="sp-only">下のタブ</span>でページを切り替える　③ 🔍（<kbd>/</kbd> キー）で何でも検索　─　地球の外から来た方は「地球大全」からどうぞ。</span></div><div class="hellob"><a class="chip" href="#earth-book" data-h="book">📘 地球大全を読む</a><button class="chip" data-h="help">使い方</button><button class="chip" data-h="x">閉じる</button></div></div>`);
     $("hello").addEventListener("click",e=>{const b=e.target.closest("[data-h]");if(!b)return;const k=b.dataset.h;if(k==="help")help();if(k==="x"){$("hello").remove();try{localStorage.setItem("kmap.hello","1");}catch(e){}}});}
 })();

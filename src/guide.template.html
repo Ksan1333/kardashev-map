@@ -682,10 +682,6 @@ a{color:var(--cool)}
 .snsub a{font-size:12.5px;color:var(--ink-2);text-decoration:none;padding:2px 9px;border-radius:99px;border:1px solid var(--line-2);line-height:1.6}
 .snsub a:hover{color:var(--ink);border-color:#56679b}
 .snsub a.on{color:var(--accent-ink);background:var(--accent);border-color:var(--accent);font-weight:700}
-.sidebook{display:flex;flex-direction:column;gap:2px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
-.sbh{font-size:12px;color:var(--muted);letter-spacing:.08em;padding:0 10px 4px}
-.sn-book .sni{color:var(--accent);border-color:#f4b94255;background:#f4b94212}
-.sn-book .snn{font-size:15px;color:var(--muted)}
 .sidefoot{margin-top:auto;display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid var(--line)}
 .sbtn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border-radius:11px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 14px var(--font-body);cursor:pointer;text-align:left}
 .sbtn:hover{border-color:var(--accent)}
@@ -929,7 +925,7 @@ body.fs-on{overflow:hidden}
   .brand{justify-content:center;padding:4px 0 12px}
   .brand .bt{display:none}
   .sn{grid-template-columns:1fr;justify-items:center;gap:3px;padding:8px 2px;text-align:center}
-  .snt,.snn,.sbh{display:none}
+  .snt,.snn{display:none}
   .snr{display:block;font-size:11px;font-weight:600;line-height:1.25;color:inherit}
   .sn.on::before{left:-8px}
   .snsub{display:none}
@@ -1072,8 +1068,6 @@ body.fs-on{overflow:hidden}
   .hxbox{padding:18px 16px calc(24px + var(--sab))}
   .hx-kbd{display:none}
 }
-/* 上のバーに📘（地球大全）が増えたので、時代名を優先して Type の札は 420px 以下で隠す */
-@media (max-width:420px){.ec-type{display:none}.topbar{gap:6px}.topbar .ibtn{width:40px}}
 @media (max-width:380px){
   .tb span{font-size:10px}
   .edi{grid-template-columns:10px 88px minmax(0,1fr)}
@@ -1083,6 +1077,181 @@ body.fs-on{overflow:hidden}
   .ed-track .fill,.knob,.eradock,.dsheet,.chev{transition:none!important}
   .flash{animation:none}
 }
+/* ===== ⑥ 地球大全（文明マップの中で読む）：道具の行・目次・本文・前後の章・表紙・検索 ===== */
+#v-earth-book{--ebtoolH:58px}
+#v-earth-book .num{font-family:var(--font-num);font-variant-numeric:tabular-nums}
+.ebtools{position:sticky;top:var(--stickyH);z-index:30;display:flex;align-items:center;gap:8px;margin:0 -6px;padding:9px 6px;background:rgba(7,11,22,.93);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ebtb{flex:none;display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 13px;border-radius:11px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font:600 14px var(--font-body);cursor:pointer;white-space:nowrap;text-decoration:none}
+.ebtb svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ebtb .chev{width:14px;height:14px;transition:transform .2s}
+.ebtb:hover{border-color:#56679b;background:var(--surface-2)}
+.ebtb[aria-expanded="true"]{border-color:var(--accent);color:var(--accent)}
+.ebtb[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.ebsrch{position:relative;flex:1 1 auto;min-width:0;max-width:560px}
+.ebsrch label{display:flex;align-items:center;gap:8px;height:40px;padding:0 10px 0 12px;border-radius:11px;border:1px solid var(--line-2);background:var(--surface);color:var(--muted)}
+.ebsrch label:focus-within{border-color:var(--accent);color:var(--ink)}
+.ebsrch svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.ebsrch input{flex:1;min-width:0;height:100%;border:0;background:none;color:var(--ink);font:500 14.5px var(--font-body);outline:none}
+.ebsrch input::placeholder{color:#7e89a8}
+.ebsrch input::-webkit-search-cancel-button{filter:invert(.7)}
+#v-earth-book .qres{position:absolute;top:calc(100% + 8px);left:0;width:min(600px,calc(100vw - 32px));max-height:min(70vh,640px);overflow:auto;padding:6px;border-radius:14px;border:1px solid var(--line-2);background:#0d1428;box-shadow:0 18px 50px #000b;z-index:40}
+#v-earth-book .qh{padding:6px 10px 8px;font-size:13px;color:var(--muted)}
+#v-earth-book .qres a,.ebres-list a{display:block;padding:10px 12px;border-radius:10px;color:var(--ink);text-decoration:none}
+#v-earth-book .qres a:hover,#v-earth-book .qres a.sel,.ebres-list a:hover{background:var(--surface-2)}
+#v-earth-book .qres a b,.ebres-list a b{display:block;font-size:14.5px}
+#v-earth-book .qres a small,.ebres-list a small{display:block;font-size:13px;color:var(--muted)}
+#v-earth-book .qres a span,.ebres-list a span{display:block;margin-top:3px;font-size:13px;color:var(--ink-2);line-height:1.6}
+#v-earth-book .qres a.qall{margin-top:4px;border-top:1px solid var(--line);border-radius:0 0 10px 10px;color:var(--cool);font-size:13.5px}
+#v-earth-book mark{background:#f4b94240;color:#fff;border-radius:3px;padding:0 1px}
+#v-earth-book mark.hit{background:#f4b942;color:var(--accent-ink);box-shadow:0 0 0 2px #f4b94255}
+/* 目次（道具の行の下に開く） */
+.ebtoc{position:absolute;left:0;right:0;top:calc(100% + 6px);max-height:calc(100svh - var(--stickyH) - var(--ebtoolH) - 24px);overflow:auto;overscroll-behavior:contain;padding:14px 16px 18px;border-radius:16px;border:1px solid var(--line-2);background:#0d1428;box-shadow:0 18px 50px #000b;z-index:40}
+.ebtoc-home{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;margin-bottom:10px;border-radius:11px;border:1px solid var(--line-2);color:var(--ink);text-decoration:none;font-weight:700;font-size:14px}
+.ebtoc-home:hover{border-color:#56679b}.ebtoc-home.on{border-color:#f4b94270;background:#f4b94214;color:var(--accent)}
+.ebtocg{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px 22px}
+.ebtoc-ph{display:flex;align-items:center;gap:7px;padding:4px 8px;font:700 13.5px var(--font-body);color:var(--muted);letter-spacing:.04em}
+.ebtoc-ph span{font-size:15px}.ebtoc-ph small{font:600 13px var(--font-num);color:#6d7896}
+.ebtoc-ch{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px;align-items:baseline;padding:5px 8px;border-radius:9px;color:var(--ink-2);text-decoration:none;font-size:14px;line-height:1.45}
+.ebtoc-ch:hover{background:#ffffff0a;color:var(--ink)}
+.ebtoc-ch.on{background:linear-gradient(90deg,#f4b94224,#f4b94206);color:var(--ink);font-weight:700}
+.ebn{font:600 13px var(--font-num);color:#6d7896}
+.ebtoc-ch.on .ebn{color:var(--accent)}
+/* 本文｜この章の見出し */
+.ebgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:32px;align-items:start}
+#v-earth-book.eb-reading .ebgrid{grid-template-columns:minmax(0,860px) 220px}
+.ebmain{min-width:0}
+.ebside{position:sticky;top:calc(var(--stickyH) + var(--ebtoolH) + 16px);max-height:calc(100vh - var(--stickyH) - var(--ebtoolH) - 32px);overflow-y:auto;padding:8px 0;scrollbar-width:thin}
+.ebside b{display:block;font-size:13px;color:var(--muted);letter-spacing:.06em;margin:0 0 8px 10px}
+.ebside a{display:block;padding:5px 10px;border-left:2px solid var(--line);color:var(--ink-2);text-decoration:none;font-size:13px;line-height:1.5}
+.ebside a:hover{color:var(--ink);border-left-color:#56679b}
+.ebside a.on{color:var(--accent);border-left-color:var(--accent)}
+.ebch .crumb{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin:2px 0 10px}
+.ebch .crumb a{color:var(--muted);text-decoration:none}.ebch .crumb a:hover{color:var(--ink)}
+.ebch-h{display:flex;align-items:center;gap:14px;margin:0 0 16px}
+.ebch-h .ebic{flex:none;width:56px;height:56px;display:grid;place-items:center;font-size:30px;border-radius:16px;border:1px solid var(--line-2);background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+.ebch-h small{display:block;font:600 13px var(--font-num);color:var(--accent);letter-spacing:.08em}
+.ebch-h h3{margin:0;font:900 clamp(24px,3vw,31px)/1.25 var(--font-display);letter-spacing:.02em}
+.outl{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 18px;padding:0;list-style:none}
+.outl a{display:inline-block;font-size:13px;color:var(--ink-2);text-decoration:none;padding:4px 11px;border-radius:99px;border:1px solid var(--line-2);background:var(--surface)}
+.outl a:hover{color:var(--ink);border-color:#56679b}
+#v-earth-book.eb-reading .outl{display:none}
+.ebbody{font-size:15px}
+.ebbody>*:first-child{margin-top:0}
+.ebbody h4{margin:30px 0 10px;padding-top:4px;font:800 18px/1.4 var(--font-display);color:var(--accent);scroll-margin-top:calc(var(--ebtoolH) + 6px)}
+.ebbody h5{margin:18px 0 6px;font-size:15px;color:#f4d79a}
+.ebbody p,.ebbody li{font-size:15px;line-height:1.9;color:#d8def0}
+.ebbody ul,.ebbody ol{padding-left:1.3em}
+.ebbody li{margin:3px 0}
+.ebbody b{color:#fff}
+.ebbody kbd,#v-earth-book .vh-more kbd{font:600 12px var(--font-num);padding:1px 6px;border-radius:5px;border:1px solid #3a4670;background:#0b1122;color:#cfd7ea}
+.eblead{font-size:16.5px!important;line-height:1.85!important;color:#f2f5fc!important;margin:0 0 18px;padding:2px 0 2px 14px;border-left:3px solid var(--accent)}
+.ebscroll{overflow-x:auto;max-width:100%;margin:10px 0;-webkit-overflow-scrolling:touch}
+#v-earth-book .ltable{border-collapse:collapse;width:100%;font-size:14px}
+#v-earth-book .ltable th,#v-earth-book .ltable td{border-bottom:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top;line-height:1.7;width:auto}
+#v-earth-book .ltable thead th{font-size:13px;color:var(--muted);font-weight:700;background:#0d1428;white-space:nowrap}
+.ebt tbody th{color:#f4d79a;font-weight:700;white-space:nowrap;width:1%!important}
+.ebt td{color:#d8def0}
+.ebt thead+tbody td:first-child{min-width:5.2em}
+.ebbars{display:flex;flex-direction:column;gap:8px;margin:12px 0 8px}
+.ebbar{display:grid;grid-template-columns:minmax(120px,190px) 1fr minmax(96px,170px);gap:12px;align-items:center;font-size:14px}
+.ebbn{color:#d8def0;text-align:right}
+.ebbt{height:12px;border-radius:99px;background:#ffffff0d;overflow:hidden}.ebbt i{display:block;height:100%;border-radius:99px}
+.ebbv{color:var(--ink);font-size:13.5px}.ebbv small{display:block;color:var(--muted);font-size:13px;font-family:var(--font-body)}
+.ebfig{margin:16px 0;padding:12px;border:1px solid var(--line);border-radius:14px;background:#070b17}
+.ebfig figcaption{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+.ebsvg{display:block;width:100%;max-width:640px;height:auto;margin:0 auto}
+.ebnums{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}
+.ebnums div{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border:1px solid var(--line);border-radius:10px;background:#0b1122}
+.ebnums b{font-size:22px;color:var(--accent)}.ebnums small{font-size:13px;color:var(--muted);text-align:center}
+.ebdots{font-size:7px;letter-spacing:1px;color:#7fb2ff;text-align:center;max-width:70px;word-break:break-all;line-height:1.1}
+.ebmono{font-family:var(--font-num);font-size:14px;letter-spacing:.05em;color:#f4d79a!important;word-break:break-all}
+.ebcode{font-size:13px}.ebcode td{padding:6px 8px!important}.ebcode td div{white-space:nowrap;line-height:1.6}.ebcode th{text-align:center!important}
+.ebscripts{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}
+.ebscripts div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px;border:1px solid var(--line);border-radius:10px;background:#0b1122;text-align:center}
+.ebscripts b{font-size:20px;color:#fff}.ebscripts small{font-size:13px;color:var(--muted)}
+.ebtl{font-size:14px;line-height:2.1!important;padding:12px 16px;border-radius:12px;background:#0b1122;border:1px solid var(--line)}
+.ebc3d{display:block;width:100%;max-width:560px;aspect-ratio:360/220;margin:0 auto 18px;border-radius:14px;border:1px solid var(--line);background:#0a0f1f}
+.ebcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(var(--min,200px),100%),1fr));gap:10px;margin:12px 0}
+.ebcard{padding:12px 14px;border-radius:12px;border:1px solid var(--line);border-top:3px solid var(--c,var(--line-2));background:linear-gradient(180deg,var(--surface),#0d1426)}
+.ebcard b{display:block;font-size:15px;margin-bottom:4px;color:#fff}
+.ebcard p{margin:0;font-size:13.5px!important;line-height:1.75!important;color:#cdd5e8!important}
+.ebflow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 4px;margin:12px 0;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#0b1122}
+.ebflow span{font-size:14px;padding:4px 10px;border-radius:9px;background:var(--surface-2);color:var(--ink)}
+.ebflow i{font-style:normal;color:var(--accent);font-weight:700}
+.ebnote{margin:14px 0;padding:12px 16px;border-radius:12px;border:1px solid #f4b94250;background:#f4b9420d;font-size:14.5px;line-height:1.85;color:#f2e6c8}
+.ebnote.cool{border-color:#7fb2ff50;background:#7fb2ff0d;color:#dbe7ff}
+.ebnote.warn{border-color:#f06a6a55;background:#f06a6a0d;color:#ffd9d9}
+.ebsrc{font-size:13px!important;color:var(--muted)!important;line-height:1.7!important;margin:10px 0 0}
+.eblinks{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.ebmap,.ebsee{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;font-size:13.5px;text-decoration:none;border:1px solid var(--line-2);background:var(--surface);color:var(--ink)}
+.ebmap:hover,.ebsee:hover{border-color:var(--accent)}
+.ebsee{color:var(--cool)}
+p .ebsee,li .ebsee,td .ebsee{padding:0;border:0;background:none;display:inline;font-size:inherit;text-decoration:underline;text-underline-offset:3px}
+.ebpager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:40px 0 0}
+.ebpager a{display:flex;flex-direction:column;gap:2px;padding:14px 16px;border-radius:14px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);text-decoration:none}
+.ebpager a:hover{border-color:var(--accent)}
+.ebpager a small{font-size:13px;color:var(--muted)}
+.ebpager a b{font-size:15px}
+.ebpager .nx{text-align:right;grid-column:2}
+/* 表紙 */
+.ebcover{max-width:1120px}
+.cv-hero{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:center;padding:24px 26px;border-radius:20px;border:1px solid var(--line-2);background:radial-gradient(600px 300px at 85% 20%,#f4b94218,transparent 70%),linear-gradient(180deg,var(--surface),#0d1426)}
+.cv-title{margin:0 0 4px;font:900 clamp(22px,2.6vw,28px)/1.3 var(--font-display);letter-spacing:.03em}
+.cv-title small{display:block;font:600 14px var(--font-body);color:var(--muted);letter-spacing:.04em;margin-top:6px}
+.cv-hero .eblead{margin-top:14px}
+.cv-act{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.ebbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink);font:700 14.5px var(--font-body);text-decoration:none}
+.ebbtn:hover{border-color:#56679b}
+.ebbtn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.cv-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cv-stats div{padding:12px;border-radius:12px;border:1px solid var(--line);background:#0b1122;text-align:center}
+.cv-stats b{display:block;font-size:26px;font-weight:700;color:var(--accent)}
+.cv-stats small{font-size:13px;color:var(--muted)}
+.cv-parts{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:18px}
+.cv-part{padding:16px 18px 14px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(180deg,var(--surface),#0d1426);scroll-margin-top:calc(var(--ebtoolH) + 6px)}
+.cv-part.flash{border-color:var(--accent);box-shadow:0 0 0 3px #f4b94233}
+.cv-part h3{display:flex;align-items:center;gap:10px;margin:0 0 6px;font:900 18px/1.3 var(--font-display)}
+.cv-part h3 span{font-size:22px}
+.cv-part h3 small{font:600 13px var(--font-num);color:var(--muted)}
+.cv-part p{margin:0 0 8px;font-size:13.5px;line-height:1.75;color:#c6cee3}
+.cv-part ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px}
+.cv-part li a{display:grid;grid-template-columns:30px minmax(0,1fr);gap:4px;padding:5px 6px;border-radius:8px;color:var(--ink-2);text-decoration:none;font-size:14px}
+.cv-part li a:hover{background:#ffffff0a;color:var(--ink)}
+.cv-foot{margin:24px 0 0;font-size:13px;color:var(--muted);line-height:1.8}
+/* 検索結果のページ */
+.ebres h3{margin:0 0 10px;font:900 22px var(--font-display)}
+.ebres h3 small{font:600 14px var(--font-body);color:var(--muted);margin-left:8px}
+.ebres-list{display:flex;flex-direction:column;gap:2px;max-width:860px}
+@media (max-width:1279px){
+  #v-earth-book.eb-reading .ebgrid{grid-template-columns:minmax(0,1fr)}
+  #v-earth-book.eb-reading .outl{display:flex}
+  .ebside{display:none}
+  .ebch{max-width:860px}
+  .cv-hero{grid-template-columns:1fr}
+}
+@media (max-width:767px){
+  #v-earth-book{--ebtoolH:54px}
+  .ebtools{margin:0 -12px;padding:7px 12px}
+  .ebtb{padding:0 11px}
+  .ebsrch{max-width:none}
+  /* 道具の行（backdrop-filter があるので、中の固定配置はこの行が基準になる）のすぐ下に、行と同じ幅で開く */
+  .ebsrch{position:static}
+  #v-earth-book .qres{left:6px;right:6px;width:auto;top:calc(100% + 4px);max-height:calc(100svh - var(--stickyH) - var(--ebtoolH) - var(--tabH) - var(--sab) - 16px)}
+  .ebtoc{left:6px;right:6px;top:calc(100% + 4px);max-height:calc(100svh - var(--stickyH) - var(--ebtoolH) - var(--tabH) - var(--sab) - 16px);padding:12px}
+  .ebtocg{grid-template-columns:1fr}
+  .ebch-h .ebic{width:46px;height:46px;font-size:25px;border-radius:13px}
+  .ebbody p,.ebbody li{font-size:15px;line-height:1.85}
+  .ebbody h4{font-size:17px}
+  .ebbar{grid-template-columns:96px 1fr 88px;gap:8px;font-size:13px}
+  .ebbv{font-size:13px}
+  .ebnums,.ebscripts{grid-template-columns:repeat(3,1fr)}
+  #v-earth-book .ltable{font-size:13.5px}#v-earth-book .ltable th,#v-earth-book .ltable td{padding:8px 8px}
+  .ebt.c4{min-width:520px}.ebt.c5,.ebt.c6{min-width:680px}
+  .ebpager{grid-template-columns:1fr}.ebpager .nx{grid-column:1}
+  .cv-hero{padding:18px 16px}
+  .cv-parts{grid-template-columns:1fr}
+}
+@media print{.ebtools,.ebside,.ebpager,.outl{display:none!important}.ebbody p,.ebbody li,.ebt td{color:#000!important}}
 </style>
 </head>
 <body>
@@ -1332,6 +1501,17 @@ body.fs-on{overflow:hidden}
     </div>
     <aside class="panel whpanel detail bgpanel" id="lpanel" hidden></aside>
   </section>
+  <!-- ⑥ 地球大全 -->
+  <section class="view" id="v-earth-book">
+    <div class="view-head"><h2>地球大全 <small>宇宙人のための地球ガイド</small></h2><p class="lead">地球の外から来た知的存在のための、いまの地球（2026年）と人類の手引き。<span id="ebcount"></span>。</p>
+      <details class="vh-more"><summary>見方と操作</summary><p>「目次」で部と章の一覧を開き、読みたい章へ飛べます。検索欄では全章の本文から言葉を探せて、見つかった言葉は本文の中で光ります。章の終わりのボタンか <kbd>←</kbd> <kbd>→</kbd> キーで前後の章へ。章の中の見出しには、題名の下（広い画面では右）の一覧から飛べます。地球大全は「いまの地球」の説明なので、上の時代バーで時代を変えても中身は変わりません。</p></details></div>
+    <div class="ebtools">
+      <button type="button" class="ebtb" id="ebtocb" aria-controls="ebtoc" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h10"/></svg><span>目次</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="ebsrch" id="ebsrch" role="search"><label><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input id="ebq" type="search" placeholder="地球大全の本文を検索" autocomplete="off" aria-label="地球大全の本文を検索" aria-controls="ebqres"></label><div class="qres" id="ebqres" role="listbox" hidden></div></div>
+      <nav class="ebtoc" id="ebtoc" aria-label="地球大全の目次" hidden></nav>
+    </div>
+    <div class="ebgrid"><div class="ebmain" id="ebmain"></div><aside class="ebside" id="ebside" aria-label="この章の見出し" hidden></aside></div>
+  </section>
   <footer class="foot">
     <details>
     <summary>数値の扱いと出典</summary>
@@ -1480,13 +1660,14 @@ const INV = [
 ];
 
 /* ---------- ビューの切り替え ---------- */
-const VIEWS = [["overview","全体マップ"],["timeline","年表（宇宙・地球・世界史）"],["space-map","宇宙・地球・ミクロ"],["lineage","系統樹（分野別）"],["laws","宇宙の法則"]];
+const VIEWS = [["overview","全体マップ"],["timeline","年表（宇宙・地球・世界史）"],["space-map","宇宙・地球・ミクロ"],["lineage","系統樹（分野別）"],["laws","宇宙の法則"],["earth-book","地球大全"]];
 function show(){
   let h = (location.hash||"").slice(1);if(h==="theater"){h="timeline";history.replaceState(null,"","#timeline");}
-  if(h==="earth-book"||h.startsWith("eb-")){location.replace("__EARTH_URL__");return;}
-  const id = (VIEWS.some(v=>v[0]===h)||h==="world-map"||h==="micro") ? h : "overview";
+  // 地球大全は #earth-book（表紙）と #eb-…（章・見出し・検索）
+  const id = (h==="earth-book"||h.startsWith("eb-")) ? "earth-book" : (VIEWS.some(v=>v[0]===h)||h==="world-map"||h==="micro") ? h : "overview";
   document.querySelectorAll("section.view").forEach(s=>s.classList.toggle("on", s.id==="v-"+id));
   window.KSHELL&&KSHELL.onView(id);
+  if(id==="earth-book"&&window.EBVIEW) EBVIEW.route(h);
   if(id==="overview") requestAnimationFrame(drawLinks);
 }
 window.addEventListener("hashchange", show);
@@ -1540,7 +1721,7 @@ __EV3D__
 __THEATER__
 __LAWS3D__
 __LAWS__
-window.EBIDX=__EBINDEX__;window.EARTH_URL="__EARTH_URL__";
+window.EBIDX=__EBINDEX__;
 __LVINFO__
 __ORG3D__
 __CUTE__
@@ -1548,6 +1729,9 @@ __MICROHQ__
 __MICRO3D__
 __SEARCH__
 __SHELL__
+__EBCORE__
+__EBCH__
+__EBVIEW__
 show();
 document.fonts?.ready.then(drawLinks);
 </script>

@@ -1,7 +1,8 @@
 // カルダシェフ文明マップ：src/ の部品を1つの index.html にまとめる
-// 使い方: node build.js          → index.html と earth.html（three.js は CDN から読み込む。GitHub Pages で公開するのはこれ）
+// 使い方: node build.js          → index.html（three.js は CDN から読み込む。GitHub Pages で公開するのはこれ）と earth.html
 //        node build.js --local  → index.local.html と earth.local.html（three.js を node_modules から読む。オフライン確認用）
-// earth.html は「地球大全」の読む画面。章は src/eb_p*.js（部ごと）に書く。
+// 「地球大全」は index.html の6番目のページ。章は src/eb_p*.js（部ごと）に書く。
+// earth.html は、前の地球大全の URL（earth.html#章、?q=語）を index.html の同じ場所へ送るだけのページ。
 const fs=require("fs"),path=require("path"),vm=require("vm");
 const SRC=path.join(__dirname,"src");
 const read=f=>fs.readFileSync(path.join(SRC,f),"utf8");
@@ -66,7 +67,7 @@ const r={
 for(const [k,f] of Object.entries(r)){if(!t.includes(k))console.warn("missing placeholder",k);t=t.split(k).join(read(f));}
 const local=process.argv.includes("--local");
 const CDN3="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js",LOCAL3="node_modules/three/build/three.min.js";
-const URLS={"__MAP_URL__":local?"index.local.html":"index.html","__EARTH_URL__":local?"earth.local.html":"earth.html","__THREE_URL__":local?LOCAL3:CDN3};
+const URLS={"__MAP_URL__":local?"index.local.html":"index.html"};
 const fill=s=>{for(const [k,v] of Object.entries(URLS))s=s.split(k).join(v);return s;};
 
 // ---- 地球大全（章のファイルを順に読み、部・章・見出しを取り出す） ----
@@ -78,25 +79,19 @@ const EB=ctx.EB;
 const strip=h=>h.replace(/<[^>]+>/g," ").replace(/&[a-z]+;/g," ").replace(/\s+/g," ").trim();
 const ids=new Set();EB.chapters.forEach(c=>{if(ids.has(c.id)||/[.\s]/.test(c.id))throw new Error("章のidが重複または不正: "+c.id);ids.add(c.id);});
 // 章どうしのリンク（EB.see）が、ある章を指しているか確かめる
-{const bad=[];EB.chapters.forEach(c=>{for(const m of c.h.matchAll(/class="ebsee" href="#([^".]+)/g))if(!ids.has(m[1]))bad.push(c.id+"→"+m[1]);});if(bad.length)console.warn("地球大全：行き先のない章リンク",bad.join(", "));}
+{const bad=[];EB.chapters.forEach(c=>{for(const m of c.h.matchAll(/class="ebsee" href="#eb-([^".]+)/g))if(!ids.has(m[1]))bad.push(c.id+"→"+m[1]);});if(bad.length)console.warn("地球大全：行き先のない章リンク",bad.join(", "));}
 // 文明マップの検索に渡す目次（部・章・見出し）
 const EBIDX={p:EB.parts.map(p=>[p.id,p.t,p.ic]),c:EB.chapters.map(c=>[c.id,c.t,c.ic,EB.parts.findIndex(p=>p.id===c.part),[...c.h.matchAll(/<h4[^>]*>([\s\S]*?)<\/h4>/g)].map(m=>strip(m[1])),c.k||""])};
 t=t.split("__EBINDEX__").join(JSON.stringify(EBIDX));
+// 地球大全の部品・章・読む画面（⑥のページ）
+for(const [k,v] of Object.entries({"__EBCORE__":read("eb_core.js"),"__EBCH__":ebSrc,"__EBVIEW__":read("ebview.js")})){if(!t.includes(k))console.warn("missing placeholder",k);t=t.split(k).join(v);}
 
 const html=fill(local?t.replace(CDN3,LOCAL3):t);
 const name=local?"index.local.html":"index.html";
 fs.writeFileSync(path.join(__dirname,name),html);
 console.log("built",name,(Buffer.byteLength(html)/1e6).toFixed(2)+" MB");
 
-// ---- earth.html ----
-{const md=(()=>{const c={console};c.window=c;vm.createContext(c);return vm.runInContext(read("microdata.js")+"\n;({MOLS,ATOMCOL,ATOMR})",c);})();
- const r2=a=>a.map(([e,x,y,z])=>[e,+x.toFixed(2),+y.toFixed(2),+z.toFixed(2)]);
- const mols=md.MOLS.filter(m=>["dna","h2o","co2","ch4","glu","nacl","benz","diam","c60","etoh","o3","nh3"].includes(m[0])).map(m=>[m[0],m[1],m[2],m[3],r2(m[4])]);
- let e=read("earth.template.html");
- const R={"__EBCORE__":read("eb_core.js"),"__EBCH__":ebSrc,"__MOL3D__":"var MOLS="+JSON.stringify(mols)+",ATOMCOL="+JSON.stringify(md.ATOMCOL)+",ATOMR="+JSON.stringify(md.ATOMR)+";","__LAWS3D__":read("laws3d.js")};
- for(const [k,v] of Object.entries(R)){if(!e.includes(k))console.warn("missing placeholder",k);e=e.split(k).join(v);}
- e=fill(e);
- const en=local?"earth.local.html":"earth.html";
- fs.writeFileSync(path.join(__dirname,en),e);
+// ---- earth.html（前の URL から index.html の地球大全へ送る） ----
+{const e=fill(read("earth.redirect.html"));const en=local?"earth.local.html":"earth.html";fs.writeFileSync(path.join(__dirname,en),e);
  const tabs=(EB.chapters.map(c=>c.h).join("").match(/<table/g)||[]).length;
- console.log("built",en,(Buffer.byteLength(e)/1e6).toFixed(2)+" MB",EB.parts.length+"部",EB.chapters.length+"章",tabs+"表");}
+ console.log("built",en,"（転送）／地球大全",EB.parts.length+"部",EB.chapters.length+"章",tabs+"表");}

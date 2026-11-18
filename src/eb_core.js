@@ -1,8 +1,9 @@
 /* ---------- 地球大全：章の部品（表・棒グラフ・図・リンク）と、部・章の登録 ----------
    章のファイル（eb_p*.js）は EB.part(...) で部を始め、EB.add({...}) で章を足す。並びは足した順。
-   地図アプリへのリンクは EB.map("timeline","年表で見る") のように書く（ビルドで地図のファイル名に置き換わる）。 */
+   文明マップのほかのページへは EB.map("timeline","年表で見る")、ほかの章へは EB.see("energy","エネルギーの章へ") と書く。
+   地球大全は文明マップ（index.html）の中のページなので、どちらも同じページの中の # リンクになる。 */
 window.EB=(function(){
-  const MAP="__MAP_URL__";
+  const MAP="";
   const parts=[],chapters=[];
   // 棒グラフ：[名前, 値, 色, 補足]
   const bar=(rows,unit="",max)=>{const m=max||Math.max(...rows.map(r=>typeof r[1]==="number"?r[1]:0));return `<div class="ebbars">${rows.map(([n,v,c,note])=>`<div class="ebbar"><span class="ebbn">${n}</span><span class="ebbt"><i style="width:${typeof v==="number"?Math.max(.6,v/m*100):0}%;background:${c||"var(--accent)"}"></i></span><span class="ebbv num">${typeof v==="number"?v.toLocaleString():v}${unit}${note?`<small>${note}</small>`:""}</span></div>`).join("")}</div>`;};
@@ -12,7 +13,7 @@ window.EB=(function(){
   const dots=n=>`<span class="ebdots">${"●".repeat(n)}</span>`;
   // 地図アプリへ／ほかの章へ
   const map=(hash,label)=>`<a class="ebmap" href="${MAP}#${hash}"><span aria-hidden="true">🗺</span>${label}</a>`;
-  const see=(id,label)=>`<a class="ebsee" href="#${id}">${label}</a>`;
+  const see=(id,label)=>`<a class="ebsee" href="#eb-${id}">${label}</a>`;
   // カード：[見出し, 本文, 色]
   const cards=(items,min=200)=>`<div class="ebcards" style="--min:${min}px">${items.map(([t,b,c])=>`<div class="ebcard"${c?` style="--c:${c}"`:""}><b>${t}</b><p>${b}</p></div>`).join("")}</div>`;
   // 流れ：A → B → C

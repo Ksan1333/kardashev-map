@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex">
+<title>地球大全は文明マップの中に移りました</title>
+<script>
+/* 地球大全は文明マップ（index.html）の6番目のページになった。前の URL で来た人を、同じ章・見出し・検索へ送る。
+   earth.html#章 → #eb-章、earth.html#章.番号 → #eb-章.番号、earth.html#part-部 → #eb-part-部、earth.html?q=語 → #eb-q=語 */
+(function(){
+  var h=location.hash.slice(1),q=new URLSearchParams(location.search).get("q"),to;
+  if(q)to="eb-q="+encodeURIComponent(q);
+  else if(!h)to="earth-book";
+  else to="eb-"+h;
+  location.replace("__MAP_URL__#"+to);
+})();
+</script>
+<noscript><meta http-equiv="refresh" content="0; url=__MAP_URL__#earth-book"></noscript>
+<style>body{margin:0;padding:40px 20px;background:#070b16;color:#eef2fb;font:15px/1.8 "Noto Sans JP",system-ui,sans-serif}a{color:#7fb2ff}</style>
+</head>
+<body>
+<p>地球大全は、カルダシェフ文明マップの中のページに移りました。<a href="__MAP_URL__#earth-book">地球大全を開く</a></p>
+</body>
+</html>

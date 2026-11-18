@@ -1,15 +1,15 @@
 /* 第4部：地球 */
 (function(){
   const {bar,tbl,fig,dots,map,see,cards,flow,note,src,links}=EB;
-  const interior=`<svg viewBox="0 0 420 230" class="ebsvg"><defs><radialGradient id="ebcore"><stop offset="0" stop-color="#fff2b0"/><stop offset="1" stop-color="#ffb347"/></radialGradient></defs>
+  const interior=`<svg viewBox="0 -22 420 252" class="ebsvg"><defs><radialGradient id="ebcore"><stop offset="0" stop-color="#fff2b0"/><stop offset="1" stop-color="#ffb347"/></radialGradient></defs>
     <path d="M210,220 L10,220 A200,200 0 0 1 410,220 Z" fill="#7a8a5a"/><path d="M210,220 L16,220 A194,194 0 0 1 404,220 Z" fill="#c0603a"/><path d="M210,220 L100,220 A110,110 0 0 1 320,220 Z" fill="#f08a3a"/><path d="M210,220 L172,220 A38,38 0 0 1 248,220 Z" fill="url(#ebcore)"/>
     <g font-size="11" fill="#fff"><text x="30" y="200">地殻 5〜70km</text><text x="40" y="150">マントル（〜2,900km）岩石・ゆっくり対流</text><text x="120" y="200">外核（〜5,150km）液体の鉄</text><text x="185" y="214" fill="#3a2000">内核</text></g>
-    <g font-size="10" fill="#cfd7ea"><text x="300" y="40">中心温度 約5,000〜6,000℃</text><text x="300" y="55">中心圧力 約360万気圧</text></g></svg>`;
+    <g font-size="10" fill="#cfd7ea" text-anchor="end"><text x="416" y="-8">中心温度 約5,000〜6,000℃</text><text x="416" y="7">中心圧力 約360万気圧</text></g></svg>`;
   const atmo=`<svg viewBox="0 0 420 240" class="ebsvg"><defs><linearGradient id="ebsky" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#6fa8e8"/><stop offset=".45" stop-color="#1d3f73"/><stop offset="1" stop-color="#02040c"/></linearGradient></defs><rect x="0" y="0" width="420" height="240" fill="url(#ebsky)"/>
     ${[[230,"対流圏 0〜約12km：雲・雨・天気のすべて。空気の約8割"],[185,"成層圏 〜約50km：オゾン層が紫外線を吸収"],[140,"中間圏 〜約85km：流れ星が燃える"],[90,"熱圏 〜約600km：オーロラ・国際宇宙ステーション（約400km）"],[35,"外気圏 〜約1万km：宇宙へ溶けていく"]].map(([y,t])=>`<line x1="0" x2="420" y1="${y-14}" y2="${y-14}" stroke="#ffffff30"/><text x="8" y="${y-20}" font-size="11" fill="#fff">${t}</text>`).join("")}
-    <text x="300" y="118" font-size="10" fill="#f4d06a">カーマン線 100km（宇宙の入口）</text><line x1="0" x2="420" y1="123" y2="123" stroke="#f4d06a" stroke-dasharray="4 3"/></svg>`;
+    <text x="414" y="118" font-size="10" fill="#f4d06a" text-anchor="end">カーマン線 100km（宇宙の入口）</text><line x1="0" x2="420" y1="123" y2="123" stroke="#f4d06a" stroke-dasharray="4 3"/></svg>`;
   const tilt=`<svg viewBox="0 0 420 170" class="ebsvg"><circle cx="210" cy="85" r="18" fill="#ffd27a"/><ellipse cx="210" cy="85" rx="185" ry="55" fill="none" stroke="#4a5a80"/>
-    ${[[25,85,"6月（北半球の夏）"],[395,85,"12月（北半球の冬）"]].map(([x,y,t],i)=>`<g transform="translate(${x},${y})"><circle r="14" fill="#3d7fd0"/><line x1="-4" y1="-20" x2="4" y2="20" stroke="#fff" stroke-width="2" transform="rotate(${i?23:23})"/><text y="34" font-size="10" fill="#cfd7ea" text-anchor="middle">${t}</text></g>`).join("")}
+    ${[[25,85,"6月（北半球の夏）"],[395,85,"12月（北半球の冬）"]].map(([x,y,t],i)=>`<g transform="translate(${x},${y})"><circle r="14" fill="#3d7fd0"/><line x1="-4" y1="-20" x2="4" y2="20" stroke="#fff" stroke-width="2" transform="rotate(${i?23:23})"/><text y="34" x="${i?21:-21}" font-size="10" fill="#cfd7ea" text-anchor="${i?"end":"start"}">${t}</text></g>`).join("")}
     <text x="210" y="160" font-size="11" fill="#cfd7ea" text-anchor="middle">自転軸が23.4°傾いたまま公転するので、季節が生まれる</text></svg>`;
   EB.part("earth","地球","🌍","惑星としての地球。岩石とプレート、大気と天気、海と水、地球の歴史、自然災害。");
   EB.add({id:"earth",c3d:"un|earthcut",ic:"🌍",t:"地球という惑星",h:`

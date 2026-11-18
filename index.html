@@ -682,10 +682,6 @@ a{color:var(--cool)}
 .snsub a{font-size:12.5px;color:var(--ink-2);text-decoration:none;padding:2px 9px;border-radius:99px;border:1px solid var(--line-2);line-height:1.6}
 .snsub a:hover{color:var(--ink);border-color:#56679b}
 .snsub a.on{color:var(--accent-ink);background:var(--accent);border-color:var(--accent);font-weight:700}
-.sidebook{display:flex;flex-direction:column;gap:2px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
-.sbh{font-size:12px;color:var(--muted);letter-spacing:.08em;padding:0 10px 4px}
-.sn-book .sni{color:var(--accent);border-color:#f4b94255;background:#f4b94212}
-.sn-book .snn{font-size:15px;color:var(--muted)}
 .sidefoot{margin-top:auto;display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid var(--line)}
 .sbtn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border-radius:11px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 14px var(--font-body);cursor:pointer;text-align:left}
 .sbtn:hover{border-color:var(--accent)}
@@ -929,7 +925,7 @@ body.fs-on{overflow:hidden}
   .brand{justify-content:center;padding:4px 0 12px}
   .brand .bt{display:none}
   .sn{grid-template-columns:1fr;justify-items:center;gap:3px;padding:8px 2px;text-align:center}
-  .snt,.snn,.sbh{display:none}
+  .snt,.snn{display:none}
   .snr{display:block;font-size:11px;font-weight:600;line-height:1.25;color:inherit}
   .sn.on::before{left:-8px}
   .snsub{display:none}
@@ -1072,8 +1068,6 @@ body.fs-on{overflow:hidden}
   .hxbox{padding:18px 16px calc(24px + var(--sab))}
   .hx-kbd{display:none}
 }
-/* 上のバーに📘（地球大全）が増えたので、時代名を優先して Type の札は 420px 以下で隠す */
-@media (max-width:420px){.ec-type{display:none}.topbar{gap:6px}.topbar .ibtn{width:40px}}
 @media (max-width:380px){
   .tb span{font-size:10px}
   .edi{grid-template-columns:10px 88px minmax(0,1fr)}
@@ -1083,6 +1077,181 @@ body.fs-on{overflow:hidden}
   .ed-track .fill,.knob,.eradock,.dsheet,.chev{transition:none!important}
   .flash{animation:none}
 }
+/* ===== ⑥ 地球大全（文明マップの中で読む）：道具の行・目次・本文・前後の章・表紙・検索 ===== */
+#v-earth-book{--ebtoolH:58px}
+#v-earth-book .num{font-family:var(--font-num);font-variant-numeric:tabular-nums}
+.ebtools{position:sticky;top:var(--stickyH);z-index:30;display:flex;align-items:center;gap:8px;margin:0 -6px;padding:9px 6px;background:rgba(7,11,22,.93);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ebtb{flex:none;display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 13px;border-radius:11px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font:600 14px var(--font-body);cursor:pointer;white-space:nowrap;text-decoration:none}
+.ebtb svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ebtb .chev{width:14px;height:14px;transition:transform .2s}
+.ebtb:hover{border-color:#56679b;background:var(--surface-2)}
+.ebtb[aria-expanded="true"]{border-color:var(--accent);color:var(--accent)}
+.ebtb[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.ebsrch{position:relative;flex:1 1 auto;min-width:0;max-width:560px}
+.ebsrch label{display:flex;align-items:center;gap:8px;height:40px;padding:0 10px 0 12px;border-radius:11px;border:1px solid var(--line-2);background:var(--surface);color:var(--muted)}
+.ebsrch label:focus-within{border-color:var(--accent);color:var(--ink)}
+.ebsrch svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.ebsrch input{flex:1;min-width:0;height:100%;border:0;background:none;color:var(--ink);font:500 14.5px var(--font-body);outline:none}
+.ebsrch input::placeholder{color:#7e89a8}
+.ebsrch input::-webkit-search-cancel-button{filter:invert(.7)}
+#v-earth-book .qres{position:absolute;top:calc(100% + 8px);left:0;width:min(600px,calc(100vw - 32px));max-height:min(70vh,640px);overflow:auto;padding:6px;border-radius:14px;border:1px solid var(--line-2);background:#0d1428;box-shadow:0 18px 50px #000b;z-index:40}
+#v-earth-book .qh{padding:6px 10px 8px;font-size:13px;color:var(--muted)}
+#v-earth-book .qres a,.ebres-list a{display:block;padding:10px 12px;border-radius:10px;color:var(--ink);text-decoration:none}
+#v-earth-book .qres a:hover,#v-earth-book .qres a.sel,.ebres-list a:hover{background:var(--surface-2)}
+#v-earth-book .qres a b,.ebres-list a b{display:block;font-size:14.5px}
+#v-earth-book .qres a small,.ebres-list a small{display:block;font-size:13px;color:var(--muted)}
+#v-earth-book .qres a span,.ebres-list a span{display:block;margin-top:3px;font-size:13px;color:var(--ink-2);line-height:1.6}
+#v-earth-book .qres a.qall{margin-top:4px;border-top:1px solid var(--line);border-radius:0 0 10px 10px;color:var(--cool);font-size:13.5px}
+#v-earth-book mark{background:#f4b94240;color:#fff;border-radius:3px;padding:0 1px}
+#v-earth-book mark.hit{background:#f4b942;color:var(--accent-ink);box-shadow:0 0 0 2px #f4b94255}
+/* 目次（道具の行の下に開く） */
+.ebtoc{position:absolute;left:0;right:0;top:calc(100% + 6px);max-height:calc(100svh - var(--stickyH) - var(--ebtoolH) - 24px);overflow:auto;overscroll-behavior:contain;padding:14px 16px 18px;border-radius:16px;border:1px solid var(--line-2);background:#0d1428;box-shadow:0 18px 50px #000b;z-index:40}
+.ebtoc-home{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;margin-bottom:10px;border-radius:11px;border:1px solid var(--line-2);color:var(--ink);text-decoration:none;font-weight:700;font-size:14px}
+.ebtoc-home:hover{border-color:#56679b}.ebtoc-home.on{border-color:#f4b94270;background:#f4b94214;color:var(--accent)}
+.ebtocg{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px 22px}
+.ebtoc-ph{display:flex;align-items:center;gap:7px;padding:4px 8px;font:700 13.5px var(--font-body);color:var(--muted);letter-spacing:.04em}
+.ebtoc-ph span{font-size:15px}.ebtoc-ph small{font:600 13px var(--font-num);color:#6d7896}
+.ebtoc-ch{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px;align-items:baseline;padding:5px 8px;border-radius:9px;color:var(--ink-2);text-decoration:none;font-size:14px;line-height:1.45}
+.ebtoc-ch:hover{background:#ffffff0a;color:var(--ink)}
+.ebtoc-ch.on{background:linear-gradient(90deg,#f4b94224,#f4b94206);color:var(--ink);font-weight:700}
+.ebn{font:600 13px var(--font-num);color:#6d7896}
+.ebtoc-ch.on .ebn{color:var(--accent)}
+/* 本文｜この章の見出し */
+.ebgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:32px;align-items:start}
+#v-earth-book.eb-reading .ebgrid{grid-template-columns:minmax(0,860px) 220px}
+.ebmain{min-width:0}
+.ebside{position:sticky;top:calc(var(--stickyH) + var(--ebtoolH) + 16px);max-height:calc(100vh - var(--stickyH) - var(--ebtoolH) - 32px);overflow-y:auto;padding:8px 0;scrollbar-width:thin}
+.ebside b{display:block;font-size:13px;color:var(--muted);letter-spacing:.06em;margin:0 0 8px 10px}
+.ebside a{display:block;padding:5px 10px;border-left:2px solid var(--line);color:var(--ink-2);text-decoration:none;font-size:13px;line-height:1.5}
+.ebside a:hover{color:var(--ink);border-left-color:#56679b}
+.ebside a.on{color:var(--accent);border-left-color:var(--accent)}
+.ebch .crumb{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin:2px 0 10px}
+.ebch .crumb a{color:var(--muted);text-decoration:none}.ebch .crumb a:hover{color:var(--ink)}
+.ebch-h{display:flex;align-items:center;gap:14px;margin:0 0 16px}
+.ebch-h .ebic{flex:none;width:56px;height:56px;display:grid;place-items:center;font-size:30px;border-radius:16px;border:1px solid var(--line-2);background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+.ebch-h small{display:block;font:600 13px var(--font-num);color:var(--accent);letter-spacing:.08em}
+.ebch-h h3{margin:0;font:900 clamp(24px,3vw,31px)/1.25 var(--font-display);letter-spacing:.02em}
+.outl{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 18px;padding:0;list-style:none}
+.outl a{display:inline-block;font-size:13px;color:var(--ink-2);text-decoration:none;padding:4px 11px;border-radius:99px;border:1px solid var(--line-2);background:var(--surface)}
+.outl a:hover{color:var(--ink);border-color:#56679b}
+#v-earth-book.eb-reading .outl{display:none}
+.ebbody{font-size:15px}
+.ebbody>*:first-child{margin-top:0}
+.ebbody h4{margin:30px 0 10px;padding-top:4px;font:800 18px/1.4 var(--font-display);color:var(--accent);scroll-margin-top:calc(var(--ebtoolH) + 6px)}
+.ebbody h5{margin:18px 0 6px;font-size:15px;color:#f4d79a}
+.ebbody p,.ebbody li{font-size:15px;line-height:1.9;color:#d8def0}
+.ebbody ul,.ebbody ol{padding-left:1.3em}
+.ebbody li{margin:3px 0}
+.ebbody b{color:#fff}
+.ebbody kbd,#v-earth-book .vh-more kbd{font:600 12px var(--font-num);padding:1px 6px;border-radius:5px;border:1px solid #3a4670;background:#0b1122;color:#cfd7ea}
+.eblead{font-size:16.5px!important;line-height:1.85!important;color:#f2f5fc!important;margin:0 0 18px;padding:2px 0 2px 14px;border-left:3px solid var(--accent)}
+.ebscroll{overflow-x:auto;max-width:100%;margin:10px 0;-webkit-overflow-scrolling:touch}
+#v-earth-book .ltable{border-collapse:collapse;width:100%;font-size:14px}
+#v-earth-book .ltable th,#v-earth-book .ltable td{border-bottom:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top;line-height:1.7;width:auto}
+#v-earth-book .ltable thead th{font-size:13px;color:var(--muted);font-weight:700;background:#0d1428;white-space:nowrap}
+.ebt tbody th{color:#f4d79a;font-weight:700;white-space:nowrap;width:1%!important}
+.ebt td{color:#d8def0}
+.ebt thead+tbody td:first-child{min-width:5.2em}
+.ebbars{display:flex;flex-direction:column;gap:8px;margin:12px 0 8px}
+.ebbar{display:grid;grid-template-columns:minmax(120px,190px) 1fr minmax(96px,170px);gap:12px;align-items:center;font-size:14px}
+.ebbn{color:#d8def0;text-align:right}
+.ebbt{height:12px;border-radius:99px;background:#ffffff0d;overflow:hidden}.ebbt i{display:block;height:100%;border-radius:99px}
+.ebbv{color:var(--ink);font-size:13.5px}.ebbv small{display:block;color:var(--muted);font-size:13px;font-family:var(--font-body)}
+.ebfig{margin:16px 0;padding:12px;border:1px solid var(--line);border-radius:14px;background:#070b17}
+.ebfig figcaption{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+.ebsvg{display:block;width:100%;max-width:640px;height:auto;margin:0 auto}
+.ebnums{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}
+.ebnums div{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border:1px solid var(--line);border-radius:10px;background:#0b1122}
+.ebnums b{font-size:22px;color:var(--accent)}.ebnums small{font-size:13px;color:var(--muted);text-align:center}
+.ebdots{font-size:7px;letter-spacing:1px;color:#7fb2ff;text-align:center;max-width:70px;word-break:break-all;line-height:1.1}
+.ebmono{font-family:var(--font-num);font-size:14px;letter-spacing:.05em;color:#f4d79a!important;word-break:break-all}
+.ebcode{font-size:13px}.ebcode td{padding:6px 8px!important}.ebcode td div{white-space:nowrap;line-height:1.6}.ebcode th{text-align:center!important}
+.ebscripts{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}
+.ebscripts div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px;border:1px solid var(--line);border-radius:10px;background:#0b1122;text-align:center}
+.ebscripts b{font-size:20px;color:#fff}.ebscripts small{font-size:13px;color:var(--muted)}
+.ebtl{font-size:14px;line-height:2.1!important;padding:12px 16px;border-radius:12px;background:#0b1122;border:1px solid var(--line)}
+.ebc3d{display:block;width:100%;max-width:560px;aspect-ratio:360/220;margin:0 auto 18px;border-radius:14px;border:1px solid var(--line);background:#0a0f1f}
+.ebcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(var(--min,200px),100%),1fr));gap:10px;margin:12px 0}
+.ebcard{padding:12px 14px;border-radius:12px;border:1px solid var(--line);border-top:3px solid var(--c,var(--line-2));background:linear-gradient(180deg,var(--surface),#0d1426)}
+.ebcard b{display:block;font-size:15px;margin-bottom:4px;color:#fff}
+.ebcard p{margin:0;font-size:13.5px!important;line-height:1.75!important;color:#cdd5e8!important}
+.ebflow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 4px;margin:12px 0;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#0b1122}
+.ebflow span{font-size:14px;padding:4px 10px;border-radius:9px;background:var(--surface-2);color:var(--ink)}
+.ebflow i{font-style:normal;color:var(--accent);font-weight:700}
+.ebnote{margin:14px 0;padding:12px 16px;border-radius:12px;border:1px solid #f4b94250;background:#f4b9420d;font-size:14.5px;line-height:1.85;color:#f2e6c8}
+.ebnote.cool{border-color:#7fb2ff50;background:#7fb2ff0d;color:#dbe7ff}
+.ebnote.warn{border-color:#f06a6a55;background:#f06a6a0d;color:#ffd9d9}
+.ebsrc{font-size:13px!important;color:var(--muted)!important;line-height:1.7!important;margin:10px 0 0}
+.eblinks{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.ebmap,.ebsee{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;font-size:13.5px;text-decoration:none;border:1px solid var(--line-2);background:var(--surface);color:var(--ink)}
+.ebmap:hover,.ebsee:hover{border-color:var(--accent)}
+.ebsee{color:var(--cool)}
+p .ebsee,li .ebsee,td .ebsee{padding:0;border:0;background:none;display:inline;font-size:inherit;text-decoration:underline;text-underline-offset:3px}
+.ebpager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:40px 0 0}
+.ebpager a{display:flex;flex-direction:column;gap:2px;padding:14px 16px;border-radius:14px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);text-decoration:none}
+.ebpager a:hover{border-color:var(--accent)}
+.ebpager a small{font-size:13px;color:var(--muted)}
+.ebpager a b{font-size:15px}
+.ebpager .nx{text-align:right;grid-column:2}
+/* 表紙 */
+.ebcover{max-width:1120px}
+.cv-hero{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:center;padding:24px 26px;border-radius:20px;border:1px solid var(--line-2);background:radial-gradient(600px 300px at 85% 20%,#f4b94218,transparent 70%),linear-gradient(180deg,var(--surface),#0d1426)}
+.cv-title{margin:0 0 4px;font:900 clamp(22px,2.6vw,28px)/1.3 var(--font-display);letter-spacing:.03em}
+.cv-title small{display:block;font:600 14px var(--font-body);color:var(--muted);letter-spacing:.04em;margin-top:6px}
+.cv-hero .eblead{margin-top:14px}
+.cv-act{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.ebbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink);font:700 14.5px var(--font-body);text-decoration:none}
+.ebbtn:hover{border-color:#56679b}
+.ebbtn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.cv-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cv-stats div{padding:12px;border-radius:12px;border:1px solid var(--line);background:#0b1122;text-align:center}
+.cv-stats b{display:block;font-size:26px;font-weight:700;color:var(--accent)}
+.cv-stats small{font-size:13px;color:var(--muted)}
+.cv-parts{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:18px}
+.cv-part{padding:16px 18px 14px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(180deg,var(--surface),#0d1426);scroll-margin-top:calc(var(--ebtoolH) + 6px)}
+.cv-part.flash{border-color:var(--accent);box-shadow:0 0 0 3px #f4b94233}
+.cv-part h3{display:flex;align-items:center;gap:10px;margin:0 0 6px;font:900 18px/1.3 var(--font-display)}
+.cv-part h3 span{font-size:22px}
+.cv-part h3 small{font:600 13px var(--font-num);color:var(--muted)}
+.cv-part p{margin:0 0 8px;font-size:13.5px;line-height:1.75;color:#c6cee3}
+.cv-part ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px}
+.cv-part li a{display:grid;grid-template-columns:30px minmax(0,1fr);gap:4px;padding:5px 6px;border-radius:8px;color:var(--ink-2);text-decoration:none;font-size:14px}
+.cv-part li a:hover{background:#ffffff0a;color:var(--ink)}
+.cv-foot{margin:24px 0 0;font-size:13px;color:var(--muted);line-height:1.8}
+/* 検索結果のページ */
+.ebres h3{margin:0 0 10px;font:900 22px var(--font-display)}
+.ebres h3 small{font:600 14px var(--font-body);color:var(--muted);margin-left:8px}
+.ebres-list{display:flex;flex-direction:column;gap:2px;max-width:860px}
+@media (max-width:1279px){
+  #v-earth-book.eb-reading .ebgrid{grid-template-columns:minmax(0,1fr)}
+  #v-earth-book.eb-reading .outl{display:flex}
+  .ebside{display:none}
+  .ebch{max-width:860px}
+  .cv-hero{grid-template-columns:1fr}
+}
+@media (max-width:767px){
+  #v-earth-book{--ebtoolH:54px}
+  .ebtools{margin:0 -12px;padding:7px 12px}
+  .ebtb{padding:0 11px}
+  .ebsrch{max-width:none}
+  /* 道具の行（backdrop-filter があるので、中の固定配置はこの行が基準になる）のすぐ下に、行と同じ幅で開く */
+  .ebsrch{position:static}
+  #v-earth-book .qres{left:6px;right:6px;width:auto;top:calc(100% + 4px);max-height:calc(100svh - var(--stickyH) - var(--ebtoolH) - var(--tabH) - var(--sab) - 16px)}
+  .ebtoc{left:6px;right:6px;top:calc(100% + 4px);max-height:calc(100svh - var(--stickyH) - var(--ebtoolH) - var(--tabH) - var(--sab) - 16px);padding:12px}
+  .ebtocg{grid-template-columns:1fr}
+  .ebch-h .ebic{width:46px;height:46px;font-size:25px;border-radius:13px}
+  .ebbody p,.ebbody li{font-size:15px;line-height:1.85}
+  .ebbody h4{font-size:17px}
+  .ebbar{grid-template-columns:96px 1fr 88px;gap:8px;font-size:13px}
+  .ebbv{font-size:13px}
+  .ebnums,.ebscripts{grid-template-columns:repeat(3,1fr)}
+  #v-earth-book .ltable{font-size:13.5px}#v-earth-book .ltable th,#v-earth-book .ltable td{padding:8px 8px}
+  .ebt.c4{min-width:520px}.ebt.c5,.ebt.c6{min-width:680px}
+  .ebpager{grid-template-columns:1fr}.ebpager .nx{grid-column:1}
+  .cv-hero{padding:18px 16px}
+  .cv-parts{grid-template-columns:1fr}
+}
+@media print{.ebtools,.ebside,.ebpager,.outl{display:none!important}.ebbody p,.ebbody li,.ebt td{color:#000!important}}
 </style>
 </head>
 <body>
@@ -1331,6 +1500,17 @@ body.fs-on{overflow:hidden}
     <div class="ltab" data-t="unsolved"><p class="note" style="margin-top:0">人類がまだ答えを持っていない「この世の謎」。物理・宇宙、生命と心、数学（クレイ研究所のミレニアム懸賞問題を含む）に分けています。状態は2026年時点の目安です。</p><div class="lunsolved" id="lunsolved"></div></div>
     </div>
     <aside class="panel whpanel detail bgpanel" id="lpanel" hidden></aside>
+  </section>
+  <!-- ⑥ 地球大全 -->
+  <section class="view" id="v-earth-book">
+    <div class="view-head"><h2>地球大全 <small>宇宙人のための地球ガイド</small></h2><p class="lead">地球の外から来た知的存在のための、いまの地球（2026年）と人類の手引き。<span id="ebcount"></span>。</p>
+      <details class="vh-more"><summary>見方と操作</summary><p>「目次」で部と章の一覧を開き、読みたい章へ飛べます。検索欄では全章の本文から言葉を探せて、見つかった言葉は本文の中で光ります。章の終わりのボタンか <kbd>←</kbd> <kbd>→</kbd> キーで前後の章へ。章の中の見出しには、題名の下（広い画面では右）の一覧から飛べます。地球大全は「いまの地球」の説明なので、上の時代バーで時代を変えても中身は変わりません。</p></details></div>
+    <div class="ebtools">
+      <button type="button" class="ebtb" id="ebtocb" aria-controls="ebtoc" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h10"/></svg><span>目次</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="ebsrch" id="ebsrch" role="search"><label><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input id="ebq" type="search" placeholder="地球大全の本文を検索" autocomplete="off" aria-label="地球大全の本文を検索" aria-controls="ebqres"></label><div class="qres" id="ebqres" role="listbox" hidden></div></div>
+      <nav class="ebtoc" id="ebtoc" aria-label="地球大全の目次" hidden></nav>
+    </div>
+    <div class="ebgrid"><div class="ebmain" id="ebmain"></div><aside class="ebside" id="ebside" aria-label="この章の見出し" hidden></aside></div>
   </section>
   <footer class="foot">
     <details>
@@ -6249,13 +6429,14 @@ const INV = [
 ];
 
 /* ---------- ビューの切り替え ---------- */
-const VIEWS = [["overview","全体マップ"],["timeline","年表（宇宙・地球・世界史）"],["space-map","宇宙・地球・ミクロ"],["lineage","系統樹（分野別）"],["laws","宇宙の法則"]];
+const VIEWS = [["overview","全体マップ"],["timeline","年表（宇宙・地球・世界史）"],["space-map","宇宙・地球・ミクロ"],["lineage","系統樹（分野別）"],["laws","宇宙の法則"],["earth-book","地球大全"]];
 function show(){
   let h = (location.hash||"").slice(1);if(h==="theater"){h="timeline";history.replaceState(null,"","#timeline");}
-  if(h==="earth-book"||h.startsWith("eb-")){location.replace("earth.html");return;}
-  const id = (VIEWS.some(v=>v[0]===h)||h==="world-map"||h==="micro") ? h : "overview";
+  // 地球大全は #earth-book（表紙）と #eb-…（章・見出し・検索）
+  const id = (h==="earth-book"||h.startsWith("eb-")) ? "earth-book" : (VIEWS.some(v=>v[0]===h)||h==="world-map"||h==="micro") ? h : "overview";
   document.querySelectorAll("section.view").forEach(s=>s.classList.toggle("on", s.id==="v-"+id));
   window.KSHELL&&KSHELL.onView(id);
+  if(id==="earth-book"&&window.EBVIEW) EBVIEW.route(h);
   if(id==="overview") requestAnimationFrame(drawLinks);
 }
 window.addEventListener("hashchange", show);
@@ -8306,7 +8487,7 @@ window.L3D=(function(){
   window.addEventListener("k-year",()=>{renderParticles();renderPT();SC3();});
 })();
 
-window.EBIDX={"p":[["intro","はじめに","📖"],["number","数・論理・情報","🔢"],["matter","物質とエネルギー","⚛️"],["cosmos","宇宙","🌌"],["earth","地球","🌍"],["life","生命","🧬"],["human","人間","🧍"],["society","社会","🏛"],["culture","文化","🎨"],["tech","技術","⚙️"],["history","歴史","📜"],["now","いま・これから","🔭"]],"c":[["read","このガイドの読み方","📖",0,["この本の組み立て","約束ごと","この画面の使い方"],"使い方 読み方 目次 凡例"],["glance","地球をひと目で","🌏",0,["惑星として","生命として","人類として","地球の1日（平均）"],"概要 まとめ 数字 データ 一日"],["num","数と単位","🔢",1,["素数（1とその数自身でしか割り切れない数）","大切な定数","単位の定義（2019年から、すべて物理定数で決まっている）","大きさを表す接頭辞","数の書き方はいろいろ","時間の単位"],"数字 単位 SI 接頭辞 キロ メガ 10進法 2進法 60進法 万 億 兆"],["math","数学のことば","📐",1,["数の種類","形（幾何学）","変化をとらえる（関数・微分・積分）","無限","有名な定理と、まだ解けていない問題"],"数学 幾何 図形 関数 微分 積分 無限 定理 未解決問題 リーマン予想 ゼロ"],["logic","論理・確率・統計","⚖️",1,["論理の基本","確率（どのくらい起こりやすいか）","統計（たくさんのデータを読む）","科学の方法","人間の思い込みのくせ（認知バイアス）"],"論理学 三段論法 背理法 確率 統計 平均 中央値 正規分布 相関 因果 科学的方法 バイアス 思い込み"],["info","情報とコンピュータ","💻",1,["情報の単位","コンピュータのしくみ","文字を数にする","アルゴリズム（解き方の手順）","暗号","インターネット","人工知能（AI）"],"ビット バイト 2進法 文字コード Unicode CPU トランジスタ アルゴリズム 暗号 インターネット DNS AI 人工知能 機械学習"],["matter","物質のなりたち","⚛️",2,["原子のつくり","元素","同位体","原子どうしのつながり方（化学結合）","物質の状態"],"原子 陽子 中性子 電子 元素 周期表 同位体 化学結合 固体 液体 気体 プラズマ 水"],["chem","化学反応","🧪",2,["反応の例","酸と塩基（pH）","酸化と還元","触媒と酵素","有機化学（炭素の化学）","プラスチック（人が作った高分子）","身近な化学"],"化学 反応式 燃焼 酸 塩基 pH 酸化 還元 触媒 酵素 有機化学 プラスチック 発酵"],["force","力・運動・エネルギー","🍎",2,["ニュートンの運動の3法則（1687年）","重力（万有引力）","いろいろな速さ","エネルギー","熱力学の法則","圧力と浮力","波と音"],"ニュートン 運動の法則 重力 万有引力 エネルギー保存 熱力学 エントロピー 圧力 浮力 波 音 速さ"],["light","光と電気・磁気","💡",2,["電気","磁気と発電","電磁波の仲間（波長の長い順）","光の速さと色","光を使う道具"],"電気 電流 電圧 オームの法則 磁石 電磁誘導 発電機 電磁波 スペクトル 赤外線 紫外線 X線 色 虹 レンズ レーザー"],["relativity","相対性理論と量子の世界","🌀",2,["特殊相対性理論（1905年）","一般相対性理論（1915年）","量子力学（1900〜1920年代〜）","物質の最小の部品（標準模型）"],"アインシュタイン 特殊相対性理論 一般相対性理論 E=mc2 時間の遅れ GPS 重力波 ブラックホール 量子力学 不確定性原理 トンネル効果 量子もつれ 標準模型 ヒッグス"],["addr","私たちの住所","📍",3,["距離の物差し","太陽（私たちの恒星）"],"住所 銀河系 天の川 ラニアケア 局部銀河群 太陽 パルサー 光年"],["solar","太陽系","🪐",3,["8つの惑星","小さな天体","太陽系の外側へ"],"惑星 水星 金星 火星 木星 土星 天王星 海王星 冥王星 準惑星 小惑星 彗星 衛星 月 ボイジャー"],["stars","星の一生","⭐",3,["星が生まれるまで","重さで決まる運命","星の色と温度（スペクトル型）","よく知られた星","星は元素の工場"],"恒星 主系列 赤色巨星 白色矮星 超新星 中性子星 ブラックホール スペクトル型 元素の合成 ベテルギウス シリウス"],["universe","銀河と宇宙の歴史","🌌",3,["宇宙の年表","宇宙は何でできているか","膨らむ宇宙","銀河","これからの宇宙"],"ビッグバン インフレーション 宇宙背景放射 銀河 天の川 アンドロメダ ダークマター ダークエネルギー 膨張 ハッブル 大規模構造 宇宙の未来"],["seti","宇宙の仲間を探す","👽",3,["系外惑星","生命がいるかもしれない場所","どうやって見分けるか","ドレイク方程式とフェルミのパラドックス"],"系外惑星 ハビタブルゾーン TRAPPIST-1 プロキシマ ドレイク方程式 フェルミのパラドックス SETI エウロパ エンケラドゥス タイタン バイオシグネチャー 宇宙人"],["earth","地球という惑星","🌍",4,["空気の成分（乾燥空気）","動き続ける惑星"],""],["rocks","岩石・プレート・地震と火山","🌋",4,["岩石の3つの種類","主なプレート","地震","火山","高い山"],"岩石 鉱物 火成岩 堆積岩 変成岩 プレート 大陸移動 パンゲア 地震 マグニチュード 震度 火山 環太平洋 山 エベレスト"],["weather","大気・天気・気候","⛅",4,["天気のしくみ","雲の種類（10種雲形）","台風・ハリケーン・サイクロン","気候の分け方（ケッペンの気候区分）","エルニーニョとラニーニャ","温室効果","天気の記録"],"天気 気象 風 偏西風 高気圧 低気圧 前線 雲 台風 ハリケーン サイクロン 気候区分 ケッペン エルニーニョ 温室効果"],["ocean","海と水","🌊",4,["地球の水はどこにあるか","5つの大洋","海の流れ","潮の満ち引き","海が地球にしていること","大きな川と湖"],"海 大洋 太平洋 大西洋 塩分 海流 黒潮 深層循環 潮の満ち引き 深海 マリアナ海溝 川 湖 ナイル アマゾン バイカル 淡水"],["earthhist","地球の歴史","🦕",4,["地質時代","5回の大量絶滅","地球の歴史を1年に縮めると"],"地質時代 冥王代 太古代 原生代 古生代 中生代 新生代 カンブリア爆発 恐竜 大量絶滅 全球凍結 氷河期 大酸化"],["disaster","自然災害","⚠️",4,["主な自然災害","歴史に残る大災害","身を守る基本"],"災害 地震 津波 火山 台風 洪水 干ばつ 熱波 山火事 竜巻 雷 防災 避難 備え 関東大震災 東日本大震災"],["life","生命","🧬",5,["遺伝暗号表（ほぼすべての生物で共通）","地球の生き物の重さ（炭素量、2018年の推計）"],""],["cell","細胞と遺伝","🔬",5,["細胞のつくり","細胞の分かれ方","遺伝のしくみ","遺伝子を扱う技術"],"細胞 細胞膜 核 ミトコンドリア 葉緑体 リボソーム 原核 真核 細胞分裂 減数分裂 メンデル 遺伝子 染色体 ゲノム 突然変異 PCR CRISPR iPS細胞"],["evolution","進化","🦴",5,["自然選択のしくみ（ダーウィン、1859年『種の起源』）","進化の証拠","生命の大きな出来事","人類の進化"],"進化 ダーウィン 自然選択 化石 共通祖先 種の起源 人類の進化 猿人 原人 ネアンデルタール人 ホモ・サピエンス 出アフリカ"],["taxonomy","生き物の分類","🌳",5,["分類の段階（人の場合）","生命の3つのドメイン","名前のついた種の数（概数）","動物の主なグループ（門）","ウイルスは生き物？"],"分類 ドメイン 界 門 綱 目 科 属 種 学名 細菌 古細菌 真核生物 昆虫 脊椎動物 哺乳類 鳥類 種の数 ウイルス"],["plants","植物と菌類","🌿",5,["光合成","植物の歩み","花と受粉","木と森","人類を養う作物（世界の年間生産量）","菌類（きのこ・かび・酵母）"],"植物 光合成 コケ シダ 裸子植物 被子植物 花 受粉 森林 木 作物 トウモロコシ 小麦 米 菌類 きのこ かび 酵母 菌根 地衣類"],["animals","動物","🐘",5,["動物の記録","人にはない感覚","動物の行動","人と暮らす動物","消えていく動物"],"動物 シロナガスクジラ ゾウ キリン チーター ハヤブサ 記録 感覚 反響定位 渡り 道具 ミツバチ 家畜 絶滅危惧種 レッドリスト"],["ecology","生態系","🐝",5,["食べる・食べられるのつながり","物質のめぐり","地球のおもな生き物の環境（バイオーム）","生き物どうしの関係","生物多様性はなぜ大切か"],"生態系 食物連鎖 食物網 生産者 消費者 分解者 エネルギーピラミッド 炭素循環 窒素循環 バイオーム 熱帯雨林 サンゴ礁 生物多様性 共生 寄生 外来種"],["human","人類（ホモ・サピエンス）","🧍",6,["感覚","どこに住んでいるか（2025年の人口）"],""],["body","人体のしくみ","🫀",6,["器官系の分担","血液","主な臓器","体の中の小さな同居人","体の数字"],"人体 からだ 骨 筋肉 心臓 血液 血管 肺 呼吸 消化 胃 小腸 腎臓 肝臓 皮膚 ホルモン 免疫 腸内細菌 血液型"],["brain","脳と心","🧠",6,["脳の地図","ニューロンのしくみ","記憶","眠りと夢","脳のくせ","意識——最大のなぞ","心の健康"],"脳 大脳 前頭葉 小脳 脳幹 海馬 扁桃体 ニューロン シナプス 記憶 感情 睡眠 夢 意識 心理学 錯視 心の健康"],["health","病気と健康","🩺",6,["世界の死因（2023年）","寿命","病気の原因になる小さな生き物","人類をおそった大流行","病気と戦う道具","健康の基本（多くの研究で一致していること）"],"病気 死因 心臓病 脳卒中 がん 糖尿病 感染症 ウイルス 細菌 マラリア パンデミック 黒死病 スペインかぜ HIV 新型コロナ ワクチン 抗生物質 薬剤耐性 寿命 健康寿命"],["food","食べ物と栄養","🍚",6,["栄養素","味の感じ方","世界の食卓","飢えと食べすぎ","食べ物を安全に"],"栄養 栄養素 炭水化物 脂質 タンパク質 ビタミン ミネラル カロリー 主食 米 小麦 飢餓 食料不安 肥満 食品ロス 水 味覚"],["lifecourse","一生","👶",6,["生まれるまで","大人になるまで","年をとること","寿命の延び","人生の節目","若い国と年をとった国"],"誕生 妊娠 赤ちゃん 成長 思春期 大人 老化 寿命 長寿 死 葬儀 儀式 成人 結婚 人口ピラミッド"],["language","言葉と文字","💬",7,["話す人の多い言語（母語＋第二言語）","言語の家族（語族）","文字の歴史","「地球」をいろいろな文字で","声以外の言葉","感情と身ぶり（多くの文化で共通しやすいもの）"],"言語 言葉 語族 英語 中国語 文字 アルファベット 漢字 ひらがな 楔形文字 ヒエログリフ 手話 消滅危機言語 翻訳 表情 身ぶり ジェスチャー"],["cities","家族・人口・都市","🏙",7,["家族のかたち","人口の歩み","人口の多い国（2025年）","都市","動く人々"],"家族 結婚 人口 人口爆発 出生率 少子化 高齢化 都市 都市化 メガシティ ジャカルタ 東京 移民 国別人口 インド 中国"],["politics","国と政治","🗳",7,["国とは","政治のしくみ","国をこえるしくみ"],"国家 政治 民主主義 選挙 議会 大統領 首相 君主制 憲法 三権分立 国際連合 安全保障理事会 EU ASEAN NATO 国の数 面積"],["law","法とルール","⚖️",7,["法の種類","法の歩み","世界人権宣言の主な内容（全30条）","法の系統","裁判"],"法律 憲法 民法 刑法 国際法 ハンムラビ法典 マグナ・カルタ 世界人権宣言 人権 裁判 推定無罪 大陸法 英米法"],["economy","経済とお金","💰",7,["お金の3つの役割","お金の歴史","値段のきまり方","国の経済の大きさ（GDP、2025年）","会社と市場","豊かさのかたより","税と社会保障：みんなで支えるしくみ"],"経済 お金 通貨 貨幣 紙幣 銀行 中央銀行 金利 インフレ GDP 株式 会社 貿易 格差 貧困 暗号資産 ビットコイン 需要と供給"],["work","仕事と産業","🏭",7,["産業の3つの分け方","仕事の移り変わり","働き方の現実","大きな産業の例"],"仕事 職業 産業 第一次産業 第二次産業 第三次産業 農業 工業 サービス業 労働 雇用 児童労働 自動化 AI 観光"],["education","教育と学問","🎓",7,["学ぶ場所の歴史","いまの世界の教育","学問の地図","ノーベル賞"],"教育 学校 大学 義務教育 識字率 寺子屋 学問 自然科学 社会科学 人文学 ノーベル賞 研究"],["media","メディアと情報社会","📰",7,["メディアの歩み","いまの数字（2026年）","情報社会のしくみと落とし穴","情報を確かめる5つの問い"],"メディア ニュース 新聞 テレビ ラジオ 報道 ジャーナリズム SNS ソーシャルメディア 広告 誤情報 フェイクニュース 報道の自由 アルゴリズム フィルターバブル ディープフェイク 生成AI ファクトチェック 情報リテラシー"],["war","戦争と平和","🕊",7,["なぜ戦争が起きるのか","歴史の中の大きな戦争","いまの数字","平和のためのしくみ"],"戦争 紛争 平和 世界大戦 冷戦 核兵器 軍事費 難民 国連 平和維持活動 条約 ジュネーブ条約 核兵器不拡散条約"],["religion","信仰と宗教","🛐",8,["世界の宗教の割合（2020年）","おもな宗教","宗教が社会でしてきたこと"],"宗教 信仰 神 キリスト教 イスラム教 ヒンドゥー教 仏教 ユダヤ教 シク教 神道 道教 儒教 無宗教 聖書 クルアーン コーラン 祈り 巡礼 寺院 教会 モスク"],["philosophy","哲学と思想","🤔",8,["哲学の分野","今も答えの出ていない大きな問い","おもな思想家"],"哲学 思想 倫理 道徳 善悪 正義 自由意志 意識 心 存在 認識 ソクラテス プラトン アリストテレス 孔子 老子 ブッダ デカルト カント ニーチェ 功利主義 トロッコ問題 実存主義"],["arts","芸術と表現","🖼",8,["芸術の始まり","音楽：音の高さは空気の振動の速さ","文学：物語を書き残す","美術の流れ","演劇と映像","建築：形に残る芸術"],"芸術 美術 音楽 文学 絵画 彫刻 洞窟壁画 手形 演劇 映画 アニメ 漫画 建築 ピラミッド 世界遺産 平均律 440Hz 音階 源氏物語 シェイクスピア 浮世絵 ルネサンス"],["play","遊びとスポーツ","⚽",8,["世界で人気のスポーツ","サッカー・ワールドカップ","オリンピックとパラリンピック","盤の上のゲームと、AI","ビデオゲーム"],"遊び スポーツ サッカー ワールドカップ オリンピック 野球 クリケット バスケットボール 陸上 チェス 囲碁 将棋 ゲーム ビデオゲーム eスポーツ AI ディープ・ブルー アルファ碁 パラリンピック"],["living","衣・食・住と暮らし","🏠",8,["衣：毛の少ない体を守る","食：何をどう食べるか","住：気候と材料で決まる家の形","水・トイレ・電気・台所"],"衣食住 服 衣服 繊維 ポリエステル 綿 食事 主食 米 小麦 トウモロコシ 料理 発酵 調味料 家 住まい スラム 水 トイレ 衛生 電気 料理の燃料 暮らし"],["calendar","暦と時間・祭り","📅",8,["時間の単位のもと","世界の暦","時刻と時差","世界の祭りと祝日"],"暦 カレンダー グレゴリオ暦 うるう年 太陰暦 イスラム暦 旧暦 農暦 元号 令和 西暦 曜日 1週間 時刻 時差 タイムゾーン 協定世界時 UTC うるう秒 原子時計 祭り 祝日 正月 春節 クリスマス ラマダン ディーワーリー"],["tech","技術の歩み","⚙️",9,["大きな転換点","技術はなぜ加速するのか"],"技術 発明 道具 石器 火 農耕 車輪 印刷 蒸気機関 産業革命 電気 コンピュータ インターネット AI イノベーション"],["materials","材料","🧱",9,["材料の歴史","人類は1年にどれだけ作っているか（2024〜2025年）","半導体：髪の毛の1万分の1の部品"],"材料 素材 石 青銅 鉄 鋼鉄 セメント コンクリート アルミニウム 銅 プラスチック ガラス 半導体 シリコン トランジスタ 石器時代 青銅器時代 鉄器時代"],["energy","エネルギー","⚡",9,["何からエネルギーを得ているか（2025年）","電気は急速に変わっている（2025年の発電量）","エネルギーの単位","カルダシェフの尺度で見ると"],"エネルギー 電気 発電 石油 石炭 天然ガス 原子力 再生可能エネルギー 太陽光 風力 水力 カルダシェフ 電力 二酸化炭素 脱炭素 電気自動車"],["transport","乗り物と物流","🚄",9,["乗り物の歩み","速さくらべ","いまの移動と物流"],"乗り物 交通 物流 車輪 馬 船 帆船 鉄道 蒸気機関車 自動車 飛行機 ジェット機 新幹線 高速鉄道 コンテナ船 電気自動車 EV 速さ"],["comms","通信・コンピュータ・AI","📱",9,["通信の歩み","つながる世界（2025年）","コンピュータ","人工知能（AI）"],"通信 電信 電話 ラジオ テレビ インターネット スマートフォン 携帯電話 5G 海底ケーブル 人工衛星 コンピュータ スーパーコンピュータ AI 人工知能 生成AI 機械学習 ChatGPT データ"],["medtech","医療の技術","💉",9,["医療を変えた発見と発明","数字で見る効果と課題"],"医療 医学 ワクチン 天然痘 抗生物質 ペニシリン 麻酔 手術 レントゲン X線 CT MRI 臓器移植 インスリン mRNA ゲノム編集 CRISPR 薬剤耐性 平均寿命"],["agri","農業と食料生産","🌾",9,["農業は世界の各地で別々に始まった","収穫を増やした発明","いまの食料生産"],"農業 農耕 作物 穀物 小麦 米 トウモロコシ サトウキビ 家畜 牧畜 肥料 ハーバー・ボッシュ法 緑の革命 養殖 漁業 食品ロス 飢餓 灌漑"],["space","宇宙開発","🚀",9,["宇宙開発の歩み","いまの宇宙（2025〜2026年）","これからの計画"],"宇宙開発 ロケット 人工衛星 スプートニク ガガーリン アポロ 月面着陸 国際宇宙ステーション ISS 天宮 アルテミス はやぶさ SLIM スターリンク 宇宙ごみ デブリ 宇宙飛行士 ボイジャー"],["history","人類史の流れ","📜",10,["30万年を1日にたとえると","人類のおおまかな流れ","人口の増え方","この200年で変わったこと"],"歴史 人類史 世界史 先史 文明 農耕 都市 人口 寿命 識字率 貧困 産業革命 時代区分"],["ancient","古代：文明と帝国","🏺",10,["最初の文明","古代の帝国と思想","そのころの日本"],"古代 文明 メソポタミア エジプト インダス 黄河 殷 ピラミッド ハンムラビ法典 ペルシャ アレクサンドロス マウリヤ朝 秦 始皇帝 漢 ローマ帝国 シルクロード 縄文 弥生 卑弥呼 マヤ"],["medieval","中世：信仰と交易の時代","🏯",10,["世界の中世","そのころの日本"],"中世 ビザンツ帝国 イスラム帝国 アッバース朝 バグダッド 知恵の館 唐 宋 火薬 羅針盤 印刷 モンゴル帝国 チンギス・ハン 黒死病 ペスト 十字軍 マリ帝国 アンコール アステカ インカ 平安 鎌倉 元寇 オスマン帝国"],["earlymodern","近世：世界がつながる","⛵",10,["大航海の時代","つながった世界が生んだもの","考え方の大きな変化","アジアの大帝国","革命の時代"],"近世 大航海時代 コロンブス バスコ・ダ・ガマ マゼラン 世界一周 コロンブス交換 奴隷貿易 宗教改革 ルター 科学革命 コペルニクス ガリレオ ニュートン ムガル帝国 清 江戸時代 鎖国 啓蒙思想 アメリカ独立 フランス革命 ハイチ革命"],["modern","近代・現代","🏭",10,["産業革命と19世紀","二つの世界大戦","戦後から現代へ"],"近代 現代 産業革命 植民地 帝国主義 明治維新 第一次世界大戦 スペイン風邪 世界恐慌 第二次世界大戦 ホロコースト 原爆 広島 長崎 国際連合 冷戦 独立 脱植民地化 ベルリンの壁 ソ連崩壊 グローバル化 同時多発テロ 新型コロナ ウクライナ"],["issues","いま地球が抱える課題","⚠️",11,["おもな課題と、いまの数字","課題はつながっている"],"課題 問題 気候変動 地球温暖化 二酸化炭素 生物多様性 絶滅 核兵器 戦争 紛争 難民 貧困 飢餓 感染症 薬剤耐性 AI プラスチック 水 高齢化 エネルギー危機"],["sdgs","SDGs：世界の17の目標","🎯",11,["17の目標","どこまで進んだか（2026年の国連の報告）"],"SDGs 持続可能な開発目標 2030アジェンダ 国連 目標 貧困 飢餓 健康 教育 ジェンダー 水 エネルギー 気候 海 陸 平和 パートナーシップ"],["future","これからの人類","🔭",11,["かなり確かな見通し","気候はどこへ向かうか","カルダシェフの尺度で見た人類","まだ「もしも」の技術","とても遠い未来（天文学の予測）"],"未来 将来 予測 人口 高齢化 気候 温暖化 1.5℃ パリ協定 エネルギー転換 核融合 AI 宇宙 月 火星 カルダシェフ Type I 太陽 アンドロメダ"],["msg","私たちが宇宙へ送ったメッセージ","📡",11,[],"メッセージ パイオニア アレシボ ボイジャー 金のレコード 宇宙人 地球外知的生命"],["meet","人類に会ったら","🤝",11,[],"出会い あいさつ 接触 ファーストコンタクト 国連"]]};window.EARTH_URL="earth.html";
+window.EBIDX={"p":[["intro","はじめに","📖"],["number","数・論理・情報","🔢"],["matter","物質とエネルギー","⚛️"],["cosmos","宇宙","🌌"],["earth","地球","🌍"],["life","生命","🧬"],["human","人間","🧍"],["society","社会","🏛"],["culture","文化","🎨"],["tech","技術","⚙️"],["history","歴史","📜"],["now","いま・これから","🔭"]],"c":[["read","このガイドの読み方","📖",0,["この本の組み立て","約束ごと","この画面の使い方"],"使い方 読み方 目次 凡例"],["glance","地球をひと目で","🌏",0,["惑星として","生命として","人類として","地球の1日（平均）"],"概要 まとめ 数字 データ 一日"],["num","数と単位","🔢",1,["素数（1とその数自身でしか割り切れない数）","大切な定数","単位の定義（2019年から、すべて物理定数で決まっている）","大きさを表す接頭辞","数の書き方はいろいろ","時間の単位"],"数字 単位 SI 接頭辞 キロ メガ 10進法 2進法 60進法 万 億 兆"],["math","数学のことば","📐",1,["数の種類","形（幾何学）","変化をとらえる（関数・微分・積分）","無限","有名な定理と、まだ解けていない問題"],"数学 幾何 図形 関数 微分 積分 無限 定理 未解決問題 リーマン予想 ゼロ"],["logic","論理・確率・統計","⚖️",1,["論理の基本","確率（どのくらい起こりやすいか）","統計（たくさんのデータを読む）","科学の方法","人間の思い込みのくせ（認知バイアス）"],"論理学 三段論法 背理法 確率 統計 平均 中央値 正規分布 相関 因果 科学的方法 バイアス 思い込み"],["info","情報とコンピュータ","💻",1,["情報の単位","コンピュータのしくみ","文字を数にする","アルゴリズム（解き方の手順）","暗号","インターネット","人工知能（AI）"],"ビット バイト 2進法 文字コード Unicode CPU トランジスタ アルゴリズム 暗号 インターネット DNS AI 人工知能 機械学習"],["matter","物質のなりたち","⚛️",2,["原子のつくり","元素","同位体","原子どうしのつながり方（化学結合）","物質の状態"],"原子 陽子 中性子 電子 元素 周期表 同位体 化学結合 固体 液体 気体 プラズマ 水"],["chem","化学反応","🧪",2,["反応の例","酸と塩基（pH）","酸化と還元","触媒と酵素","有機化学（炭素の化学）","プラスチック（人が作った高分子）","身近な化学"],"化学 反応式 燃焼 酸 塩基 pH 酸化 還元 触媒 酵素 有機化学 プラスチック 発酵"],["force","力・運動・エネルギー","🍎",2,["ニュートンの運動の3法則（1687年）","重力（万有引力）","いろいろな速さ","エネルギー","熱力学の法則","圧力と浮力","波と音"],"ニュートン 運動の法則 重力 万有引力 エネルギー保存 熱力学 エントロピー 圧力 浮力 波 音 速さ"],["light","光と電気・磁気","💡",2,["電気","磁気と発電","電磁波の仲間（波長の長い順）","光の速さと色","光を使う道具"],"電気 電流 電圧 オームの法則 磁石 電磁誘導 発電機 電磁波 スペクトル 赤外線 紫外線 X線 色 虹 レンズ レーザー"],["relativity","相対性理論と量子の世界","🌀",2,["特殊相対性理論（1905年）","一般相対性理論（1915年）","量子力学（1900〜1920年代〜）","物質の最小の部品（標準模型）"],"アインシュタイン 特殊相対性理論 一般相対性理論 E=mc2 時間の遅れ GPS 重力波 ブラックホール 量子力学 不確定性原理 トンネル効果 量子もつれ 標準模型 ヒッグス"],["addr","私たちの住所","📍",3,["距離の物差し","太陽（私たちの恒星）"],"住所 銀河系 天の川 ラニアケア 局部銀河群 太陽 パルサー 光年"],["solar","太陽系","🪐",3,["8つの惑星","小さな天体","太陽系の外側へ"],"惑星 水星 金星 火星 木星 土星 天王星 海王星 冥王星 準惑星 小惑星 彗星 衛星 月 ボイジャー"],["stars","星の一生","⭐",3,["星が生まれるまで","重さで決まる運命","星の色と温度（スペクトル型）","よく知られた星","星は元素の工場"],"恒星 主系列 赤色巨星 白色矮星 超新星 中性子星 ブラックホール スペクトル型 元素の合成 ベテルギウス シリウス"],["universe","銀河と宇宙の歴史","🌌",3,["宇宙の年表","宇宙は何でできているか","膨らむ宇宙","銀河","これからの宇宙"],"ビッグバン インフレーション 宇宙背景放射 銀河 天の川 アンドロメダ ダークマター ダークエネルギー 膨張 ハッブル 大規模構造 宇宙の未来"],["seti","宇宙の仲間を探す","👽",3,["系外惑星","生命がいるかもしれない場所","どうやって見分けるか","ドレイク方程式とフェルミのパラドックス"],"系外惑星 ハビタブルゾーン TRAPPIST-1 プロキシマ ドレイク方程式 フェルミのパラドックス SETI エウロパ エンケラドゥス タイタン バイオシグネチャー 宇宙人"],["earth","地球という惑星","🌍",4,["空気の成分（乾燥空気）","動き続ける惑星"],""],["rocks","岩石・プレート・地震と火山","🌋",4,["岩石の3つの種類","主なプレート","地震","火山","高い山"],"岩石 鉱物 火成岩 堆積岩 変成岩 プレート 大陸移動 パンゲア 地震 マグニチュード 震度 火山 環太平洋 山 エベレスト"],["weather","大気・天気・気候","⛅",4,["天気のしくみ","雲の種類（10種雲形）","台風・ハリケーン・サイクロン","気候の分け方（ケッペンの気候区分）","エルニーニョとラニーニャ","温室効果","天気の記録"],"天気 気象 風 偏西風 高気圧 低気圧 前線 雲 台風 ハリケーン サイクロン 気候区分 ケッペン エルニーニョ 温室効果"],["ocean","海と水","🌊",4,["地球の水はどこにあるか","5つの大洋","海の流れ","潮の満ち引き","海が地球にしていること","大きな川と湖"],"海 大洋 太平洋 大西洋 塩分 海流 黒潮 深層循環 潮の満ち引き 深海 マリアナ海溝 川 湖 ナイル アマゾン バイカル 淡水"],["earthhist","地球の歴史","🦕",4,["地質時代","5回の大量絶滅","地球の歴史を1年に縮めると"],"地質時代 冥王代 太古代 原生代 古生代 中生代 新生代 カンブリア爆発 恐竜 大量絶滅 全球凍結 氷河期 大酸化"],["disaster","自然災害","⚠️",4,["主な自然災害","歴史に残る大災害","身を守る基本"],"災害 地震 津波 火山 台風 洪水 干ばつ 熱波 山火事 竜巻 雷 防災 避難 備え 関東大震災 東日本大震災"],["life","生命","🧬",5,["遺伝暗号表（ほぼすべての生物で共通）","地球の生き物の重さ（炭素量、2018年の推計）"],""],["cell","細胞と遺伝","🔬",5,["細胞のつくり","細胞の分かれ方","遺伝のしくみ","遺伝子を扱う技術"],"細胞 細胞膜 核 ミトコンドリア 葉緑体 リボソーム 原核 真核 細胞分裂 減数分裂 メンデル 遺伝子 染色体 ゲノム 突然変異 PCR CRISPR iPS細胞"],["evolution","進化","🦴",5,["自然選択のしくみ（ダーウィン、1859年『種の起源』）","進化の証拠","生命の大きな出来事","人類の進化"],"進化 ダーウィン 自然選択 化石 共通祖先 種の起源 人類の進化 猿人 原人 ネアンデルタール人 ホモ・サピエンス 出アフリカ"],["taxonomy","生き物の分類","🌳",5,["分類の段階（人の場合）","生命の3つのドメイン","名前のついた種の数（概数）","動物の主なグループ（門）","ウイルスは生き物？"],"分類 ドメイン 界 門 綱 目 科 属 種 学名 細菌 古細菌 真核生物 昆虫 脊椎動物 哺乳類 鳥類 種の数 ウイルス"],["plants","植物と菌類","🌿",5,["光合成","植物の歩み","花と受粉","木と森","人類を養う作物（世界の年間生産量）","菌類（きのこ・かび・酵母）"],"植物 光合成 コケ シダ 裸子植物 被子植物 花 受粉 森林 木 作物 トウモロコシ 小麦 米 菌類 きのこ かび 酵母 菌根 地衣類"],["animals","動物","🐘",5,["動物の記録","人にはない感覚","動物の行動","人と暮らす動物","消えていく動物"],"動物 シロナガスクジラ ゾウ キリン チーター ハヤブサ 記録 感覚 反響定位 渡り 道具 ミツバチ 家畜 絶滅危惧種 レッドリスト"],["ecology","生態系","🐝",5,["食べる・食べられるのつながり","物質のめぐり","地球のおもな生き物の環境（バイオーム）","生き物どうしの関係","生物多様性はなぜ大切か"],"生態系 食物連鎖 食物網 生産者 消費者 分解者 エネルギーピラミッド 炭素循環 窒素循環 バイオーム 熱帯雨林 サンゴ礁 生物多様性 共生 寄生 外来種"],["human","人類（ホモ・サピエンス）","🧍",6,["感覚","どこに住んでいるか（2025年の人口）"],""],["body","人体のしくみ","🫀",6,["器官系の分担","血液","主な臓器","体の中の小さな同居人","体の数字"],"人体 からだ 骨 筋肉 心臓 血液 血管 肺 呼吸 消化 胃 小腸 腎臓 肝臓 皮膚 ホルモン 免疫 腸内細菌 血液型"],["brain","脳と心","🧠",6,["脳の地図","ニューロンのしくみ","記憶","眠りと夢","脳のくせ","意識——最大のなぞ","心の健康"],"脳 大脳 前頭葉 小脳 脳幹 海馬 扁桃体 ニューロン シナプス 記憶 感情 睡眠 夢 意識 心理学 錯視 心の健康"],["health","病気と健康","🩺",6,["世界の死因（2023年）","寿命","病気の原因になる小さな生き物","人類をおそった大流行","病気と戦う道具","健康の基本（多くの研究で一致していること）"],"病気 死因 心臓病 脳卒中 がん 糖尿病 感染症 ウイルス 細菌 マラリア パンデミック 黒死病 スペインかぜ HIV 新型コロナ ワクチン 抗生物質 薬剤耐性 寿命 健康寿命"],["food","食べ物と栄養","🍚",6,["栄養素","味の感じ方","世界の食卓","飢えと食べすぎ","食べ物を安全に"],"栄養 栄養素 炭水化物 脂質 タンパク質 ビタミン ミネラル カロリー 主食 米 小麦 飢餓 食料不安 肥満 食品ロス 水 味覚"],["lifecourse","一生","👶",6,["生まれるまで","大人になるまで","年をとること","寿命の延び","人生の節目","若い国と年をとった国"],"誕生 妊娠 赤ちゃん 成長 思春期 大人 老化 寿命 長寿 死 葬儀 儀式 成人 結婚 人口ピラミッド"],["language","言葉と文字","💬",7,["話す人の多い言語（母語＋第二言語）","言語の家族（語族）","文字の歴史","「地球」をいろいろな文字で","声以外の言葉","感情と身ぶり（多くの文化で共通しやすいもの）"],"言語 言葉 語族 英語 中国語 文字 アルファベット 漢字 ひらがな 楔形文字 ヒエログリフ 手話 消滅危機言語 翻訳 表情 身ぶり ジェスチャー"],["cities","家族・人口・都市","🏙",7,["家族のかたち","人口の歩み","人口の多い国（2025年）","都市","動く人々"],"家族 結婚 人口 人口爆発 出生率 少子化 高齢化 都市 都市化 メガシティ ジャカルタ 東京 移民 国別人口 インド 中国"],["politics","国と政治","🗳",7,["国とは","政治のしくみ","国をこえるしくみ"],"国家 政治 民主主義 選挙 議会 大統領 首相 君主制 憲法 三権分立 国際連合 安全保障理事会 EU ASEAN NATO 国の数 面積"],["law","法とルール","⚖️",7,["法の種類","法の歩み","世界人権宣言の主な内容（全30条）","法の系統","裁判"],"法律 憲法 民法 刑法 国際法 ハンムラビ法典 マグナ・カルタ 世界人権宣言 人権 裁判 推定無罪 大陸法 英米法"],["economy","経済とお金","💰",7,["お金の3つの役割","お金の歴史","値段のきまり方","国の経済の大きさ（GDP、2025年）","会社と市場","豊かさのかたより","税と社会保障：みんなで支えるしくみ"],"経済 お金 通貨 貨幣 紙幣 銀行 中央銀行 金利 インフレ GDP 株式 会社 貿易 格差 貧困 暗号資産 ビットコイン 需要と供給"],["work","仕事と産業","🏭",7,["産業の3つの分け方","仕事の移り変わり","働き方の現実","大きな産業の例"],"仕事 職業 産業 第一次産業 第二次産業 第三次産業 農業 工業 サービス業 労働 雇用 児童労働 自動化 AI 観光"],["education","教育と学問","🎓",7,["学ぶ場所の歴史","いまの世界の教育","学問の地図","ノーベル賞"],"教育 学校 大学 義務教育 識字率 寺子屋 学問 自然科学 社会科学 人文学 ノーベル賞 研究"],["media","メディアと情報社会","📰",7,["メディアの歩み","いまの数字（2026年）","情報社会のしくみと落とし穴","情報を確かめる5つの問い"],"メディア ニュース 新聞 テレビ ラジオ 報道 ジャーナリズム SNS ソーシャルメディア 広告 誤情報 フェイクニュース 報道の自由 アルゴリズム フィルターバブル ディープフェイク 生成AI ファクトチェック 情報リテラシー"],["war","戦争と平和","🕊",7,["なぜ戦争が起きるのか","歴史の中の大きな戦争","いまの数字","平和のためのしくみ"],"戦争 紛争 平和 世界大戦 冷戦 核兵器 軍事費 難民 国連 平和維持活動 条約 ジュネーブ条約 核兵器不拡散条約"],["religion","信仰と宗教","🛐",8,["世界の宗教の割合（2020年）","おもな宗教","宗教が社会でしてきたこと"],"宗教 信仰 神 キリスト教 イスラム教 ヒンドゥー教 仏教 ユダヤ教 シク教 神道 道教 儒教 無宗教 聖書 クルアーン コーラン 祈り 巡礼 寺院 教会 モスク"],["philosophy","哲学と思想","🤔",8,["哲学の分野","今も答えの出ていない大きな問い","おもな思想家"],"哲学 思想 倫理 道徳 善悪 正義 自由意志 意識 心 存在 認識 ソクラテス プラトン アリストテレス 孔子 老子 ブッダ デカルト カント ニーチェ 功利主義 トロッコ問題 実存主義"],["arts","芸術と表現","🖼",8,["芸術の始まり","音楽：音の高さは空気の振動の速さ","文学：物語を書き残す","美術の流れ","演劇と映像","建築：形に残る芸術"],"芸術 美術 音楽 文学 絵画 彫刻 洞窟壁画 手形 演劇 映画 アニメ 漫画 建築 ピラミッド 世界遺産 平均律 440Hz 音階 源氏物語 シェイクスピア 浮世絵 ルネサンス"],["play","遊びとスポーツ","⚽",8,["世界で人気のスポーツ","サッカー・ワールドカップ","オリンピックとパラリンピック","盤の上のゲームと、AI","ビデオゲーム"],"遊び スポーツ サッカー ワールドカップ オリンピック 野球 クリケット バスケットボール 陸上 チェス 囲碁 将棋 ゲーム ビデオゲーム eスポーツ AI ディープ・ブルー アルファ碁 パラリンピック"],["living","衣・食・住と暮らし","🏠",8,["衣：毛の少ない体を守る","食：何をどう食べるか","住：気候と材料で決まる家の形","水・トイレ・電気・台所"],"衣食住 服 衣服 繊維 ポリエステル 綿 食事 主食 米 小麦 トウモロコシ 料理 発酵 調味料 家 住まい スラム 水 トイレ 衛生 電気 料理の燃料 暮らし"],["calendar","暦と時間・祭り","📅",8,["時間の単位のもと","世界の暦","時刻と時差","世界の祭りと祝日"],"暦 カレンダー グレゴリオ暦 うるう年 太陰暦 イスラム暦 旧暦 農暦 元号 令和 西暦 曜日 1週間 時刻 時差 タイムゾーン 協定世界時 UTC うるう秒 原子時計 祭り 祝日 正月 春節 クリスマス ラマダン ディーワーリー"],["tech","技術の歩み","⚙️",9,["大きな転換点","技術はなぜ加速するのか"],"技術 発明 道具 石器 火 農耕 車輪 印刷 蒸気機関 産業革命 電気 コンピュータ インターネット AI イノベーション"],["materials","材料","🧱",9,["材料の歴史","人類は1年にどれだけ作っているか（2024〜2025年）","半導体：髪の毛の1万分の1の部品"],"材料 素材 石 青銅 鉄 鋼鉄 セメント コンクリート アルミニウム 銅 プラスチック ガラス 半導体 シリコン トランジスタ 石器時代 青銅器時代 鉄器時代"],["energy","エネルギー","⚡",9,["何からエネルギーを得ているか（2025年）","電気は急速に変わっている（2025年の発電量）","エネルギーの単位","カルダシェフの尺度で見ると"],"エネルギー 電気 発電 石油 石炭 天然ガス 原子力 再生可能エネルギー 太陽光 風力 水力 カルダシェフ 電力 二酸化炭素 脱炭素 電気自動車"],["transport","乗り物と物流","🚄",9,["乗り物の歩み","速さくらべ","いまの移動と物流"],"乗り物 交通 物流 車輪 馬 船 帆船 鉄道 蒸気機関車 自動車 飛行機 ジェット機 新幹線 高速鉄道 コンテナ船 電気自動車 EV 速さ"],["comms","通信・コンピュータ・AI","📱",9,["通信の歩み","つながる世界（2025年）","コンピュータ","人工知能（AI）"],"通信 電信 電話 ラジオ テレビ インターネット スマートフォン 携帯電話 5G 海底ケーブル 人工衛星 コンピュータ スーパーコンピュータ AI 人工知能 生成AI 機械学習 ChatGPT データ"],["medtech","医療の技術","💉",9,["医療を変えた発見と発明","数字で見る効果と課題"],"医療 医学 ワクチン 天然痘 抗生物質 ペニシリン 麻酔 手術 レントゲン X線 CT MRI 臓器移植 インスリン mRNA ゲノム編集 CRISPR 薬剤耐性 平均寿命"],["agri","農業と食料生産","🌾",9,["農業は世界の各地で別々に始まった","収穫を増やした発明","いまの食料生産"],"農業 農耕 作物 穀物 小麦 米 トウモロコシ サトウキビ 家畜 牧畜 肥料 ハーバー・ボッシュ法 緑の革命 養殖 漁業 食品ロス 飢餓 灌漑"],["space","宇宙開発","🚀",9,["宇宙開発の歩み","いまの宇宙（2025〜2026年）","これからの計画"],"宇宙開発 ロケット 人工衛星 スプートニク ガガーリン アポロ 月面着陸 国際宇宙ステーション ISS 天宮 アルテミス はやぶさ SLIM スターリンク 宇宙ごみ デブリ 宇宙飛行士 ボイジャー"],["history","人類史の流れ","📜",10,["30万年を1日にたとえると","人類のおおまかな流れ","人口の増え方","この200年で変わったこと"],"歴史 人類史 世界史 先史 文明 農耕 都市 人口 寿命 識字率 貧困 産業革命 時代区分"],["ancient","古代：文明と帝国","🏺",10,["最初の文明","古代の帝国と思想","そのころの日本"],"古代 文明 メソポタミア エジプト インダス 黄河 殷 ピラミッド ハンムラビ法典 ペルシャ アレクサンドロス マウリヤ朝 秦 始皇帝 漢 ローマ帝国 シルクロード 縄文 弥生 卑弥呼 マヤ"],["medieval","中世：信仰と交易の時代","🏯",10,["世界の中世","そのころの日本"],"中世 ビザンツ帝国 イスラム帝国 アッバース朝 バグダッド 知恵の館 唐 宋 火薬 羅針盤 印刷 モンゴル帝国 チンギス・ハン 黒死病 ペスト 十字軍 マリ帝国 アンコール アステカ インカ 平安 鎌倉 元寇 オスマン帝国"],["earlymodern","近世：世界がつながる","⛵",10,["大航海の時代","つながった世界が生んだもの","考え方の大きな変化","アジアの大帝国","革命の時代"],"近世 大航海時代 コロンブス バスコ・ダ・ガマ マゼラン 世界一周 コロンブス交換 奴隷貿易 宗教改革 ルター 科学革命 コペルニクス ガリレオ ニュートン ムガル帝国 清 江戸時代 鎖国 啓蒙思想 アメリカ独立 フランス革命 ハイチ革命"],["modern","近代・現代","🏭",10,["産業革命と19世紀","二つの世界大戦","戦後から現代へ"],"近代 現代 産業革命 植民地 帝国主義 明治維新 第一次世界大戦 スペイン風邪 世界恐慌 第二次世界大戦 ホロコースト 原爆 広島 長崎 国際連合 冷戦 独立 脱植民地化 ベルリンの壁 ソ連崩壊 グローバル化 同時多発テロ 新型コロナ ウクライナ"],["issues","いま地球が抱える課題","⚠️",11,["おもな課題と、いまの数字","課題はつながっている"],"課題 問題 気候変動 地球温暖化 二酸化炭素 生物多様性 絶滅 核兵器 戦争 紛争 難民 貧困 飢餓 感染症 薬剤耐性 AI プラスチック 水 高齢化 エネルギー危機"],["sdgs","SDGs：世界の17の目標","🎯",11,["17の目標","どこまで進んだか（2026年の国連の報告）"],"SDGs 持続可能な開発目標 2030アジェンダ 国連 目標 貧困 飢餓 健康 教育 ジェンダー 水 エネルギー 気候 海 陸 平和 パートナーシップ"],["future","これからの人類","🔭",11,["かなり確かな見通し","気候はどこへ向かうか","カルダシェフの尺度で見た人類","まだ「もしも」の技術","とても遠い未来（天文学の予測）"],"未来 将来 予測 人口 高齢化 気候 温暖化 1.5℃ パリ協定 エネルギー転換 核融合 AI 宇宙 月 火星 カルダシェフ Type I 太陽 アンドロメダ"],["msg","私たちが宇宙へ送ったメッセージ","📡",11,[],"メッセージ パイオニア アレシボ ボイジャー 金のレコード 宇宙人 地球外知的生命"],["meet","人類に会ったら","🤝",11,[],"出会い あいさつ 接触 ファーストコンタクト 国連"]]};
 /* ---------- 宇宙12段階・ミクロ11段階の「くわしく」 ---------- */
 window.LVINFO={
 // ===== 宇宙 =====
@@ -9766,7 +9947,7 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
     brv(id){goHash("space-map");later(()=>SPZ.goBr(id),320);},
     micro(k,v){goHash("micro");later(()=>MICRO.open(k,v),220);},
     law(tab,sel,idx){goHash("laws");later(()=>{LAWS_TAB(tab);let el=null;if(sel)el=document.querySelector(sel);else if(idx)el=document.querySelectorAll(idx[0])[idx[1]];if(!el)return;if(sel)el.click();el.scrollIntoView({block:"center",behavior:"smooth"});flash(el);});},
-    book(id){location.href=(window.EARTH_URL||"earth.html")+"#"+id;},
+    book(id){location.hash="eb-"+id;},
     view(h){goHash(h);later(()=>window.scrollTo({top:0,behavior:"smooth"}),60);},
     tg(k){goHash("overview");later(()=>{window.TG_SHOW&&TG_SHOW(k);const el=$("tguide");el.scrollIntoView({behavior:"smooth",block:"start"});flash(el);});},
     era(i){later(()=>{KSET(i);window.KSHELL&&KSHELL.flashEra();},10);},
@@ -9777,10 +9958,10 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
   const fy=y=>typeof y!=="number"?"":y<=-10000?`約${Math.round(-y/1e4).toLocaleString()}万年前`:y<0?`紀元前${-y}年`:`${y}年`;
   function build(){IDX=[];const add=(k,t,s,txt,fn,y)=>{const nt=norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,""));IDX.push({k,t:String(t),s:s||"",nt,nb:norm(String(t).replace(/[\u{1F1E6}-\u{1F1FF}]/gu,"").replace(/（.*?）|\(.*?\)/g,"")),h:norm((t||"")+" "+(s||"")+" "+(txt||"")),fn,y});};
     const T=(f)=>{try{f();}catch(e){console.warn("search index",e);}};
-    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（分野別）","17分野・約1,400要素の系譜（分野ごとに独立。未来は5つの世界線＋SFノート）"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド（別の画面）"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
+    T(()=>[["overview","全体マップ","12分野の現在地・文明タイプ・ガイド"],["timeline","年表（宇宙・地球・世界史）","ブランチ表示の3つの年表と3Dシアター"],["space-map","宇宙","12段階の宇宙ズーム"],["world-map","世界地図","国・ランドマーク・世界遺産・3Dの風景"],["micro","ミクロの世界","細胞から超ひもまで11段階"],["lineage","系統樹（分野別）","17分野・約1,400要素の系譜（分野ごとに独立。未来は5つの世界線＋SFノート）"],["laws","宇宙の法則","4つの力・公式・素粒子・周期表・分子・未解決問題"],["earth-book","地球大全","宇宙人のための地球ガイド"]].forEach(([h,t,s])=>add("view",t,s,"",()=>go.view(h))));
     T(()=>{add("view","歴史シアター（3D）","年表の中の3D映像で通し再生","シアター 映像 再生",()=>{goHash("timeline");later(()=>{const d=$("thdock");if(d){d.open=true;d.scrollIntoView({behavior:"smooth"});}});});});
-    // 地球大全は別の画面（earth.html）。章と見出しから探し、押すとその画面の該当箇所を開く
-    T(()=>{const X=window.EBIDX;if(!X)return;X.c.forEach(([id,t,ic,pi,hs,k])=>{const P=X.p[pi]||["","",""];add("book",t,`${P[1]}の章（別の画面）`,hs.join(" ")+" "+(k||""),()=>go.book(id));hs.forEach((h,j)=>add("book",h,`「${t}」の見出し`,"",()=>go.book(id+"."+(j+1))));});});
+    // 地球大全（⑥のページ）の章と見出し。押すとその章・見出しを開く（#eb-章 / #eb-章.番号）
+    T(()=>{const X=window.EBIDX;if(!X)return;X.c.forEach(([id,t,ic,pi,hs,k])=>{const P=X.p[pi]||["","",""];add("book",t,`${P[1]}の章`,hs.join(" ")+" "+(k||""),()=>go.book(id));hs.forEach((h,j)=>add("book",h,`「${t}」の見出し`,"",()=>go.book(id+"."+(j+1))));});});
     T(()=>[["t1","Type I 文明ガイド（惑星文明）"],["t2","Type II 文明ガイド（恒星文明）"],["t3","Type III 文明ガイド（銀河文明）"]].forEach(([k,t])=>add("view",t,"全体マップ・想定の世界","タイプ カルダシェフ 文明",()=>go.tg(k))));
     T(()=>(window.KSTAGES||[]).forEach((st,i)=>add("era",st[2],`時代（スライダー）・${st[1]}`,st[7]||"",()=>go.era(i))));
     T(()=>FIELDS.forEach(f=>add("field",f.t,`分野・${f.v}（${f.l}）`,f.lead+" "+f.pts.join(" "),()=>go.field(f.id))));
@@ -9816,7 +9997,7 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
   const SUG=["地球大全","ビッグバン","恐竜","ピラミッド","産業革命","アポロ","日本","水","金","ヒッグス粒子","シロナガスクジラ","ブラックホール","ダイソン球","未解決問題"];
   function render(){const str=q.value;fil.innerHTML=FIL.map(([k,n])=>`<button class="chip" data-f="${k}" aria-pressed="${curF===k}">${n}</button>`).join("");
     if(!str.trim()){res.innerHTML=`<div class="sxsug"><b>試しに検索：</b>${SUG.map(s=>`<button class="chip" data-s="${s}">${s}</button>`).join("")}</div>`;cur=[];$("sxcount").textContent=IDX?`索引 ${IDX.length.toLocaleString()}件`:"";return;}
-    cur=search(str);if(window.EBIDX)cur.push({k:"book",t:`「${str.trim()}」を地球大全の本文から探す`,s:"別の画面で、全章の本文を検索",fn:()=>{location.href=(window.EARTH_URL||"earth.html")+"?q="+encodeURIComponent(str.trim());}});ai=Math.min(ai,Math.max(0,cur.length-1));
+    cur=search(str);if(window.EBIDX)cur.push({k:"book",t:`「${str.trim()}」を地球大全の本文から探す`,s:"全章の本文を検索して、見つかった場所を並べる",fn:()=>{location.hash="eb-q="+encodeURIComponent(str.trim());}});ai=Math.min(ai,Math.max(0,cur.length-1));
     $("sxcount").textContent=`${cur.length>80?"80+":Math.max(0,cur.length-(window.EBIDX?1:0))}件`;
     res.innerHTML=cur.length?cur.map((it,i)=>`<button class="sxr${i===ai?" on":""}" role="option" aria-selected="${i===ai}" data-i="${i}"><span class="sxk" title="${KIND[it.k][1]}">${KIND[it.k][0]}</span><span class="sxt"><b>${hl(it.t,str)}</b><small>${KIND[it.k][1]}・${esc(it.s)}</small></span><span class="sxgo">↵</span></button>`).join(""):`<div class="sxnone">「${esc(str)}」は見つかりませんでした。ひらがな・カタカナ・漢字を変えるか、短い言葉で試してください。</div>`;}
   function open(){sx.hidden=false;document.body.classList.add("sxopen");if(!IDX)build();q.select();render();setTimeout(()=>q.focus(),20);}
@@ -9833,12 +10014,12 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
   // ---- 使い方・ショートカット ----
   const HELP=()=>`<h3>使い方</h3>
     <ol class="hxsteps"><li><b>時代を選ぶ</b>：画面上の「時代バー」（スマホは上の時代ボタン）で、宇宙誕生（138億年前）からType IV（約10億年後・構想）まで選べます。すべてのページがその時代の姿に変わります。つまみのドラッグ、‹ › ボタン、時代名を押して出る一覧のどれでも選べます。</li>
-    <li><b>見方を選ぶ</b>：左のメニュー（スマホは画面下のタブ）で「全体マップ・年表・宇宙/地球/ミクロ・系統樹・宇宙の法則」を切り替えます。</li>
+    <li><b>見方を選ぶ</b>：左のメニュー（スマホは画面下のタブ）で「全体マップ・年表・宇宙/地球/ミクロ・系統樹・宇宙の法則・地球大全」を切り替えます。</li>
     <li><b>図を動かす</b>：年表・系統樹・地図・3Dは、どのページでも図の上に同じ操作バーがあります。左がそのページの切り替え、右が −・＋・全体・<span class="hxfs">⤢</span>（全画面）。ドラッグで移動、ホイール（スマホは2本指のピンチ）でも拡大縮小できます。</li><li><b>詳細を読む</b>：出来事・国・要素などを押すと、PCでは画面の右、スマホでは画面の下に詳細パネルが出ます。× か Esc で閉じます（スマホは上下にスワイプで広げる／たたむ）。宇宙・ミクロの「いま見ているもの」は、図の操作バーの「詳細」で出す／しまうを切り替えます（しまうと図の下に出ます）。</li>
     <li><b>なんでも検索</b>：🔍（<kbd>/</kbd>キー）で、出来事・国・元素・生き物・天体など約${(IDX||[]).length.toLocaleString()}件から探して、その場所へ飛べます。</li>
-    <li><b>地球の外から来た方へ</b>：まず「地球大全」（別の画面。PCは左のメニューの下、スマホは上の📘）を読むと、地球と人類の全体像がつかめます。数・物質・宇宙・地球・生命・人間・社会・文化・技術・歴史を${window.EBIDX?EBIDX.c.length:""}章で説明しています。</li></ol>
+    <li><b>地球の外から来た方へ</b>：まず「地球大全」（左のメニューの6番目、スマホは下のタブ）を読むと、地球と人類の全体像がつかめます。数・物質・宇宙・地球・生命・人間・社会・文化・技術・歴史を${window.EBIDX?EBIDX.c.length:""}章で説明しています。</li></ol>
     <h3 class="hx-kbd">キーボード</h3><table class="ltable hxkeys hx-kbd"><tbody>
-    <tr><th><kbd>/</kbd> または <kbd>Ctrl</kbd>+<kbd>K</kbd></th><td>全体検索</td></tr><tr><th><kbd>1</kbd>〜<kbd>5</kbd></th><td>ページを切り替え（1＝全体マップ … 5＝宇宙の法則）</td></tr><tr><th><kbd>B</kbd></th><td>地球大全（別の画面）を開く</td></tr>
+    <tr><th><kbd>/</kbd> または <kbd>Ctrl</kbd>+<kbd>K</kbd></th><td>全体検索</td></tr><tr><th><kbd>1</kbd>〜<kbd>6</kbd></th><td>ページを切り替え（1＝全体マップ … 6＝地球大全）</td></tr><tr><th><kbd>←</kbd> <kbd>→</kbd>（地球大全）</th><td>前／次の章</td></tr>
     <tr><th><kbd>[</kbd> <kbd>]</kbd></th><td>ひとつ前／次の時代へ</td></tr><tr><th><kbd>0</kbd></th><td>現在（2026年）に戻る</td></tr><tr><th><kbd>←</kbd> <kbd>→</kbd></th><td>時代バーを選んでいるとき：前／次の時代</td></tr><tr><th><kbd>F</kbd></th><td>図・地図・3Dを全画面に（もう一度押すと戻る）</td></tr><tr><th><kbd>?</kbd></th><td>この使い方を開く</td></tr><tr><th><kbd>Esc</kbd></th><td>閉じる（検索・全画面・時代の一覧・詳細パネル）</td></tr></tbody></table>
     <h3>記号の意味</h3><table class="ltable hxkeys"><tbody>
     <tr><th><span class="hxstar">★</span></th><td>年表：その出来事専用の3D映像がある</td></tr><tr><th><span class="hxdot"></span></th><td>年表：ふつうの出来事（3Dは時代と地域の風景）</td></tr>
@@ -9854,14 +10035,13 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
     if(typing(e)||e.ctrlKey||e.metaKey||e.altKey||!sx.hidden)return;
     if(e.key==="/"){e.preventDefault();open();}
     else if(e.key==="?"){e.preventDefault();hx.hidden?help():(hx.hidden=true);}
-    else if(/^[1-5]$/.test(e.key)){const v=VIEWS[+e.key-1];if(v){location.hash=v[0];}}
-    else if(e.key==="b"||e.key==="B"){location.href=window.EARTH_URL||"earth.html";}
+    else if(/^[1-6]$/.test(e.key)){const v=VIEWS[+e.key-1];if(v){location.hash=v[0];}}
     else if(e.key==="["){$("kprev")?.click();}else if(e.key==="]"){$("knext")?.click();}else if(e.key==="0"){$("know")?.click();}
   });
   // ---- はじめての人へ ----
   let seen=false;try{seen=localStorage.getItem("kmap.hello")==="1";}catch(e){}
   const head=document.querySelector("#v-overview .view-head");
-  if(!seen&&head){head.insertAdjacentHTML("afterend",`<div class="hello" id="hello"><div><b>はじめての方へ</b><span>① <span class="pc-only">上の時代バー</span><span class="sp-only">上の時代ボタン</span>で、宇宙誕生〜Type IVまで時代を選ぶ　② <span class="pc-only">左のメニュー</span><span class="sp-only">下のタブ</span>でページを切り替える　③ 🔍（<kbd>/</kbd> キー）で何でも検索　─　地球の外から来た方は「地球大全」からどうぞ。</span></div><div class="hellob"><a class="chip" href="earth.html" data-h="book">📘 地球大全を読む（別の画面）</a><button class="chip" data-h="help">使い方</button><button class="chip" data-h="x">閉じる</button></div></div>`);
+  if(!seen&&head){head.insertAdjacentHTML("afterend",`<div class="hello" id="hello"><div><b>はじめての方へ</b><span>① <span class="pc-only">上の時代バー</span><span class="sp-only">上の時代ボタン</span>で、宇宙誕生〜Type IVまで時代を選ぶ　② <span class="pc-only">左のメニュー</span><span class="sp-only">下のタブ</span>でページを切り替える　③ 🔍（<kbd>/</kbd> キー）で何でも検索　─　地球の外から来た方は「地球大全」からどうぞ。</span></div><div class="hellob"><a class="chip" href="#earth-book" data-h="book">📘 地球大全を読む</a><button class="chip" data-h="help">使い方</button><button class="chip" data-h="x">閉じる</button></div></div>`);
     $("hello").addEventListener("click",e=>{const b=e.target.closest("[data-h]");if(!b)return;const k=b.dataset.h;if(k==="help")help();if(k==="x"){$("hello").remove();try{localStorage.setItem("kmap.hello","1");}catch(e){}}});}
 })();
 
@@ -9889,17 +10069,14 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
     {id:"timeline",n:"02",t:"年表",s:"宇宙・地球史・世界史",ic:"tl",tab:"年表",sub:[["tl:cosmos","宇宙"],["tl:earth","地球史"],["tl:hist","世界史"]]},
     {id:"space-map",n:"03",t:"宇宙・地球・ミクロ",s:"スケールを行き来する",ic:"sp",tab:"宇宙・地球",also:["world-map","micro"],sub:[["space-map","宇宙"],["world-map","世界地図"],["micro","ミクロ"]]},
     {id:"lineage",n:"04",t:"系統樹",s:"17分野・約1,600要素",ic:"tr",tab:"系統樹"},
-    {id:"laws",n:"05",t:"宇宙の法則",s:"力・素粒子・元素",ic:"lw",tab:"法則"}];
-  const TITLE={overview:"全体マップ",timeline:"年表","space-map":"宇宙と地球","world-map":"世界地図",micro:"ミクロの世界",lineage:"系統樹",laws:"宇宙の法則"};
+    {id:"laws",n:"05",t:"宇宙の法則",s:"力・素粒子・元素",ic:"lw",tab:"法則"},
+    {id:"earth-book",n:"06",t:"地球大全",s:`この世のしくみ${window.EBIDX?EBIDX.c.length:""}章`,ic:"bk",tab:"地球大全"}];
+  const TITLE={overview:"全体マップ",timeline:"年表","space-map":"宇宙と地球","world-map":"世界地図",micro:"ミクロの世界",lineage:"系統樹",laws:"宇宙の法則","earth-book":"地球大全"};
   const groupOf=id=>NAV.find(v=>v.id===id||(v.also||[]).includes(id));
   const side=$("views"), tabbar=$("tabbar");
   side.innerHTML=NAV.map(v=>`<a class="sn" href="#${v.id}" data-v="${v.id}"><span class="sni">${IC[v.ic]}</span><span class="snt"><b>${v.t}</b><small>${v.s}</small></span><span class="snr">${v.tab}</span><span class="snn num">${v.n}</span></a>`+
     (v.sub?`<div class="snsub" data-for="${v.id}">${v.sub.map(([k,t])=>`<a href="#${k.startsWith("tl:")?"timeline":k}" data-sub="${k}">${t}</a>`).join("")}</div>`:"")).join("");
   tabbar.innerHTML=NAV.map(v=>`<a class="tb" href="#${v.id}" data-v="${v.id}">${IC[v.ic]}<span>${v.tab}</span></a>`).join("");
-  // 地球大全は別の画面（earth.html）。PCは左のメニューの下、スマホは上のバーの📘から開く
-  {const EU=window.EARTH_URL||"earth.html",N=window.EBIDX?EBIDX.c.length:0;
-   side.insertAdjacentHTML("afterend",`<div class="sidebook"><span class="sbh">資料（別の画面）</span><a class="sn sn-book" href="${EU}" aria-label="地球大全を別の画面で開く"><span class="sni">${IC.bk}</span><span class="snt"><b>地球大全</b><small>この世のしくみ・全${N}章</small></span><span class="snr">地球大全</span><span class="snn" aria-hidden="true">↗</span></a></div>`);
-   const tb=$("topbar");const sb=tb&&tb.querySelector('[data-act="search"]');if(sb)sb.insertAdjacentHTML("afterend",`<a class="ibtn" href="${EU}" aria-label="地球大全を開く（別の画面）" title="地球大全">${IC.bk}</a>`);}
   side.addEventListener("click",e=>{const a=e.target.closest("[data-sub^='tl:']");if(!a)return;e.preventDefault();const m=a.dataset.sub.slice(3);
     const go=()=>{window.TL_SET&&TL_SET(m);syncSub();};if(location.hash!=="#timeline"){location.hash="timeline";setTimeout(go,60);}else go();});
   let curView=null;
@@ -10035,6 +10212,1283 @@ window.toMapFromMicro=()=>{const v=document.getElementById("veil");v.textContent
 
   window.KSHELL={onView,openEra,closeEra,flashEra,toggleFs,syncSheets,isMobile:isM};
   setSticky();
+})();
+
+/* ---------- 地球大全：章の部品（表・棒グラフ・図・リンク）と、部・章の登録 ----------
+   章のファイル（eb_p*.js）は EB.part(...) で部を始め、EB.add({...}) で章を足す。並びは足した順。
+   文明マップのほかのページへは EB.map("timeline","年表で見る")、ほかの章へは EB.see("energy","エネルギーの章へ") と書く。
+   地球大全は文明マップ（index.html）の中のページなので、どちらも同じページの中の # リンクになる。 */
+window.EB=(function(){
+  const MAP="";
+  const parts=[],chapters=[];
+  // 棒グラフ：[名前, 値, 色, 補足]
+  const bar=(rows,unit="",max)=>{const m=max||Math.max(...rows.map(r=>typeof r[1]==="number"?r[1]:0));return `<div class="ebbars">${rows.map(([n,v,c,note])=>`<div class="ebbar"><span class="ebbn">${n}</span><span class="ebbt"><i style="width:${typeof v==="number"?Math.max(.6,v/m*100):0}%;background:${c||"var(--accent)"}"></i></span><span class="ebbv num">${typeof v==="number"?v.toLocaleString():v}${unit}${note?`<small>${note}</small>`:""}</span></div>`).join("")}</div>`;};
+  // 表：見出し行なしのときは1列目を見出しにする。列の数をクラス（c3 など）に入れ、スマホでは4列以上を横スクロールにする
+  const tbl=(rows,head)=>`<div class="ebscroll"><table class="ltable ebt c${(head||rows[0]||[]).length}">${head?`<thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`:""}<tbody>${rows.map(r=>`<tr>${r.map((c,i)=>i===0&&!head?`<th>${c}</th>`:`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  const fig=(svg,cap)=>`<figure class="ebfig">${svg}<figcaption>${cap}</figcaption></figure>`;
+  const dots=n=>`<span class="ebdots">${"●".repeat(n)}</span>`;
+  // 地図アプリへ／ほかの章へ
+  const map=(hash,label)=>`<a class="ebmap" href="${MAP}#${hash}"><span aria-hidden="true">🗺</span>${label}</a>`;
+  const see=(id,label)=>`<a class="ebsee" href="#eb-${id}">${label}</a>`;
+  // カード：[見出し, 本文, 色]
+  const cards=(items,min=200)=>`<div class="ebcards" style="--min:${min}px">${items.map(([t,b,c])=>`<div class="ebcard"${c?` style="--c:${c}"`:""}><b>${t}</b><p>${b}</p></div>`).join("")}</div>`;
+  // 流れ：A → B → C
+  const flow=items=>`<div class="ebflow">${items.map(x=>`<span>${x}</span>`).join('<i aria-hidden="true">→</i>')}</div>`;
+  const note=(t,kind="")=>`<div class="ebnote ${kind}">${t}</div>`;
+  const src=t=>`<p class="ebsrc">出典・注：${t}</p>`;
+  const links=(...a)=>`<div class="eblinks">${a.join("")}</div>`;
+  let curPart=null;
+  return {MAP,parts,chapters,bar,tbl,fig,dots,map,see,cards,flow,note,src,links,
+    part(id,t,ic,desc){curPart={id,t,ic,desc,ch:[]};parts.push(curPart);},
+    add(c){if(!curPart)throw new Error("EB.part が先");c.part=curPart.id;c.n=chapters.length;chapters.push(c);curPart.ch.push(c);}};
+})();
+
+/* 序：はじめに */
+(function(){
+  const {bar,tbl,fig,dots,map,see,cards,flow,note,src,links}=EB;
+  EB.part("intro","はじめに","📖","このガイドの読み方と、地球をひと目で知るための数字。");
+
+  EB.add({id:"read",ic:"📖",t:"このガイドの読み方",k:"使い方 読み方 目次 凡例",h:`
+    <p class="eblead">これは、地球の外から来た知的存在が「地球とは何か、人類とは何か」を理解するための手引きです。数と物質から始めて、宇宙・地球・生命・人間・社会・文化・技術・歴史の順に、この世界のしくみを説明します。</p>
+    <h4>この本の組み立て</h4>
+    ${cards([
+      ["序 はじめに","読み方と、地球をひと目で知る数字","#9aa6c2"],
+      ["第1部 数・論理・情報","宇宙のどこでも通じる言葉。数学・確率・コンピュータ","#7fb2ff"],
+      ["第2部 物質とエネルギー","原子・化学反応・力・光・相対性理論と量子","#6fd3c7"],
+      ["第3部 宇宙","住所・太陽系・星の一生・銀河・宇宙の仲間探し","#b48cff"],
+      ["第4部 地球","岩石とプレート・大気と天気・海・地球の歴史・災害","#5fa8e8"],
+      ["第5部 生命","細胞と遺伝・進化・分類・植物と動物・生態系","#8fd16a"],
+      ["第6部 人間","体・脳と心・病気と健康・食べ物・一生","#ff8f8f"],
+      ["第7部 社会","言葉・都市・国と政治・法・経済・仕事・教育・メディア・戦争と平和","#f4b942"],
+      ["第8部 文化","宗教・哲学・芸術・遊び・衣食住・暦と祭り","#e6a0c4"],
+      ["第9部 技術","材料・エネルギー・乗り物・通信・医療・農業・宇宙開発","#c99cf2"],
+      ["第10部 歴史","人類30万年の流れ。古代・中世・近代・現代","#d8b48a"],
+      ["第11部 いま・これから","課題・持続可能な開発・未来・宇宙へのメッセージ","#6fd2a0"]],220)}
+    <h4>約束ごと</h4>
+    ${tbl([["数","10進法（指が10本だから）。ここでは算用数字（0123456789）で書く。大きな数は「万（10⁴）・億（10⁸）・兆（10¹²）」でも書く"],["単位","国際単位系（SI）。すべて、宇宙のどこでも同じ物理定数で定義されている（"+see("num","数と単位")+"）"],["日付","西暦（グレゴリオ暦）。「2026年」は、ある宗教の創始者の生年とされた年から数えた年数。紀元前は「前」と書く"],["「約」","測定値や推計には誤差がある。年によって変わる数字には、年と出典を添えた（各章の終わりの「出典・注」）"],["未来の表記","2027年より後は予測・目標・想像。事実とは区別して「（予測）」「（もしも）」と書く"]])}
+    <h4>この画面の使い方</h4>
+    <ul><li><b>目次：</b>本文の上の「目次」を押すと、部ごとに全部の章が並ぶ。</li><li><b>検索：</b>目次の横の検索欄で、全章の本文から言葉を探せる。見つかった言葉は本文の中で光る。画面の上の🔍（<kbd>/</kbd>キー）なら、年表・国・元素など文明マップ全体から探せる。</li><li><b>章の中の見出し：</b>題名の下（広い画面では右）の一覧から飛べる。</li><li><b>前後の章：</b>章の終わりのボタン、またはキーボードの <kbd>←</kbd> <kbd>→</kbd>。</li><li><b>ほかのページ：</b>このガイドは「カルダシェフ文明マップ」の6番目のページ。年表・宇宙の地図・系統樹・元素などの図は、左のメニュー（スマホは下のタブ）から。本文の中の 🗺 のボタンでも、関係する図へ移れる。</li></ul>
+    ${links(map("overview","文明マップ（全体マップ）"),map("timeline","年表で見る"),map("laws","宇宙の法則で見る"))}`});
+
+  EB.add({id:"glance",ic:"🌏",t:"地球をひと目で",k:"概要 まとめ 数字 データ 一日",h:`
+    <p class="eblead">細かい話の前に、地球と人類の「いま」を数字で見ておきます。どの数字も、あとの章でくわしく説明します。</p>
+    <h4>惑星として</h4>
+    ${tbl([["場所","太陽系の3番目の惑星。太陽から約1億5,000万km（光で約8分20秒）"],["大きさ","半径6,371km、表面積約5.1億km²（71%が海）"],["年齢","約45.4億年。生命は約38億年前から"],["衛星","月が1つ（約38万km先）"],["気温","平均約15℃。記録は最高56.7℃・最低−89.2℃"]])}
+    <h4>生命として</h4>
+    ${tbl([["名前のついた種","約200万種。実際は約870万種（真核生物）と推定"],["生き物の重さ（炭素）","約550Gt。8割以上が植物"],["絶滅のおそれ","評価された約17.3万種のうち約4.9万種（IUCN、2025年）"]])}
+    <h4>人類として</h4>
+    ${tbl([["人口","約82.5億人（2025年）。1日に約36万人生まれ、約17万人亡くなる"],["国","国連加盟国193か国。言語は約7,100"],["寿命","世界平均73.3歳（2023年）"],["都市","都市に住む人は約45%、町を含めると約58%（2025年、国連の新しい定義）"],["経済","世界のGDP 約117兆ドル（2025年）"],["エネルギー","年に600EJ超（2025年）。平均すると約19兆W。86%が石油・石炭・天然ガス"],["つながり","約60億人（74%）がインターネットを使う（2025年）"]])}
+    <h4>地球の1日（平均）</h4>
+    ${tbl([["生まれる人","約36万人"],["亡くなる人","約17万人（差し引き約19万人ずつ増える）"],["雷","約380万回（1秒に約44回）"],["地震","観測網が位置を決めるものだけで約55回。大きな被害を出す地震は年に十数回"],["飛行機の便","約10万便（貨物便を含む）"],["太陽から届く光","約1.5×10²² J。人類が1年に使うエネルギーの約25倍が、1日で届く"]],["1日に起きること","数"])}
+    ${note("太陽から地球に届くエネルギーは約17万3,000兆W（大気の上端）。人類が使うエネルギー（約19兆W）のおよそ9,000倍です。カルダシェフの尺度では、人類の文明は Type 0.73 前後にあたります（"+see("future","これからの人類")+"）。","cool")}
+    ${src("国連「World Population Prospects 2024」「World Urbanization Prospects 2025」、WHO「Global Health Estimates」（2023年）、IUCNレッドリスト（2025年10月）、IMF「World Economic Outlook」（2026年10月）、Energy Institute「Statistical Review of World Energy 2026」、ITU（2025年）、NASA（雷の観測）、USGS（地震）。1日あたりの数は年の値を365で割った概数。")}
+    ${links(map("overview","全体マップで見る"),map("world-map","世界地図で見る"))}`});
+})();
+
+/* 第1部：数・論理・情報 */
+(function(){
+  const {bar,tbl,fig,dots,map,see,cards,flow,note,src,links}=EB;
+  EB.part("number","数・論理・情報","🔢","宇宙のどこでも通じる言葉。数・単位・数学・論理・確率・情報とコンピュータ。");
+
+  EB.add({id:"num",ic:"🔢",t:"数と単位",k:"数字 単位 SI 接頭辞 キロ メガ 10進法 2進法 60進法 万 億 兆",h:`
+    <p class="eblead">数は宇宙共通の言語です。私たちは0から9の10個の記号で数を書き、長さ・重さ・時間を、宇宙のどこでも同じになる物理定数で決めています。</p>
+    <div class="ebnums">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<div><b class="num">${n}</b>${dots(n)}<small>${"一二三四五六七八九十"[n-1]}・${n.toString(2)}（2進法）</small></div>`).join("")}</div>
+    <h4>素数（1とその数自身でしか割り切れない数）</h4><p class="ebmono">2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 …</p>
+    <p>素数は無限にある（紀元前300年ごろ、ユークリッドが証明）。知られている最大の素数は2¹³⁶²⁷⁹⁸⁴¹−1（2024年発見、約4,100万桁）。</p>
+    <h4>大切な定数</h4>${tbl([["円周率 π","3.14159265358979…（円周 ÷ 直径）"],["ネイピア数 e","2.71828182845904…（自然な成長の割合）"],["黄金比 φ","1.6180339887…（植物の葉や種の並びに現れる）"],["√2","1.41421356…（正方形の対角線 ÷ 1辺）"]])}
+    <h4>単位の定義（2019年から、すべて物理定数で決まっている）</h4>
+    ${tbl([["秒 s","セシウム133原子が出す特定の光（電磁波）が 9,192,631,770 回振動する時間"],["メートル m","光が真空中を 1/299,792,458 秒で進む距離"],["キログラム kg","プランク定数を 6.62607015×10⁻³⁴ J·s と定めて決まる質量"],["アンペア A","電気素量を 1.602176634×10⁻¹⁹ C と定めて決まる電流"],["ケルビン K","ボルツマン定数を 1.380649×10⁻²³ J/K と定めて決まる温度。0Kは絶対零度。水は273.15Kで凍る"],["モル mol","6.02214076×10²³ 個の粒子の集まり"],["カンデラ cd","明るさの単位（特定の緑色の光の強さで定義）"]],["単位","定義"])}
+    <h4>大きさを表す接頭辞</h4>
+    ${tbl([["クエタ Q","10³⁰","ロナ R・ヨタ Y（10²⁷・10²⁴）とともに、大きな数の新顔（2022年に追加）"],["ゼタ Z","10²¹","世界で1年に作られるデータ量の単位"],["ペタ P","10¹⁵",""],["テラ T","10¹²","1TB＝本数百万冊分の文字"],["ギガ G","10⁹","10億"],["メガ M","10⁶","100万"],["キロ k","10³","1,000（1km＝1,000m）"],["ミリ m","10⁻³","1,000分の1"],["マイクロ μ","10⁻⁶","細胞の大きさ（10〜100μm）"],["ナノ n","10⁻⁹","原子は約0.1nm"],["ピコ p","10⁻¹²",""],["フェムト f","10⁻¹⁵","原子核の大きさ"],["クエクト q","10⁻³⁰","いちばん小さい接頭辞（2022年に追加）"]],["名前","倍率","例"])}
+    <h4>数の書き方はいろいろ</h4>
+    ${tbl([["10進法","指が10本だから。0〜9で1桁、10で繰り上がる"],["2進法","コンピュータの数。0と1だけ。10進法の10は2進法で1010"],["12進法・60進法","1ダース＝12、1時間＝60分、円の1周＝360°。60は2・3・4・5・6で割り切れて便利なため、古代メソポタミアから使われている"],["漢数字の位","万（10⁴）・億（10⁸）・兆（10¹²）・京（10¹⁶）・垓（10²⁰）…無量大数（10⁶⁸）。4桁ごとに名前が変わる"],["英語の位","thousand（10³）・million（10⁶）・billion（10⁹）・trillion（10¹²）。3桁ごとに名前が変わる"]])}
+    <h4>時間の単位</h4>
+    ${tbl([["1分","60秒"],["1時間","60分（3,600秒）"],["1日","24時間（86,400秒）。地球が太陽に対して1回自転する時間"],["1週間","7日（古代の7つの天体：日・月・火・水・木・金・土から）"],["1年","365.2422日。うるう年（4年に1度。ただし100で割り切れて400で割り切れない年は除く）でずれを直す"]])}
+    <p><b>宇宙共通の物差し：</b>水素原子は波長21cm（周波数1,420,405,751.768 Hz）の電波を出す。宇宙で最も多い元素が出すこの電波は、どこでも同じ長さ・時間の基準になる。1977年の探査機ボイジャーの金のレコードも、この長さと時間を単位に使って情報を書いた（${see("msg","宇宙へ送ったメッセージ")}）。</p>
+    ${src("最大の素数：GIMPS（2024年10月発見のM136279841）。SI接頭辞：国際度量衡総会（2022年）。")}
+    ${links(map("laws","物理定数を見る（宇宙の法則）"))}`});
+
+  EB.add({id:"math",ic:"📐",t:"数学のことば",k:"数学 幾何 図形 関数 微分 積分 無限 定理 未解決問題 リーマン予想 ゼロ",h:`
+    <p class="eblead">数学は、数・形・変化・構造についての「必ず正しい」推論の集まりです。宇宙のどこでも同じ結論になるので、知的な存在どうしの共通語になります。</p>
+    <h4>数の種類</h4>
+    ${tbl([["自然数","1, 2, 3, …（数えるための数）"],["整数","…, −2, −1, 0, 1, 2, …（ゼロと負の数を足したもの）"],["有理数","分数で書ける数（1/3, −7/2, 0.25 など）"],["無理数","分数で書けない数（√2、π、e など）。小数がくり返さずに無限に続く"],["実数","有理数と無理数を合わせたもの。数直線の上のすべての点"],["複素数","2乗すると−1になる数 i を使った数（a＋bi）。電気・量子力学で欠かせない"]],["種類","説明"])}
+    <p><b>ゼロの発見：</b>「何もない」を数として計算に使い始めたのは、7世紀インドの数学者ブラフマグプタとされる。0を使う位取り（10進法）は、インドからアラビアを経てヨーロッパに広まった。</p>
+    <h4>形（幾何学）</h4>
+    ${tbl([["三平方の定理","直角三角形で、斜辺²＝他の2辺の2乗の和（a²＋b²＝c²）。3:4:5 の三角形は直角になる"],["三角形","内角の和は180°（平らな面の上で）"],["円","円周＝2πr、面積＝πr²（rは半径）"],["球","表面積＝4πr²、体積＝4/3πr³"],["正多面体","すべての面が同じ正多角形の立体は5種類だけ：正4・6・8・12・20面体"],["曲がった空間","球面の上では三角形の内角の和が180°より大きい。宇宙の形を考えるときに使う（"+see("relativity","相対性理論")+"）"]])}
+    <h4>変化をとらえる（関数・微分・積分）</h4>
+    <ul><li><b>関数：</b>ある数を決めると別の数が1つ決まる関係。比例（y＝ax）、放物線（y＝x²）、倍々に増える指数（2を10回かけると1,024）、その逆の対数（桁の数を数える）、波を表す三角関数。</li>
+    <li><b>微分：</b>変化の「速さ」を求める道具。位置を微分すると速度、速度を微分すると加速度。</li>
+    <li><b>積分：</b>小さなかけらを足し合わせる道具。曲線で囲まれた面積や、動いた距離を求める。</li>
+    <li>微分と積分は互いに逆の操作（微積分学の基本定理）。17世紀後半、ニュートンとライプニッツがそれぞれ体系にした。物理学・工学・経済学のほとんどがこの言葉で書かれている。</li></ul>
+    <h4>無限</h4>
+    <p>自然数（1, 2, 3…）と偶数（2, 4, 6…）は、1対1に組にできるので「同じ個数」の無限。ところが実数は、自然数と組にしきれない「もっと大きな無限」であることを、19世紀にカントールが示した。無限にも大きさの段階がある。</p>
+    <h4>有名な定理と、まだ解けていない問題</h4>
+    ${tbl([["ピタゴラスの定理","前6世紀ごろ","証明済み","三平方の定理。証明方法は数百通り知られている"],["素数は無限にある","前300年ごろ","証明済み","ユークリッド『原論』"],["オイラーの等式","1748年","証明済み","e^(iπ)＋1＝0。5つの大切な数を1つの式で結ぶ"],["フェルマーの最終定理","1637年に提起","1995年に証明","n≧3 のとき aⁿ＋bⁿ＝cⁿ を満たす正の整数はない。ワイルズが358年ぶりに証明"],["四色定理","1852年に提起","1976年に証明","どんな地図も4色あれば隣り合う国を塗り分けられる。コンピュータを使った初の大きな証明"],["不完全性定理","1931年","証明済み","ゲーデル。十分に強い数学の体系には、正しいのに証明できない命題がある"],["ポアンカレ予想","1904年に提起","2003年に証明","ペレルマン。3次元の球の形の特徴づけ"],["リーマン予想","1859年に提起","未解決","素数の並び方の秘密にかかわる。懸賞金100万ドル"],["P≠NP予想","1971年に提起","未解決","答えを確かめるのが簡単な問題は、解くのも簡単か。暗号の安全性にかかわる"],["ゴールドバッハ予想","1742年に提起","未解決","4以上の偶数はすべて2つの素数の和で書ける（4×10¹⁸ まではコンピュータで確認）"]],["名前","いつ","状態","内容"])}
+    ${note("2000年に発表された7つの「ミレニアム懸賞問題」（各100万ドル）のうち、解けたのはポアンカレ予想だけです（2026年現在）。")}
+    ${links(map("laws","公式・未解決問題を見る（宇宙の法則）"),map("lineage","数学の系統樹を見る"))}`});
+
+  EB.add({id:"logic",ic:"⚖️",t:"論理・確率・統計",k:"論理学 三段論法 背理法 確率 統計 平均 中央値 正規分布 相関 因果 科学的方法 バイアス 思い込み",h:`
+    <p class="eblead">正しく考えるための道具です。論理は「確かなことから確かなことを導く」方法、確率と統計は「不確かなことを数で扱う」方法です。人類はこれらで迷信と知識を見分けてきました。</p>
+    <h4>論理の基本</h4>
+    ${tbl([["命題","正しいか（真）、まちがいか（偽）が決まる文。「水は100℃で沸騰する（1気圧で）」"],["かつ・または・でない","2つの命題を組み合わせる言葉。「AかつB」はA・Bの両方が真のときだけ真"],["ならば","「AならばB」は、Aが真でBが偽のときだけ偽"],["三段論法","すべての人間は死ぬ。ソクラテスは人間だ。だからソクラテスは死ぬ"],["対偶","「AならばB」が正しければ「BでないならAでない」も必ず正しい"],["逆は正しいとは限らない","「雨ならば道がぬれる」が正しくても、「道がぬれているならば雨」は正しいとは限らない（打ち水かもしれない）"],["背理法","「正しくない」と仮定して矛盾を導き、元の命題が正しいと示す。√2 が分数で書けないことの証明に使う"]])}
+    <h4>確率（どのくらい起こりやすいか）</h4>
+    ${tbl([["サイコロ","1の目が出る確率は1/6。2回続けて1が出る確率は1/36"],["2つのサイコロの和","7が最も出やすい（36通り中6通り）"],["独立","前の結果は次に影響しない。コインで表が5回続いても、次に表が出る確率は1/2（「そろそろ裏」と思うのはギャンブラーの誤り）"],["大数の法則","回数を増やすほど、結果の割合は本当の確率に近づく"],["期待値","「平均するといくら得するか」。宝くじの期待値は払った額より小さい"],["誕生日の問題","23人集まると、同じ誕生日の人がいる確率が50%を超える。直感よりずっと高い"]])}
+    <h4>統計（たくさんのデータを読む）</h4>
+    ${tbl([["平均","全部足して個数で割る。少数の極端な値（大金持ちなど）に引っ張られる"],["中央値","大きさ順に並べた真ん中。所得のように偏ったデータでは、平均より実感に近い"],["ばらつき","標準偏差で表す。正規分布（つりがね形）では、平均±1標準偏差に約68%、±2に約95%、±3に約99.7%が入る"],["標本調査","全員を調べなくても、無作為に選んだ約1,000人で、誤差およそ±3ポイントの推定ができる"],["相関と因果","アイスの売上と水の事故はいっしょに増えるが、アイスが事故の原因ではない（どちらも「暑さ」が原因）。相関があっても、原因とは限らない"]])}
+    <h4>科学の方法</h4>
+    ${flow(["観察する","仮説を立てる","予測する","実験・観測で確かめる","ほかの人が再現する","理論になる（でも新しい証拠で直される）"])}
+    <p>科学の主張は「まちがっていれば、まちがいだと示せる形」（反証可能性）で書かれる。だから科学は、間違いを見つけて直しながら進む。いちばん強い証拠は、条件をそろえて比べる実験（くじ引きで分ける比較試験など）と、多くの研究をまとめた分析である。</p>
+    <h4>人間の思い込みのくせ（認知バイアス）</h4>
+    ${tbl([["確証バイアス","自分の考えに合う情報ばかり集め、合わない情報を無視する"],["生存者バイアス","成功した例だけを見て結論を出す（失敗した例は目に入らない）"],["後知恵バイアス","結果を知ってから「最初からわかっていた」と感じる"],["アンカリング","最初に見た数字に、その後の判断が引っ張られる"],["利用可能性","思い出しやすい出来事（ニュースになった事故など）を、実際より起こりやすいと感じる"],["基準率の無視","「検査で陽性」でも、もともと珍しい病気なら、本当にかかっている確率は意外に低いことがある"]])}
+    ${note("人類は、これらのくせを持つことを知ったうえで、記録・測定・比較試験・他人による検証という手続きで補ってきました。","cool")}
+    ${links(map("lineage","学問の系統樹を見る"))}`});
+
+  EB.add({id:"info",ic:"💻",t:"情報とコンピュータ",k:"ビット バイト 2進法 文字コード Unicode CPU トランジスタ アルゴリズム 暗号 インターネット DNS AI 人工知能 機械学習",h:`
+    <p class="eblead">情報は「0か1か」の積み重ねで表せます。人類はこの考えで、文字・画像・音・動画をすべて数に変え、光の速さで地球の裏側へ送る機械（コンピュータとインターネット）を作りました。</p>
+    <h4>情報の単位</h4>
+    ${tbl([["ビット","0か1か、1つの選択"],["バイト","8ビット。256通りを表せる。英字1文字は1バイト、日本語1文字はおよそ3バイト（UTF-8）"],["キロ・メガ・ギガ・テラバイト","1,000倍ずつ。写真1枚 約3MB、映画1本 約5GB"],["ゼタバイト（ZB）","10²¹バイト。人類が1年に作るデータは約180ZB（2025年の推計）"]],["単位","大きさ"])}
+    <h4>コンピュータのしくみ</h4>
+    ${tbl([["CPU（計算する部品）","命令を1秒に数十億回こなす。半導体のスイッチ（トランジスタ）でできている"],["トランジスタ","1947年に発明。いまは指先ほどのチップに数百億〜2,000億個以上が入る"],["メモリ","計算中のデータを置く作業机。電源を切ると消える"],["ストレージ","データをしまう本棚（SSD・ハードディスク）。電源を切っても残る"],["プログラム","コンピュータへの命令の列。人が読める言葉（プログラミング言語）で書き、機械の言葉に翻訳する"]])}
+    <p><b>ムーアの法則：</b>チップに入るトランジスタの数は約2年で2倍になる、という1965年の予測。50年以上ほぼそのとおりに進み、計算の値段は100万分の1以下になった。</p>
+    <h4>文字を数にする</h4>
+    <p>1963年のASCIIは英字・数字など128文字だけだった。いまはUnicodeが世界のほぼすべての文字と絵文字（15万字以上）に番号をつけている。「地」はU+5730、「A」はU+0041。どの国のコンピュータでも同じ文字が表示されるのは、この共通の番号のおかげ。</p>
+    <h4>アルゴリズム（解き方の手順）</h4>
+    ${tbl([["二分探索","並んだデータの真ん中と比べて半分ずつしぼる。100万件から約20回で見つかる（2²⁰≒100万）"],["並べ替え","1億件でも、よい方法なら数秒。悪い方法だと何年もかかる"],["計算の限界","1936年、チューリングは「どんなプログラムが止まるかを必ず判定するプログラム」は作れないことを示した。原理的に計算できない問題がある"]])}
+    <h4>暗号</h4>
+    <p>昔の暗号は文字をずらすなど、鍵を知られると破られた。1970年代に発明された<b>公開鍵暗号</b>は、「閉める鍵」を公開しても「開ける鍵」がわからないしくみ（大きな数の素因数分解のむずかしさなどを使う）。ネットの買い物や銀行のやりとり（HTTPSの鍵マーク）を守っている。量子コンピュータに備えた新しい暗号（耐量子暗号）も、2024年から標準化が始まった。</p>
+    <h4>インターネット</h4>
+    ${flow(["データを小包（パケット）に分ける","宛先の番号（IPアドレス）をつける","ルーターが道を選んでバケツリレー","受け取った側で組み立てる"])}
+    ${tbl([["始まり","1969年のARPANET（アメリカ）。1983年に今の通信の決まり（TCP/IP）に切り替え"],["ウェブ","1989年に提案、1991年に公開（ティム・バーナーズ＝リー）。リンクで文書をつなぐ"],["名前と住所","「example.com」のような名前を、DNSが数字のIPアドレスに変える"],["海底ケーブル","国と国の通信の99%以上は、海の底の光ファイバーを通る（総延長約140万km）"],["利用者","約60億人（世界人口の74%、2025年）"]])}
+    <h4>人工知能（AI）</h4>
+    ${tbl([["機械学習","人が規則を書く代わりに、たくさんの例（データ）から規則を学ばせる方法"],["ニューラルネットワーク","脳の神経細胞のつながりをまねた計算。層を深く重ねたもの（深層学習）が2012年ごろから画像認識で人に迫った"],["大規模言語モデル","大量の文章で「次の言葉」を予測するよう学んだAI。2017年のTransformerという方式が基礎。2022年から一般に広く使われている"],["得意なこと","文章・翻訳・要約・プログラム・画像の生成、パターンの発見"],["課題","もっともらしい間違い、学習データの偏り、悪用、仕事や社会への影響、より強いAIを安全に保つ方法"]])}
+    ${src("データ量：IDCの推計（2025年）。インターネット利用者：ITU「Facts and Figures 2025」。海底ケーブル：TeleGeographyの概数。")}
+    ${links(map("lineage","情報・通信の系統樹を見る"))}`});
+})();
+
+/* 第2部：物質とエネルギー */
+(function(){
+  const {bar,tbl,fig,dots,map,see,cards,flow,note,src,links}=EB;
+  EB.part("matter","物質とエネルギー","⚛️","すべてのものは何でできていて、どう動くのか。原子・化学反応・力とエネルギー・光と電気・相対性理論と量子。");
+
+  EB.add({id:"matter",ic:"⚛️",t:"物質のなりたち",c3d:"mol|h2o",k:"原子 陽子 中性子 電子 元素 周期表 同位体 化学結合 固体 液体 気体 プラズマ 水",h:`
+    <p class="eblead">身のまわりのものも、星も、私たちの体も、118種類の元素の原子が組み合わさってできています。原子はとても小さく、1cmの中に約1億個並びます。</p>
+    <h4>原子のつくり</h4>
+    ${tbl([["原子核","陽子（＋の電気）と中性子でできた中心。原子の直径の約10万分の1しかないが、質量の99.9%以上がここにある"],["電子","原子核のまわりに雲のように広がる（−の電気）。質量は陽子の約1/1,836。化学反応は電子のやりとり"],["元素を決めるもの","陽子の数（原子番号）。陽子が1個なら水素、6個なら炭素、79個なら金"],["大きさ","水素原子の直径は約0.1nm（1,000万分の1mm）"]])}
+    <h4>元素</h4>
+    <p>知られている元素は118種類（2016年に113番ニホニウムなど4つが命名され、周期表の第7周期まで埋まった）。地球の自然の中にあるのは約90種類で、残りは実験室で作られた。1869年、メンデレーエフは元素を性質の似たものが縦に並ぶ表（周期表）にまとめ、まだ見つかっていない元素の性質まで予言した。</p>
+    <h5>宇宙・地球・人体は何でできているか（質量の割合）</h5>
+    ${tbl([["宇宙（ふつうの物質）","水素 約74%、ヘリウム 約24%、酸素 約1%、炭素 約0.5%、そのほか"],["地球の地殻","酸素 46%、ケイ素 28%、アルミニウム 8%、鉄 5%、カルシウム 4%"],["人の体","酸素 65%、炭素 18%、水素 10%、窒素 3%、カルシウム 1.5%、リン 1%"]])}
+    <p>水素とヘリウムの一部はビッグバン直後にでき、炭素や酸素や鉄は星の中で、金などの重い元素は超新星や中性子星の合体で作られた。<b>私たちの体の原子のほとんどは、かつて星の中にあった</b>（${see("stars","星の一生")}）。</p>
+    <h4>同位体</h4>
+    <p>陽子の数が同じで中性子の数が違う原子。炭素12（ふつうの炭素）と炭素14（放射性）など。炭素14は約5,730年で半分に減る（半減期）ので、生き物の遺物が何年前のものかを測れる（放射性炭素年代測定）。</p>
+    <h4>原子どうしのつながり方（化学結合）</h4>
+    ${tbl([["共有結合","電子を出し合って共有する。水（H₂O）、ダイヤモンド、DNAの骨格"],["イオン結合","電子を渡した側（＋）と受け取った側（−）が引き合う。食塩（NaCl）"],["金属結合","電子が自由に動き回る。だから金属は電気と熱をよく通し、光を反射する"],["水素結合","弱いつながり。水が凍ると軽くなる理由、DNAの2本の鎖が結びつく理由"]],["種類","しくみと例"])}
+    <h4>物質の状態</h4>
+    ${tbl([["固体","原子・分子が決まった場所で振動している。形が変わらない"],["液体","くっついたまま動き回る。形は容器に合わせて変わる"],["気体","ばらばらに飛び回る。0℃・1気圧で1molの気体は約22.4L"],["プラズマ","高温で電子がはぎ取られた状態。太陽・雷・オーロラ。宇宙の見える物質のほとんど"],["そのほか","絶対零度近くでは、超流動やボース＝アインシュタイン凝縮（1995年に初めて作られた）など、ふしぎな状態になる"]],["状態","特徴"])}
+    ${note("<b>水は変わり者：</b>ふつうの物質は固体の方が重いのに、氷は水に浮く（水素結合で、すき間の多い結晶になるため）。もし氷が沈んだら、湖や海は底から凍り、生き物は冬を越せなかった。水はまた温まりにくく冷めにくい（比熱が大きい）ので、海が地球の気温をやわらげている。","cool")}
+    ${links(map("laws","周期表・分子を見る（宇宙の法則）"),map("micro","原子の大きさまでズームする（ミクロ）"))}`});
+
+  EB.add({id:"chem",ic:"🧪",t:"化学反応",c3d:"mol|glu",k:"化学 反応式 燃焼 酸 塩基 pH 酸化 還元 触媒 酵素 有機化学 プラスチック 発酵",h:`
+    <p class="eblead">化学反応は、原子の組み合わせが変わることです。原子そのものは消えも生まれもせず、反応の前後で重さの合計は変わりません（質量保存の法則）。</p>
+    <h4>反応の例</h4>
+    ${tbl([["水ができる","2H₂ ＋ O₂ → 2H₂O（水素が燃えると水だけができる）"],["メタンが燃える","CH₄ ＋ 2O₂ → CO₂ ＋ 2H₂O（都市ガスの燃焼。熱を出す）"],["光合成","6CO₂ ＋ 6H₂O ＋ 光 → C₆H₁₂O₆（糖）＋ 6O₂"],["呼吸","C₆H₁₂O₆ ＋ 6O₂ → 6CO₂ ＋ 6H₂O ＋ エネルギー（光合成の逆）"],["鉄がさびる","4Fe ＋ 3O₂ → 2Fe₂O₃（ゆっくり進む酸化）"]],["反応","式"])}
+    <p>熱を出す反応（燃焼など）を発熱反応、熱を吸う反応（冷却パックなど）を吸熱反応という。</p>
+    <h4>酸と塩基（pH）</h4>
+    <p>水に溶けると水素イオンを出すものが酸、それを打ち消すものが塩基（アルカリ）。強さはpH（0〜14）で表し、7が中性。1違うと強さは10倍違う。</p>
+    ${tbl([["胃液","1〜2（強い酸）"],["レモン汁","約2"],["コーヒー","約5"],["雨水","約5.6（空気中のCO₂が溶ける）"],["純粋な水","7（中性）"],["血液","7.35〜7.45（体は厳しく保っている）"],["海水","約8.1（CO₂が溶けて少しずつ下がっている）"],["石けん水","9〜10"],["家庭用漂白剤","12〜13（強いアルカリ）"]],["もの","pH"])}
+    <h4>酸化と還元</h4>
+    <p>物質が酸素と結びつく（電子を失う）のが酸化、その逆が還元。燃える、さびる、呼吸する、電池が電気を生む——どれも酸化と還元の組み合わせ。製鉄は、鉄鉱石（酸化鉄）を炭素で還元して鉄を取り出す作業。</p>
+    <h4>触媒と酵素</h4>
+    <p>自分は変わらずに反応を速める物質を触媒という。自動車の排ガスをきれいにする白金、肥料を作るハーバー・ボッシュ法の鉄触媒など。生き物の体の中では、タンパク質でできた<b>酵素</b>が何千種類も働き、ふつうなら何年もかかる反応を一瞬で進めている。</p>
+    <h4>有機化学（炭素の化学）</h4>
+    <p>炭素は4本の手で鎖や輪を作れるので、数え切れないほど多くの化合物になる（登録された化学物質は2億種類以上）。</p>
+    ${tbl([["炭化水素","炭素と水素だけ。メタン・プロパン・ガソリン・ろう"],["アルコール","エタノール（お酒）など"],["糖","ブドウ糖・でんぷん・セルロース（植物の体）"],["脂肪","エネルギーの貯蔵。細胞の膜の材料"],["タンパク質","20種類のアミノ酸の鎖。体の部品と酵素"],["核酸","DNAとRNA。遺伝情報"]],["グループ","例"])}
+    <h4>プラスチック（人が作った高分子）</h4>
+    <p>小さな分子を長い鎖につないだもの。軽く、丈夫で、安い。世界で年に約4億トン作られ、リサイクルされるのは約1割。自然の中で分解しにくく、海の汚染や細かいかけら（マイクロプラスチック）が問題になっている。</p>
+    <h4>身近な化学</h4>
+    <ul><li><b>料理：</b>肉や パンの焼き色と香りは、糖とアミノ酸の反応（メイラード反応）。</li><li><b>発酵：</b>酵母が糖を分解してアルコールと二酸化炭素を作る（パン・酒）。乳酸菌はヨーグルト、麹かびはみそ・しょうゆ。</li><li><b>洗剤：</b>水と油の両方になじむ分子（界面活性剤）が、油よごれを包んで水に溶かす。</li><li><b>電池：</b>酸化と還元を離れた場所で起こし、電子の流れを取り出す。</li></ul>
+    ${src("登録化学物質数：CAS Registry（2億件超）。プラスチック：OECD「Global Plastics Outlook」、PlasticsEuropeの概数。")}
+    ${links(map("laws","分子を3Dで見る（宇宙の法則）"))}`});
+
+  EB.add({id:"force",ic:"🍎",t:"力・運動・エネルギー",c3d:"un|entropy",k:"ニュートン 運動の法則 重力 万有引力 エネルギー保存 熱力学 エントロピー 圧力 浮力 波 音 速さ",h:`
+    <p class="eblead">ものが動くのも止まるのも、力が働くからです。そして形は変わっても、エネルギーの合計は決して増えも減りもしません。この2つが、身のまわりから宇宙までの動きを説明します。</p>
+    <h4>ニュートンの運動の3法則（1687年）</h4>
+    ${tbl([["第1法則（慣性）","力が働かなければ、止まっているものは止まったまま、動いているものはまっすぐ同じ速さで動き続ける"],["第2法則","力 ＝ 質量 × 加速度（F＝ma）。重いものほど動かしにくい"],["第3法則（作用・反作用）","押せば同じ力で押し返される。ロケットは燃料ガスを後ろへ押し出す反動で進む"]])}
+    <h4>重力（万有引力）</h4>
+    <p>質量を持つものはすべて引き合う。引き合う力は質量に比例し、距離の2乗に反比例する。リンゴを落とす力と、月を地球のまわりに回らせる力は同じものだ（ニュートン）。</p>
+    ${tbl([["地球の表面","1秒ごとに秒速9.8mずつ速く落ちる（重力加速度 9.8m/s²）"],["月の表面","地球の約1/6。体重60kgの人は10kgほどに感じる"],["木星の雲の上","地球の約2.5倍"],["宇宙ステーション","重力は地上の約9割あるが、いっしょに落ち続けている（地球のまわりを回っている）ので、ふわふわ浮く"]])}
+    <h4>いろいろな速さ</h4>
+    ${tbl([["人が歩く","秒速約1.4m（時速5km）"],["音（空気中）","秒速約340m"],["地球の自転（赤道）","秒速約465m"],["国際宇宙ステーション","秒速約7.7km（90分で地球を1周）"],["地球の公転","秒速約30km"],["太陽系が銀河を回る","秒速約230km"],["光","秒速約30万km（何も光より速くは進めない）"]],["もの","速さ"])}
+    <h4>エネルギー</h4>
+    <p>エネルギーは「仕事をする能力」。単位はジュール（J）。1Jは、約100gのものを1m持ち上げるエネルギー。形を変えて移るが、合計はいつも同じ（エネルギー保存の法則）。</p>
+    ${tbl([["運動エネルギー","動いているものが持つ。速さが2倍なら4倍"],["位置エネルギー","高い所にあるものが持つ。水力発電はこれを使う"],["熱エネルギー","原子・分子がばらばらに動くエネルギー"],["化学エネルギー","分子の結びつきにたくわえられている（食べ物・燃料・電池）"],["電気・光","電子の流れ、電磁波"],["核エネルギー","原子核にたくわえられている。太陽が光るのも、原子力発電も"]])}
+    <h5>エネルギーの大きさくらべ</h5>
+    ${tbl([["食べ物1kcal","約4,200J"],["人が1日に食べる食事","約1,000万J（約2,400kcal）"],["ガソリン1L","約3,400万J"],["雷1回","約10億J"],["広島に落とされた原子爆弾","約63兆J"],["人類が1年に使うエネルギー","約6×10²⁰J（600EJ）"],["太陽が1秒に出すエネルギー","約3.8×10²⁶J"]],["もの","エネルギー"])}
+    <h4>熱力学の法則</h4>
+    ${tbl([["第1法則","エネルギーは保存される（ただでエネルギーを生む機械はできない）"],["第2法則","熱は高い方から低い方へ流れ、全体の「乱雑さ（エントロピー）」は増え続ける。こぼれた水は自然には元に戻らない。時間に向きがあるように見える理由"],["第3法則","絶対零度（−273.15℃）には、どんな方法でもたどり着けない"]])}
+    <h4>圧力と浮力</h4>
+    <p>地上の空気は1cm²あたり約1kgの重さでのしかかっている（1気圧＝約1,013hPa）。水の中では深さ10mごとに1気圧ずつ増える。水の中のものは、押しのけた水の重さだけ軽くなる（アルキメデスの原理）。だから鉄の船も浮かぶ。</p>
+    <h4>波と音</h4>
+    <p>音は空気の振動（波）。1秒間の振動の数（周波数、Hz）が多いほど高い音になる。人は約20〜2万Hzを聞ける。音の速さは、空気中で秒速約340m、水中で約1,500m、鉄の中で約5,900m。雷が光ってから音が届くまでの秒数×340mが、雷までの距離。</p>
+    ${links(map("laws","4つの力・公式を見る（宇宙の法則）"))}`});
+
+  EB.add({id:"light",ic:"💡",t:"光と電気・磁気",k:"電気 電流 電圧 オームの法則 磁石 電磁誘導 発電機 電磁波 スペクトル 赤外線 紫外線 X線 色 虹 レンズ レーザー",h:`
+    <p class="eblead">電気と磁気は、同じ力（電磁気力）の2つの顔です。そして光は、電気と磁気の波が空間を伝わっていくもの（電磁波）です。人類はこの力で、夜を明るくし、声と映像を地球の裏側へ届けています。</p>
+    <h4>電気</h4>
+    ${tbl([["電荷","＋と−がある。同じ種類は反発し、違う種類は引き合う"],["電流（A）","電荷の流れ。導線の中では電子が流れている"],["電圧（V）","電流を流そうとする力。家のコンセントは100〜240V（国による）"],["抵抗（Ω）","流れにくさ。電圧 ＝ 電流 × 抵抗（オームの法則）"],["電力（W）","電圧 × 電流。1Wの電気を1時間使うと1Wh"],["雷","雲の中の静電気が一気に流れる。電圧は数億V、温度は約3万℃"]])}
+    <h4>磁気と発電</h4>
+    <p>磁石にはN極とS極がある。1820年、電流のまわりに磁場ができることが発見され、1831年にファラデーが、磁石を動かすとコイルに電流が生まれること（電磁誘導）を見つけた。これが<b>発電機</b>（回すと電気ができる）と<b>モーター</b>（電気で回る）の原理で、いまの電気文明の土台になっている。地球も大きな磁石で、方位磁針の北はおおよそ北を向く。</p>
+    <h4>電磁波の仲間（波長の長い順）</h4>
+    ${fig(`<svg viewBox="0 0 640 160" class="ebsvg" role="img" aria-label="電磁波のスペクトル">
+      <defs><linearGradient id="ebvis" x1="0" x2="1"><stop offset="0" stop-color="#ff3030"/><stop offset=".2" stop-color="#ff9a20"/><stop offset=".38" stop-color="#ffe640"/><stop offset=".55" stop-color="#40d060"/><stop offset=".75" stop-color="#3080ff"/><stop offset="1" stop-color="#9040ff"/></linearGradient></defs>
+      ${[["電波",0,170,"#3b5b8f","ラジオ・テレビ・携帯"],["マイクロ波",170,90,"#4a6fa8","電子レンジ・Wi-Fi"],["赤外線",260,90,"#8a3a3a","熱・リモコン"],["可視光",350,46,"url(#ebvis)","目に見える"],["紫外線",396,80,"#5a3a8f","日焼け・殺菌"],["X線",476,80,"#3a4a6a","レントゲン"],["γ線",556,84,"#2a3550","放射性物質"]].map(([n,x,w,c,u],i)=>`<rect x="${x}" y="40" width="${w}" height="44" fill="${c}" stroke="#0a0f1f"/><text x="${x+w/2}" y="${i%2?22:34}" text-anchor="middle" font-size="13" fill="#eef2fb" font-weight="700">${n}</text><text x="${x+w/2}" y="${i%2?118:102}" text-anchor="middle" font-size="11" fill="#cdd5e8">${u}</text>`).join("")}
+      <text x="4" y="150" font-size="11" fill="#9ba6c3">← 波長が長い（km〜mm）・エネルギーが小さい</text><text x="636" y="150" font-size="11" fill="#9ba6c3" text-anchor="end">波長が短い（原子より小さい）・エネルギーが大きい →</text></svg>`,"電磁波のスペクトル。人の目に見えるのは、約380〜750nmのごく一部")}
+    ${tbl([["電波","約1m〜数千km","ラジオ、テレビ、携帯電話、GPS、電波望遠鏡"],["マイクロ波","1mm〜1m","電子レンジ（水を揺らして温める）、Wi-Fi、レーダー、宇宙背景放射"],["赤外線","約0.75μm〜1mm","熱（温かいものはみな出している）、リモコン、暗視カメラ"],["可視光","約380〜750nm","赤・橙・黄・緑・青・紫。太陽の光が最も強いあたり"],["紫外線","約10〜380nm","日焼け、殺菌、ビタミンDの合成。オゾン層が大部分を防ぐ"],["X線","約0.01〜10nm","体を透かして骨を写す、空港の荷物検査"],["ガンマ線","0.01nmより短い","放射性物質、がんの放射線治療、宇宙の爆発現象"]],["種類","波長","使い道・身近な例"])}
+    <h4>光の速さと色</h4>
+    <p>光は真空中を秒速299,792km（1秒で地球7周半）で進む。月まで約1.3秒、太陽まで約8分20秒。<b>夜空の星は、光が出発したときの昔の姿</b>を見ている。</p>
+    ${tbl([["光の三原色","赤・緑・青。混ぜるほど明るくなり、全部で白（テレビやスマホの画面）"],["色の三原色","シアン・マゼンタ・イエロー。混ぜるほど暗くなる（印刷や絵の具）"],["空が青い","青い光は空気の分子にはね返されやすく（散乱）、空いっぱいに広がるから"],["夕焼けが赤い","太陽の光が空気の中を長く通るうちに青い光が散ってしまい、赤い光が残るから"],["虹","水滴の中で光が曲がり（屈折）、色ごとに曲がり方が違うので分かれる"]])}
+    <h4>光を使う道具</h4>
+    <p>レンズは光を曲げて集める（眼鏡・カメラ・望遠鏡・顕微鏡）。1960年に発明されたレーザーは、波のそろった強い光で、光ファイバー通信・手術・読み取り機・距離の測定に使われる。月に置いた反射板にレーザーを当てて、地球と月の距離をcm単位で測っている（月は年に約3.8cmずつ遠ざかっている）。</p>
+    ${links(map("laws","電磁気力を見る（宇宙の法則）"),map("lineage","エネルギー・情報通信の系統樹"))}`});
+
+  EB.add({id:"relativity",ic:"🌀",t:"相対性理論と量子の世界",c3d:"un|bh",k:"アインシュタイン 特殊相対性理論 一般相対性理論 E=mc2 時間の遅れ GPS 重力波 ブラックホール 量子力学 不確定性原理 トンネル効果 量子もつれ 標準模型 ヒッグス",h:`
+    <p class="eblead">とても速いもの、とても重いもの、とても小さいものの世界では、日常の感覚が通用しません。20世紀の人類は、相対性理論と量子力学という2つの理論で、その世界を正確に説明できるようになりました。</p>
+    <h4>特殊相対性理論（1905年）</h4>
+    ${tbl([["光の速さは変わらない","誰が、どんな速さで動きながら測っても、光の速さは同じ秒速約30万km"],["時間が遅れる","速く動くものほど時間がゆっくり進む。秒速26万kmで動けば、時間の進みは半分"],["E＝mc²","質量はエネルギーの一形態。わずか1gの質量が、すべてエネルギーになると約9×10¹³J（広島の原爆の約1.4倍）。太陽はこうして毎秒約400万トンずつ軽くなりながら光っている"],["光より速くは進めない","質量のあるものを光の速さまで加速するには、無限のエネルギーがいる"]])}
+    <h4>一般相対性理論（1915年）</h4>
+    <p>重力は、質量が空間と時間（時空）をゆがめることで生まれる。重いもののそばでは時間がゆっくり進み、光の道すじも曲がる。</p>
+    ${tbl([["GPS","衛星の時計は、速さの効果と重力の効果を合わせて1日に約38マイクロ秒進む。補正しないと、位置が1日に約10kmずれていく"],["重力レンズ","遠くの銀河の光が、手前の銀河の重力で曲がって見える"],["重力波","時空のさざ波。2015年に初めて観測された（約13億年前の、2つのブラックホールの合体）"],["ブラックホール","重力が強すぎて光も出られない天体。2019年に初めて「影」が撮影された（M87銀河の中心）"]],["現象","説明"])}
+    <h4>量子力学（1900〜1920年代〜）</h4>
+    ${tbl([["エネルギーは飛び飛び","原子の中の電子は、決まったエネルギーの段だけにいられる。原子が決まった色の光を出す理由"],["粒であり波でもある","光は粒（光子）としても波としてもふるまう。電子も同じ"],["不確定性原理","粒子の位置と勢い（運動量）を、同時に完全に決めることはできない"],["トンネル効果","粒子が、越えられないはずの壁をすり抜けることがある。太陽の核融合も、半導体の一部もこれに頼っている"],["量子もつれ","2つの粒子が、離れていても一体として振る舞う。量子暗号・量子コンピュータの基礎（2022年ノーベル物理学賞）"]],["考え方","内容"])}
+    <p>量子力学は、半導体（コンピュータ・スマホ）、レーザー、LED、MRI、太陽電池を生んだ。<b>現代の機械の多くは、量子力学がなければ作れない</b>。</p>
+    <h4>物質の最小の部品（標準模型）</h4>
+    <p>物質は6種類のクォークと6種類のレプトン（電子やニュートリノの仲間）でできていて、力は「力を運ぶ粒子」のやりとりで伝わる。粒子に質量を与えるヒッグス粒子は、2012年に見つかった。</p>
+    ${tbl([["強い力","クォークを結びつけ、原子核を作る","最も強い"],["電磁気力","電気・磁気・光・化学反応","強い力の約1/100"],["弱い力","放射性崩壊、太陽の核融合の第一歩","とても弱く、届く距離も短い"],["重力","質量どうしが引き合う","4つの中で飛びぬけて弱い（電磁気力の約10³⁶分の1）が、遠くまで届き、打ち消し合わないので宇宙を形づくる"]],["力","役割","強さ"])}
+    ${note("<b>まだわかっていないこと：</b>相対性理論（重力）と量子力学は、それぞれ驚くほど正確なのに、1つの理論にまとめられていません（量子重力の問題）。宇宙の約95%を占めるダークマターとダークエネルギーの正体もわかっていません。","warn")}
+    ${links(map("laws","素粒子・4つの力・未解決問題（宇宙の法則）"),map("micro","クォークまでズームする（ミクロ）"))}`});
+})();
+
+/* 第3部：宇宙 */
+(function(){
+  const {bar,tbl,fig,dots,map,see,cards,flow,note,src,links}=EB;
+  EB.part("cosmos","宇宙","🌌","私たちの住所から、太陽系・星の一生・銀河と宇宙の歴史、そして宇宙の仲間探しまで。");
+
+  EB.add({id:"addr",ic:"📍",t:"私たちの住所",k:"住所 銀河系 天の川 ラニアケア 局部銀河群 太陽 パルサー 光年",h:`
+    <p class="eblead">あなたが私たちを訪ねる場合の、宇宙の住所です（大きい方から）。</p>
+    ${tbl([["観測可能な宇宙","直径約930億光年。年齢約138億年"],["ラニアケア超銀河団","約10万個の銀河の集まり。直径約5億光年"],["おとめ座銀河団の外れ","—"],["局部銀河群","天の川銀河・アンドロメダ銀河など約80個の銀河"],["天の川銀河","棒渦巻銀河。恒星1,000〜4,000億個。直径約10万光年"],["オリオン腕","銀河中心から約2万6,000光年。約2億3,000万年で銀河を1周"],["太陽系","恒星「太陽」と8つの惑星"],["地球","太陽から3番目の惑星。太陽から約1億5,000万km（光で約8分20秒）"]],["階層","説明"])}
+    <h4>距離の物差し</h4>
+    ${tbl([["天文単位（au）","地球と太陽の平均距離。約1億4,960万km"],["光年","光が1年に進む距離。約9兆4,600億km"],["パーセク","約3.26光年。天文学者がよく使う"]])}
+    <h4>太陽（私たちの恒星）</h4>${tbl([["種類","G型主系列星（黄色い普通の星）。年齢約46億年、あと約50億年輝く"],["質量","1.989×10³⁰ kg（地球の約33万倍）。太陽系の質量の99.86%"],["直径","約139万km（地球の109倍）"],["表面温度","約5,500℃（約5,800K）。中心は約1,500万℃"],["明るさ","3.828×10²⁶ W"],["近くの目印","最も近い恒星はプロキシマ・ケンタウリ（約4.24光年）。夜空で最も明るい恒星はシリウス（8.6光年）"]])}
+    <p><b>見つけ方のヒント：</b>1972年の探査機パイオニアの金属板には、14個のパルサー（規則正しく点滅する中性子星）から見た太陽の方向と点滅の周期が刻まれている。周期の変化から、出発した時代も逆算できる。</p>
+    ${links(map("space-map","宇宙のスケールをズームする"))}`});
+
+  EB.add({id:"solar",ic:"🪐",t:"太陽系",c3d:"un|planet",k:"惑星 水星 金星 火星 木星 土星 天王星 海王星 冥王星 準惑星 小惑星 彗星 衛星 月 ボイジャー",h:`
+    <p class="eblead">太陽系は、約46億年前にガスとちりの円盤から生まれました。太陽のまわりを8つの惑星と、たくさんの準惑星・小惑星・彗星が回っています。</p>
+    <h4>8つの惑星</h4>
+    ${tbl([["水星","4,879","0.39","88日","0","最も小さく太陽に近い。昼は約430℃、夜は約−180℃"],["金星","12,104","0.72","225日","0","二酸化炭素の厚い大気の温室効果で、表面は約460℃。自転は逆向きでとても遅い"],["地球","12,742","1.00","365日","1","液体の水の海と、生命がある"],["火星","6,779","1.52","687日","2","赤い砂漠。太陽系最大の火山オリンポス山（高さ約22km）。昔は水が流れていた"],["木星","139,820","5.20","11.9年","100以上","最大の惑星（地球が1,300個入る）。大赤斑は地球より大きな嵐"],["土星","116,460","9.58","29.5年","約290","氷の環（幅約28万km、厚さは多くの場所で数十m以下）。水に浮くほど密度が小さい"],["天王星","50,724","19.2","84年","29","横倒しで自転している（約98°）。メタンで青緑に見える"],["海王星","49,244","30.1","165年","16","太陽系で最も強い風（時速2,000km以上）"]],["惑星","直径(km)","太陽からの距離(au)","1年","衛星の数","特徴"])}
+    <p>衛星の数は、木星と土星の小さな衛星の発見が続いているため、毎年のように増えている（2026年の数）。</p>
+    <h4>小さな天体</h4>
+    ${tbl([["準惑星","冥王星（直径2,377km。2006年に惑星から準惑星に。2015年に探査機が撮影）、エリス、ケレス、マケマケ、ハウメアなど"],["小惑星","火星と木星の間の小惑星帯などに、軌道がわかったものだけで140万個以上"],["彗星","氷とちりのかたまり。太陽に近づくと、ガスとちりの尾を伸ばす"],["カイパーベルト","海王星の外側の、氷の天体の帯（冥王星もその一員）"],["オールトの雲","太陽から1万〜10万auに広がると考えられている彗星のふるさと"]])}
+    <h4>太陽系の外側へ</h4>
+    <p>1977年に打ち上げられた探査機ボイジャー1号は、2012年に太陽風の届く範囲（太陽圏）の外へ出た。<b>2026年11月18日、人工物として初めて、地球から光で1日（約259億km）の距離に達する</b>（NASAの計算）。地球から送った命令が届くのに24時間かかる。</p>
+    ${src("衛星の数：IAU小惑星センターの発表（2026年）。土星は2025年3月に128個が一度に追加された。小惑星の数：小惑星センター。ボイジャー1号：NASA（2026年）。")}
+    ${links(map("space-map","太陽系を3Dで見る"),map("world-map","惑星・衛星の地図（世界地図のページ）"))}`});
+
+  EB.add({id:"stars",ic:"⭐",t:"星の一生",c3d:"un|halo",k:"恒星 主系列 赤色巨星 白色矮星 超新星 中性子星 ブラックホール スペクトル型 元素の合成 ベテルギウス シリウス",h:`
+    <p class="eblead">夜空の星（恒星）は、太陽と同じく、中心で水素を燃やして（核融合で）光っています。星の一生は、生まれたときの重さでほぼ決まります。</p>
+    <h4>星が生まれるまで</h4>
+    ${flow(["ガスとちりの雲（分子雲）","重力で縮む","中心が約1,000万℃になる","水素の核融合が始まり、星になる"])}
+    <h4>重さで決まる運命</h4>
+    ${tbl([["太陽の0.08〜0.5倍（赤色矮星）","数千億〜数兆年","ゆっくり燃え続け、最後は静かに冷える。天の川の星の約7割"],["太陽くらい","約100億年","赤色巨星にふくらみ、外側を吹き飛ばして（惑星状星雲）、地球ほどの大きさの白色矮星が残る"],["太陽の8倍以上","数百万〜数千万年","赤色超巨星になり、超新星爆発。中心に中性子星（スプーン1杯で数十億トン）か、ブラックホールが残る"]],["生まれたときの重さ","寿命","最後"])}
+    <p><b>太陽の未来：</b>太陽は少しずつ明るくなっていて、約10億年後には地球の海が蒸発し始めると考えられている。約50億年後に赤色巨星になり、水星と金星を飲み込む（地球がどうなるかは、まだはっきりしない）。</p>
+    <h4>星の色と温度（スペクトル型）</h4>
+    ${tbl([["O型","3万K以上","青","とても重く、まれ"],["B型","1万〜3万K","青白","リゲル"],["A型","7,500〜1万K","白","シリウス、ベガ"],["F型","6,000〜7,500K","黄白","プロキオン"],["G型","5,200〜6,000K","黄","太陽（約5,800K）"],["K型","3,700〜5,200K","橙","アルクトゥルス"],["M型","3,700K以下","赤","ベテルギウス、プロキシマ・ケンタウリ"]],["型","表面温度（K＝℃＋273）","色","例"])}
+    <h4>よく知られた星</h4>
+    ${tbl([["シリウス","8.6光年","夜空で最も明るい恒星。白色矮星の伴星がいる"],["アルファ・ケンタウリ","約4.4光年","肉眼で見える最も近い恒星系。プロキシマ・ケンタウリも同じ仲間"],["ベガ・アルタイル","25光年・17光年","七夕の織姫星と彦星"],["北極星（ポラリス）","約430光年","地球の自転軸の延長近くにあり、ほとんど動かない"],["ベテルギウス","約550光年","オリオン座の赤色超巨星。いつか超新星爆発を起こす（数万年以内かもしれない）"]],["星","距離","特徴"])}
+    <h4>星は元素の工場</h4>
+    ${tbl([["ビッグバン","水素・ヘリウム（とわずかなリチウム）"],["ふつうの星の中","ヘリウム→炭素・酸素。重い星では鉄まで"],["超新星爆発","鉄より重い元素の一部"],["中性子星どうしの合体","金・白金など。2017年、重力波と光で合体を同時に観測し、金が作られる証拠をとらえた"]],["場所","できる元素"])}
+    ${note("あなたの体の炭素や酸素、血の中の鉄は、太陽ができる前に燃え尽きた星々から来ています。","cool")}
+    ${links(map("space-map","恒星のスケールへズームする"),map("timeline","宇宙の年表を見る"))}`});
+
+  EB.add({id:"universe",ic:"🌌",t:"銀河と宇宙の歴史",c3d:"un|spiral",k:"ビッグバン インフレーション 宇宙背景放射 銀河 天の川 アンドロメダ ダークマター ダークエネルギー 膨張 ハッブル 大規模構造 宇宙の未来",h:`
+    <p class="eblead">宇宙は約138億年前、とても熱く小さな状態（ビッグバン）から膨らみ始め、今も膨らみ続けています。銀河はその中で、重力によって集まった星の大集団です。</p>
+    <h4>宇宙の年表</h4>
+    ${tbl([["0","ビッグバン（約138億年前）。時間と空間の始まり"],["10⁻³⁶〜10⁻³²秒","インフレーション：一瞬で急激に膨らんだ（有力な仮説）"],["約1秒","陽子と中性子ができる"],["約3分","水素・ヘリウムの原子核ができる"],["約38万年","原子ができ、光がまっすぐ進めるようになった（宇宙の晴れ上がり）。この光がいまも宇宙背景放射（約−270℃のマイクロ波）として届く"],["約1〜2億年","最初の星が輝く"],["数億年","銀河ができ始める（ジェイムズ・ウェッブ宇宙望遠鏡が、ビッグバンから約3億年の銀河を見つけている）"],["約92億年（46億年前）","太陽系が生まれる"],["138億年","現在"]],["ビッグバンから","できごと"])}
+    <h4>宇宙は何でできているか</h4>
+    ${bar([["ダークエネルギー",68,"#6a7ab0","正体不明。膨張を加速させている"],["ダークマター",27,"#9a6ad0","光らないが重力を持つ。正体不明"],["ふつうの物質",5,"#f4b942","星・ガス・惑星・私たち"]],"%",100)}
+    <p>私たちが知っている原子は、宇宙全体のわずか約5%。<b>宇宙の95%は、まだ何かわかっていない</b>。</p>
+    <h4>膨らむ宇宙</h4>
+    <p>1929年、遠い銀河ほど速く遠ざかっていることがわかった（ハッブル＝ルメートルの法則）。1998年には、膨張がだんだん速くなっていること（加速膨張）が見つかった。膨張の速さ（ハッブル定数）は、測り方によって毎秒約67〜73km/メガパーセクと食い違っていて、大きななぞになっている。</p>
+    <h4>銀河</h4>
+    ${tbl([["渦巻銀河","円盤と腕を持つ。天の川銀河、アンドロメダ銀河"],["楕円銀河","丸いかたまり。年老いた星が多い"],["不規則銀河","形が決まっていない。大・小マゼラン雲"],["銀河の中心","巨大ブラックホールがある。天の川の中心のいて座A*は太陽の約400万倍の重さ（2022年に影を撮影）"],["銀河の数","観測可能な宇宙に数千億〜2兆個（推定に幅がある）"]],["種類","特徴"])}
+    <p>銀河は宇宙に均一に散らばっておらず、網の目のような筋（フィラメント）に沿って並び、そのすき間には銀河がほとんどない巨大な空洞（ボイド）がある。</p>
+    <h4>これからの宇宙</h4>
+    <p>天の川銀河とアンドロメダ銀河は近づき合っていて、数十億年後に合体するかもしれない（2025年の研究では、今後100億年以内に合体する確率は約50%）。膨張が加速し続ければ、遠い銀河は見えなくなり、星は燃え尽き、宇宙は冷たく暗くなっていくと考えられている。ただし、ダークエネルギーの正体しだいで未来は変わる。</p>
+    ${src("宇宙の成分：プランク衛星の観測（2018年）による。銀河の数：ハッブル宇宙望遠鏡などの推定。銀河の合体：Sawalaほか（2025年、Nature Astronomy）。")}
+    ${links(map("timeline","宇宙の年表（ブランチ）を見る"),map("space-map","銀河・宇宙全体へズームする"))}`});
+
+  EB.add({id:"seti",ic:"👽",t:"宇宙の仲間を探す",k:"系外惑星 ハビタブルゾーン TRAPPIST-1 プロキシマ ドレイク方程式 フェルミのパラドックス SETI エウロパ エンケラドゥス タイタン バイオシグネチャー 宇宙人",h:`
+    <p class="eblead">人類はまだ、地球の外で生命を見つけていません。でも、太陽系の外の惑星（系外惑星）がたくさんあることはわかりました。あなたがこれを読んでいるなら、私たちの問いにはもう答えが出ているのかもしれません。</p>
+    <h4>系外惑星</h4>
+    <p>1995年、太陽に似た星のまわりで初めて惑星（ペガスス座51番星b）が見つかった。<b>2026年10月までに確認された系外惑星は6,445個</b>。ほとんどの恒星が惑星を持つと考えられている。</p>
+    ${tbl([["トランジット法","惑星が星の前を横切るとき、星がわずかに暗くなるのを測る（発見の約4分の3）"],["視線速度法","惑星に引っ張られて星がわずかに揺れるのを、光の色の変化で測る"],["直接撮像","星の光を隠して、惑星そのものを写す"],["重力マイクロレンズ","手前の星と惑星の重力で、奥の星の光が一瞬明るくなるのを使う"]],["見つけ方","しくみ"])}
+    <h4>生命がいるかもしれない場所</h4>
+    ${tbl([["ハビタブルゾーン","星からの距離がちょうどよく、表面に液体の水がありうる範囲"],["プロキシマ・ケンタウリb","4.2光年。最も近い恒星を回る、地球くらいの重さの惑星"],["TRAPPIST-1","約40光年。地球ほどの大きさの惑星が7つ。うち数個がハビタブルゾーンにある"],["火星","地下に氷があり、昔は湖や川があった。生命の痕跡を探査車が調べている"],["エウロパ（木星の衛星）","氷の下に地球の海の約2倍の水がある。探査機エウロパ・クリッパーが2030年に到着予定"],["エンケラドゥス（土星の衛星）","氷の割れ目から海水を噴き出し、有機物も見つかっている"],["タイタン（土星の衛星）","メタンの雨と湖がある。回転翼の探査機ドラゴンフライが2028年に打ち上げ予定"]],["場所","特徴"])}
+    <h4>どうやって見分けるか</h4>
+    <ul><li><b>大気の成分（バイオシグネチャー）：</b>酸素とメタンのように、すぐ反応して消えるはずの気体が同時に多くあれば、生き物が作り続けている可能性がある。ジェイムズ・ウェッブ宇宙望遠鏡が系外惑星の大気を調べ始めている。</li>
+    <li><b>文明のしるし（テクノシグネチャー）：</b>人工的な電波・レーザー光、星を囲む巨大な構造物が出す赤外線など（文明マップの「Type II」の世界）。</li></ul>
+    <h4>ドレイク方程式とフェルミのパラドックス</h4>
+    <p>1961年、ドレイクは「銀河の中に、電波で交信できる文明がいくつあるか」を、星の数×惑星を持つ割合×生命が生まれる確率×…という掛け算で見積もる式を作った。多くの値がわからないので、答えは1未満から数百万まで大きく揺れる。</p>
+    <p>宇宙はこんなに広く古いのに、なぜ宇宙人の証拠が見つからないのか——物理学者フェルミのこの問いは「フェルミのパラドックス」と呼ばれる。生命の誕生がとてもまれなのか、文明は長続きしないのか、距離が遠すぎるだけなのか、まだ答えはない。</p>
+    ${tbl([["1960年","オズマ計画：電波望遠鏡で近くの2つの星に耳をすませた最初の試み"],["1974年","アレシボ・メッセージを球状星団M13へ送信（"+see("msg","宇宙へ送ったメッセージ")+"）"],["1977年","「Wow!シグナル」：72秒間だけ強い電波を受信。その後、二度と観測されていない"],["2015年〜","ブレイクスルー・リッスン：100万個の近い星と100の銀河を探す大規模な計画"]],["年","できごと"])}
+    ${src("系外惑星の数：NASA Exoplanet Archive（2026年10月8日時点で6,445個）。")}
+    ${links(map("space-map","宇宙マップで見る"),map("overview","Type I〜IIIの文明を見る（全体マップ）"))}`});
+})();
+
+/* 第4部：地球 */
+(function(){
+  const {bar,tbl,fig,dots,map,see,cards,flow,note,src,links}=EB;
+  const interior=`<svg viewBox="0 -22 420 252" class="ebsvg"><defs><radialGradient id="ebcore"><stop offset="0" stop-color="#fff2b0"/><stop offset="1" stop-color="#ffb347"/></radialGradient></defs>
+    <path d="M210,220 L10,220 A200,200 0 0 1 410,220 Z" fill="#7a8a5a"/><path d="M210,220 L16,220 A194,194 0 0 1 404,220 Z" fill="#c0603a"/><path d="M210,220 L100,220 A110,110 0 0 1 320,220 Z" fill="#f08a3a"/><path d="M210,220 L172,220 A38,38 0 0 1 248,220 Z" fill="url(#ebcore)"/>
+    <g font-size="11" fill="#fff"><text x="30" y="200">地殻 5〜70km</text><text x="40" y="150">マントル（〜2,900km）岩石・ゆっくり対流</text><text x="120" y="200">外核（〜5,150km）液体の鉄</text><text x="185" y="214" fill="#3a2000">内核</text></g>
+    <g font-size="10" fill="#cfd7ea" text-anchor="end"><text x="416" y="-8">中心温度 約5,000〜6,000℃</text><text x="416" y="7">中心圧力 約360万気圧</text></g></svg>`;
+  const atmo=`<svg viewBox="0 0 420 240" class="ebsvg"><defs><linearGradient id="ebsky" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#6fa8e8"/><stop offset=".45" stop-color="#1d3f73"/><stop offset="1" stop-color="#02040c"/></linearGradient></defs><rect x="0" y="0" width="420" height="240" fill="url(#ebsky)"/>
+    ${[[230,"対流圏 0〜約12km：雲・雨・天気のすべて。空気の約8割"],[185,"成層圏 〜約50km：オゾン層が紫外線を吸収"],[140,"中間圏 〜約85km：流れ星が燃える"],[90,"熱圏 〜約600km：オーロラ・国際宇宙ステーション（約400km）"],[35,"外気圏 〜約1万km：宇宙へ溶けていく"]].map(([y,t])=>`<line x1="0" x2="420" y1="${y-14}" y2="${y-14}" stroke="#ffffff30"/><text x="8" y="${y-20}" font-size="11" fill="#fff">${t}</text>`).join("")}
+    <text x="414" y="118" font-size="10" fill="#f4d06a" text-anchor="end">カーマン線 100km（宇宙の入口）</text><line x1="0" x2="420" y1="123" y2="123" stroke="#f4d06a" stroke-dasharray="4 3"/></svg>`;
+  const tilt=`<svg viewBox="0 0 420 170" class="ebsvg"><circle cx="210" cy="85" r="18" fill="#ffd27a"/><ellipse cx="210" cy="85" rx="185" ry="55" fill="none" stroke="#4a5a80"/>
+    ${[[25,85,"6月（北半球の夏）"],[395,85,"12月（北半球の冬）"]].map(([x,y,t],i)=>`<g transform="translate(${x},${y})"><circle r="14" fill="#3d7fd0"/><line x1="-4" y1="-20" x2="4" y2="20" stroke="#fff" stroke-width="2" transform="rotate(${i?23:23})"/><text y="34" x="${i?21:-21}" font-size="10" fill="#cfd7ea" text-anchor="${i?"end":"start"}">${t}</text></g>`).join("")}
+    <text x="210" y="160" font-size="11" fill="#cfd7ea" text-anchor="middle">自転軸が23.4°傾いたまま公転するので、季節が生まれる</text></svg>`;
+  EB.part("earth","地球","🌍","惑星としての地球。岩石とプレート、大気と天気、海と水、地球の歴史、自然災害。");
+  EB.add({id:"earth",c3d:"un|earthcut",ic:"🌍",t:"地球という惑星",h:`
+    ${tbl([["半径","6,371 km（赤道6,378km・極6,357km）"],["質量","5.972×10²⁴ kg"],["表面重力","9.81 m/s²（物を落とすと1秒後に秒速9.8m）"],["1日（自転）","23時間56分4秒（恒星に対して）。太陽が南中してから次の南中まで24時間"],["1年（公転）","365.2422日。軌道半径 約1億4,960万km（1天文単位）。秒速約30kmで回る"],["自転軸の傾き","23.44°（季節の原因）"],["年齢","約45.4億年"],["表面","71%が海（平均の深さ3,688m、最深1万920m）、29%が陸（最高峰8,849m）"],["平均気温","約15℃（観測史上最も暑かった2024年は約15.1℃）。記録：最高56.7℃（1913年、アメリカ）・最低−89.2℃（1983年、南極）"],["磁場","液体の鉄の外核の流れが作る。太陽風から大気を守り、オーロラを生む"],["衛星","月（直径3,474km、距離約38万km、質量は地球の1/81）。潮の満ち干を起こし、自転軸を安定させている"]])}
+    ${fig(interior,"地球の内部（断面）")}${fig(atmo,"大気の層")}
+    <h4>空気の成分（乾燥空気）</h4>${bar([["窒素 N₂",78.08,"#7fb2ff"],["酸素 O₂",20.95,"#8fd16a"],["アルゴン Ar",.93,"#c99cf2"],["二酸化炭素 CO₂",.043,"#f06a6a","約430ppm（2025〜26年）"]],"%",100)}
+    <p>地上の気圧は約1,013hPa（1cm²あたり約1kgの空気がのっている）。水蒸気は場所により0〜4%。</p>
+    ${fig(tilt,"季節のしくみ")}
+    <h4>動き続ける惑星</h4><ul><li><b>プレートテクトニクス：</b>地表は十数枚の板（プレート）に分かれ、年に数cm動く。地震・火山・山脈はその境目で生まれる。</li><li><b>水の循環：</b>海から蒸発→雲→雨・雪→川→海。水の97.5%は海水で、淡水の約7割は氷。</li><li><b>炭素の循環：</b>大気・海・生物・岩石の間を炭素がめぐり、気候を左右する。</li></ul>`});
+  EB.add({id:"rocks",ic:"🌋",t:"岩石・プレート・地震と火山",k:"岩石 鉱物 火成岩 堆積岩 変成岩 プレート 大陸移動 パンゲア 地震 マグニチュード 震度 火山 環太平洋 山 エベレスト",h:`
+    <p class="eblead">地球の表面は十数枚の硬い板（プレート）に分かれ、年に数cmずつ動いています。地震・火山・山脈・海溝は、ほとんどがプレートの境目で生まれます。</p>
+    <h4>岩石の3つの種類</h4>
+    ${tbl([["火成岩","マグマが冷えて固まった岩。海底をつくる玄武岩、大陸に多い花こう岩"],["堆積岩","砂・泥・生き物の殻が積もって固まった岩。砂岩・泥岩・石灰岩。化石が見つかる"],["変成岩","熱と圧力で性質が変わった岩。石灰岩が変わった大理石など"]],["種類","でき方と例"])}
+    <p>岩石は、けずられて砂になり、積もって堆積岩になり、地下で変成岩やマグマになり…と、何百万年もかけて姿を変えながらめぐっている。岩石をつくる鉱物は6,000種類以上知られている。硬さはモース硬度で表し、1が滑石、7が石英、10がダイヤモンド。</p>
+    <h4>主なプレート</h4>
+    ${tbl([["太平洋プレート","最大。年に約8〜10cmずつ北西へ動き、日本海溝などで沈み込む"],["ユーラシアプレート","ヨーロッパとアジアの大部分"],["北アメリカプレート","北アメリカ・グリーンランド、日本の東北地方も含まれるとされる"],["アフリカプレート","東アフリカでは大地が裂け始めている（大地溝帯）"],["南アメリカ・南極・インド＝オーストラリア","インドがユーラシアにぶつかり続け、ヒマラヤ山脈が高くなっている"],["日本のまわり","太平洋・フィリピン海・北アメリカ・ユーラシアの4枚が集まる、世界でも珍しい場所"]],["プレート","特徴"])}
+    <h5>プレートの境目で起きること</h5>
+    ${tbl([["離れる","海の底の山脈（中央海嶺）で新しい地面が生まれる。アイスランドは陸に出た海嶺"],["沈み込む","海溝ができ、大地震と火山が起きる（日本、アンデス）"],["ぶつかる","大陸どうしが押し合って大山脈になる（ヒマラヤ）"],["すれ違う","横ずれの大断層（アメリカのサンアンドレアス断層）"]],["境目","できるもの"])}
+    <p>1912年、ヴェーゲナーは大陸が動くと唱えた。約3億〜2億年前、陸地は1つの超大陸パンゲアにまとまっていた。数億年後には、また1つにまとまると考えられている。</p>
+    <h4>地震</h4>
+    ${tbl([["マグニチュード（M）","地震そのものの大きさ。1増えるとエネルギーは約32倍、2増えると1,000倍"],["震度","その場所の揺れの強さ（日本では0〜7の10段階）"],["数","世界でM6以上は年に100〜150回ほど。日本とその周辺で、その約2割が起きる"]],["物差し","意味"])}
+    ${tbl([["1960年","チリ","M9.5","観測史上最大。津波が日本にも届いた"],["1964年","アラスカ","M9.2",""],["2004年","スマトラ島沖","M9.1","インド洋大津波"],["2011年","東北地方太平洋沖","M9.0〜9.1","東日本大震災"],["1952年","カムチャツカ","M9.0",""]],["年","場所","規模","メモ"])}
+    <h4>火山</h4>
+    <p>過去約1万2,000年の間に噴火した火山は約1,300〜1,400。毎年50〜70ほどが噴火している。太平洋をぐるりと囲む「環太平洋火山帯」に、世界の活火山の約4分の3が集まる。</p>
+    ${tbl([["1815年","タンボラ（インドネシア）","記録上最大級の噴火。火山灰が日光をさえぎり、翌年は北半球で「夏のない年」になった"],["1883年","クラカタウ（インドネシア）","爆発音が約4,800km先まで聞こえた"],["1991年","ピナトゥボ（フィリピン）","まき上げた硫酸のもやで、世界の平均気温が約0.5℃下がった"],["約7万4,000年前","トバ（インドネシア）","過去200万年で最大級の噴火のひとつ"]],["年","火山","できごと"])}
+    <h4>高い山</h4>
+    ${tbl([["エベレスト（チョモランマ）","8,849m","世界最高峰（2020年の測量）。8,000mを超える山14座はすべてヒマラヤ・カラコルム"],["K2","8,611m","世界第2位"],["アコンカグア","6,961m","南アメリカ最高峰"],["デナリ","6,190m","北アメリカ最高峰"],["キリマンジャロ","5,895m","アフリカ最高峰"],["富士山","3,776m","日本最高峰の成層火山"],["マウナケア","4,207m","海の底から測ると約1万m。世界一「背の高い」山"],["オリンポス山（火星）","約22km","太陽系で最も高い山のひとつ"]],["山","高さ","メモ"])}
+    ${src("地震の回数：USGS。火山の数：スミソニアン協会「Global Volcanism Program」。")}
+    ${links(map("world-map","世界地図で見る"),map("timeline","地球史の年表（大陸移動）を見る"))}`});
+
+  EB.add({id:"weather",ic:"⛅",t:"大気・天気・気候",k:"天気 気象 風 偏西風 高気圧 低気圧 前線 雲 台風 ハリケーン サイクロン 気候区分 ケッペン エルニーニョ 温室効果",h:`
+    <p class="eblead">天気は、太陽の熱・水・地球の自転がつくる、大気の動きです。毎日の空模様が「天気」、数十年の平均が「気候」です。</p>
+    <h4>天気のしくみ</h4>
+    ${flow(["太陽が地面と海を温める","温まった空気が上がる（低気圧）","上空で冷えて水蒸気が雲になる","雨や雪が降る","冷えた空気は下りる（高気圧）"])}
+    ${tbl([["赤道付近","強い日差しで空気が上昇し、雨が多い（熱帯雨林）"],["緯度30°付近","上空の空気が下りてきて乾く。世界の大きな砂漠がこの帯に並ぶ"],["中緯度（日本など）","西から東へ吹く偏西風に乗って、天気が西から変わる"],["地球の自転","風は北半球では右へ、南半球では左へそれる。台風の渦の向きが北と南で逆になる理由"]],["場所","特徴"])}
+    <h4>雲の種類（10種雲形）</h4>
+    ${tbl([["高い雲（5〜13km）","巻雲（すじ雲）・巻積雲（うろこ雲）・巻層雲（うす雲）"],["中くらい（2〜7km）","高積雲（ひつじ雲）・高層雲（おぼろ雲）・乱層雲（雨雲）"],["低い雲（〜2km）","層積雲（うね雲）・層雲（霧雲）"],["縦に伸びる雲","積雲（わた雲）・積乱雲（入道雲・雷雲。てっぺんは1万mを超える）"]],["高さ","雲"])}
+    <h4>台風・ハリケーン・サイクロン</h4>
+    <p>どれも同じ「熱帯低気圧」で、生まれる海によって呼び名が変わる（北西太平洋で台風、大西洋と北東太平洋でハリケーン、インド洋と南太平洋でサイクロン）。海面の水温が約26.5℃以上の暖かい海で、水蒸気が雲になるときに出す熱をエネルギーにして育つ。中心の「目」は、雲が少なく風も弱い。</p>
+    <h4>気候の分け方（ケッペンの気候区分）</h4>
+    ${tbl([["熱帯（A）","一年中暑い","熱帯雨林・サバンナ（シンガポール、アマゾン）"],["乾燥帯（B）","雨が少ない","砂漠・ステップ（サハラ、モンゴル）"],["温帯（C）","四季がある","日本の多く、ヨーロッパ西部、アメリカ東部"],["冷帯（D）","冬が長く寒い","シベリア、カナダ、北海道"],["寒帯（E）","一年中寒い","南極、グリーンランド、北極海沿岸"]],["気候","特徴","例"])}
+    <h4>エルニーニョとラニーニャ</h4>
+    <p>太平洋の赤道付近で、東側の海面水温が平年より高くなる現象がエルニーニョ、低くなる現象がラニーニャ。数年おきに入れ替わり、世界中の天候（大雨・干ばつ・暖冬など）に影響する。</p>
+    <h4>温室効果</h4>
+    <p>大気中の水蒸気や二酸化炭素は、地面から出る熱（赤外線）の一部を吸って地上に戻す。この自然の温室効果がなければ、地球の平均気温は約−18℃になる（実際は約15℃）。人類が石炭・石油・ガスを燃やして二酸化炭素を増やしたため、気温が上がっている（${see("issues","いま地球が抱える課題")}）。</p>
+    <h4>天気の記録</h4>
+    ${tbl([["最も暑い","56.7℃（1913年、アメリカ・デスバレー）"],["最も寒い","−89.2℃（1983年、南極・ボストーク基地）"],["最も雨が多い","インド北東部のマウシンラム・チェラプンジ周辺（年に1万mm超）"],["最も乾いた場所","チリのアタカマ砂漠（何年も雨が降らない場所がある）"],["最も強い風","竜巻の中で秒速約135m（1999年、アメリカ、レーダー観測）"]],["記録","値と場所"])}
+    ${links(map("world-map","世界地図（気候の風景）で見る"))}`});
+
+  EB.add({id:"ocean",ic:"🌊",t:"海と水",k:"海 大洋 太平洋 大西洋 塩分 海流 黒潮 深層循環 潮の満ち引き 深海 マリアナ海溝 川 湖 ナイル アマゾン バイカル 淡水",h:`
+    <p class="eblead">地球は「水の惑星」です。表面の7割を海がおおい、その水は蒸発・雨・川をめぐって、生き物と気候を支えています。</p>
+    <h4>地球の水はどこにあるか</h4>
+    ${bar([["海水",97.5,"#3d7fd0"],["淡水",2.5,"#8fd1ff","うち約7割は氷河と氷床、約3割は地下水"]],"%",100)}
+    <p>川や湖の水は、淡水のうちでも約1%ほど。人が使いやすい水は、地球の水全体のほんのわずかしかない。</p>
+    <h4>5つの大洋</h4>
+    ${tbl([["太平洋","約1億6,500万km²","最大・最深。陸地をすべて合わせたより広い"],["大西洋","約1億600万km²","ヨーロッパ・アフリカと南北アメリカの間"],["インド洋","約7,000万km²","最も温かい大洋"],["南極海","約2,000万km²","南極を囲む。強い海流がぐるりと回る"],["北極海","約1,400万km²","最も小さく浅い。夏の海氷が減っている"]],["大洋","面積","特徴"])}
+    ${tbl([["平均の深さ","約3,700m"],["最も深い所","マリアナ海溝チャレンジャー海淵。約1万900m（エベレストを沈めても2,000m以上余る）"],["塩分","約3.5%（海水1Lに約35g。大部分は塩化ナトリウム）"],["水温","表面は−2℃〜30℃以上。深い所は2〜4℃前後"],["光","200mより深くはほとんど届かない。それより下は暗い深海"]],["項目","値"])}
+    <h4>海の流れ</h4>
+    <ul><li><b>表面の海流：</b>風が動かす。日本の南を流れる黒潮は世界最大級の暖流（秒速2mに達する）。</li><li><b>深い所の流れ（深層循環）：</b>北大西洋や南極のまわりで、冷たく塩からい重い水が沈み、海の底をゆっくり世界中へ流れる。一巡りに千年以上かかり、熱と二酸化炭素を運んで気候を安定させている。</li></ul>
+    <h4>潮の満ち引き</h4>
+    <p>主に月の引力（太陽はその約半分の効果）で海面が上下し、多くの場所で1日に約2回の満潮と干潮がある。月と太陽が一直線に並ぶ新月・満月のころは差が大きい（大潮）。カナダのファンディ湾では、満潮と干潮の差が約16mになる。</p>
+    <h4>海が地球にしていること</h4>
+    ${cards([["酸素をつくる","海の植物プランクトンの光合成が、地球の酸素の約半分をつくる","#6fd3c7"],["熱をたくわえる","温暖化で増えた熱の約9割を海が吸い込んでいる","#ff8f8f"],["二酸化炭素を吸う","人が出した二酸化炭素の約4分の1を吸収。そのぶん海が酸性に近づく","#9fb3d6"],["まだ知らない世界","海底のうち詳しい地図があるのは約4分の1（2024年）。深海には未知の生き物が多い","#b48cff"]],220)}
+    <h4>大きな川と湖</h4>
+    ${tbl([["ナイル川","約6,650km","最も長い川とされる（アマゾン川とする説もある）"],["アマゾン川","約6,400km","流れる水の量は世界一。世界の川が海へ運ぶ水の約2割"],["長江","約6,300km","アジア最長"],["カスピ海","約37万km²","最大の湖（塩湖）"],["スペリオル湖","約8万2,000km²","最大の淡水湖（北アメリカの五大湖）"],["バイカル湖","深さ1,642m","最も深く古い湖（約2,500万年）。地表の淡水の約2割をたたえる"],["死海","湖面は海面下約430m","陸地の最も低い場所。塩分が濃く、人が浮く"]],["名前","大きさ","特徴"])}
+    ${src("水の分布：USGS。海の熱の吸収：IPCC第6次評価報告書。海底地図：Seabed 2030（2024年）。")}
+    ${links(map("world-map","世界地図で見る"))}`});
+
+  EB.add({id:"earthhist",ic:"🦕",t:"地球の歴史",k:"地質時代 冥王代 太古代 原生代 古生代 中生代 新生代 カンブリア爆発 恐竜 大量絶滅 全球凍結 氷河期 大酸化",h:`
+    <p class="eblead">地球の46億年は、海と大気ができ、生命が生まれ、大陸が動き、何度もの大絶滅をくぐり抜けた歴史です。人類が登場したのは、その最後のほんの一瞬です。</p>
+    <h4>地質時代</h4>
+    ${tbl([["冥王代","46億〜40億年前","地球の誕生。火星ほどの天体がぶつかって月ができた（約45億年前）。海ができる"],["太古代","40億〜25億年前","最初の生命（約38億年前とされる）。光合成をする細菌が現れる"],["原生代","25億〜5.39億年前","大気に酸素が増える（大酸化、約24億年前）。核を持つ細胞、多細胞の生き物。地球全体が凍った時期も（全球凍結）"],["古生代","5.39億〜2.52億年前","カンブリア爆発で動物の体の形が出そろう。魚、植物と動物の上陸、大森林（石炭のもと）、爬虫類"],["中生代","2.52億〜6,600万年前","恐竜の時代。哺乳類・鳥・花の咲く植物が現れる"],["新生代","6,600万年前〜現在","哺乳類が多様になる。約260万年前から氷河期（氷期と間氷期のくり返し）。人類の登場"]],["時代","いつ","主なできごと"])}
+    <h4>5回の大量絶滅</h4>
+    ${tbl([["オルドビス紀末","約4億4,500万年前","約85%","寒冷化と海面低下"],["デボン紀後期","約3億7,200万年前","約75%","海の酸素不足など"],["ペルム紀末","約2億5,200万年前","約90%以上","史上最大。シベリアの巨大噴火による温暖化と海の酸性化"],["三畳紀末","約2億100万年前","約80%","大規模な火山活動。その後、恐竜が栄える"],["白亜紀末","6,600万年前","約75%","直径約10kmの小惑星がメキシコに衝突。鳥以外の恐竜が絶滅"]],["名前","いつ","消えた種の割合（推定）","原因"])}
+    <p>いまの地球では、人間の活動によって種が自然の何十倍以上の速さで消えていて、「6回目の大量絶滅」が始まっていると警告する研究者もいる。</p>
+    <h4>地球の歴史を1年に縮めると</h4>
+    ${tbl([["1月1日 0時","地球が生まれる（46億年前）"],["3月はじめ","最初の生命"],["6月下旬","大気に酸素が増え始める"],["11月中旬","カンブリア爆発（動物が一気に多様に）"],["11月下旬","植物が陸に上がる"],["12月12日ごろ","恐竜が現れる"],["12月26日","恐竜が絶滅する"],["12月31日 10時半ごろ","人類の祖先がチンパンジーの祖先と分かれる"],["12月31日 23時26分","ホモ・サピエンスが現れる"],["23時58分38秒","農耕が始まる"],["23時59分58秒","産業革命"]],["日時","できごと"])}
+    ${links(map("timeline","地球史の年表（ブランチ）を見る"),map("micro","生き物のスケールを見る"))}`});
+
+  EB.add({id:"disaster",ic:"⚠️",t:"自然災害",k:"災害 地震 津波 火山 台風 洪水 干ばつ 熱波 山火事 竜巻 雷 防災 避難 備え 関東大震災 東日本大震災",h:`
+    <p class="eblead">地球は生きている惑星なので、地震・噴火・嵐は止められません。人類にできるのは、知ること、備えること、早く知らせることです。</p>
+    <h4>主な自然災害</h4>
+    ${tbl([["地震","プレートの境目や断層がずれて揺れる。建物の倒壊・火災・土砂崩れ"],["津波","海底の地震や噴火で海水が持ち上がる。ジェット機ほどの速さで海を渡り、浅い所で高くなる"],["火山噴火","溶岩・火砕流・火山灰・ガス。大噴火は世界の気候も冷やす"],["台風・ハリケーン","強風・大雨・高潮"],["洪水・土砂災害","大雨で川があふれる、斜面が崩れる"],["干ばつ","雨が降らず、水と食料が不足する"],["熱波・寒波","命にかかわる暑さ・寒さ。熱波は温暖化で増えている"],["山火事","乾燥と高温で広がる"],["竜巻・雷","局地的だが激しい"]],["災害","特徴"])}
+    <h4>歴史に残る大災害</h4>
+    ${tbl([["1556年","中国・華県地震","約83万人","記録上最も死者の多い地震"],["1923年","関東大震災（日本）","約10万5,000人","多くは火災による"],["1931年","中国の大洪水","数十万〜数百万人","推計に大きな幅がある"],["1970年","ボーラ・サイクロン（現在のバングラデシュ）","30万〜50万人",""],["2004年","インド洋大津波","約23万人","14か国に被害"],["2010年","ハイチ地震","10万〜30万人","推計に幅がある"],["2011年","東日本大震災","約2万2,000人","死者・行方不明・関連死の合計。原子力発電所の事故も起きた"],["2023年","トルコ・シリア地震","約6万人",""]],["年","災害","死者","メモ"])}
+    <h4>身を守る基本</h4>
+    ${cards([["地震","頭を守り、倒れてくる物・落ちてくる物から離れる。揺れがおさまったら火の始末と出口の確保","#d8b48a"],["津波","海の近くで強い揺れ・長い揺れを感じたら、警報を待たずにすぐ高い所へ","#3d7fd0"],["台風・大雨","早めに避難する。増水した川や用水路に近づかない","#7fb2ff"],["熱波","水分と塩分をとり、涼しい場所で過ごす。高齢者と子どもに注意","#ff8f8f"],["雷","建物や車の中へ。木の下は危ない","#f4d06a"],["備え","飲み水（1人1日約3L）と食料を数日分、懐中電灯・ラジオ・常備薬","#8fd16a"]],200)}
+    <p>地震の揺れが届く前に知らせる緊急地震速報、津波警報、台風の進路予報、人工衛星による観測など、<b>早く知らせるしくみ</b>が多くの命を救っている。</p>
+    ${src("死者数は推計に幅があるものが多い。関東大震災・東日本大震災：日本の政府・消防庁の資料による概数。")}
+    ${links(map("world-map","世界地図で見る"))}`});
+})();
+
+/* 第5部：生命 */
+(function(){
+  const {bar,tbl,fig,dots,map,see,cards,flow,note,src,links}=EB;
+  // ---- 遺伝暗号（標準） ----
+  const B="TCAG",AA="FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG";
+  const AN={F:"フェニルアラニン",L:"ロイシン",S:"セリン",Y:"チロシン","*":"停止",C:"システイン",W:"トリプトファン",P:"プロリン",H:"ヒスチジン",Q:"グルタミン",R:"アルギニン",I:"イソロイシン",M:"メチオニン（開始）",T:"トレオニン",N:"アスパラギン",K:"リシン",V:"バリン",A:"アラニン",D:"アスパラギン酸",E:"グルタミン酸",G:"グリシン"};
+  const ACOL={"*":"#f06a6a",M:"#8fd16a"};
+  let code=`<table class="ltable ebcode"><thead><tr><th>1文字目＼2文字目</th>${[..."TCAG"].map(b=>`<th>${b==="T"?"U(T)":b}</th>`).join("")}</tr></thead><tbody>`;
+  for(let i=0;i<4;i++){code+=`<tr><th>${B[i]==="T"?"U(T)":B[i]}</th>`;for(let j=0;j<4;j++){code+="<td>";for(let k=0;k<4;k++){const idx=i*16+j*4+k,a=AA[idx];code+=`<div style="color:${ACOL[a]||"inherit"}"><span class="num">${(B[i]+B[j]+B[k]).replace(/T/g,"U")}</span> ${AN[a]}</div>`;}code+="</td>";}code+="</tr>";}code+="</tbody></table>";
+  EB.part("life","生命","🧬","生命のしくみ、細胞と遺伝、進化、生き物の分類、植物・動物・菌、生態系。");
+  EB.add({id:"life",c3d:"mol|dna",ic:"🧬",t:"生命",h:`
+    <p class="eblead">地球の生命はすべて、同じしくみを共有する一つの家系です。約38億年前に海で生まれたと考えられています。</p>
+    ${tbl([["材料","炭素を骨格に、水素・酸素・窒素・リン・硫黄。溶媒は液体の水"],["設計図","DNA。4種類の塩基 A（アデニン）・T（チミン）・G（グアニン）・C（シトシン）の並び。AはTと、GはCと対になる二重らせん"],["読み取り","DNA → RNA（TがUに）→ 3文字ずつ読み → 20種類のアミノ酸をつなげてタンパク質を作る"],["エネルギー","ATPという分子で受け渡す。植物は光合成で太陽光から糖を作る"],["単位","細胞（大きさ1〜100μm）。細菌は1個の細胞、人は約37兆個"],["種の数","名前のついた種は約200万。実際は約870万種（真核生物）とする推定がある"]])}
+    <h4>遺伝暗号表（ほぼすべての生物で共通）</h4><p>RNAの3文字（コドン）がどのアミノ酸を表すか。この表は地球生命の「共通言語」です。</p><div class="ebscroll">${code}</div>
+    <h4>地球の生き物の重さ（炭素量、2018年の推計）</h4>
+    ${bar([["植物",450,"#5fbf5f"],["細菌",70,"#8fd16a"],["菌類",12,"#d8b48a"],["古細菌",7,"#6fd2c0"],["原生生物",4,"#b0d6e6"],["動物",2,"#ff8f8f"],["ウイルス",.2,"#c94a4a"]]," Gt")}
+    <p>動物のうち人類は約0.06Gt、家畜は約0.1Gt、野生の哺乳類は約0.007Gt。<b>地球の哺乳類の重さの大半は人間と家畜</b>になっている。</p>
+    <p>生命の系統（家系図）は「年表 → 地球史」、体のしくみは「宇宙・地球・ミクロ → ミクロの世界」で見られます。</p>`});
+  EB.add({id:"cell",ic:"🔬",t:"細胞と遺伝",c3d:"un|cell",k:"細胞 細胞膜 核 ミトコンドリア 葉緑体 リボソーム 原核 真核 細胞分裂 減数分裂 メンデル 遺伝子 染色体 ゲノム 突然変異 PCR CRISPR iPS細胞",h:`
+    <p class="eblead">生き物の体は、細胞という小さな部屋でできています。細胞の中のDNAが設計図となり、親から子へ受け継がれます。</p>
+    <h4>細胞のつくり</h4>
+    ${tbl([["細胞膜","脂質の二重の膜。必要なものだけを出し入れする"],["核","DNAをしまう部屋（真核細胞だけにある）"],["ミトコンドリア","糖と酸素からエネルギー（ATP）を作る発電所。もとは別の細菌が入り込んで住みついたもの"],["葉緑体","植物の細胞にあり、光合成をする。これも元は光合成をする細菌"],["リボソーム","DNAの情報を読んでタンパク質を作る工場"],["小胞体・ゴルジ体","できたタンパク質を加工し、荷造りして運ぶ"],["細胞壁","植物・菌類・細菌の外側の丈夫な壁（動物にはない）"]],["部品","はたらき"])}
+    ${tbl([["原核細胞","核がない。小さい（約1〜10μm）","細菌・古細菌"],["真核細胞","核と部品の部屋を持つ。大きい（約10〜100μm）","動物・植物・菌類・アメーバなど"]],["種類","特徴","生き物"])}
+    <p>1665年、フックが顕微鏡でコルクの小部屋を見て「細胞（cell）」と名づけた。人の体には約200種類の細胞がある。酸素を運ぶ赤血球（核がなく、約120日で入れ替わる）、長いものは1mにもなる神経細胞、精子と卵など。</p>
+    <h4>細胞の分かれ方</h4>
+    <ul><li><b>体細胞分裂：</b>DNAをコピーして、同じ細胞を2つ作る。成長やけがの修復。</li><li><b>減数分裂：</b>染色体の数を半分にした細胞（精子・卵）を作る。受精で再び合わさり、両親から半分ずつ受け継いだ新しい組み合わせになる。</li></ul>
+    <h4>遺伝のしくみ</h4>
+    ${tbl([["メンデルの法則","1865年、エンドウの交配から、性質が粒のような単位（遺伝子）で伝わることを見つけた"],["顕性と潜性","2つの遺伝子のうち、表に出やすい方が顕性（優性）、隠れやすい方が潜性（劣性）。どちらが「すぐれている」という意味ではない"],["染色体","DNAが巻きついたもの。人は23対46本。うち1対が性染色体（女性XX・男性XY が基本）"],["遺伝子","タンパク質などを作る情報を持つDNAの区間。人は約2万個"],["ゲノム","ある生き物のDNAの全部。人は約31億塩基対。2003年に解読がほぼ完了し、2022年に完全な配列が発表された"],["突然変異","DNAのコピーのまちがいや損傷。多くは影響がないが、病気（がんなど）の原因にも、進化の材料にもなる"]])}
+    <h4>遺伝子を扱う技術</h4>
+    ${tbl([["1973年","遺伝子組み換え","別の生き物の遺伝子をつなぎ込む。インスリンを細菌に作らせる"],["1983年","PCR","DNAのごく一部を何百万倍にも増やす。病気の検査、犯罪捜査、化石のDNA研究"],["1996年","クローン羊ドリー","大人の体の細胞から、同じ遺伝子を持つ動物を作った"],["2006年","iPS細胞","皮膚などの細胞を、いろいろな細胞になれる状態に戻す（山中伸弥、2012年ノーベル賞）"],["2012年","ゲノム編集（CRISPR-Cas9）","DNAの狙った場所を切って書き換える（2020年ノーベル化学賞）。治療にも使われ始めた"],["いま","ゲノム解読の値段","最初の人のゲノムは数千億円かかったが、いまは数万円ほど"]],["年","技術","内容"])}
+    ${links(map("micro","細胞の中へズームする（ミクロ）"),map("lineage","医療の系統樹を見る"))}`});
+
+  EB.add({id:"evolution",ic:"🦴",t:"進化",k:"進化 ダーウィン 自然選択 化石 共通祖先 種の起源 人類の進化 猿人 原人 ネアンデルタール人 ホモ・サピエンス 出アフリカ",h:`
+    <p class="eblead">すべての生き物は、共通の祖先から長い時間をかけて枝分かれしてきました。その原動力の1つが自然選択です。</p>
+    <h4>自然選択のしくみ（ダーウィン、1859年『種の起源』）</h4>
+    ${flow(["同じ種でも少しずつ違う（個体差）","子は生き残れる数より多く生まれる","環境に合った個体が生き残りやすい","その違いが子に伝わる","長い時間で、別の種へ"])}
+    <p>進化は「進歩」ではなく「変化」。洞窟の魚が目を失うのも進化。また進化するのは1匹ではなく、集団全体の遺伝子の割合である。</p>
+    <h4>進化の証拠</h4>
+    ${tbl([["化石","魚から陸の動物への中間（ティクターリク）、恐竜と鳥の中間（始祖鳥）など、途中の姿が見つかっている"],["体のつくり","人の腕、コウモリの翼、クジラのひれは、同じ骨の並びを持つ（もとは同じ）"],["DNA","近い生き物ほどDNAが似ている。人とチンパンジーは約99%同じ"],["いま起きている進化","薬の効かない細菌の出現、ガラパゴス諸島のフィンチのくちばしの変化"]],["証拠","例"])}
+    <h4>生命の大きな出来事</h4>
+    ${tbl([["約38億年前","最初の生命（とされる）"],["約30億年前","光合成をする細菌"],["約20億年前","核を持つ細胞（真核生物）"],["約6億年前","大きな多細胞の生き物"],["約5.4億年前","カンブリア爆発（目・殻・足を持つ動物が一気に現れる）"],["約4.7億年前","植物が陸に上がる"],["約3.7億年前","脊椎動物が陸に上がる"],["約2.3億年前","恐竜が現れる"],["約2億年前","哺乳類が現れる"],["約1.5億年前","鳥が現れる（恐竜の一系統）"],["約700万年前","人類の祖先がチンパンジーの祖先と分かれる"],["約30万年前","ホモ・サピエンス"]],["いつ","できごと"])}
+    <h4>人類の進化</h4>
+    ${tbl([["猿人","約700万〜200万年前","二本足で歩き始める。アウストラロピテクス（「ルーシー」は約320万年前）"],["原人","約240万〜10万年前","石器を作り、火を使う。ホモ・エレクトスはアフリカの外へ広がった"],["旧人","約40万〜4万年前","ネアンデルタール人、デニソワ人。死者を葬り、装飾品も作った"],["新人（私たち）","約30万年前〜","ホモ・サピエンス。アフリカで生まれ、約6万〜7万年前から世界中へ広がった"]],["段階","いつ","特徴"])}
+    ${note("アフリカ以外の人々のDNAの約1〜2%はネアンデルタール人から受け継いだもの。私たちの祖先は、ほかの人類と出会い、子を残していました。","cool")}
+    <p><b>よくある誤解：</b>「人はサルから進化した」のではなく、人と今のサルは共通の祖先から分かれた親戚。</p>
+    ${links(map("timeline","地球史の年表（生命のブランチ）を見る"),map("micro","生き物を見る（ミクロ）"))}`});
+
+  EB.add({id:"taxonomy",ic:"🌳",t:"生き物の分類",k:"分類 ドメイン 界 門 綱 目 科 属 種 学名 細菌 古細菌 真核生物 昆虫 脊椎動物 哺乳類 鳥類 種の数 ウイルス",h:`
+    <p class="eblead">生き物は、似ているもの（共通の祖先から近いもの）どうしをまとめて、入れ子の箱のように分類します。名前がついた種は約200万。まだ名前のない種のほうがずっと多いと考えられています。</p>
+    <h4>分類の段階（人の場合）</h4>
+    ${tbl([["ドメイン","真核生物"],["界","動物界"],["門","脊索動物門"],["綱","哺乳綱"],["目","霊長目（サル目）"],["科","ヒト科"],["属","ヒト属（ホモ）"],["種","ホモ・サピエンス（学名 Homo sapiens）"]],["段階","人"])}
+    <p>学名は「属名＋種小名」の2語で、世界共通（18世紀のリンネが始めた方法）。</p>
+    <h4>生命の3つのドメイン</h4>
+    ${tbl([["細菌（バクテリア）","核のない単細胞。乳酸菌、大腸菌、光合成をするシアノバクテリア。地球のどこにでもいる"],["古細菌（アーキア）","見た目は細菌に似るが、別の系統。熱水、塩湖など厳しい環境にも住む。真核生物の祖先に近い"],["真核生物","核を持つ。動物・植物・菌類（きのこ・かび）と、アメーバや藻類などの原生生物"]],["ドメイン","特徴"])}
+    <h4>名前のついた種の数（概数）</h4>
+    ${bar([["昆虫",1000000,"#f4b942"],["植物",380000,"#5fbf5f"],["菌類",155000,"#d8b48a"],["クモ・ダニなど",110000,"#c99cf2"],["貝・イカなど（軟体動物）",85000,"#9fb3d6"],["エビ・カニなど（甲殻類）",70000,"#ff9a70"],["魚類",36000,"#3d7fd0"],["爬虫類",12000,"#8fd16a"],["鳥類",11000,"#7fb2ff"],["両生類",8900,"#6fd2c0"],["哺乳類",6700,"#ff8f8f"]],"種")}
+    <p>毎年1万数千種が新しく記載されている。実際の種の数は、真核生物だけで約870万種という推定がある。</p>
+    <h4>動物の主なグループ（門）</h4>
+    ${tbl([["節足動物","昆虫・クモ・エビ・カニ・ムカデ。動物の種の約8割"],["軟体動物","貝・イカ・タコ・カタツムリ"],["脊索動物","魚・両生類・爬虫類・鳥・哺乳類（背骨を持つ仲間）"],["環形動物","ミミズ・ゴカイ"],["刺胞動物","クラゲ・サンゴ・イソギンチャク"],["棘皮動物","ウニ・ヒトデ・ナマコ"],["海綿動物","最も単純な動物のひとつ"]],["門","例"])}
+    <h4>ウイルスは生き物？</h4>
+    <p>ウイルスは細胞を持たず、ほかの生き物の細胞に入り込まないと増えられない。そのため「生物と無生物のあいだ」とされることが多い。大きさは細菌の10分の1〜100分の1ほど。病気を起こすものは一部で、海には1Lに約100億個ものウイルスがいて、細菌の数を調節している。</p>
+    ${src("種の数：IUCNレッドリストの統計、Mammal Diversity Database、Reptile Database、AmphibiaWebなどの概数（2024〜25年）。推定種数：Moraほか（2011年）。")}
+    ${links(map("micro","生き物の一覧を見る（ミクロ）"))}`});
+
+  EB.add({id:"plants",ic:"🌿",t:"植物と菌類",k:"植物 光合成 コケ シダ 裸子植物 被子植物 花 受粉 森林 木 作物 トウモロコシ 小麦 米 菌類 きのこ かび 酵母 菌根 地衣類",h:`
+    <p class="eblead">植物は太陽の光から養分を作り、地球の生き物のほとんどを養っています。菌類はそれを分解して土に返し、植物の根と手を組んで生きています。</p>
+    <h4>光合成</h4>
+    <p>葉緑体の中で、光のエネルギーを使って二酸化炭素と水から糖を作り、酸素を出す（6CO₂＋6H₂O→C₆H₁₂O₆＋6O₂）。地球の大気の酸素は、光合成をする生き物が何十億年もかけて作った。地球の生き物の重さの8割以上は植物である。</p>
+    <h4>植物の歩み</h4>
+    ${tbl([["藻類","水の中で光合成を始めた"],["コケ植物","約4億7,000万年前、植物として初めて陸に上がる"],["シダ植物","水を運ぶ管（維管束）を持ち、背が高くなる。3億年前ごろの大森林が石炭になった"],["裸子植物","種子で増える（マツ・スギ・イチョウ・ソテツ）"],["被子植物","約1億3,000万年前から。花と果実を持ち、いまの植物の約9割を占める"]],["グループ","特徴"])}
+    <h4>花と受粉</h4>
+    <p>花は、花粉を運んでもらうための仕組み。虫・鳥・コウモリ・風・水が運ぶ。世界の主な作物の約4分の3は、ハチなどの動物による受粉の恩恵を受けている。</p>
+    <h4>木と森</h4>
+    <p>地球には約3兆本の木があると推定され、森林は陸地の約3割をおおう。森林は毎年約1,000万ヘクタール（日本の面積の約4分の1）ずつ失われている（2015〜2020年の平均）。</p>
+    ${tbl([["最も高い木","セコイアの一種「ハイペリオン」約116m（アメリカ）"],["最も長生き","ブリッスルコーンパインの一種、約4,800年以上（アメリカ）"],["最も大きな花","ラフレシア（直径約1m）"],["最も速く育つ","竹（1日に約90cm伸びた記録）"]],["記録","植物"])}
+    <h4>人類を養う作物（世界の年間生産量）</h4>
+    ${bar([["サトウキビ",19.2,"#8fd16a"],["トウモロコシ",12.4,"#f4d06a"],["米（もみ）",8.0,"#f4f0e0"],["小麦",8.0,"#d8b48a"],["ジャガイモ",3.8,"#c9a070"],["大豆",3.7,"#a0c070"]],"億トン")}
+    <p>米・小麦・トウモロコシの3つで、人類が食べるカロリーの約半分になる。</p>
+    <h4>菌類（きのこ・かび・酵母）</h4>
+    ${tbl([["分解者","落ち葉や倒れた木を分解して土に返す。菌類がいなければ森は死がいで埋まる"],["菌根","陸上植物の約8〜9割は、根で菌類と手を組む。菌は水と養分を、植物は糖を渡す"],["食べ物と薬","酵母はパン・酒、こうじかびはみそ・しょうゆ。青かびから抗生物質ペニシリンが見つかった"],["地衣類","菌と藻が一体になった生き物。岩や木の皮に住み、厳しい環境で最初に住みつく"],["世界最大の生き物","アメリカ・オレゴン州のオニナラタケの仲間は、地下で約10km²に広がっている"]],["役割","内容"])}
+    <p>菌類は植物でも動物でもない独自のグループで、DNAで比べると、植物より動物に近い。</p>
+    ${src("作物：FAOSTAT（2023年）。木の本数：Crowtherほか（2015年）。森林の減少：FAO「世界森林資源評価2020」。受粉：FAO・IPBES。")}
+    ${links(map("lineage","農業の系統樹を見る"),map("micro","植物の細胞を見る（ミクロ）"))}`});
+
+  EB.add({id:"animals",ic:"🐘",t:"動物",k:"動物 シロナガスクジラ ゾウ キリン チーター ハヤブサ 記録 感覚 反響定位 渡り 道具 ミツバチ 家畜 絶滅危惧種 レッドリスト",h:`
+    <p class="eblead">動物は、ほかの生き物を食べてエネルギーを得て、神経と筋肉で動く多細胞の生き物です。その姿と能力の幅は、驚くほど広いのです。</p>
+    <h4>動物の記録</h4>
+    ${tbl([["いちばん大きい","シロナガスクジラ。長さ最大約30m、重さ約150トン以上。地球史上最大級の動物"],["陸でいちばん大きい","アフリカゾウ。約6トン"],["いちばん背が高い","キリン。約5.5m"],["いちばん速い","ハヤブサの急降下（時速約390km）。陸ではチーター（時速約100km以上）"],["いちばん長生き","二枚貝のアイスランドガイ（507年の記録）。脊椎動物ではニシオンデンザメ（約400年と推定）"],["いちばん深い所に住む魚","シンカイクサウオの仲間（約8,300m）"],["いちばん小さい脊椎動物","パプアニューギニアのカエル（約7mm）"]],["記録","動物"])}
+    <h4>人にはない感覚</h4>
+    ${tbl([["コウモリ・イルカ","自分で出した音のこだまで、暗闇や濁った水の中を「見る」（反響定位）"],["渡り鳥・ウミガメ","地球の磁場を感じて方角を知る"],["イヌ","嗅覚が人の数千〜数万倍とされる"],["ヘビの一部","獲物の体温（赤外線）を感じる"],["ミツバチ","紫外線と、光の偏り（偏光）が見える"],["サメ","生き物の筋肉が出すかすかな電気を感じる"]],["動物","感覚"])}
+    <h4>動物の行動</h4>
+    <ul><li><b>渡り：</b>キョクアジサシは北極と南極の間を往復し、1年に約7万km飛ぶ。</li><li><b>道具：</b>チンパンジーは枝でアリを釣り、カラスは針金を曲げてかぎを作る。ラッコは石で貝を割る。</li><li><b>伝え合い：</b>ミツバチは8の字のダンスで、花の方向と距離を仲間に伝える。</li><li><b>社会：</b>アリやハチは女王・働き手などの分業をし、巣全体がひとつの生き物のように動く。</li></ul>
+    <h4>人と暮らす動物</h4>
+    <p>人類は約1万年前から動物を家畜にしてきた。いま地球には、ニワトリが約260億羽、牛が約15億頭、羊・ヤギがそれぞれ10億頭以上、豚が約10億頭いる。地球の鳥の重さの約7割は飼われているニワトリなどの家禽で、哺乳類の重さの大半は人と家畜が占める。</p>
+    <h4>消えていく動物</h4>
+    ${bar([["評価された種",172620,"#9aa6c2"],["絶滅のおそれ",48646,"#f06a6a"]],"種",172620)}
+    <p>国際自然保護連合（IUCN）が評価した約17万3,000種のうち、約4万9,000種に絶滅のおそれがある（2025年）。鳥類の約6割で数が減っている。ドードー（17世紀）、リョコウバト（1914年）、ニホンオオカミ（1905年ごろ）など、人の活動で消えた動物も多い。一方、保護によって数が回復した例（アオウミガメなど）もある。</p>
+    ${src("IUCNレッドリスト（2025年10月更新）。家畜の頭数：FAOSTAT（2023年ごろ）。生き物の重さ：Bar-Onほか（2018年）。")}
+    ${links(map("micro","生き物を3Dで見る（ミクロ）"),map("world-map","世界地図で見る"))}`});
+
+  EB.add({id:"ecology",ic:"🐝",t:"生態系",k:"生態系 食物連鎖 食物網 生産者 消費者 分解者 エネルギーピラミッド 炭素循環 窒素循環 バイオーム 熱帯雨林 サンゴ礁 生物多様性 共生 寄生 外来種",h:`
+    <p class="eblead">生き物は単独では生きられません。食べる・食べられる、助け合う・奪い合う関係でつながり、まわりの空気・水・土といっしょに1つのしくみ（生態系）をつくっています。</p>
+    <h4>食べる・食べられるのつながり</h4>
+    ${flow(["植物・藻類（生産者）","草食動物","肉食動物","大型の肉食動物"])}
+    <p>死がいやふんは、菌類や細菌（分解者）が分解して、植物が使える養分に戻す。実際のつながりは網の目のように複雑（食物網）。</p>
+    <p><b>エネルギーのピラミッド：</b>食べる段を1つ上がるごとに、エネルギーはおよそ1割しか伝わらない。だから大型の肉食動物は数が少なく、生態系の変化に弱い。</p>
+    <h4>物質のめぐり</h4>
+    ${tbl([["炭素","大気の二酸化炭素→光合成で植物へ→食べられて動物へ→呼吸・分解で大気へ。海と岩石も大量にたくわえる"],["窒素","空気の8割は窒素だが、そのままでは使えない。マメ科植物の根の細菌などが使える形にする（窒素固定）。20世紀に人工的に窒素肥料を作る方法（ハーバー・ボッシュ法）ができ、いまの人口の約半分の食料を支えている"],["水","蒸発・雨・川・地下水をめぐる。植物は根から吸った水を葉から出し、雨のもとになる"]],["物質","めぐり方"])}
+    <h4>地球のおもな生き物の環境（バイオーム）</h4>
+    ${tbl([["熱帯雨林","陸地の約6%ほどなのに、陸の生き物の種の半分以上が住むとされる"],["サバンナ","草原にまばらな木。ゾウ・キリン・ライオン"],["砂漠","陸地の約3分の1は乾燥地。夜に活動する生き物が多い"],["温帯の森と草原","四季に合わせて葉を落とす森、広い草原"],["北方林（タイガ）","針葉樹の大森林。世界の森林の約3割"],["ツンドラ","地面の下がずっと凍っている（永久凍土）"],["サンゴ礁","海底のごくわずかな面積に、海の生き物の約4分の1の種が集まる"],["深海の熱水噴出孔","日光ではなく、地下から出る化学物質のエネルギーで生きる生態系"]],["環境","特徴"])}
+    <h4>生き物どうしの関係</h4>
+    ${tbl([["共生（どちらも得）","花とハチ、根と菌根菌、クマノミとイソギンチャク、人と腸内細菌"],["寄生（片方が損）","カやダニ、寄生虫"],["競争","同じ食べ物・すみかを取り合う"],["捕食","食べる・食べられる"]],["関係","例"])}
+    <h4>生物多様性はなぜ大切か</h4>
+    <p>人類の食料・水・薬・木材、作物の受粉、きれいな空気と水、気候の安定は、多様な生き物が支えている（生態系サービス）。多様な生態系ほど、病気や気候の変化に強い。いっぽうで、森林の伐採・乱獲・汚染・気候変動・持ち込まれた外来種によって、生物多様性は急速に失われている（${see("issues","いま地球が抱える課題")}）。</p>
+    ${links(map("world-map","世界地図（自然遺産）を見る"))}`});
+})();
+
+/* 第6部：人間 */
+(function(){
+  const {bar,tbl,fig,dots,map,see,cards,flow,note,src,links}=EB;
+  EB.part("human","人間","🧍","ホモ・サピエンスの体と心。人体のしくみ、脳、病気と健康、食べ物と栄養、一生。");
+  EB.add({id:"human",ic:"🧍",t:"人類（ホモ・サピエンス）",h:`
+    <p class="eblead">約30万年前にアフリカで生まれた、二本足で歩く哺乳類。大きな脳と言葉を持ち、道具と知識を世代を超えて積み上げる。</p>
+    ${tbl([["人口","約82億人（2025年）。1800年は約10億人"],["身長・体重","成人で平均約1.6〜1.75m、約60〜80kg（地域差が大きい）"],["体温","約36.5〜37℃"],["寿命","世界平均 約73歳。最長記録は122歳"],["体のつくり","細胞 約37兆個、骨 206本、筋肉 約600、心臓は1分に約60〜100回拍動"],["脳","約1.4kg、神経細胞 約860億個。体重の2%だがエネルギーの約20%を使う"],["ゲノム","約31億塩基対、タンパク質の遺伝子 約2万個。人どうしのDNAの違いは約0.1%"],["生殖","男女2つの性。妊娠期間は約40週。子は約18年で大人になる"],["食事・睡眠","雑食。1日約2,000〜2,500kcal、睡眠は1日7〜9時間"]])}
+    <h4>感覚</h4>${tbl([["視覚","波長 約380〜750nm の光（虹の紫〜赤）を見る。3種類の色センサー"],["聴覚","約20Hz〜20,000Hz の音"],["嗅覚・味覚","甘・塩・酸・苦・うま味の5つの味"],["触覚など","温度・痛み・圧力、体の傾き（平衡感覚）、手足の位置（固有感覚）"]])}
+    <h4>どこに住んでいるか（2025年の人口）</h4>
+    ${bar([["アジア",48,"#ff8f8f"],["アフリカ",15.5,"#8fd16a"],["ヨーロッパ",7.4,"#7fb2ff"],["中南米",6.7,"#c99cf2"],["北アメリカ",3.9,"#f4b942"],["オセアニア",.47,"#6fd2c0"]],"億人")}
+    <p>人口が最も多い国はインド（約14.6億）と中国（約14.1億）。半分以上の人が都市に住む。</p>`});
+  EB.add({id:"body",ic:"🫀",t:"人体のしくみ",k:"人体 からだ 骨 筋肉 心臓 血液 血管 肺 呼吸 消化 胃 小腸 腎臓 肝臓 皮膚 ホルモン 免疫 腸内細菌 血液型",h:`
+    <p class="eblead">人の体は約37兆個の細胞でできた、精密な機械です。いくつもの「器官系」が分担して、酸素と栄養を運び、体温を保ち、外敵から身を守っています。</p>
+    <h4>器官系の分担</h4>
+    ${tbl([["骨格系","骨（大人で206本）。体を支え、脳や内臓を守り、骨の中で血液を作る"],["筋肉系","約600の筋肉。体を動かし、熱を作る。心臓も筋肉"],["循環器系","心臓と血管。心臓は1日に約10万回拍動し、約7,000Lの血液を送り出す"],["呼吸器系","鼻・のど・肺。1分に12〜20回呼吸し、1日に約1万L以上の空気を出し入れする。肺の中の小さな袋（肺胞）は約5億個"],["消化器系","口→食道→胃→小腸（約6〜7m）→大腸（約1.5m）。食べ物が通り抜けるのに1〜3日"],["泌尿器系","腎臓が1日に約150Lの血液成分をこし、約1.5Lの尿にして不要なものを出す"],["神経系","脳・脊髄・神経。体の情報を電気信号で伝える（"+see("brain","脳と心")+"）"],["内分泌系","ホルモンを血液に出して、成長・血糖・ストレスへの反応などを調節する"],["免疫系","白血球や抗体が、細菌やウイルスを見つけて退治する"],["生殖器系","子どもを作る"],["外皮系","皮膚・髪・つめ。皮膚は体で最も大きな器官（広げると約1.6m²）"]],["器官系","しくみ"])}
+    <h4>血液</h4>
+    ${tbl([["量","体重の約8%（大人で約5L）"],["赤血球","酸素を運ぶ。血を赤くするヘモグロビン（鉄を含む）を持つ。約120日で入れ替わる"],["白血球","病原体と戦う"],["血小板","傷口で血を固める"],["血しょう","栄養・ホルモン・二酸化炭素を運ぶ液体"],["血液型","ABO型（1901年発見）とRh型がよく使われる。輸血では型を合わせる"]],["項目","内容"])}
+    <h4>主な臓器</h4>
+    ${tbl([["脳","約1.4kg","考える・感じる・体を動かす司令塔"],["心臓","約300g","握りこぶしほど。生涯で約30億回拍動する"],["肺","左右で約1kg","酸素を取り込み、二酸化炭素を出す"],["肝臓","約1.2〜1.5kg","最大の内臓。栄養の貯蔵・解毒・胆汁づくりなど数百の仕事。一部を切っても再生する"],["腎臓","1個約150g","血液をこして尿を作る"],["胃","空っぽで約50mL、食後は約1.5L","強い酸（pH1〜2）で食べ物を溶かし、殺菌する"]],["臓器","重さ・大きさ","はたらき"])}
+    <h4>体の中の小さな同居人</h4>
+    <p>腸の中には約38兆個の細菌が住み、人の細胞の数とほぼ同じ。食べ物の消化を助け、ビタミンを作り、免疫を鍛える。重さは全部で約0.2kg。</p>
+    <h4>体の数字</h4>
+    ${tbl([["水分","大人で体重の約60%"],["体温","約36.5〜37℃（脳の視床下部が一定に保つ）"],["髪","約10万本。1日に約0.3mm伸びる"],["神経の信号の速さ","速いもので秒速約120m"],["体のDNAを全部つなぐと","約2m×37兆個。地球と太陽を何百往復もする長さ"]],["項目","値"])}
+    ${links(map("micro","体の中へズームする（ミクロ）"),map("lineage","医療の系統樹を見る"))}`});
+
+  EB.add({id:"brain",ic:"🧠",t:"脳と心",c3d:"un|neurons",k:"脳 大脳 前頭葉 小脳 脳幹 海馬 扁桃体 ニューロン シナプス 記憶 感情 睡眠 夢 意識 心理学 錯視 心の健康",h:`
+    <p class="eblead">約1.4kgの脳の中で、約860億個の神経細胞（ニューロン）がつながり合い、考え・記憶・感情・意識を生み出しています。脳が自分自身を完全に理解するまでには、まだ遠い道のりがあります。</p>
+    <h4>脳の地図</h4>
+    ${tbl([["前頭葉","考える・計画する・がまんする・話す。人で特に大きい"],["頭頂葉","体の感覚、空間の位置"],["側頭葉","聞く、言葉の理解、記憶"],["後頭葉","見る（目からの情報を処理する）"],["小脳","体の動きをなめらかにし、バランスをとる"],["脳幹","呼吸・心臓の拍動・眠りと目覚め。生きるための基本"],["海馬","新しい記憶を作る"],["扁桃体","恐れなどの感情。危険にすばやく反応する"],["視床下部","体温・空腹・のどの渇き・ホルモンの司令"]],["部分","主な役割"])}
+    <h4>ニューロンのしくみ</h4>
+    <p>ニューロンは電気信号を細い線（軸索）で送り、つなぎ目（シナプス）では化学物質（神経伝達物質。ドーパミン・セロトニンなど）で次のニューロンに伝える。つなぎ目の数は約100兆。<b>使うつながりは強くなり、使わないつながりは弱くなる</b>——これが学習と記憶のもとである（脳の可塑性）。脳は体重の約2%なのに、体のエネルギーの約20%を使う。</p>
+    <h4>記憶</h4>
+    ${tbl([["感覚記憶","1秒ほど","見たり聞いたりしたものの一瞬の残り"],["短期記憶","数十秒","電話番号を覚えておく間。同時に覚えられるのは数個"],["長期記憶","何年も","思い出（エピソード記憶）、知識（意味記憶）、自転車の乗り方（手続き記憶）"]],["種類","続く時間","例"])}
+    <p>記憶はビデオの録画ではなく、思い出すたびに作り直される。そのため、本当にはなかったことを「覚えている」こともある。</p>
+    <h4>眠りと夢</h4>
+    <p>眠りには、夢を多く見るレム睡眠と、深く休むノンレム睡眠があり、約90分の周期でくり返す。眠っている間に脳は記憶を整理し、老廃物を流し出す。眠りが足りないと、注意力・記憶・気分・免疫が落ちる。</p>
+    <h4>脳のくせ</h4>
+    <ul><li><b>錯視：</b>脳は目からの不完全な情報を「推測」で補うので、同じ長さの線が違って見えたりする。</li><li><b>注意の限界：</b>何かに集中していると、目の前の大きな変化にも気づかないことがある。</li><li><b>思い込み：</b>人はさまざまな認知バイアスを持つ（${see("logic","論理・確率・統計")}）。</li></ul>
+    <h4>意識——最大のなぞ</h4>
+    <p>脳の電気と化学の活動から、なぜ「赤い」「痛い」といった主観的な感じ（クオリア）が生まれるのかは、まだわかっていない。科学と哲学の大きな未解決問題である（${see("philosophy","哲学と倫理")}）。</p>
+    <h4>心の健康</h4>
+    <p>うつ病や不安症など、心の病気とともに生きる人は世界で約8人に1人（2019年、WHO）。心の病気は弱さではなく、治療や支えで良くなることが多い。つらいときは、信頼できる人や専門家に話すことが助けになる。</p>
+    ${src("ニューロン数：Azevedoほか（2009年）。心の健康：WHO「World mental health report」（2022年）。")}
+    ${links(map("micro","神経細胞を見る（ミクロ）"),map("lineage","学問（心理学）の系統樹を見る"))}`});
+
+  EB.add({id:"health",ic:"🩺",t:"病気と健康",k:"病気 死因 心臓病 脳卒中 がん 糖尿病 感染症 ウイルス 細菌 マラリア パンデミック 黒死病 スペインかぜ HIV 新型コロナ ワクチン 抗生物質 薬剤耐性 寿命 健康寿命",h:`
+    <p class="eblead">人類の平均寿命は、200年前の約30歳から73歳まで延びました。感染症の多くを抑えたいま、死因の中心は心臓病・脳卒中・がんなどの「うつらない病気」に移っています。</p>
+    <h4>世界の死因（2023年）</h4>
+    ${bar([["虚血性心疾患（心筋梗塞など）",9.5,"#f06a6a"],["脳卒中",6.8,"#ff8f8f"],["慢性閉塞性肺疾患（COPD）",3.6,"#c9a070"],["下気道感染症（肺炎など）",2.7,"#7fb2ff"],["認知症（アルツハイマー病など）",2.1,"#c99cf2"],["糖尿病",2.0,"#f4b942"],["気管・気管支・肺のがん",1.8,"#9aa6c2"],["高血圧性心疾患",1.7,"#e6a0c4"],["腎臓病",1.6,"#d8b48a"],["下痢性疾患",1.5,"#6fd2c0"]],"百万人")}
+    <p>2023年に世界で亡くなった約6,100万人のうち、上の10の原因で約3,300万人。うつらない病気（非感染性疾患）が死因の約74%を占める。新型コロナは2021年に最大の死因だったが、2023年には14位になった。</p>
+    <h4>寿命</h4>
+    ${tbl([["世界の平均寿命","73.3歳（2023年）"],["健康寿命","62.8歳（介助なしで暮らせる期間の平均）"],["国による差","最も長い国々（日本・香港・スイスなど）は80代半ば、最も短い国々は50代"],["日本","女性 約87歳、男性 約81歳（2024年）"]],["項目","値"])}
+    <h4>病気の原因になる小さな生き物</h4>
+    ${tbl([["ウイルス","かぜ、インフルエンザ、新型コロナ、はしか、HIV"],["細菌","結核（年に100万人以上が亡くなる）、コレラ、肺炎の一部"],["菌類","水虫、カンジダ症"],["原虫","マラリア（蚊がうつす。年に約60万人が亡くなり、多くはアフリカの子ども）"],["寄生虫","回虫、住血吸虫など"]],["種類","病気の例"])}
+    <h4>人類をおそった大流行</h4>
+    ${tbl([["14世紀","黒死病（ペスト）","ヨーロッパの人口の3分の1以上が亡くなったとされる"],["1918〜20年","スペインかぜ（インフルエンザ）","世界で数千万人が亡くなった"],["1981年〜","HIV／エイズ","累計で4,000万人以上が亡くなったが、いまは薬で長く生きられる"],["2020年〜","新型コロナウイルス感染症","2020〜21年だけで約1,500万人の超過死亡（WHOの推計）"]],["時代","病気","被害"])}
+    <h4>病気と戦う道具</h4>
+    ${tbl([["ワクチン","病原体の「手配書」を体に覚えさせる。天然痘は1980年に地球上から根絶された。ポリオは99%以上減った"],["抗生物質","細菌を殺す薬。1928年のペニシリン発見から。ただし使いすぎで、薬の効かない細菌（薬剤耐性菌）が増えている"],["きれいな水と下水","コレラなど多くの感染症を減らした、最大の健康対策のひとつ"],["手洗い","石けんでの手洗いは、下痢や肺炎を大きく減らす"],["検診と早期発見","がんや高血圧は、早く見つけるほど治しやすい"]],["方法","しくみ"])}
+    <h4>健康の基本（多くの研究で一致していること）</h4>
+    ${cards([["たばこを吸わない","肺がん・心臓病・脳卒中の最大の防げる原因","#9aa6c2"],["体を動かす","週に150分ほどの早歩き程度の運動が、多くの病気を減らす","#8fd16a"],["よく眠る","大人は7〜9時間が目安","#7fb2ff"],["バランスよく食べる","野菜・果物・豆・全粒の穀物を多く、塩・砂糖・加工肉は控えめに","#f4b942"],["お酒は控えめに","少ないほど体への害は小さい","#c99cf2"],["人とつながる","孤独は健康を損なう。支え合いは体と心を守る","#e6a0c4"]],200)}
+    ${src("死因と寿命：WHO「Global Health Estimates」（2026年10月公表、2023年のデータ）。マラリア：WHO「World Malaria Report」。日本の平均寿命：厚生労働省「簡易生命表」（2024年）。新型コロナの超過死亡：WHO（2022年）。")}
+    ${links(map("lineage","医療の系統樹を見る"),map("micro","ウイルスと細菌を見る（ミクロ）"))}`});
+
+  EB.add({id:"food",ic:"🍚",t:"食べ物と栄養",k:"栄養 栄養素 炭水化物 脂質 タンパク質 ビタミン ミネラル カロリー 主食 米 小麦 飢餓 食料不安 肥満 食品ロス 水 味覚",h:`
+    <p class="eblead">人は食べ物からエネルギーと体の材料を得ています。いま地球では、飢えている人と、食べすぎで病気になる人、そして捨てられる食べ物が同時に存在しています。</p>
+    <h4>栄養素</h4>
+    ${tbl([["炭水化物","エネルギー源（1gで約4kcal）","米・パン・めん・いも・砂糖"],["脂質","エネルギー源（1gで約9kcal）・細胞の膜・ホルモンの材料","油・バター・肉の脂・ナッツ"],["タンパク質","筋肉・内臓・酵素・抗体の材料（1gで約4kcal）","肉・魚・卵・大豆・乳製品"],["ビタミン","体の調子を整える（13種類）。不足すると病気になる（ビタミンCの不足で壊血病など）","野菜・果物・レバー"],["ミネラル","骨（カルシウム）、血（鉄）、神経（ナトリウム・カリウム）など","海藻・乳製品・塩"],["食物繊維","腸内細菌のえさになり、腸の調子を整える","野菜・豆・きのこ・全粒穀物"],["水","体の約60%。1日に飲み物と食べ物から約2〜2.5Lをとり、同じだけ出す","—"]],["栄養素","はたらき","多く含む食べ物"])}
+    <p>必要なエネルギーは、年齢・体格・活動量で大きく変わる（大人でおよそ1日2,000kcal前後）。</p>
+    <h4>味の感じ方</h4>
+    <p>舌は、甘味（エネルギー）・塩味（ミネラル）・うま味（タンパク質）・酸味（腐敗や未熟）・苦味（毒）の5つを感じる。どれも「食べてよいか」を判断するためのセンサー。香り（嗅覚）が加わって、さまざまな「味」になる。</p>
+    <h4>世界の食卓</h4>
+    <p>米・小麦・トウモロコシの3つで、人類が食べるカロリーの約半分。アジアは米、ヨーロッパ・中東・北アフリカは小麦、中南米とアフリカの一部はトウモロコシやキャッサバ・いもが主食。宗教や文化で食べない物（豚肉・牛肉・肉全般など）もある（${see("living","衣・食・住")}）。</p>
+    <h4>飢えと食べすぎ</h4>
+    ${tbl([["慢性的な飢餓","約6億4,500万人（世界人口の7.8%、2025年）。3年続けて減ったが、アフリカでは5人に1人"],["食料が足りない不安","中程度以上の食料不安は約21億人（25.8%）"],["健康的な食事","世界の約3人に1人が、健康的な食事を買えない"],["肥満","大人の約8億9,000万人（2022年）。心臓病・糖尿病の原因になる"],["食品ロス","作られた食べ物の約13%が店に届くまでに失われ、約19%が店や家庭で捨てられる"]],["問題","現状"])}
+    ${note("世界全体では、全員に十分なカロリーを生産できています。飢えの主な原因は、貧困・紛争・気候の災害・流通の問題です。","cool")}
+    <h4>食べ物を安全に</h4>
+    <ul><li>十分に加熱する（肉・卵・魚の多くの細菌は75℃・1分ほどで死ぬ）。</li><li>冷やす・乾かす・塩や砂糖や酢に漬ける・発酵させる——人類が編み出した保存の知恵。</li><li>調理の前と食事の前に手を洗う。</li></ul>
+    ${src("飢餓・食料不安：FAOほか「SOFI 2026」（2025年のデータ）。肥満：WHO（2022年）。食品ロス：FAO（2019年）、UNEP「Food Waste Index Report 2024」。")}
+    ${links(map("lineage","食料・食文化の系統樹を見る"))}`});
+
+  EB.add({id:"lifecourse",ic:"👶",t:"一生",k:"誕生 妊娠 赤ちゃん 成長 思春期 大人 老化 寿命 長寿 死 葬儀 儀式 成人 結婚 人口ピラミッド",h:`
+    <p class="eblead">人は約40週をお母さんのおなかの中で過ごして生まれ、約20年かけて大人になり、平均して70年あまりを生きます。</p>
+    <h4>生まれるまで</h4>
+    ${tbl([["受精","精子と卵が出会い、両親の遺伝子が半分ずつ合わさる"],["妊娠期間","約40週（約280日）"],["生まれたとき","体重約3kg、身長約50cm"],["世界の誕生","1年に約1億3,000万人が生まれる"]],["段階","内容"])}
+    <h4>大人になるまで</h4>
+    ${tbl([["乳児（〜1歳）","1年で体重が約3倍に。笑う・はいはい・つかまり立ち"],["幼児（1〜6歳）","歩く、話す。言葉を急速に覚える（6歳で数千語）"],["児童（6〜12歳）","読み書き・計算。友だちとの社会"],["思春期（10代）","ホルモンで体が大人に変わる。心も大きく揺れ動く"],["大人","体の成長は10代後半で止まるが、脳の前頭葉の発達は20代半ばまで続く"]],["時期","特徴"])}
+    <h4>年をとること</h4>
+    <p>細胞が分裂できる回数には限りがあり、DNAの傷も少しずつたまる。年をとると、筋肉・骨・目や耳・記憶の速さが少しずつ衰える。いっぽう、知識や言葉の力、人の気持ちを理解する力は、年をとっても伸び続けることが多い。</p>
+    <h4>寿命の延び</h4>
+    ${bar([["1800年",29,"#9aa6c2"],["1900年",32,"#9fb3d6"],["1950年",46,"#7fb2ff"],["2000年",67,"#8fd16a"],["2023年",73.3,"#f4b942"]],"歳",80)}
+    <p>延びた大きな理由は、子どもが死ななくなったこと（きれいな水・ワクチン・栄養・医療）。記録上最も長生きしたのはフランスのジャンヌ・カルマン（122歳164日、1997年没）。</p>
+    <h4>人生の節目</h4>
+    ${tbl([["誕生","名前をつける儀式、お宮参り、洗礼など"],["大人になる","成人式（日本）、バル・ミツワー（ユダヤ教）、キンセアニェーラ（中南米の15歳の祝い）など"],["結婚","二人と家族を結ぶ儀式。形は文化によってさまざま"],["死","世界で1年に約6,100万人が亡くなる。土葬・火葬・水葬・鳥葬など、弔い方は文化と宗教で違う"]],["節目","世界の例"])}
+    <h4>若い国と年をとった国</h4>
+    <p>人口の真ん中の年齢（年齢の中央値）は、ニジェールでは約15歳、日本では約49歳。アフリカでは子どもと若者が多く、日本・ヨーロッパ・韓国・中国では高齢者の割合が増えて人口が減り始めている（${see("cities","家族・人口・都市")}）。</p>
+    ${src("寿命の推移：Rileyほか、国連（Our World in Dataの集計）。2023年：WHO。誕生・死亡数：国連「World Population Prospects 2024」、WHO。")}
+    ${links(map("overview","文明の歩みを見る（全体マップ）"))}`});
+})();
+
+/* 第7部：社会 */
+(function(){
+  const {bar,tbl,fig,dots,map,see,cards,flow,note,src,links}=EB;
+  EB.part("society","社会","🏛","人がいっしょに暮らすしくみ。言葉、家族と都市、国と政治、法、経済とお金、仕事、教育、メディア、戦争と平和。");
+
+  EB.add({id:"language",ic:"💬",t:"言葉と文字",k:"言語 言葉 語族 英語 中国語 文字 アルファベット 漢字 ひらがな 楔形文字 ヒエログリフ 手話 消滅危機言語 翻訳 表情 身ぶり ジェスチャー",h:`
+    <p class="eblead">人類は約7,100の言語を話し、数百の文字で書いています。言葉は、知識を世代を超えて積み上げることを可能にした、人類最大の発明です。</p>
+    <h4>話す人の多い言語（母語＋第二言語）</h4>
+    ${bar([["英語",15,"#7fb2ff"],["中国語（標準語）",12,"#ff8f8f"],["ヒンディー語",6.1,"#e6a0c4"],["スペイン語",5.6,"#f4b942"],["アラビア語（正則）",3.3,"#6fd2a0"],["フランス語",3.1,"#9fb3d6"],["ベンガル語",2.8,"#d8b48a"],["ポルトガル語",2.7,"#8fd16a"],["ロシア語",2.5,"#c99cf2"],["インドネシア語",2.5,"#ffb070"]],"億人")}
+    <p>上位わずか20あまりの言語を、世界の人口の半分以上が母語として話す。いっぽうで、言語の約4割は話す人が減って消えかけている（多くは話者が1,000人未満）。</p>
+    <h4>言語の家族（語族）</h4>
+    ${tbl([["インド・ヨーロッパ語族","約450","約32億","英語・スペイン語・ヒンディー語・ロシア語・ペルシア語"],["シナ・チベット語族","約450","約14億","中国語・チベット語・ビルマ語"],["ニジェール・コンゴ語族","約1,500","約7億","スワヒリ語・ヨルバ語・ズールー語"],["アフロ・アジア語族","約370","約5〜6億","アラビア語・ヘブライ語・ハウサ語・アムハラ語"],["オーストロネシア語族","約1,250","約3億","インドネシア語・タガログ語・マオリ語・マダガスカル語"],["ドラヴィダ語族","約80","約2.5億","タミル語・テルグ語"],["そのほか","—","—","日本語と琉球の言葉（日琉語族）、朝鮮語、バスク語などは、ほかとの親戚関係がはっきりしない"]],["語族","言語の数","話す人","例"])}
+    <h4>文字の歴史</h4>
+    ${tbl([["前3200年ごろ","楔形文字（メソポタミア）","粘土板に葦のペンで刻んだ。最古級の文字。税や交易の記録から始まった"],["前3100年ごろ","ヒエログリフ（エジプト）","絵のような文字。1822年にロゼッタ・ストーンで解読された"],["前1300年ごろ","甲骨文字（中国）","占いを亀の甲羅や骨に刻んだ。漢字の祖先"],["前1050年ごろ","フェニキア文字","子音だけのアルファベット。ギリシャ文字・ラテン文字・アラビア文字・ヘブライ文字の祖先"],["前800年ごろ","ギリシャ文字","母音も書くアルファベット"],["9世紀ごろ","ひらがな・カタカナ","漢字をくずしたり一部をとったりして作られた"],["1443年","ハングル","朝鮮王朝の世宗が作らせた、発音のしくみに合わせた文字"]],["いつ","文字","特徴"])}
+    <h4>「地球」をいろいろな文字で</h4>
+    <div class="ebscripts">${[["英語（ラテン文字）","Earth"],["ロシア語（キリル文字）","Земля"],["アラビア語（右から左）","الأرض"],["ヒンディー語（デーヴァナーガリー）","पृथ्वी"],["中国語（漢字）","地球"],["日本語（ひらがな）","ちきゅう"],["韓国語（ハングル）","지구"],["ギリシャ語","Γη"],["ヘブライ語","כדור הארץ"],["タイ語","โลก"]].map(([n,w])=>`<div><b>${w}</b><small>${n}</small></div>`).join("")}</div>
+    <p>文字には、音を表すもの（アルファベット・かな）と、意味を表すもの（漢字）がある。世界の言語の多くは、まだ文字を持たないか、文字で書かれることが少ない。</p>
+    <h4>声以外の言葉</h4>
+    <p>手話は、手の形・動き・表情で話す独自の文法を持った言語で、世界に約300ある（国ごとに違う）。点字は、指で触れて読む文字（1825年、ブライユ）。</p>
+    <h4>感情と身ぶり（多くの文化で共通しやすいもの）</h4>
+    <p>喜び・悲しみ・怒り・恐れ・嫌悪・驚きは、表情として文化を超えて伝わりやすい。<b>口角を上げる笑顔は友好のしるし</b>。手のひらを見せるのは「武器を持っていない」合図。ただし、うなずきや指のサインの意味は地域で違い、ある国の「OK」が別の国では侮辱になることもある。</p>
+    ${src("話者数：Ethnologue 2025の概数。語族の言語数と話者数：Ethnologue。")}
+    ${links(map("lineage","文化（言語）の系統樹を見る"),map("world-map","国ごとの言語を見る（世界地図）"))}`});
+
+  EB.add({id:"cities",ic:"🏙",t:"家族・人口・都市",k:"家族 結婚 人口 人口爆発 出生率 少子化 高齢化 都市 都市化 メガシティ ジャカルタ 東京 移民 国別人口 インド 中国",h:`
+    <p class="eblead">人類は約82億人。19世紀からの200年で8倍に増えましたが、増え方はゆるやかになり、今世紀の後半に増えるのが止まると予測されています。そして半分近くの人が都市に住んでいます。</p>
+    <h4>家族のかたち</h4>
+    <p>多くの社会で、親子と夫婦を単位に暮らす。祖父母やおじ・おばも一緒の大家族、親と子だけの核家族、ひとり暮らしなど、形は文化と時代で大きく違う。先進国ではひとり暮らしが増え、結婚の年齢も上がっている。同性どうしの結婚を法律で認める国も30か国以上になった。</p>
+    <h4>人口の歩み</h4>
+    ${bar([["1800年",10,"#9aa6c2"],["1927年",20,"#9fb3d6"],["1960年",30,"#7fb2ff"],["1974年",40,"#7fb2ff"],["1987年",50,"#6fd3c7"],["1999年",60,"#6fd3c7"],["2011年",70,"#8fd16a"],["2022年",80,"#f4b942"],["2050年（予測）",97,"#c99cf2"],["2080年代（予測のピーク）",103,"#c99cf2"]],"億人",103)}
+    <p>1人の女性が一生に産む子どもの数（合計特殊出生率）は、世界平均で約2.2。人口が増えも減りもしない目安は約2.1。日本は1.15（2024年）、韓国は0.7台で、人口が減り始めている。アフリカのサハラ以南では4を超える国が多い。</p>
+    <h4>人口の多い国（2025年）</h4>
+    ${tbl([["1","インド","約14.6億"],["2","中国","約14.2億"],["3","アメリカ","約3.5億"],["4","インドネシア","約2.9億"],["5","パキスタン","約2.6億"],["6","ナイジェリア","約2.4億"],["7","ブラジル","約2.1億"],["8","バングラデシュ","約1.8億"],["9","ロシア","約1.4億"],["10","エチオピア","約1.4億"],["12","日本","約1.2億"]],["順位","国","人口"])}
+    <h4>都市</h4>
+    <p>都市に住む人は約45%、小さな町まで含めると約58%（2025年、国連の新しい数え方）。1950年に都市に住んでいたのは約2割だった。</p>
+    ${tbl([["1","ジャカルタ（インドネシア）","約4,200万人"],["2","ダッカ（バングラデシュ）","約3,700万〜4,000万人"],["3","東京（日本）","約3,300万人"],["4〜10","ニューデリー、上海、広州、カイロ、マニラ、コルカタ、ソウル","—"]],["順位","都市圏","人口"])}
+    <p>大きな都市の上位10のうち9つはアジアにある。東京は2000年には世界一だったが、人口が少しずつ減っている。</p>
+    <h4>動く人々</h4>
+    <p>生まれた国の外に住む人（国際移民）は約3億人（2024年）。紛争や迫害で家を追われた人は約1億1,800万人（2025年末、${see("war","戦争と平和")}）。</p>
+    ${src("国連「World Population Prospects 2024」「World Urbanization Prospects 2025」「International Migrant Stock 2024」。日本の出生率：厚生労働省（2024年）。")}
+    ${links(map("world-map","国の人口を見る（世界地図）"),map("overview","文明の規模を見る（全体マップ）"))}`});
+
+  EB.add({id:"politics",ic:"🗳",t:"国と政治",k:"国家 政治 民主主義 選挙 議会 大統領 首相 君主制 憲法 三権分立 国際連合 安全保障理事会 EU ASEAN NATO 国の数 面積",h:`
+    <p class="eblead">地球には約200の国があり、それぞれが自分の領土と国民と法律を持っています。地球全体を治める政府はなく、国どうしは条約と国際機関でゆるやかにつながっています。</p>
+    <h4>国とは</h4>
+    <p>決まった領土、そこに住む国民、ほかから命令されない政府（主権）を持つまとまり。国連の加盟国は193か国、オブザーバー国がバチカンとパレスチナの2つ。どこを「国」と認めるかは国によって違うので、数え方に幅がある。</p>
+    ${tbl([["ロシア","約1,710万km²"],["カナダ","約998万km²"],["アメリカ","約983万km²"],["中国","約960万km²"],["ブラジル","約852万km²"],["オーストラリア","約769万km²"],["最も小さい国","バチカン市国（約0.44km²）"]],["面積の大きい国","面積"])}
+    <h4>政治のしくみ</h4>
+    ${tbl([["民主制","国民が選挙で代表を選ぶ。議会の多数派が首相を選ぶ議院内閣制（日本・イギリス）、国民が大統領を選ぶ大統領制（アメリカ）など"],["立憲君主制","王や皇帝がいるが、憲法と議会が政治を動かす（イギリス・日本・スウェーデン・タイなど）"],["絶対君主制","君主が政治の実権を持つ（ごく少数）"],["一党制","1つの政党だけが政権を担う（中国など）"],["軍事政権","軍が政治の実権をにぎる"]],["しくみ","内容"])}
+    <p><b>三権分立：</b>法律を作る（立法・議会）、法律を実行する（行政・政府）、法律にもとづいて裁く（司法・裁判所）を別々の機関に分け、権力の暴走を防ぐ考え方（モンテスキュー、1748年）。</p>
+    <p><b>投票する権利：</b>女性が国政選挙で投票できるようになったのは、1893年のニュージーランドが最初。日本では1945年。いまはほとんどの国で18歳前後から投票できる。</p>
+    <p>研究機関の評価では、世界の人口の半分以上が、選挙や言論の自由が十分に保障されていない国で暮らしているとされる（V-Dem研究所、2025年）。</p>
+    <h4>国をこえるしくみ</h4>
+    ${tbl([["国際連合","1945年","193か国。平和と安全、人権、開発。安全保障理事会の常任理事国（アメリカ・ロシア・中国・イギリス・フランス）は拒否権を持つ"],["国連の専門機関","—","WHO（保健）、UNESCO（教育・科学・文化）、UNICEF（子ども）、FAO（食料）、WFP（食料支援）など"],["世界貿易機関（WTO）","1995年","貿易のルールと紛争の解決"],["国際通貨基金（IMF）・世界銀行","1945年","通貨の安定、開発のための資金"],["欧州連合（EU）","1993年","27か国。共通の市場、20か国以上が共通通貨ユーロ"],["アフリカ連合（AU）","2002年","55か国・地域"],["東南アジア諸国連合（ASEAN）","1967年","11か国（2025年に東ティモールが加盟）"],["北大西洋条約機構（NATO）","1949年","32か国の軍事同盟"]],["しくみ","できた年","内容"])}
+    ${src("国連加盟国：国連。面積：各国の公表値の概数。民主主義の評価：V-Dem研究所「Democracy Report 2025」。")}
+    ${links(map("world-map","国を見る（世界地図）"),map("lineage","政治・国家の系統樹を見る"))}`});
+
+  EB.add({id:"law",ic:"⚖️",t:"法とルール",k:"法律 憲法 民法 刑法 国際法 ハンムラビ法典 マグナ・カルタ 世界人権宣言 人権 裁判 推定無罪 大陸法 英米法",h:`
+    <p class="eblead">法は、社会のルールのうち、国が守らせるものです。「強い者が勝つ」のではなく「決まりにしたがって争いを解決する」ために、人類は何千年もかけて法を作ってきました。</p>
+    <h4>法の種類</h4>
+    ${tbl([["憲法","国の最高のきまり。国の形、政府の権限と限界、国民の権利を定める"],["民法","人と人との関係（売り買いの約束、家族、相続など）"],["刑法","何が犯罪か、どんな刑罰を科すか"],["行政法","国や役所の仕事のきまり"],["国際法","国と国のきまり。条約と、長く守られてきた慣習"]],["種類","内容"])}
+    <h4>法の歩み</h4>
+    ${tbl([["前2100年ごろ","ウル・ナンム法典（メソポタミア）","現存する最古級の法典"],["前1750年ごろ","ハンムラビ法典（バビロニア）","「目には目を」で知られる282の条文"],["前450年ごろ","十二表法（ローマ）","ローマ法の出発点。のちのヨーロッパの法の土台"],["701年","大宝律令（日本）","中国の法にならった国家のきまり"],["1215年","マグナ・カルタ（イングランド）","王の権力も法で縛られることを認めさせた"],["1787年","アメリカ合衆国憲法","いまも使われている最古の成文憲法"],["1789年","フランス人権宣言","人は生まれながらに自由で平等"],["1804年","ナポレオン法典（フランス）","近代的な民法典。多くの国の手本になった"],["1946年","日本国憲法（1947年施行）","国民主権・基本的人権の尊重・平和主義"],["1948年","世界人権宣言（国連）","すべての人の基本的な権利を初めて国際的に示した"]],["年","法","意味"])}
+    <h4>世界人権宣言の主な内容（全30条）</h4>
+    <ul><li>すべての人は生まれながらに自由で、尊厳と権利において平等である。</li><li>生命・自由・身体の安全。奴隷・拷問の禁止。</li><li>法の前での平等、公正な裁判、罪が証明されるまで無罪と推定されること。</li><li>思想・良心・宗教・表現・集まりの自由。</li><li>教育を受ける権利、働く権利、社会保障。</li></ul>
+    <h4>法の系統</h4>
+    ${tbl([["大陸法","議会が作った条文（法典）が中心。フランス・ドイツ・日本・中南米など"],["英米法","裁判の積み重ね（判例）が大きな役割を持つ。イギリス・アメリカ・オーストラリアなど"],["イスラム法","クルアーンなどに基づくきまり（シャリーア）。家族のことなどで使う国が多い"],["慣習法","地域の伝統的なきまり"]],["系統","特徴"])}
+    <h4>裁判</h4>
+    <p>争いや犯罪を、中立の裁判官（国によっては市民の陪審員や裁判員も）が、証拠と法にもとづいて判断する。疑わしいだけでは罰しない「推定無罪」、同じ事件で二度裁かない原則などが、多くの国の土台になっている。国と国の争いは国際司法裁判所（1945年）、戦争犯罪などの個人の罪は国際刑事裁判所（2002年）が扱う。</p>
+    ${links(map("lineage","政治（法）の系統樹を見る"))}`});
+
+  EB.add({id:"economy",ic:"💰",t:"経済とお金",k:"経済 お金 通貨 貨幣 紙幣 銀行 中央銀行 金利 インフレ GDP 株式 会社 貿易 格差 貧困 暗号資産 ビットコイン 需要と供給",h:`
+    <p class="eblead">経済とは、限りある資源で、人が必要とするものを作って分ける営みです。お金は、そのやりとりをなめらかにする「みんなが価値を信じている約束ごと」です。</p>
+    <h4>お金の3つの役割</h4>
+    ${cards([["交換の道具","物々交換では、ほしい物どうしがかみ合う相手を探すのが大変。お金ならだれとでも交換できる","#f4b942"],["価値のものさし","パンもスマホも同じ単位（円・ドル）で比べられる","#7fb2ff"],["価値の保存","今日の稼ぎを、来年使うために取っておける","#8fd16a"]],200)}
+    <h4>お金の歴史</h4>
+    ${tbl([["大昔","貝殻・穀物・布・家畜などが、お金の代わりに使われた"],["前7世紀","リディア（いまのトルコ）で、金と銀の合金の硬貨が作られた"],["11世紀","中国の宋で、世界初の紙幣「交子」"],["1694年","イングランド銀行。中央銀行の先がけ"],["19世紀","金本位制：お札をいつでも金と交換できるしくみ"],["1971〜73年","金との交換をやめ、為替の値段が市場で決まる変動相場制へ"],["2009年","暗号資産ビットコイン。国や銀行を通さない電子のお金"],["いま","世界の多くの支払いがカードやスマホで行われる。中央銀行が発行するデジタル通貨も研究されている"]],["時代","できごと"])}
+    <h4>値段のきまり方</h4>
+    <p>ほしい人（需要）が多く、売る物（供給）が少なければ値段は上がり、逆なら下がる。物の値段が全体的に上がり続けるのがインフレ、下がり続けるのがデフレ。中央銀行は、金利の上げ下げなどでお金の量を調節し、値段を安定させようとする。</p>
+    <h4>国の経済の大きさ（GDP、2025年）</h4>
+    ${bar([["アメリカ",30.9,"#7fb2ff"],["中国",19.6,"#ff8f8f"],["ドイツ",5.1,"#f4d06a"],["日本",4.5,"#f4b942"],["イギリス",4.0,"#9fb3d6"],["インド",3.9,"#8fd16a"]],"兆ドル")}
+    <p>GDP（国内総生産）は、1年間に国の中で新しく生み出された物とサービスの価値の合計。世界全体で約117兆ドル（2025年）。人口で割った「1人あたりGDP」で比べると、順位は大きく変わる。ドルに換算した値は為替の動きでも上下する。</p>
+    <h4>会社と市場</h4>
+    <p>株式会社は、多くの人から少しずつお金（株式）を集めて大きな事業をする仕組み（1602年のオランダ東インド会社が先がけ）。株式は証券取引所で売り買いされる。国と国の貿易は、物とサービスを合わせて年に約33兆ドル（2024年）。それぞれが得意なものを作って交換すると、全体が豊かになる（比較優位、リカード）。</p>
+    <h4>豊かさのかたより</h4>
+    ${tbl([["所得","世界の上位10%の人が、全体の所得の約半分を得ている"],["資産","上位10%が、全体の資産の約4分の3を持つ"],["極度の貧困","約8億人（世界の約10人に1人）が1日3ドル未満で暮らす。1990年の約23億人から大きく減った"],["子ども","極度の貧困の家庭で暮らす子どもは約4億1,000万人（2024年）"]],["項目","現状"])}
+    <h4>税と社会保障：みんなで支えるしくみ</h4>
+    <p>国や自治体は税金を集めて、道路・学校・警察・消防・医療などを支える。税には、収入にかかる所得税、買い物にかかる消費税（付加価値税）、会社のもうけにかかる法人税などがある。豊かな国の多くは、GDPの3〜4割を税と社会保険料として集めている（OECD加盟国の平均は34.1%。メキシコの18.3%からデンマークの45.2%まで。2024年）。</p>
+    ${tbl([["年金","年をとって働けなくなったときの暮らしを支える"],["医療保険","病気やけがの治療費を、みんなで出し合ったお金で支える"],["失業保険","仕事を失ったとき、次の仕事が見つかるまでの暮らしを支える"],["子どもの手当・生活保護","子育てや、暮らしに困った人を支える"]],["しくみ","内容"])}
+    <p>何らかの社会保障（年金・手当など）を受けられる人は、2023年に世界の人口の52.4%となり、初めて半分を超えた。ただし、高所得の国では約86%なのに、低所得の国では1割に満たず、約38億人がまだどの保障も受けられない。</p>
+    ${src("GDP：IMF「World Economic Outlook」（2026年10月）の2025年の値。貿易：UNCTAD（2024年）。格差：「世界不平等報告書2022」。貧困：世界銀行（1日3.00ドル、2021年の購買力平価）、国連「SDGs報告2026」。税：OECD「Revenue Statistics 2025」。社会保障：ILO「World Social Protection Report 2024-26」。")}
+    ${links(map("lineage","経済・お金の系統樹を見る"),map("overview","経済の現在地（全体マップ）"))}`});
+
+  EB.add({id:"work",ic:"🏭",t:"仕事と産業",k:"仕事 職業 産業 第一次産業 第二次産業 第三次産業 農業 工業 サービス業 労働 雇用 児童労働 自動化 AI 観光",h:`
+    <p class="eblead">人類の約35億人が働いて、食べ物・物・サービスを作り出しています。働く場所は、田畑から工場へ、そして事務所や店、画面の前へと移ってきました。</p>
+    <h4>産業の3つの分け方</h4>
+    ${tbl([["第1次産業","農業・林業・漁業","世界の働く人の約4分の1。アフリカや南アジアでは半分以上の国も"],["第2次産業","工業・建設・鉱業・電気","約4分の1弱"],["第3次産業","商業・運輸・金融・情報・医療・教育・観光など","約半分。豊かな国では7〜8割"]],["分類","中身","世界の働く人の割合（推計）"])}
+    <h4>仕事の移り変わり</h4>
+    ${flow(["狩り・採集","農業（約1万2000年前〜）","職人と商人（都市の誕生）","工場の労働者（産業革命）","事務・サービス","情報の仕事・AIとの協働"])}
+    <p>機械やコンピュータが仕事を置き換えるたびに、なくなる仕事と新しく生まれる仕事がある。いまはAIが文章や画像やプログラムを作る仕事の一部を担い始め、仕事の中身がどう変わるかが議論されている。</p>
+    <h4>働き方の現実</h4>
+    ${tbl([["インフォーマルな仕事","世界の働く人の約6割は、契約や社会保障のない仕事に就いている"],["働いても貧しい","1日3ドル未満で暮らす働く人が約2億8,400万人（2025年）"],["子どもの労働","約1億3,800万人の子どもが働かされている（2024年）"],["強制労働","約2,800万人（2021年）"],["働く時間","多くの国で法律の基本は1日8時間・週40時間前後"]],["項目","現状"])}
+    <h4>大きな産業の例</h4>
+    ${tbl([["食料と農業","約80億人の毎日の食事を支える"],["エネルギー","石油・ガス・電力。世界経済の血液"],["製造業","自動車・電子機器・服・薬"],["建設","家・道路・都市"],["情報通信","インターネット・ソフトウェア・半導体"],["医療と介護","高齢化で働く人が増え続けている"],["観光","国境をこえた旅行者は約15億2,000万人（2025年、過去最多）"]],["産業","役割"])}
+    ${src("産業別の割合：ILO推計（世界銀行のデータ）。インフォーマル：ILO。働く貧困層：国連「SDGs報告2026」。児童労働：ILO・UNICEF（2025年）。強制労働：ILOほか（2022年）。観光：UN Tourism（2026年1月）。")}
+    ${links(map("lineage","仕事の系統樹を見る"))}`});
+
+  EB.add({id:"education",ic:"🎓",t:"教育と学問",k:"教育 学校 大学 義務教育 識字率 寺子屋 学問 自然科学 社会科学 人文学 ノーベル賞 研究",h:`
+    <p class="eblead">人類は、生まれてくる子どもに、それまでに積み上げた知識を受け渡し続けてきました。教育はその仕組みであり、学問は知識を広げ、確かめる営みです。</p>
+    <h4>学ぶ場所の歴史</h4>
+    ${tbl([["前2000年ごろ","シュメールの書記学校","粘土板で文字と計算を学んだ"],["前387年","アカデメイア（アテネ）","プラトンが開いた学園"],["5世紀〜","ナーランダ（インド）","仏教の大学。各地から学僧が集まった"],["859年","アル・カラウィーイン（モロッコ）","いまも続く最古の高等教育機関とされる"],["1088年","ボローニャ大学（イタリア）","ヨーロッパ最古の大学"],["江戸時代","寺子屋（日本）","町や村の子どもが読み書き・そろばんを学んだ"],["18〜19世紀","義務教育","プロイセンなどで始まり、日本は1872年の学制から"]],["いつ","場所","内容"])}
+    <h4>いまの世界の教育</h4>
+    ${tbl([["文字の読み書き","大人の約87%ができる（1950年ごろは半分以下）"],["学校に通えない子ども","約2億7,200万人（2025年）。紛争地や貧しい地域、女の子に多い"],["大学など","進学率は国によって1割未満から8割以上まで"]],["項目","現状"])}
+    <h4>学問の地図</h4>
+    ${tbl([["形式科学","数学・論理学・情報科学・統計学","かたちと推論"],["自然科学","物理学・化学・生物学・地球科学・天文学","自然のしくみ"],["社会科学","経済学・政治学・法学・社会学・心理学・人類学","人と社会のしくみ"],["人文学","哲学・歴史学・言語学・文学・芸術学・宗教学","人間の考え・表現・過去"],["応用の学問","工学・医学・薬学・農学・建築学・教育学","知識を役立てる"]],["分野","主な学問","調べるもの"])}
+    <p>どの学問も、根拠を示し、ほかの人が確かめられる形で発表し、まちがいを直していくことで進む（${see("logic","論理・確率・統計")}）。</p>
+    <h4>ノーベル賞</h4>
+    <p>ダイナマイトを発明したノーベルの遺言で1901年に始まった。物理学・化学・生理学医学・文学・平和の5部門に、1969年から経済学賞が加わった。科学の大発見の多くがこの賞で知られている。</p>
+    ${src("識字率：UNESCO統計研究所。学校に通えない子ども：UNESCO（2025年）。")}
+    ${links(map("lineage","学問の系統樹を見る"))}`});
+
+  EB.add({id:"media",ic:"📰",t:"メディアと情報社会",k:"メディア ニュース 新聞 テレビ ラジオ 報道 ジャーナリズム SNS ソーシャルメディア 広告 誤情報 フェイクニュース 報道の自由 アルゴリズム フィルターバブル ディープフェイク 生成AI ファクトチェック 情報リテラシー",h:`
+    <p class="eblead">人は、自分の目で見られない遠くのできごとを、メディア（媒体）を通して知ります。新聞・ラジオ・テレビの時代から、いまは一人ひとりが発信し、AIが文章や画像を作る時代になりました。何を信じるかを決める力が、これまで以上に大切になっています。</p>
+    <h4>メディアの歩み</h4>
+    ${tbl([["1605年ごろ","新聞","ヨーロッパで、定期的に出る新聞が始まった"],["1920年代","ラジオ放送","1920年にアメリカで定時放送が始まった。日本は1925年"],["1930〜50年代","テレビ放送","1936年にイギリスで定時放送。日本は1953年"],["1990年代","インターネットのニュース","世界中のニュースを、すぐに、無料で読めるようになった"],["2000年代〜","ソーシャルメディア（SNS）","Facebook（2004年）、YouTube（2005年）、Twitter（2006年、いまのX）、Instagram（2010年）、TikTok（2016〜17年）など。誰もが発信者になった"],["2020年代","生成AI","AIが文章・画像・動画を作り、ニュースの調べ方も変わり始めた"]],["いつ","メディア","変わったこと"])}
+    <h4>いまの数字（2026年）</h4>
+    ${tbl([["SNSの利用","アカウントの数で約58億（10月。1人で複数持つ人もいるので人数ではない）。インターネットを使う人の9割以上がSNSも使う"],["ニュースの入り口","48の国と地域の調査で、SNSと動画サイトが初めてテレビやニュースサイトを上回り、ニュースを知るいちばんの入り口になった"],["ニュースへの信頼","「ほとんどのニュースをたいてい信頼できる」と答えた人は37%。2015年の調査開始以来、最も低い"],["AIでニュースを知る","AIとの対話でニュースを知る人は週に10%（18〜24歳では17%）。AIが伝えるニュースを信頼する人は20%"],["報道の自由","180の国と地域のうち、半分以上で報道の状況が「難しい」か「非常に深刻」。25年の記録で最悪。「良い」とされる国に住む人は世界の1%未満"]],["","数字"])}
+    <h4>情報社会のしくみと落とし穴</h4>
+    ${cards([["広告で成り立つ","多くのSNSや検索は無料で使える。そのかわり、利用者の注目と行動のデータが広告に使われる。","#f4b942"],["アルゴリズム","SNSは、その人が反応しそうな投稿を優先して見せる。好みに合う情報ばかりに囲まれる（フィルターバブル）おそれがある。","#7fb2ff"],["誤った情報","うその情報は驚きや怒りを呼ぶため広まりやすい。2018年の研究では、Twitter（いまのX）で、うそのニュースは本当のニュースより速く、遠くまで広がった。","#ff8f8f"],["本物そっくりの偽物","実在の人の顔や声をまねた画像・音声・動画（ディープフェイク）を、誰でも作れるようになった。","#c99cf2"],["報道の役割","権力を見張り、隠された事実を明らかにする。報道の自由は、民主主義の土台のひとつとされる。","#6fd2a0"]],210)}
+    <h4>情報を確かめる5つの問い</h4>
+    <ol><li><b>誰が言っている？</b> 発信者は誰で、どんな立場か。</li><li><b>いつの情報？</b> 古い写真や記事が、新しいものとして出回ることがある。</li><li><b>根拠は？</b> データ、元の資料、現場の証言があるか。</li><li><b>ほかの情報源は？</b> 別の信頼できるメディアも同じことを伝えているか。</li><li><b>感情をあおっていない？</b> 強い怒りや不安を感じたら、広める前にひと呼吸おく。</li></ol>
+    ${src("SNS：DataReportal（2026年10月）。ニュース：ロイター・ジャーナリズム研究所「Digital News Report 2026」（約10万人を調査）。報道の自由：国境なき記者団（RSF）「世界報道自由度ランキング2026」。うその広がり方：Vosoughi ほか、Science（2018年）。")}
+    ${links(see("comms","通信・コンピュータ・AIの章へ"),see("politics","国と政治の章へ"))}`});
+
+  EB.add({id:"war",ic:"🕊",t:"戦争と平和",k:"戦争 紛争 平和 世界大戦 冷戦 核兵器 軍事費 難民 国連 平和維持活動 条約 ジュネーブ条約 核兵器不拡散条約",h:`
+    <p class="eblead">人類の歴史には多くの戦争があります。同時に人類は、戦争を防ぎ、戦争の中でも守るべききまりを作る努力も続けてきました。</p>
+    <h4>なぜ戦争が起きるのか</h4>
+    <p>土地・水・資源の奪い合い、民族や宗教の対立、権力争い、相手への恐れと不信、指導者の判断の誤り——多くの戦争では、いくつもの原因が重なっている。</p>
+    <h4>歴史の中の大きな戦争</h4>
+    ${tbl([["約1万3,000年前","ジェベル・サハバ（スーダン）","集団どうしの争いの跡が残る、最古級の墓地"],["前1274年","カデシュの戦い","エジプトとヒッタイト。その後、記録に残る最古級の平和条約が結ばれた"],["13世紀","モンゴル帝国の征服","ユーラシアの大部分を支配した"],["1618〜48年","三十年戦争","ヨーロッパの宗教戦争。終戦の条約で「主権国家」の考えが広まった"],["1914〜18年","第一次世界大戦","戦車・毒ガス・飛行機。死者は約1,500万〜2,000万人"],["1939〜45年","第二次世界大戦","人類史上最大の戦争。死者は約7,000万〜8,500万人。広島と長崎に原子爆弾が使われた"],["1947〜91年","冷戦","アメリカとソ連の対立。核兵器の開発競争、朝鮮戦争やベトナム戦争などの代理戦争"],["2020年代","ウクライナ、スーダン、ガザ、イランなど","国家が関わる武力紛争は2025年に65件で、記録のある1946年以降で最多。2026年にはアメリカ・イスラエルとイランの戦争でホルムズ海峡がふさがれ、世界的なエネルギー危機が起きた"]],["いつ","戦争","内容"])}
+    <h4>いまの数字</h4>
+    ${tbl([["核兵器","9か国が合計約1万2,000発を持つ（アメリカとロシアで約9割）"],["軍事費","世界で2兆8,870億ドル（2025年）。世界のGDPの2.5%"],["家を追われた人","約1億1,780万人（2025年末）。うち国の外へ逃れた難民が約4,160万人"]],["項目","値"])}
+    <h4>平和のためのしくみ</h4>
+    ${tbl([["国際連合","安全保障理事会が平和への脅威に対応する。平和維持活動（PKO）は1948年から70以上"],["国際人道法","ジュネーブ条約（1949年）：捕虜・けが人・民間人を守る。戦争にもルールがある"],["軍縮の条約","核兵器不拡散条約（1970年）、化学兵器禁止条約（1997年）、対人地雷禁止条約（1999年）、核兵器禁止条約（2021年）"],["話し合いと仲介","外交、調停、経済的なつながり、人どうしの交流"],["裁く仕組み","国際刑事裁判所（2002年）が、戦争犯罪や人道に対する罪を裁く"]],["しくみ","内容"])}
+    ${note("1945年以降、核兵器を持つ大国どうしの直接の全面戦争は起きていません。核兵器による「抑止」が理由だとする見方と、偶然や危うい均衡にすぎないとする見方があります。","cool")}
+    ${src("紛争数：ウプサラ紛争データプログラム（UCDP、2026年6月）。核弾頭：SIPRI年鑑2026。軍事費：SIPRI（2026年4月）。避難民：UNHCR「Global Trends」（2026年6月）。大戦の死者数は推計に幅がある。")}
+    ${links(map("lineage","戦争の系統樹を見る"),map("timeline","世界史の年表を見る"))}`});
+})();
+
+/* 第8部：文化 */
+(function(){
+  const {bar,tbl,fig,dots,map,see,cards,flow,note,src,links}=EB;
+  EB.part("culture","文化","🎨","人が心の中で作ってきたもの。信仰と宗教、哲学と思想、芸術、遊びとスポーツ、衣食住、暦と祭り。");
+
+  EB.add({id:"religion",ic:"🛐",t:"信仰と宗教",k:"宗教 信仰 神 キリスト教 イスラム教 ヒンドゥー教 仏教 ユダヤ教 シク教 神道 道教 儒教 無宗教 聖書 クルアーン コーラン 祈り 巡礼 寺院 教会 モスク",h:`
+    <p class="eblead">世界の人の約4分の3が、何らかの宗教に属しています。宗教は「なぜ生きるのか」「死んだらどうなるのか」「何が善いことか」に答え、人と人をつなぎ、多くの芸術や建築や祭りを生んできました。</p>
+    <h4>世界の宗教の割合（2020年）</h4>
+    ${bar([["キリスト教",28.8,"#7fb2ff","約23億人"],["イスラム教",25.6,"#6fd2a0","約20億人"],["無宗教（どの宗教にも属さない）",24.2,"#9fb3d6","約19億人"],["ヒンドゥー教",14.9,"#f4b942","約12億人"],["仏教",4.1,"#e6a0c4","約3.2億人"],["そのほかの宗教",2.2,"#d8b48a","約1.7億人（シク教・道教・神道など）"],["ユダヤ教",0.2,"#c99cf2","約1,480万人"]],"%")}
+    <p>2010年から2020年の10年で、最も増えたのはイスラム教徒（3億4,700万人増。若い人が多く、子どもの数も多いため）。無宗教の人も増え、キリスト教の割合は下がった。宗教を離れる人は東アジアやヨーロッパ、南北アメリカで多い。</p>
+    <h4>おもな宗教</h4>
+    ${tbl([["ユダヤ教","古代イスラエル（前1千年紀に形が整う）","聖典はヘブライ語聖書（とくにトーラー＝モーセ五書）","唯一の神と民の契約。律法を守って生きる","世界のユダヤ教徒の85%がイスラエルとアメリカに住む"],["キリスト教","1世紀、ローマ帝国のパレスチナ","イエス。聖典は聖書（旧約・新約）","神の愛と、イエスによる救い。隣人を愛する。カトリック・プロテスタント・正教会など","いちばん多く住むのはサハラ以南のアフリカ（2020年）。中南米・ヨーロッパにも多い"],["イスラム教","7世紀初め（610年ごろ）、アラビア半島のメッカ","預言者ムハンマド。聖典はクルアーン（コーラン）","唯一の神アッラーに従う。五行（信仰告白・1日5回の礼拝・喜捨・断食・メッカ巡礼）。スンナ派が8〜9割、シーア派が1〜2割","中東・北アフリカから南アジア・東南アジアまで。信者が最も多い国はインドネシア"],["ヒンドゥー教","インド。前1500年ごろからのヴェーダの信仰が土台。開いた人はいない","聖典はヴェーダ、ウパニシャッド、『バガヴァッド・ギーター』など","生まれ変わり（輪廻）と、そこからの解放（解脱）。自分の務め（ダルマ）。ヴィシュヌ・シヴァなど多くの神々","信者の9割以上がインドに住む"],["仏教","前5世紀ごろ、北インド","ゴータマ・シッダールタ（ブッダ）。聖典は経典","苦しみの原因は執着。正しい道（八正道）を歩めば苦しみから解き放たれる（悟り）","上座部（スリランカ・東南アジア）、大乗（中国・朝鮮半島・日本・ベトナム）、チベット仏教"],["シク教","15世紀末、インド北西部のパンジャーブ","グル・ナーナク。聖典は『グル・グラント・サーヒブ』","唯一の神、すべての人の平等、奉仕","約2,500万人以上。多くはインドのパンジャーブ州"],["道教・儒教","中国","道教は老子、儒教は孔子に始まるとされる","道教は自然の道（タオ）との調和。儒教は思いやり（仁）や礼儀、家族の秩序。儒教は宗教より道徳・思想とされることも多い","中国・台湾・朝鮮半島・日本・ベトナムの文化に広く溶け込む"],["神道","日本","開いた人も教典もない（神話は『古事記』『日本書紀』に）","山・森・岩・祖先などに宿る多くの神（八百万の神）を敬い、清らかさを大切にする","日本。多くの人は神社の祭りとお寺の行事の両方に関わる"],["民族宗教・先住民の信仰","世界の各地","ふつう聖典を持たず、口伝えで受け継ぐ","祖先や自然の霊を敬う。アフリカ・アメリカ大陸・オセアニアなどに多い","—"]],["宗教","始まり","開いた人・聖典","中心の教え","多い地域"])}
+    <h4>宗教が社会でしてきたこと</h4>
+    ${cards([["意味を与える","生と死、苦しみ、宇宙の始まりについて、人が納得できる物語を与えてきた。","#7fb2ff"],["道徳の基準","「殺してはいけない」「盗んではいけない」「困っている人を助けよ」など、多くの宗教に共通する決まりがある。","#6fd2a0"],["共同体","祈りや祭りで人が集まり、助け合う。病院・学校・福祉を始めたのが宗教団体だった地域も多い。","#f4b942"],["節目の儀式","誕生・成人・結婚・死を区切る儀式の多くは、宗教から生まれた。","#e6a0c4"],["芸術と建築","大聖堂、モスク、寺院、宗教画、聖歌、写経。人類の芸術の多くは信仰から生まれた。","#c99cf2"],["争いの理由にも","宗教の違いが、戦争や迫害の理由や口実にされてきた。いっぽうで、和解や平和の運動を宗教者が率いた例も多い。","#ff8f8f"]],210)}
+    ${src("Pew Research Center「How the Global Religious Landscape Changed From 2010 to 2020」（2025年6月）。割合は2020年。")}
+    ${links(map("lineage","文化（言語・宗教・芸術）の系統樹を見る"),see("philosophy","次の章：哲学と思想"))}`});
+
+  EB.add({id:"philosophy",ic:"🤔",t:"哲学と思想",k:"哲学 思想 倫理 道徳 善悪 正義 自由意志 意識 心 存在 認識 ソクラテス プラトン アリストテレス 孔子 老子 ブッダ デカルト カント ニーチェ 功利主義 トロッコ問題 実存主義",h:`
+    <p class="eblead">哲学は、当たり前だと思っていることを、もう一度問い直す営みです。「何が本当にあるのか」「私たちは何を知りうるのか」「どう生きるべきか」。科学も、もとは哲学から分かれて生まれました。</p>
+    <h4>哲学の分野</h4>
+    ${tbl([["形而上学（存在論）","何が本当に存在するのか。時間とは何か。心と体はどうつながるのか"],["認識論","「知っている」とはどういうことか。確かな知識はありうるか"],["倫理学","何が善く、何が悪いのか。どう行動すべきか"],["論理学","正しい推論の形（"+see("logic","数・論理・情報の章")+"も参照）"],["美学","美しいとはどういうことか。芸術とは何か"],["政治哲学・社会哲学","国家はなぜあるのか。正義、自由、平等とは"],["心の哲学","意識とは何か。機械は考えられるか"],["科学哲学","科学は何をしているのか。科学とそうでないものを分けるものは何か"]],["分野","問い"])}
+    <h4>今も答えの出ていない大きな問い</h4>
+    ${cards([["心と体の問題","脳は電気と化学の信号で動いている。では、赤い色を「赤い」と感じるこの体験（意識）は、どこから生まれるのか。","#c99cf2"],["自由意志","すべてが物理法則で決まっているなら、私たちが「自分で選んだ」と感じることは本当に自由なのか。","#7fb2ff"],["何が正しいか","結果の幸福で決める（功利主義）、守るべき義務で決める（義務論）、よい人柄で決める（徳倫理）。トロッコ問題は、この違いを問う思考実験。","#f4b942"],["私とは誰か","体の細胞は入れ替わり、記憶も変わる。部品をすべて取り替えた船は同じ船か（テセウスの船）。","#6fd2a0"],["確かなものはあるか","デカルトは、すべてを疑っても「疑っている私」だけは疑えないと考えた（我思う、ゆえに我あり）。","#e6a0c4"],["機械は考えられるか","会話で人間と区別できなければ考えているとみなす（チューリング・テスト、1950年）。意味を理解しているとは言えないという反論もある（中国語の部屋）。AIの発達で、この問いは現実の問題になった。","#9fb3d6"]],220)}
+    <h4>おもな思想家</h4>
+    ${tbl([["前6〜前4世紀","孔子・老子（中国）、ブッダ（インド）、ソクラテス・プラトン・アリストテレス（ギリシャ）","ほぼ同じ時代に、各地で人間と世界を根本から考える思想が生まれた（「枢軸時代」と呼ばれる）"],["前4世紀〜","アリストテレス","論理学・自然学・倫理学・政治学をまとめ、約2,000年にわたって学問の土台になった"],["11〜13世紀","イブン・スィーナー（ペルシャ）、朱子（中国）、トマス・アクィナス（イタリア）","ギリシャの哲学と、イスラム教・儒教・キリスト教の考えを結びつけた"],["17世紀","デカルト（フランス）、ホッブズ・ロック（イギリス）","理性で確かな知識を求めた。国は人々の約束（社会契約）でできると考えた"],["18世紀","ルソー（フランス）、ヒューム（イギリス）、カント（ドイツ）","人権や民主主義の考えの土台に。カントは「人を手段としてだけ扱ってはならない」と説いた"],["19世紀","ヘーゲル、マルクス（ドイツ）、ミル（イギリス）、ニーチェ（ドイツ）","歴史の発展、資本主義の批判、功利主義（できるだけ多くの人の幸福を）、それまでの価値を問い直す"],["20世紀","ウィトゲンシュタイン、サルトル、ボーヴォワール、ロールズ、西田幾多郎","言葉の意味、実存主義（人は自分で自分を作る）、女性の解放、公正としての正義"]],["時代","人","考えたこと"])}
+    <p>東アジアの思想は人と人、人と自然の調和を、インドの思想は心のあり方と解放を、ギリシャに始まる西洋の思想は理性による説明を、それぞれ大切にしてきたと言われる。もちろん、どの伝統の中にもさまざまな考えがある。</p>
+    ${note("哲学で答えが一つに決まることは少ない。けれど、問いをはっきりさせ、考えの筋道を確かめることで、科学・法律・倫理・AIのルールづくりなど、多くの分野を支えている。","cool")}
+    ${links(see("brain","脳と心の章へ"),see("logic","科学の方法（数・論理・情報）"))}`});
+
+  EB.add({id:"arts",ic:"🖼",t:"芸術と表現",k:"芸術 美術 音楽 文学 絵画 彫刻 洞窟壁画 手形 演劇 映画 アニメ 漫画 建築 ピラミッド 世界遺産 平均律 440Hz 音階 源氏物語 シェイクスピア 浮世絵 ルネサンス",h:`
+    <p class="eblead">人類は、食べ物や道具に直接役立たないものも作り続けてきました。絵、音楽、物語、踊り。芸術は、人が感じたことや考えたことを、時間と場所を超えて他人に伝える方法です。</p>
+    <h4>芸術の始まり</h4>
+    ${tbl([["約7万3,000年前","南アフリカのブロンボス洞窟の石に描かれた交差する線","知られている中で最も古い「描いた模様」のひとつ"],["6万7,800年以上前","インドネシア・スラウェシ島の近くのムナ島の洞窟の手形","年代がはっきりした中で最古の岩絵（2026年発表）。手を壁に当て、まわりに顔料を吹きつけて形を残した"],["約6万6,700年前","スペインの洞窟の手形","ネアンデルタール人が描いた可能性がある"],["約4万年前","ドイツの洞窟の象牙の彫刻「ライオンマン」、骨の笛","頭がライオンで体が人の像。最古級の楽器も同じ地域で見つかっている"],["約3万6,000年前","フランスのショーヴェ洞窟","ウマ・ライオン・サイなどを生き生きと描いた壁画"],["約1万7,000年前","フランスのラスコー洞窟","数百頭の動物の絵"]],["いつ","どこで","特徴"])}
+    <h4>音楽：音の高さは空気の振動の速さ</h4>
+    <p>音の高さは、1秒間に空気が何回ふるえるか（振動数、ヘルツ）で決まる。振動数が2倍になると1オクターブ高い同じ名前の音になる。いま世界で広く使われる「平均律」は、1オクターブを12の半音に等しく分け、半音ごとに振動数が約1.0595倍（2の12乗根）になる。</p>
+    ${tbl([["ド（C4）","261.6"],["レ（D4）","293.7"],["ミ（E4）","329.6"],["ファ（F4）","349.2"],["ソ（G4）","392.0"],["ラ（A4）","440.0（国際規格の基準の音）"],["シ（B4）","493.9"],["ド（C5）","523.3（C4のちょうど2倍）"]],["音","振動数（Hz）"])}
+    <p>よく響き合う音の組は、振動数が簡単な整数の比になっている（オクターブ2:1、ドとソ3:2、ドとファ4:3、ドとミ5:4）。この発見はピタゴラス（前6世紀）にさかのぼるとされる。音楽のしくみは文化で大きく違い、5つの音だけの音階（日本の民謡やスコットランド民謡など多くの地域）、半音より細かい音を使う中東のマカーム、インドのラーガ、インドネシアのガムランなどがある。</p>
+    <h4>文学：物語を書き残す</h4>
+    ${tbl([["前2100年ごろ〜","ギルガメシュ叙事詩（メソポタミア）","友の死に悩み、不死を求めて旅する王の物語。最古級の文学"],["前8世紀ごろ","『イリアス』『オデュッセイア』（ギリシャ）","ホメロス作と伝わる。トロイア戦争と英雄の帰郷"],["前4世紀〜後4世紀ごろ","『マハーバーラタ』（インド）","約10万の詩節からなる、世界最長級の叙事詩"],["8世紀","『万葉集』（日本）","天皇から庶民まで約4,500首の歌"],["11世紀初め","『源氏物語』（日本）","紫式部。人の心の動きを細かく描いた長い物語で、世界最古級の長編小説とされる"],["9世紀ごろから","『千夜一夜物語』（中東）","アラジン、シンドバッドなどの物語を集めたもの"],["1605・1615年","『ドン・キホーテ』（スペイン）","セルバンテス。近代小説の始まりとされる"],["1590〜1610年代","シェイクスピアの劇（イギリス）","『ロミオとジュリエット』『ハムレット』など"]],["いつ","作品","内容"])}
+    <p>1450年ごろのグーテンベルクの活版印刷で、本は大量に作れるようになった。最も多くの言語に翻訳された本は聖書。いまは小説・漫画・ウェブ小説・ゲームの物語など、物語の形はさらに広がっている。</p>
+    <h4>美術の流れ</h4>
+    ${tbl([["古代","エジプトの壁画と彫刻、ギリシャの彫刻","ギリシャは人体の理想の比率を追い求めた"],["古代〜","中国の書と山水画","筆と墨で、文字そのものと風景の心を描く"],["7世紀〜","イスラム美術","人や動物の像より、幾何学模様・植物の文様・書道が発達した"],["15〜16世紀","ルネサンス（イタリア）","遠近法と解剖学。レオナルド・ダ・ヴィンチ、ミケランジェロ"],["17〜19世紀","浮世絵（日本）","木版画で大量に刷って庶民が楽しんだ。葛飾北斎、歌川広重。ヨーロッパの画家にも影響を与えた"],["19世紀後半","印象派（フランス）","光と色の一瞬をとらえる。モネ、ルノワール"],["1839年〜","写真","見たままを写す技術が生まれ、絵画は「見たまま」以外の表現へ向かった"],["20世紀","キュビスム、抽象画、ポップアート","ピカソは物をいくつもの視点から同時に描いた"],["21世紀","デジタルアート、AIによる画像生成","誰でも作れて誰にでも届く時代に。作者とは誰かという新しい問いも"]],["時代","流れ","特徴"])}
+    <h4>演劇と映像</h4>
+    ${flow(["古代ギリシャ劇（前5世紀）","能（14世紀）","歌舞伎・京劇（17〜18世紀）","映画（1895年）","テレビ（1920〜30年代）","アニメーション","動画配信"])}
+    <p>映画は1895年、フランスのリュミエール兄弟の上映会から始まった。日本のアニメと漫画は、いまでは世界中で読まれ、見られている。</p>
+    <h4>建築：形に残る芸術</h4>
+    ${tbl([["ギザの大ピラミッド（エジプト）","前2560年ごろ","建てたときの高さ約146m。約3,800年間、人が造った最も高い建造物だった"],["パルテノン神殿（ギリシャ）","前5世紀","柱の太さや傾きを微妙に調整し、まっすぐ美しく見せた"],["万里の長城（中国）","前7世紀〜17世紀","いま残る多くは14〜17世紀（明の時代）のもの。すべての壁を合わせると2万km以上"],["法隆寺（日本）","7世紀","いま残る世界最古級の木造建築"],["アンコール・ワット（カンボジア）","12世紀","世界最大級の宗教建築"],["タージ・マハル（インド）","17世紀","皇帝が亡き妃のために建てた白い大理石の墓"],["エッフェル塔（フランス）","1889年","鉄の塔。完成時は世界一高い建造物（いまは約330m）"],["東京スカイツリー（日本）","2012年","634m。世界一高い電波塔"],["ブルジュ・ハリファ（アラブ首長国連邦）","2010年","828m。2026年時点で世界一高い建物"]],["建物","いつ","特徴"])}
+    <p>人類の宝として守られている世界遺産は、2026年時点で1,273件。文化遺産（建物・遺跡・町並み）が約8割を占める。</p>
+    ${src("最古の岩絵：Oktaviana ほか、Nature（2026年1月）。音の振動数は平均律でA4＝440Hzとしたとき（国際規格ISO 16）。世界遺産の件数：ユネスコ（2026年）。")}
+    ${links(map("lineage","芸術・娯楽の系統樹を見る"),map("world-map","世界遺産を地図で見る"))}`});
+
+  EB.add({id:"play",ic:"⚽",t:"遊びとスポーツ",k:"遊び スポーツ サッカー ワールドカップ オリンピック 野球 クリケット バスケットボール 陸上 チェス 囲碁 将棋 ゲーム ビデオゲーム eスポーツ AI ディープ・ブルー アルファ碁 パラリンピック",h:`
+    <p class="eblead">遊びは人間だけのものではありません。子イヌはじゃれ合い、カラスは雪の斜面を滑ります。遊びは体と頭の練習であり、仲間とルールを分かち合う方法です。人類はそれを、世界中が熱中するスポーツやゲームにまで育てました。</p>
+    <h4>世界で人気のスポーツ</h4>
+    ${tbl([["サッカー","世界で最も多くの人が見て、遊ぶスポーツとされる。国際サッカー連盟（FIFA）には211の国・地域の協会が加盟"],["クリケット","インド・パキスタン・イギリス・オーストラリアなど、イギリス連邦の国々で絶大な人気"],["バスケットボール","1891年にアメリカで考案。世界中で遊ばれる"],["野球","アメリカ・日本・韓国・台湾・中南米で人気"],["テニス・卓球・バドミントン","ラケット競技。アジアでは卓球とバドミントンの人気が高い"],["陸上・水泳","「より速く、より高く、より強く」を数字で競う、オリンピックの中心競技"],["格闘技","柔道・空手・テコンドー・レスリング・ボクシング。相撲は日本の国技とされる"]],["競技","特徴"])}
+    <h4>サッカー・ワールドカップ</h4>
+    <p>1930年のウルグアイ大会から、第二次世界大戦中を除いて4年ごとに開かれる、世界で最も多くの人が見るスポーツ大会のひとつ。2026年大会は、アメリカ・カナダ・メキシコの3か国で開かれ、出場チームが初めて48に増えて104試合が行われた。決勝（7月19日、ニュージャージー州）で<b>スペインがアルゼンチンを延長戦の末1対0で破り、2010年以来2回目の優勝</b>を果たした。最多優勝はブラジルの5回。</p>
+    <h4>オリンピックとパラリンピック</h4>
+    ${tbl([["古代オリンピック","前776年〜後393年","ギリシャのオリンピアで、ゼウス神に捧げる祭りとして4年ごとに開かれた"],["近代オリンピック","1896年アテネ〜","クーベルタンの呼びかけで始まった。冬季大会は1924年から"],["パラリンピック","1960年ローマ〜","障がいのある選手の大会。オリンピックと同じ都市で開かれる"],["パリ2024（夏）","2024年","32競技329種目、約1万500人。金メダルはアメリカと中国が40個で並び、日本は20個で3位"],["ミラノ・コルティナ2026（冬）","2026年2月","ノルウェーが金18個・合計41個で1位、アメリカが金12個で2位。日本は金5個・合計24個。ノルウェーのクレボ選手が1大会で金6個の新記録"],["これから","2028年〜","ロサンゼルス2028（夏）、フランス・アルプス2030（冬）、ブリスベン2032（夏）、ソルトレークシティ2034（冬）"]],["大会","いつ","内容"])}
+    <h4>盤の上のゲームと、AI</h4>
+    ${tbl([["囲碁","中国で数千年前","盤面の置き方は約2×10¹⁷⁰通り（2016年に数え上げられた）。宇宙の原子の数（約10⁸⁰）よりはるかに多い"],["チェス","6世紀ごろのインドの「チャトランガ」が祖先","ありうる局面は約5×10⁴⁴通りと推定されている"],["将棋","日本。いまの形は16世紀ごろ","取った相手の駒を自分の駒として使えるのが特徴"],["バックギャモン・すごろく","最古級は約4,500年前のメソポタミアの「ウル王墓のゲーム」","さいころを使うゲームの祖先"],["マンカラ","アフリカ・中東で古くから","穴に入れた種を配っていく、数のゲーム"],["麻雀","19世紀の中国","4人で牌を組み合わせる"]],["ゲーム","始まり","特徴"])}
+    ${tbl([["1997年","コンピュータ「ディープ・ブルー」がチェスの世界王者カスパロフに勝った"],["2016年","「アルファ碁」が囲碁のトップ棋士イ・セドルに4勝1敗。囲碁でAIが人を超えるのはまだ先と考えられていた"],["2017年","将棋ソフトが現役の名人に勝った。ルールだけを教えて自分どうしで対局させるAI（アルファゼロ）が、囲碁・チェス・将棋で最強になった"],["2019年","6人で遊ぶポーカーで、AIがトップのプロに勝った"]],["年","AIと人の対戦"])}
+    <h4>ビデオゲーム</h4>
+    <p>1958年の「テニス・フォー・ツー」や1972年の「ポン」から始まり、いまでは世界の約36億人が遊ぶ。2025年の世界のゲーム市場は約2,016億ドル（約30兆円）で、初めて2,000億ドルを超えた。その半分以上がスマートフォンのゲーム。プロの選手が競うeスポーツも、大きな大会は数百万人が同時に視聴する。</p>
+    ${src("ワールドカップとオリンピックの結果：FIFA、IOC。囲碁の局面数：Tromp ほか（2016年）、チェスの局面数：Tromp の推定（2022年）。ゲーム市場：Newzoo（2025年の実績、遊ぶ人の数は2025年の推定）。")}
+    ${links(map("lineage","娯楽・スポーツの系統樹を見る"))}`});
+
+  EB.add({id:"living",ic:"🏠",t:"衣・食・住と暮らし",k:"衣食住 服 衣服 繊維 ポリエステル 綿 食事 主食 米 小麦 トウモロコシ 料理 発酵 調味料 家 住まい スラム 水 トイレ 衛生 電気 料理の燃料 暮らし",h:`
+    <p class="eblead">人の暮らしの基本は、着ること、食べること、住むこと。そして、安全な水、トイレ、電気、煙の出ない台所。これらがそろっている人と、そうでない人の差は、いまも大きいのです。</p>
+    <h4>衣：毛の少ない体を守る</h4>
+    <p>人は体毛が少なく、汗で体を冷やす動物。寒さや日差しから身を守るため、少なくとも数万年前には服を着ていた（骨で作った針は約4万〜5万年前のものが見つかっている）。服は体を守るだけでなく、身分・職業・信仰・美しさを表すものにもなった（着物、サリー、民族衣装、制服）。</p>
+    ${bar([["ポリエステル",59,"#7fb2ff","石油から作る化学繊維。リサイクルは約1割"],["綿",19,"#f4d79a","植物の綿花の繊維"],["レーヨンなど",6,"#6fd2a0","木材パルプから作る繊維"],["ナイロン",5,"#c99cf2"],["羊毛など動物の毛",1,"#d8b48a"],["そのほか",10,"#9fb3d6","ポリプロピレン・麻など"]],"%")}
+    <p>世界で作られる繊維は、2025年に約1億3,900万トン（1人あたり約17kg）。2000年の2倍以上に増えた。上のグラフは2024年の内訳で、いまや繊維の6割近くが石油からできている。</p>
+    <h4>食：何をどう食べるか</h4>
+    <p>人が食べられる植物は数万種類あるが、実際の食べ物のエネルギーの約9割は、わずか15種類ほどの作物でまかなわれている。その中でも米・小麦・トウモロコシの3つが特に大きい（栄養のしくみは${see("food","食べ物と栄養の章")}）。</p>
+    ${tbl([["火で調理する","少なくとも数十万年前から。調理すると消化がよくなり、病原体も減る"],["保存する","乾かす・塩や砂糖に漬ける・いぶす・発酵させる・冷やす（冷蔵庫は20世紀に普及）"],["発酵させる","微生物の力で味と保存性を高める。パン・チーズ・ヨーグルト・味噌・醤油・キムチ・酒"],["味つけする","塩はどの文化でも欠かせない。コショウなどの香辛料を求めて、15〜16世紀の大航海が始まった"],["宗教の決まり","イスラム教のハラール（豚肉や酒を避ける）、ユダヤ教のコーシャ、多くのヒンドゥー教徒は牛肉を食べない、仏教の精進料理"],["食べ方","手で食べる（南アジア・中東・アフリカなど）、箸（東アジア）、ナイフとフォーク（ヨーロッパなど）。どれも長い歴史を持つ作法"]],["","内容"])}
+    <h4>住：気候と材料で決まる家の形</h4>
+    ${cards([["石・れんが・土","乾いた地域では日干しれんがや土の厚い壁が、昼の暑さと夜の寒さをやわらげる。","#d8b48a"],["木","森の多い地域。日本の木造建築は、地震で揺れても倒れにくいしくみを発達させた。","#6fd2a0"],["高床","雨が多く湿った熱帯や、洪水の多い土地。風を通し、水や動物を避ける。","#7fb2ff"],["移動する家","モンゴルのゲルなど、遊牧の人々は組み立てて運べる家に住む。","#f4b942"],["コンクリートの高層住宅","都市に人が集まった20世紀に広がった。コンクリートは、水の次に人類が多く使う物質とされる。","#9fb3d6"],["雪や氷","北極圏のイヌイットは、狩りの旅で雪のブロックの家（イグルー）を作った。","#e8eef9"]],200)}
+    <p>いっぽうで、世界の都市に住む人のうち約11億人が、スラムや、水・トイレ・丈夫な家のそろわない住まいに暮らしている。</p>
+    <h4>水・トイレ・電気・台所</h4>
+    ${tbl([["安全な飲み水（家にあり、汚れておらず、いつでも使える）","74%","約21億人が使えない。うち約1億600万人は川や池の水をそのまま飲む"],["安全なトイレ（汚物が衛生的に処理される）","58%","約34億人が使えない。うち約3億5,400万人は屋外で用を足す"],["家で石けんと水で手を洗える","約8割","約17億人が使えない。うち約6億1,100万人は手を洗う設備がまったくない"],["電気","92%","約6億5,500万人が使えない。うち5億6,000万人以上がサハラ以南のアフリカ"],["煙の出ない料理（ガス・電気など）","約75%","約20億人が、まき・炭・灯油などで料理する。煙は肺や心臓の病気の原因になる"]],["","使える人の割合（2024年）","使えない人"])}
+    ${note("飲み水とトイレが整うと、下痢などの感染症で亡くなる子どもが大きく減る。電気があれば夜に勉強でき、冷蔵庫でワクチンを保存できる。暮らしの基本は、健康・教育・仕事のすべての土台になる。","cool")}
+    ${src("繊維：Textile Exchange「Materials Market Report」2025年版（2024年の内訳）・2026年版（2025年の生産量）。水・トイレ・手洗い：WHO・UNICEF共同監視プログラム（JMP、2025年）。電気・料理：「Tracking SDG7」2026年版。スラム：国連ハビタット（2022年）。")}
+    ${links(see("cities","家族・人口・都市の章へ"))}`});
+
+  EB.add({id:"calendar",ic:"📅",t:"暦と時間・祭り",k:"暦 カレンダー グレゴリオ暦 うるう年 太陰暦 イスラム暦 旧暦 農暦 元号 令和 西暦 曜日 1週間 時刻 時差 タイムゾーン 協定世界時 UTC うるう秒 原子時計 祭り 祝日 正月 春節 クリスマス ラマダン ディーワーリー",h:`
+    <p class="eblead">人類は、空の動きで時間を区切ってきました。地球が1回まわると1日、月が満ち欠けすると1か月、太陽のまわりを1周すると1年。この3つがきれいに割り切れないことが、暦づくりの苦労の始まりでした。</p>
+    <h4>時間の単位のもと</h4>
+    ${tbl([["1日","地球の自転","太陽が南にきてから次に南にくるまで平均24時間。星を基準にすると23時間56分4秒"],["1か月","月の満ち欠け","新月から次の新月まで約29.53日"],["1年","地球が太陽を1周","季節がひとまわりするのは約365.2422日"],["1週間","天体の周期ではない","7日は古代メソポタミアやユダヤ教に由来する。曜日の名前は、肉眼で見える7つの天体（太陽・月・火星・水星・木星・金星・土星）にちなむ"]],["単位","もと","長さ"])}
+    <h4>世界の暦</h4>
+    ${tbl([["グレゴリオ暦（太陽暦）","1582年、ローマ教皇グレゴリウス13世が定めた。いま世界の共通の暦","4で割り切れる年はうるう年（2月29日）。ただし100で割り切れる年は平年、400で割り切れる年はうるう年。平均365.2425日で、季節とのずれは3,000年あまりで1日。日本は1873年（明治6年）から"],["ユリウス暦","前45年、ユリウス・カエサル","4年に1度うるう年。1年が平均11分長く、16世紀には季節と10日ずれていた。正教会の一部はいまも祝日に使う（クリスマスが1月7日になる）"],["イスラム暦（太陰暦）","622年（ムハンマドがメッカからメディナへ移った年）が紀元","月の満ち欠けだけで決めるので1年は354日か355日。断食月ラマダンは毎年約11日ずつ早くなり、約33年で季節をひとまわりする"],["中国の農暦（太陰太陽暦）","古代中国から。日本の旧暦も同じしくみ","月の満ち欠けで月を決め、約3年に1度「うるう月」を入れて季節に合わせる。季節の目安に二十四節気を使う。春節（旧正月）は1月下旬〜2月中旬"],["ユダヤ暦（太陰太陽暦）","古代イスラエルから","19年に7回うるう月を入れる"],["ヒンドゥー暦","インドの各地で多くの種類","祭りの日を決めるのに使われる"],["元号（和暦）","645年の「大化」から","いまは「令和」（2019年5月1日〜）。2026年は令和8年。元号を使い続けている国は、いまでは日本だけとされる"]],["暦","始まり","しくみ"])}
+    <p>西暦は、6世紀にキリストの生まれた年を基準に数え始めたもの（実際の誕生は前4年ごろとされる）。0年はなく、前1年の次は1年になる。ほかにも、タイの仏暦（2026年＝2569年）、イランの太陽暦など、国によって暦が違う。</p>
+    <h4>時刻と時差</h4>
+    ${tbl([["1秒","1967年から、セシウム原子が出す光（電磁波）の振動の9,192,631,770回分と決められている。それ以前は地球の自転が基準だった"],["協定世界時（UTC）","世界の時刻の基準。原子時計の時刻を、地球の自転とのずれが0.9秒以内になるように調整したもの"],["うるう秒","地球の自転は少しずつ揺らぐため、1972年から27回、1秒を足してきた（最後は2016年12月31日）。2022年の国際会議で、2035年までにうるう秒をやめることが決まった"],["時差（時間帯）","経度15度で1時間ずれる。UTCより12時間遅い所から14時間進んだ所まで、世界には約38の時差がある。インド（＋5時間30分）やネパール（＋5時間45分）のように30分・45分単位の国もある"],["国土と時間帯","中国は東西に広いが、時間帯は1つ（UTC＋8）。時間帯が最も多い国は、海外の領土を含めたフランス（12）"],["日付変更線","太平洋のほぼ経度180度の線。西へ越えると日付が1日進む"]],["","内容"])}
+    <h4>世界の祭りと祝日</h4>
+    ${tbl([["新年","1月1日（世界の多く）、春節（中国・東アジアの旧正月）、ノウルーズ（春分の日、イラン・中央アジア）","家族が集まり、新しい年の幸せを願う"],["キリスト教","クリスマス（12月25日、イエスの誕生）、イースター（春分の後の最初の満月の次の日曜日、イエスの復活）","世界で最も多くの人が祝う祭りのひとつ"],["イスラム教","イード・アル＝フィトル（ラマダン明けの祭り）、犠牲祭（メッカ巡礼の時期）","イスラム暦で決まるので、毎年約11日ずつ早くなる"],["ヒンドゥー教","ディーワーリー（10〜11月、光の祭り）、ホーリー（3月ごろ、色の粉をかけ合う春の祭り）","明かりを灯し、色を分かち合う"],["仏教","ウェーサク（ブッダの誕生・悟り・死をしのぶ）、日本の花祭り（4月8日）とお盆","地域によって日付が違う"],["ユダヤ教","過越祭（エジプト脱出を記念）、ハヌカ（12月ごろ、光の祭り）","ユダヤ暦で決まる"],["収穫と死者","中秋節（月を眺める）、アメリカの感謝祭（11月第4木曜日）、メキシコの死者の日（11月1〜2日）","実りに感謝し、祖先をしのぶ"]],["","おもな祭り","内容"])}
+    ${src("時間の単位：国際度量衡局（BIPM）、国際地球回転・基準系事業（IERS）。うるう秒の廃止：第27回国際度量衡総会（2022年）の決議。")}
+    ${links(map("timeline","年表で時の流れを見る"),see("num","数と単位の章へ"))}`});
+})();
+
+/* 第9部：技術 */
+(function(){
+  const {bar,tbl,fig,dots,map,see,cards,flow,note,src,links}=EB;
+  EB.part("tech","技術","⚙️","道具と材料、エネルギー、乗り物と物流、通信とコンピュータとAI、医療の技術、農業と食料生産、宇宙開発。");
+
+  EB.add({id:"tech",ic:"⚙️",t:"技術の歩み",k:"技術 発明 道具 石器 火 農耕 車輪 印刷 蒸気機関 産業革命 電気 コンピュータ インターネット AI イノベーション",h:`
+    <p class="eblead">人類の技術は、加速しながら積み重なってきました。石器を使い始めてから農耕までに約330万年、農耕から産業革命までに約1万2,000年、産業革命から月面着陸まで約200年、インターネットから生成AIまでは約30年です。</p>
+    <h4>大きな転換点</h4>
+    ${tbl([["約330万年前","石器","ケニアで見つかった最古の石器は、ホモ・サピエンスより前の人類が作った"],["少なくとも数十万年前","火の利用","暖をとり、獣を遠ざけ、食べ物を調理する"],["約1万2,000年前","農耕と牧畜","食べ物を「育てる」ようになり、定住と人口の増加が始まった"],["約6,000〜5,000年前","金属・車輪・文字","青銅器、車輪つきの乗り物、記録のための文字"],["1450年ごろ","活版印刷","グーテンベルク。知識が大量に複製されるようになった"],["1760年ごろ〜","蒸気機関と産業革命","石炭の力で機械を動かし、工場で大量に作るようになった"],["1880年代","電気","発電所と電灯。モーターで機械を動かし、夜を明るくした"],["1940年代","原子力・コンピュータ","原子核のエネルギーと、電子で計算する機械"],["1957年〜","宇宙飛行","人工衛星、そして人が宇宙へ"],["1990年代","インターネットとWWW","世界中のコンピュータと人がつながった"],["2020年代","生成AI","文章・画像・プログラムを作るAIが広く使われるようになった"]],["いつ","技術","変わったこと"])}
+    <h4>技術はなぜ加速するのか</h4>
+    ${cards([["積み重なる","新しい技術は前の技術の上に作られる。印刷が知識を広め、知識が次の発明を生む。","#7fb2ff"],["人が増える","発明する人の数が増えるほど、発明も増える。人口は200年で8倍になった。","#6fd2a0"],["つながる","交易・印刷・インターネットで、離れた場所の発明が組み合わさる。","#f4b942"],["エネルギーが増える","使えるエネルギーが増えるほど、できることが増える。カルダシェフの尺度はこれを文明の物差しにしたもの。","#c99cf2"]],200)}
+    ${links(map("lineage","技術の系統樹を見る"),map("timeline","年表で見る"),see("energy","エネルギーの章へ"))}`});
+
+  EB.add({id:"materials",ic:"🧱",t:"材料",k:"材料 素材 石 青銅 鉄 鋼鉄 セメント コンクリート アルミニウム 銅 プラスチック ガラス 半導体 シリコン トランジスタ 石器時代 青銅器時代 鉄器時代",h:`
+    <p class="eblead">時代の名前に材料が使われるほど、材料は文明を決めてきました。石器時代、青銅器時代、鉄器時代。そしていまは、コンクリートと鋼鉄とプラスチックとシリコンの時代です。</p>
+    <h4>材料の歴史</h4>
+    ${tbl([["石","約330万年前〜","割って刃を作る。黒曜石の刃はいまのメスより鋭いこともある"],["土器・れんが","約2万年前〜（土器）","粘土を焼くと固くなる。日本の縄文土器は世界最古級"],["銅・青銅","約7,000〜5,000年前〜","銅にスズを混ぜた青銅は硬く、武器や道具になった"],["鉄","約3,000年前〜（広まった時期）","鉄鉱石は多いが、溶かすには高い温度が要る。炭素を少し混ぜた鋼は強くしなやか"],["ガラス","約4,500年前〜","砂（ケイ素の酸化物）を溶かして作る。のちにレンズ・窓・光ファイバーになった"],["セメント・コンクリート","古代ローマ〜、いまの形は19世紀〜","石灰石を焼いて作る。砂利と水と混ぜると岩のように固まる"],["アルミニウム","19世紀末〜","軽くさびにくいが、作るのに大量の電気が要る"],["プラスチック","20世紀〜","石油から作る。軽く、形を自由に作れ、安い。いっぽうで自然の中で分解されにくい"],["半導体（シリコン）","1950年代〜","電気を流したり止めたりできる。コンピュータの心臓部"]],["材料","いつから","特徴"])}
+    <h4>人類は1年にどれだけ作っているか（2024〜2025年）</h4>
+    ${bar([["セメント",38,"#9fb3d6","約38億トン（2025年）。約半分が中国"],["鋼鉄（粗鋼）",18,"#7fb2ff","約18億トン（2025年）。半分あまりが中国"],["プラスチック",4.3,"#f4b942","約4.3億トン（2024年）。アジアが57%"],["アルミニウム（新しく作ったもの）",0.74,"#c99cf2","約7,400万トン（2025年）。約6割が中国"]],"億トン")}
+    <p>コンクリートは、水の次に人類が多く使う物質とされる。セメントを作るときには大量の二酸化炭素が出て、世界の排出の約8%を占めるとも言われる。プラスチックのうち、リサイクルなどで作られたものはまだ約1割にすぎない。</p>
+    <h4>半導体：髪の毛の1万分の1の部品</h4>
+    ${tbl([["1947年","トランジスタの発明（アメリカ・ベル研究所）","電気の流れを小さな部品でオン・オフできるようになった"],["1958年","集積回路（IC）","多くのトランジスタを1枚の板にまとめる"],["1971年","最初のマイクロプロセッサ（インテル4004）","トランジスタ約2,300個"],["1965年〜","ムーアの法則","チップの上のトランジスタの数は、約2年ごとに倍になってきた（経験則）"],["2020年代","AI用の最先端チップ","1つのチップ（パッケージ）に2,000億個以上のトランジスタ。いちばん細かい部分は数ナノメートル〜数十ナノメートル（髪の毛の太さの約1万分の1〜千分の1）"]],["いつ","できごと","内容"])}
+    <p>最先端の半導体を作れる工場は世界でも限られ、台湾・韓国・アメリカなどに集中している。半導体は、いまや石油と並ぶ戦略物資になった。</p>
+    ${src("セメント：USGS「Mineral Commodity Summaries 2026」。粗鋼：worldsteel（2026年1月発表、2025年に報告した70か国で約18億トン）。プラスチック：Plastics Europe「Plastics the Fast Facts 2025」（2024年、4億3,090万トン）。アルミニウム：国際アルミニウム協会（2025年、7,378万トン）。")}
+    ${links(see("matter","物質のなりたちの章へ"),map("micro","ミクロの世界で原子を見る"))}`});
+
+  EB.add({id:"energy",ic:"⚡",t:"エネルギー",k:"エネルギー 電気 発電 石油 石炭 天然ガス 原子力 再生可能エネルギー 太陽光 風力 水力 カルダシェフ 電力 二酸化炭素 脱炭素 電気自動車",h:`
+    <p class="eblead">人類は1年に600EJ（エクサジュール）を超えるエネルギーを使っています。平均すると約19兆ワット。1人あたりでは約2,300ワットで、体が食べ物から使うエネルギー（約100ワット）の20倍以上です。</p>
+    <h4>何からエネルギーを得ているか（2025年）</h4>
+    ${bar([["石油",33,"#d8b48a","201.0EJ。おもに乗り物の燃料"],["石炭",28,"#8a8f9e","166.0EJ。おもに発電と製鉄"],["天然ガス",25,"#7fb2ff","150.7EJ。発電・暖房・工場"],["再生可能エネルギー（風力・太陽光など）",5.9,"#6fd2a0"],["原子力",5.2,"#c99cf2"],["水力",2.7,"#5fa8e8"]],"%")}
+    <p>いまも約86%を化石燃料（石油・石炭・天然ガス）に頼っている。化石燃料は、何億年も前の生き物が地中で変化したもので、燃やすと二酸化炭素が出る。2025年にエネルギーから出た二酸化炭素は約358億トンで、過去最多だった。</p>
+    <p>2026年には、中東の戦争で、世界の石油の約2割が通るホルムズ海峡がふさがれ、石油と天然ガスの値段が急に上がった。エネルギーをどこから得るかは、気候の問題であると同時に、安全保障の問題でもある。</p>
+    <h4>電気は急速に変わっている（2025年の発電量）</h4>
+    ${bar([["石炭",33.0,"#8a8f9e"],["天然ガス",22,"#7fb2ff"],["水力",14,"#5fa8e8"],["原子力",8.9,"#c99cf2"],["太陽光",8.7,"#f4d79a"],["風力",8.5,"#6fd2a0"],["そのほか（バイオマス・石油など）",5,"#9fb3d6"]],"%")}
+    <p>2025年、<b>再生可能エネルギー（水力・太陽光・風力など）の発電量が合計33.8%となり、初めて石炭（33.0%）を上回った</b>。原子力を合わせた「二酸化炭素を出さない電気」は43%。2025年に増えた電気の使用量の約4分の3を、太陽光の増加だけでまかなった。</p>
+    <h4>エネルギーの単位</h4>
+    ${tbl([["1ジュール（J）","リンゴ1個（約100g）を1m持ち上げるエネルギー"],["1キロカロリー（kcal）","4,184J。水1リットルを1℃温める"],["1キロワット時（kWh）","360万J。電気代の単位"],["1ワット（W）","1秒あたり1Jを使う速さ"],["1エクサジュール（EJ）","10¹⁸J。日本が1年に使うエネルギーは約17EJ"]],["単位","大きさ"])}
+    <h4>カルダシェフの尺度で見ると</h4>
+    <p>文明が使うエネルギーの量で文明を測る考え方（1964年、ソ連の天文学者カルダシェフ）。カール・セーガンの式 K＝(log₁₀P − 6) ÷ 10（Pはワット）に、人類の約1.9×10¹³Wを入れると <b>K≈0.73</b>。Type I（惑星のエネルギーを使いこなす文明、約10¹⁶W）には、いまの約500倍が必要になる。地球に届く太陽の光は約1.7×10¹⁷Wで、人類が使う量の約9,000倍ある。</p>
+    ${note("エネルギーは文明の力そのものだが、化石燃料を燃やし続けると気候が変わる。「エネルギーを増やしながら、二酸化炭素を減らす」ことが、21世紀の人類の最大の課題のひとつになっている（"+see("issues","いま地球が抱える課題")+"）。","warn")}
+    ${src("Energy Institute「Statistical Review of World Energy 2026」（2025年の一次エネルギーと二酸化炭素）。Ember「Global Electricity Review 2026」（2025年の発電量。天然ガス・水力・そのほかは概数）。")}
+    ${links(map("overview","文明マップでエネルギーの歩みを見る"),see("force","力・運動・エネルギーの章へ"))}`});
+
+  EB.add({id:"transport",ic:"🚄",t:"乗り物と物流",k:"乗り物 交通 物流 車輪 馬 船 帆船 鉄道 蒸気機関車 自動車 飛行機 ジェット機 新幹線 高速鉄道 コンテナ船 電気自動車 EV 速さ",h:`
+    <p class="eblead">200年前まで、人がいちばん速く移動する方法は馬でした。いまは飛行機で地球の裏側まで1日で行けます。物を運ぶ力が、世界の経済をひとつにつないでいます。</p>
+    <h4>乗り物の歩み</h4>
+    ${flow(["歩く","ウマに乗る（約5,000年前〜）","車輪（約5,500年前〜）","帆船","蒸気機関車（1825年）","自動車（1886年）","飛行機（1903年）","ジェット旅客機（1950年代）","新幹線（1964年）","電気自動車"])}
+    <h4>速さくらべ</h4>
+    ${tbl([["歩く","時速約5km"],["自転車","時速約15〜25km"],["ウマ（全力）","時速約60〜70km"],["自動車（高速道路）","時速約100km"],["新幹線・中国の高速鉄道","最高で時速320〜350km"],["ジェット旅客機","時速約900km"],["国際宇宙ステーション","時速約2万7,600km（地球を約90分で1周）"],["ボイジャー1号","時速約6万1,000km（秒速約17km）"],["パーカー・ソーラー・プローブ","時速約69万km（2024年。人が作った最も速い物）"]],["乗り物","速さ"])}
+    <h4>いまの移動と物流</h4>
+    ${tbl([["飛行機","2025年に約50億人が利用し、過去最多。2026年は約52億人の見込み。座席の埋まる割合も過去最高（83.6%）"],["船","国どうしの貿易の量の8割以上を船が運ぶ。1956年に始まったコンテナ（規格をそろえた鉄の箱）が、運ぶ費用を大きく下げた。最大のコンテナ船は、20フィートの箱を2万4,000個以上積める"],["鉄道","1964年に日本の新幹線が世界初の高速鉄道として開業。いま最も長いのは中国の高速鉄道で、2025年末に5万kmを超え、ほかの国すべてを合わせたより長い"],["自動車","2025年に新しく売れた車の4台に1台（2,000万台以上）が電気自動車。中国では半分以上が電気自動車になった"]],["","内容"])}
+    ${note("乗り物は、世界のエネルギーの約4分の1を使い、その大部分が石油。電気自動車・高速鉄道・航空燃料の改良で、どこまで石油を減らせるかが問われている。","cool")}
+    ${src("飛行機：IATA（2025年は見込み値、2026年は予測）。電気自動車：IEA「Global EV Outlook 2026」。中国の高速鉄道：中国国家鉄路集団（2025年末）。パーカー・ソーラー・プローブ：NASA（2024年12月、秒速約192km）。")}
+    ${links(map("world-map","世界地図で見る"))}`});
+
+  EB.add({id:"comms",ic:"📱",t:"通信・コンピュータ・AI",k:"通信 電信 電話 ラジオ テレビ インターネット スマートフォン 携帯電話 5G 海底ケーブル 人工衛星 コンピュータ スーパーコンピュータ AI 人工知能 生成AI 機械学習 ChatGPT データ",h:`
+    <p class="eblead">かつて、遠くへ知らせを届ける速さは、人や馬や船の速さと同じでした。電気の信号を使うようになってから、情報は光の速さで地球を回るようになりました。そしていま、機械が言葉を話し始めています。</p>
+    <h4>通信の歩み</h4>
+    ${tbl([["古代〜","のろし・飛脚・伝書バト","人や動物が運ぶ"],["1837年","電信（モールス信号）","電線で文字を送る。1866年に大西洋の海底ケーブルが開通"],["1876年","電話","声を電気の信号にして送る"],["1900年代","ラジオ（無線）","電線なしで、多くの人に同時に届ける"],["1920〜30年代","テレビ","映像を送る"],["1969年","インターネットの始まり（ARPANET）","コンピュータどうしをつなぐ"],["1991年","ワールド・ワイド・ウェブ（WWW）","リンクでページをたどるしくみ。誰でもインターネットを使えるようになった"],["2007年〜","スマートフォンの普及","電話・カメラ・地図・財布・テレビが手のひらに"]],["いつ","技術","内容"])}
+    <h4>つながる世界（2025年）</h4>
+    ${tbl([["インターネットを使う人","約60億人（世界の74%）。2019年は54%だった"],["使えていない人","約22億人。その96%は低・中所得の国に住む"],["国の豊かさによる差","高所得国では94%、低所得国では23%"],["5G（第5世代の携帯電話）","約30億契約。携帯電話の高速通信の約3分の1"],["海底ケーブル","大陸と大陸の間を行き来するデータのほとんど（99%以上とされる）は、海の底の光ファイバーで運ばれる"],["人工衛星","2026年10月に動いている人工衛星は約1万6,000〜1万7,000機。その約3分の2が、宇宙からインターネットを届けるスターリンク"]],["","数字"])}
+    <h4>コンピュータ</h4>
+    <p>コンピュータは、0と1（電気が流れる・流れない）の組み合わせで、計算・記憶・判断を行う機械（しくみは${see("info","情報とコンピュータの章")}）。1946年の初期のコンピュータENIACは、1秒に約5,000回の足し算をした。2026年に世界で最も速いスーパーコンピュータ（中国の「LineShine」）は、1秒に約2.2×10¹⁸回（2.2エクサ）の計算をする。80年で約400兆倍速くなった。</p>
+    <h4>人工知能（AI）</h4>
+    ${tbl([["1950年","チューリングが「機械は考えられるか」を問う"],["1956年","「人工知能」という言葉が生まれる（アメリカのダートマス会議）"],["1997年","チェスのAIが世界王者に勝つ"],["2012年","深層学習（たくさんの層を持つニューラルネットワーク）が画像認識で大きく進歩"],["2016年","囲碁のAIがトップ棋士に勝つ"],["2017年","文章を扱う新しいしくみ「トランスフォーマー」"],["2020年","AlphaFoldがタンパク質の形をほぼ正確に予測（2024年ノーベル化学賞）"],["2022年〜","対話型の生成AI（ChatGPT・Gemini・Claudeなど）が広まる。ChatGPTだけで2026年2月に週9億人が利用"]],["年","できごと"])}
+    <p>いまの生成AIは、膨大な文章や画像から規則性を学び、「次にくるもっともらしい言葉」を予測して文章を作る。文章を書く・訳す・プログラムを書くことが得意ないっぽう、もっともらしい誤り（ハルシネーション）を言うこともある。AIをどう安全に使うか、仕事や教育がどう変わるかは、いま世界中で議論されている。</p>
+    ${src("インターネット：ITU「Facts and Figures 2025」。人工衛星：CelesTrak・KeepTrackのデータ（2026年10月）。スーパーコンピュータ：TOP500（2026年6月・11月のリストで1位、HPLで2.198エクサフロップス）。ChatGPT：OpenAIの発表（2026年2月）。")}
+    ${links(see("info","情報とコンピュータの章へ"),see("philosophy","機械は考えられるか（哲学）"))}`});
+
+  EB.add({id:"medtech",ic:"💉",t:"医療の技術",k:"医療 医学 ワクチン 天然痘 抗生物質 ペニシリン 麻酔 手術 レントゲン X線 CT MRI 臓器移植 インスリン mRNA ゲノム編集 CRISPR 薬剤耐性 平均寿命",h:`
+    <p class="eblead">200年前、人の平均寿命は約30歳でした。いまは73歳を超えています。その差の多くは、清潔な水、ワクチン、抗生物質、そして病気のしくみを知る科学がもたらしました。</p>
+    <h4>医療を変えた発見と発明</h4>
+    ${tbl([["1796年","種痘（ジェンナー、イギリス）","ウシの天然痘で人の天然痘を防ぐ。ワクチンの始まり"],["1804年","全身麻酔での手術（華岡青洲、日本）","薬で眠らせて乳がんの手術をした"],["1846年","エーテル麻酔（アメリカ）","痛みのない手術が広まった"],["1847年","手洗い（ゼンメルワイス、ハンガリー）","医師の手洗いで、出産後の死亡が大きく減った"],["1860〜80年代","病原体の発見（パスツール、コッホ）","病気の多くは目に見えない微生物が起こすとわかった"],["1895年","X線（レントゲン、ドイツ）","体を切らずに中を見る"],["1921〜22年","インスリン（カナダ）","糖尿病が命に関わる病気でなくなっていった"],["1928年","ペニシリン（フレミング、イギリス）","最初の抗生物質。1940年代に大量生産され、感染症の死亡を大きく減らした"],["1954年","臓器移植（腎臓、アメリカ）","1967年には心臓移植も"],["1970年代","CT・MRI","体の断面の画像を撮る"],["1980年","天然痘の根絶（WHO宣言）","人類が地上からなくした唯一の人の感染症"],["2020年","mRNAワクチン（新型コロナ）","1年足らずで開発された。2023年ノーベル生理学・医学賞"],["2023年","ゲノム編集（CRISPR）による初めての治療薬が承認","鎌状赤血球症などの遺伝性の病気の治療"]],["いつ","発見・発明","変わったこと"])}
+    <h4>数字で見る効果と課題</h4>
+    ${tbl([["ワクチン","過去50年（1974〜2024年）で、少なくとも1億5,400万人の命を救ったと推計される"],["ポリオ（小児まひ）","野生のウイルスが残るのはパキスタンとアフガニスタンだけになった"],["薬剤耐性菌","抗生物質が効かない細菌で、2021年に約114万人が直接亡くなった。2050年には年約190万人になるおそれがある"],["寿命","世界の平均寿命は73.3歳、健康に暮らせる期間（健康寿命）は62.8歳（2023年）"]],["","内容"])}
+    ${note("医療の進歩の恩恵は、まだ世界に平等に届いていない。生まれた国によって、平均寿命には20年以上の差がある。","warn")}
+    ${src("ワクチン：WHO ほか、The Lancet（2024年）。薬剤耐性：GRAM、The Lancet（2024年）。寿命：WHO「Global Health Estimates」（2023年）。")}
+    ${links(see("health","病気と健康の章へ"),map("lineage","医療の系統樹を見る"))}`});
+
+  EB.add({id:"agri",ic:"🌾",t:"農業と食料生産",k:"農業 農耕 作物 穀物 小麦 米 トウモロコシ サトウキビ 家畜 牧畜 肥料 ハーバー・ボッシュ法 緑の革命 養殖 漁業 食品ロス 飢餓 灌漑",h:`
+    <p class="eblead">約1万2,000年前、人類は食べ物を「探す」から「育てる」へと変わりました。農業は、文明のすべての土台です。いま人類は、1年に約99億トンの作物を育てています。</p>
+    <h4>農業は世界の各地で別々に始まった</h4>
+    ${tbl([["西アジア（肥沃な三日月地帯）","約1万2,000〜1万1,000年前","小麦・大麦・エンドウ。ヤギ・ヒツジ・ウシ"],["中国","約9,000年前","長江流域で米、黄河流域でアワ・キビ。ブタ"],["メキシコ","約9,000年前","トウモロコシ・カボチャ・豆"],["アンデス","約8,000年前","ジャガイモ・キヌア。リャマ・アルパカ"],["ニューギニア","約7,000年前","タロイモ・バナナ"],["アフリカ","約5,000〜3,000年前","モロコシ・トウジンビエ・アフリカの稲"]],["地域","いつ","おもな作物・家畜"])}
+    <h4>収穫を増やした発明</h4>
+    ${tbl([["灌漑","川の水を畑へ引く。メソポタミアやエジプトの文明を支えた"],["すき（犂）と家畜","ウシやウマに土を耕させる"],["輪作","作物を順に替えて、土の栄養を保つ"],["化学肥料（1913年〜）","空気中の窒素からアンモニアを作るハーバー・ボッシュ法。いま世界の人の約半分の食べ物は、この肥料のおかげで作られているとされる"],["緑の革命（1960〜70年代）","収穫の多い品種・肥料・灌漑で、アジアや中南米の穀物の収穫が大きく増えた"],["品種改良・遺伝子組換え","病気や乾燥に強い作物。遺伝子組換え作物の栽培は1996年から"]],["","内容"])}
+    <h4>いまの食料生産</h4>
+    ${tbl([["作物全体","約99億トン（2023年）。最も重いのはサトウキビ（20億トン以上）、次がトウモロコシ"],["穀物","約30億トン（2025年、過去最多の見込み）。トウモロコシ・小麦・米で9割"],["肥料","約1億9,000万トン（2023年）"],["魚介類","養殖が1億300万トン、漁獲が9,200万トン（2024年）。養殖が漁獲を上回り、全体の53%に。海藻を含めると2億3,500万トン"],["農地","陸地の約3分の1。氷河や砂漠を除いた土地では約半分が農業に使われる"],["捨てられる食べ物","店や家庭で約10億5,000万トン（2022年、売られる食べ物の約19%）。それとは別に、収穫から店に届くまでに約13%が失われる"]],["","数字"])}
+    <p>世界全体では全員が食べられるだけの食料が作られているのに、2025年に約6億4,500万人が飢餓に苦しんでいる。足りないのは食料の量より、届け方とお金と平和だと言える。</p>
+    ${src("作物：FAO「Agricultural production statistics」（2023年）。穀物：FAO「Food Outlook」（2025年11月）。肥料：FAO「Statistical Yearbook 2025」。魚介類：FAO「SOFIA 2026」。食品ロス：UNEP「Food Waste Index 2024」、FAO。飢餓：FAO ほか「SOFI 2026」。")}
+    ${links(see("food","食べ物と栄養の章へ"),see("living","衣・食・住の章へ"))}`});
+
+  EB.add({id:"space",ic:"🚀",t:"宇宙開発",k:"宇宙開発 ロケット 人工衛星 スプートニク ガガーリン アポロ 月面着陸 国際宇宙ステーション ISS 天宮 アルテミス はやぶさ SLIM スターリンク 宇宙ごみ デブリ 宇宙飛行士 ボイジャー",h:`
+    <p class="eblead">1957年、人類は初めて物を宇宙へ届けました。その12年後には月の上を歩きました。いまでは毎日のようにロケットが打ち上げられ、数千人の宇宙飛行士の時代が見え始めています。</p>
+    <h4>宇宙開発の歩み</h4>
+    ${tbl([["1957年","スプートニク1号（ソ連）","最初の人工衛星"],["1961年","ガガーリン（ソ連）","人類初の宇宙飛行。地球を1周した"],["1969年","アポロ11号（アメリカ）","人類が初めて月を歩いた。1972年までに12人"],["1977年","ボイジャー1号・2号","2機で木星と土星を、2号はさらに天王星と海王星を訪れ、どちらも太陽系の外へ向かった"],["1990年","ハッブル宇宙望遠鏡","宇宙の年齢や銀河の姿を明らかにした"],["2000年〜","国際宇宙ステーション（ISS）","2000年11月から、人がずっと住み続けている"],["2003年","中国の初の有人宇宙飛行","2022年に宇宙ステーション「天宮」が完成"],["2010・2020年","はやぶさ・はやぶさ2（日本）","小惑星のかけらを地球に持ち帰った"],["2021年","ジェイムズ・ウェッブ宇宙望遠鏡","最初の銀河の光を赤外線で見る"],["2022年","DART（アメリカ）","探査機をぶつけて小惑星の軌道を変えた。地球防衛の初の実験"],["2023〜24年","インド・日本の月面着陸","インドは月の南極の近くに、日本のSLIMはねらった場所の100m以内に着陸"],["2024年","嫦娥6号（中国）","月の裏側の石を初めて持ち帰った"],["2026年4月","アルテミスII（アメリカ）","4人が54年ぶりに月の近くへ。地球から40万6,771kmの人類最遠記録"]],["いつ","できごと","内容"])}
+    <h4>いまの宇宙（2025〜2026年）</h4>
+    ${tbl([["打ち上げ","2025年に軌道へのロケット打ち上げが329回で過去最多。うちスペースXのファルコン9が165回、中国が92回"],["人工衛星","2025年に約4,500機が打ち上げられた。2026年10月に動いているのは約1万6,000機"],["宇宙へ行った人","高度100km以上まで行った人は746人以上"],["宇宙ごみ","追跡されている物体が約4万7,000個。追跡できない1〜10cmのかけらが約150万個あると推定され、秒速数kmでぶつかると衛星を壊す"],["最も遠い人工物","ボイジャー1号。2026年11月18日ごろ、地球から1光日（約259億km）に達した"]],["","数字"])}
+    <h4>これからの計画</h4>
+    ${tbl([["2027年","アルテミスIII：地球を回る軌道で、宇宙船と月着陸船のドッキングを試す"],["2028年","アルテミスIV・V：アメリカが月面着陸の再開をめざす"],["2030年ごろ","ISSの運用が終わり、大気圏に落とす予定。中国は2030年までに人を月に送る計画"],["2030年代以降","月の基地、火星への有人飛行、宇宙での太陽光発電などが構想されている"]],["予定","計画"])}
+    ${note("宇宙開発は国の威信の競争から始まったが、いまは天気予報・カーナビ（GPS）・通信・災害の監視など、地上の暮らしを支えている。いっぽうで、宇宙ごみが増えすぎて連鎖的にぶつかり合う「ケスラー・シンドローム」も心配されている。","cool")}
+    ${src("打ち上げ：SpaceNews（2026年1月）。人工衛星：Payload（2025年の打ち上げ数）、CelesTrak・KeepTrack（2026年10月）。宇宙ごみ：ESA（2026年の宇宙環境報告と統計）。アルテミス：NASA（2026年10月の発表）。ボイジャー：NASA/JPL。")}
+    ${links(map("space-map","宇宙の地図で見る"),see("solar","太陽系の章へ"),see("seti","宇宙の仲間を探す章へ"))}`});
+})();
+
+/* 第10部：歴史 */
+(function(){
+  const {bar,tbl,fig,dots,map,see,cards,flow,note,src,links}=EB;
+  EB.part("history","歴史","📜","人類30万年の流れ。古代の文明と帝国、中世の信仰と交易、近世に世界がつながり、近代・現代へ。");
+
+  EB.add({id:"history",ic:"📜",t:"人類史の流れ",k:"歴史 人類史 世界史 先史 文明 農耕 都市 人口 寿命 識字率 貧困 産業革命 時代区分",h:`
+    <p class="eblead">ホモ・サピエンスが現れてから約30万年。そのうち文字で記録された歴史は、最後の約5,000年だけです。そして世界が大きく変わったのは、最後の約200年でした。</p>
+    <h4>30万年を1日にたとえると</h4>
+    ${tbl([["0時","約30万年前","アフリカでホモ・サピエンスが現れる"],["18時半ごろ","約6〜7万年前","アフリカの外へ広がり始める"],["23時2分","約1万2,000年前","農耕が始まる"],["23時36分","約5,000年前","文字・都市・国家が現れる"],["23時50分ごろ","約2,000年前","ローマ帝国と漢の時代"],["23時58分45秒","約260年前","産業革命が始まる"],["23時59分54秒","約20年前","スマートフォンが広まる"]],["時刻","いつ","できごと"])}
+    <h4>人類のおおまかな流れ</h4>
+    ${flow(["狩猟と採集（30万年前〜）","農耕と定住（1万2,000年前〜）","都市と文字と国家（5,000年前〜）","古代の帝国（前6世紀〜）","信仰と交易の中世（5〜15世紀）","世界がつながる近世（15〜18世紀）","産業革命と近代（18世紀後半〜）","世界大戦と冷戦（20世紀）","グローバル化とデジタル化（現代）"])}
+    <h4>人口の増え方</h4>
+    ${tbl([["約1万年前","数百万人"],["西暦1年ごろ","約2〜3億人"],["1800年ごろ","約10億人"],["1927年","20億人"],["1960年","30億人"],["1974年","40億人"],["1987年","50億人"],["1999年","60億人"],["2011年","70億人"],["2022年","80億人（11月15日、国連の推計）"]],["いつ","世界の人口"])}
+    <h4>この200年で変わったこと</h4>
+    ${tbl([["平均寿命","約29歳（1800年ごろ）","73.3歳（2023年）"],["極度の貧困","世界の人の大半（1820年ごろの推計で約4分の3）","約1割（2025年ごろ）"],["文字が読める人","約1割（1820年ごろ）","約87%"],["都市に住む人","1割に満たない","約45%（町を含めると約58%）"]],["","昔","いま"])}
+    <p>どれも、農業の生産性、医療と衛生、教育、産業の発展がもたらした変化だ。いっぽうで、同じ200年は、世界大戦・植民地支配・環境の破壊の時代でもあった。歴史は「良くなった」と「悪くなった」が同時に進む。</p>
+    ${src("人口：国連（推計）。寿命・貧困・識字率の長期の推移：Our World in Data（Bourguignon & Morrisson ほかの推計）、WHO、世界銀行、UNESCO。昔の数字は推計で幅が大きい。")}
+    ${links(map("timeline","年表（宇宙・地球・世界史）で見る"),see("evolution","人類の進化（生命の章）"))}`});
+
+  EB.add({id:"ancient",ic:"🏺",t:"古代：文明と帝国",k:"古代 文明 メソポタミア エジプト インダス 黄河 殷 ピラミッド ハンムラビ法典 ペルシャ アレクサンドロス マウリヤ朝 秦 始皇帝 漢 ローマ帝国 シルクロード 縄文 弥生 卑弥呼 マヤ",h:`
+    <p class="eblead">農耕で食べ物に余りができると、人は集まって住み、仕事を分け合い、王や神官が現れ、文字で記録を残すようになりました。こうして各地で文明が生まれ、やがて広い地域を支配する帝国ができました。</p>
+    <h4>最初の文明</h4>
+    ${tbl([["メソポタミア（いまのイラク）","前3500年ごろ〜","最初の都市ウルク、楔形文字、法典（ハンムラビ法典、前1754年ごろ）、60進法"],["エジプト","前3100年ごろ統一","ナイル川の洪水を利用した農業。ピラミッド（前2560年ごろ）、ヒエログリフ、1年365日の暦"],["インダス（いまのパキスタン・インド）","前2600〜前1900年ごろ","碁盤の目の都市、下水道。文字はまだ解読されていない"],["中国（黄河流域）","前1600年ごろ〜（殷）","甲骨文字（漢字の祖先）、青銅器"],["アンデス（いまのペルー）","前2600年ごろ〜（カラル）","アメリカ大陸最古の都市のひとつ"],["メソアメリカ（いまのメキシコ）","前1200年ごろ〜（オルメカ）","のちのマヤ・アステカにつながる。マヤは0の記号を使った"]],["地域","いつ","特徴"])}
+    <h4>古代の帝国と思想</h4>
+    ${tbl([["前550年","アケメネス朝ペルシャ","エジプトからインダス川までを支配。道路と郵便のしくみを整えた"],["前508年ごろ","アテネの民主政","市民が集会で直接ものごとを決めた（女性・奴隷・外国人は参加できなかった）"],["前6〜前4世紀","孔子、ブッダ、ソクラテスらの時代","いまに続く思想や宗教の多くが生まれた（"+see("philosophy","哲学と思想")+"）"],["前336〜前323年","アレクサンドロス大王","ギリシャからインドの入口まで征服。ギリシャの文化が東へ広がった"],["前322年〜","マウリヤ朝（インド）","アショーカ王は仏教を保護し、戦争をやめて法（ダルマ）による政治を説いた"],["前221年","秦の統一（中国）","始皇帝が文字・度量衡・貨幣を統一。「皇帝」の始まり"],["前206年〜後220年","漢（中国）","儒教を国の学問に。紙の改良（105年ごろ）。シルクロードで西とつながる"],["前27年〜後476年","ローマ帝国（西の部分）","地中海をぐるりと支配。法律・道路・水道・ラテン語。東の部分（ビザンツ帝国）は1453年まで続いた"]],["いつ","国・できごと","内容"])}
+    <h4>そのころの日本</h4>
+    ${tbl([["約1万6,000年前〜","縄文時代","世界最古級の土器。狩りと採集と漁で暮らし、定住した"],["前10〜前3世紀ごろ〜","弥生時代","大陸から稲作と金属器が伝わる（始まりの時期には諸説ある）"],["3世紀","邪馬台国","中国の歴史書に、女王卑弥呼が治めた国として記録される"],["3〜7世紀","古墳時代","大きな墓（前方後円墳）が造られ、ヤマト王権が力を広げた"]],["いつ","時代","内容"])}
+    ${src("年代は概数で、研究によって幅がある。")}
+    ${links(map("timeline","年表で世界史を見る"),see("language","文字の歴史（言葉の章）"))}`});
+
+  EB.add({id:"medieval",ic:"🏯",t:"中世：信仰と交易の時代",k:"中世 ビザンツ帝国 イスラム帝国 アッバース朝 バグダッド 知恵の館 唐 宋 火薬 羅針盤 印刷 モンゴル帝国 チンギス・ハン 黒死病 ペスト 十字軍 マリ帝国 アンコール アステカ インカ 平安 鎌倉 元寇 オスマン帝国",h:`
+    <p class="eblead">5世紀から15世紀ごろまでの約1,000年。ヨーロッパでは教会が人々の暮らしを支え、イスラム世界と中国では学問と技術が花開き、モンゴル帝国がユーラシアをひとつにつなぎました。</p>
+    <h4>世界の中世</h4>
+    ${tbl([["7世紀〜","イスラム教の誕生と広がり","610年ごろ、ムハンマドがアラビア半島で教えを説く。100年あまりで、スペインから中央アジアまでイスラム教の国が広がった"],["8〜13世紀","イスラムの学問の黄金時代","バグダッドの「知恵の館」でギリシャやインドの本を翻訳。代数学（アル＝フワーリズミー）、医学、天文学が発展。インドで生まれた0を含む数字が、ここを通ってヨーロッパへ伝わった"],["618〜907年／960〜1279年","唐と宋（中国）","唐の都・長安は世界最大級の都市。唐から宋にかけて火薬・羅針盤・活字の印刷（1040年代）が生まれ、宋では紙幣も使われた"],["800年","カール大帝の戴冠","西ヨーロッパにキリスト教の帝国が生まれ、教会と王が力を分け合う封建社会へ"],["9〜11世紀","ヴァイキング","北欧の人々が船でヨーロッパ各地へ。北アメリカにも上陸した"],["1096〜1291年","十字軍","ヨーロッパのキリスト教徒が聖地エルサレムをめざして何度も遠征した"],["1206〜1368年","モンゴル帝国","チンギス・ハンが建て、子孫が中国からロシア・中東まで征服。陸続きの国として史上最大。東西の交易と旅（マルコ・ポーロなど）が盛んに"],["1347〜1351年","黒死病（ペスト）","ヨーロッパの人口の3〜5割が亡くなったと推計される。社会のしくみが大きく変わった"],["1324年","マリ帝国のマンサ・ムーサ","西アフリカの王が大量の金を持ってメッカへ巡礼し、その豊かさが知れ渡った"],["9〜15世紀","アンコール（カンボジア）","アンコール・ワットを築いたクメール王朝"],["14〜16世紀","アステカとインカ","アステカの都テノチティトランは人口20万人を超える大都市。インカは南北約4,000kmに広がる国を、総延長数万kmの道で結んだ"],["1299年ごろ〜","オスマン帝国","1453年にビザンツ帝国の都コンスタンティノープルを征服。20世紀まで続いた"]],["いつ","できごと","内容"])}
+    <h4>そのころの日本</h4>
+    ${tbl([["794年","平安京","都が京都に。かな文字が生まれ、『源氏物語』『枕草子』が書かれた"],["1185年ごろ","鎌倉幕府","武士が政治の中心になる"],["1274・1281年","元寇","モンゴル帝国（元）の軍が2度攻めてきたが、退けた"],["1336年〜","室町時代","能・茶の湯・書院造など、いまに続く文化が育った。後半は戦国時代"]],["いつ","できごと","内容"])}
+    ${src("黒死病の死者の割合は推計で、地域によって差が大きい。")}
+    ${links(map("timeline","年表で世界史を見る"),see("religion","信仰と宗教の章へ"))}`});
+
+  EB.add({id:"earlymodern",ic:"⛵",t:"近世：世界がつながる",k:"近世 大航海時代 コロンブス バスコ・ダ・ガマ マゼラン 世界一周 コロンブス交換 奴隷貿易 宗教改革 ルター 科学革命 コペルニクス ガリレオ ニュートン ムガル帝国 清 江戸時代 鎖国 啓蒙思想 アメリカ独立 フランス革命 ハイチ革命",h:`
+    <p class="eblead">15世紀末、ヨーロッパの船が大西洋とインド洋を渡り、それまで別々だった世界の地域が、初めてひとつにつながりました。それは富と知識が行き交う始まりであり、同時に征服と奴隷貿易の始まりでもありました。</p>
+    <h4>大航海の時代</h4>
+    ${tbl([["1450年ごろ","グーテンベルクの活版印刷","本と知識が爆発的に広まる"],["1492年","コロンブスがカリブ海に到達","ヨーロッパとアメリカ大陸が出会う"],["1498年","バスコ・ダ・ガマがインドへ","アフリカを回る航路で、香辛料の貿易がヨーロッパへ"],["1519〜1522年","マゼランの船団の世界一周","船で地球を一周できること、世界の海がひとつにつながっていることを実際に示した"],["1521・1533年","アステカとインカの滅亡","スペインに征服された"]],["いつ","できごと","内容"])}
+    <h4>つながった世界が生んだもの</h4>
+    ${cards([["作物の交換","トウモロコシ・ジャガイモ・トマト・トウガラシがアメリカから世界へ。小麦・ウシ・ウマ・サトウキビがアメリカへ（コロンブス交換）。ジャガイモやトウモロコシは、のちの人口増加を支えた。","#8fd16a"],["病気","天然痘やはしかがアメリカ大陸に持ち込まれ、免疫のない先住民の人口は、地域によっては9割近く減ったと推計される。","#ff8f8f"],["奴隷貿易","16〜19世紀に、約1,250万人のアフリカの人々が奴隷として大西洋を渡る船に乗せられ、約1,070万人がアメリカ大陸に着いた。","#c99cf2"],["銀と世界経済","アメリカ大陸の銀がヨーロッパとアジア（とくに中国）へ流れ、世界規模の経済が生まれた。","#f4d79a"]],220)}
+    <h4>考え方の大きな変化</h4>
+    ${tbl([["1517年","宗教改革（ルター）","カトリック教会を批判し、プロテスタントが生まれた"],["1543年","コペルニクスの地動説","地球が太陽のまわりを回っている"],["1609年〜","ガリレオの望遠鏡","月の山、木星の衛星を見た"],["1687年","ニュートン『プリンキピア』","同じ法則（万有引力）が、リンゴにも月にも働く"],["1648年","ウェストファリア条約","ヨーロッパで、国どうしが対等とする主権国家のしくみが始まった"],["17〜18世紀","啓蒙思想","理性・人権・自由・権力の分立（ロック、モンテスキュー、ルソー）"]],["いつ","できごと","内容"])}
+    <h4>アジアの大帝国</h4>
+    <p>16〜18世紀のアジアには、オスマン帝国（中東・北アフリカ・東ヨーロッパ）、サファヴィー朝（イラン）、ムガル帝国（インド。タージ・マハル）、明と清（中国）という大帝国があった。1700年ごろ、中国とインドだけで世界の経済の約半分を占めていたと推計される。日本では1603年に江戸幕府が開かれ、約260年続く平和の中で、外国との交流を限りながら（いわゆる鎖国）、独自の文化が育った。</p>
+    <h4>革命の時代</h4>
+    ${flow(["アメリカ独立宣言（1776年）","フランス革命と人権宣言（1789年）","ハイチ革命（1791〜1804年）：奴隷だった人々が独立を勝ち取った","中南米の国々の独立（1810〜20年代）"])}
+    ${src("奴隷貿易の人数：Slave Voyages データベースの推計。アメリカ先住民の人口の減少、1700年ごろの経済の割合は推計で幅がある。")}
+    ${links(map("timeline","年表で世界史を見る"),map("world-map","世界地図で見る"))}`});
+
+  EB.add({id:"modern",ic:"🏭",t:"近代・現代",k:"近代 現代 産業革命 植民地 帝国主義 明治維新 第一次世界大戦 スペイン風邪 世界恐慌 第二次世界大戦 ホロコースト 原爆 広島 長崎 国際連合 冷戦 独立 脱植民地化 ベルリンの壁 ソ連崩壊 グローバル化 同時多発テロ 新型コロナ ウクライナ",h:`
+    <p class="eblead">18世紀後半、イギリスで機械が人や動物の力に代わり始めました。産業革命です。そこから約250年で、人類の数も、作る物の量も、使うエネルギーも、何十倍にもなりました。その力は、豊かさと同時に、かつてない規模の戦争も生みました。</p>
+    <h4>産業革命と19世紀</h4>
+    ${tbl([["1760年ごろ〜","産業革命（イギリス）","綿の工場、ワットの改良した蒸気機関（1769年）、鉄道。石炭の時代"],["19世紀","国民国家と帝国主義","ヨーロッパの国々とアメリカ・日本が工業化し、アジア・アフリカの多くを植民地にした（1884〜85年のベルリン会議でアフリカを分割）"],["1833年・1865年","奴隷制の廃止","イギリス帝国、アメリカ合衆国などで奴隷制が廃止された"],["1840〜42年","アヘン戦争","清がイギリスに敗れ、アジアの力関係が変わった"],["1868年","明治維新（日本）","武士の世が終わり、急速に近代化・工業化した"]],["いつ","できごと","内容"])}
+    <h4>二つの世界大戦</h4>
+    ${tbl([["1914〜18年","第一次世界大戦","戦車・飛行機・毒ガス。兵士と市民で約1,500万〜2,000万人が亡くなった"],["1918〜20年","スペイン風邪（インフルエンザ）","世界で数千万人が亡くなった"],["1917年","ロシア革命","世界初の社会主義国（のちのソ連）"],["1929年","世界恐慌","アメリカから世界へ広がった大不況。各国で独裁や対立が強まった"],["1939〜45年","第二次世界大戦","約7,000万〜8,500万人（当時の世界の人口の約3%）が亡くなった。ナチス・ドイツはユダヤ人約600万人を虐殺した（ホロコースト）"],["1945年8月","広島・長崎への原子爆弾","その年のうちに広島で約14万人、長崎で約7万4,000人が亡くなった。核兵器が戦争で使われた唯一の例"]],["いつ","できごと","内容"])}
+    <h4>戦後から現代へ</h4>
+    ${tbl([["1945年","国際連合","51か国で発足。いまは193か国"],["1948年","世界人権宣言","すべての人が生まれながらに持つ権利を、初めて世界共通の言葉にした"],["1947〜1991年","冷戦","アメリカとソ連が核兵器を持ってにらみ合った。朝鮮戦争、キューバ危機（1962年）、ベトナム戦争"],["1947〜70年代","植民地の独立","インド（1947年）、「アフリカの年」（1960年、17か国）など。国連の加盟国が大きく増えた"],["1969年","アポロ11号の月面着陸","人類が初めて別の天体に立った"],["1978年〜","中国の改革開放","市場経済を取り入れ、世界第2の経済大国へ"],["1989〜1991年","ベルリンの壁の崩壊・ソ連の解体","冷戦の終わり"],["1990年代〜","グローバル化とインターネット","物・お金・人・情報が国境を越えて行き交う"],["2001年","アメリカ同時多発テロ","その後、アフガニスタン・イラクで長い戦争が続いた"],["2008年","世界金融危機","アメリカの住宅ローン問題から世界的な不況へ"],["2015年","パリ協定・SDGs","気候変動と持続可能な開発について、世界が共通の目標を決めた"],["2020年〜","新型コロナウイルスの世界的流行","世界の暮らしと経済が止まった"],["2022年〜","ロシアのウクライナ侵攻","第二次世界大戦後のヨーロッパで最大級の戦争。2026年11月時点も戦闘が続き、和平交渉は合意に至っていない"],["2022年〜","生成AIの普及","機械が文章や画像を作る時代に"],["2023年10月〜","ガザでの戦争","イスラエルとハマスの戦闘で、多くの市民が犠牲になった。2025年10月に停戦が発効したが、攻撃や人道危機は続いている"],["2026年2月〜","アメリカ・イスラエルとイランの戦争","イランが、世界の石油の約2割が通るホルムズ海峡をふさぎ、世界的なエネルギー危機が起きた。合意と停戦が結ばれては崩れ、2026年秋も海峡の通航をめぐる交渉が続いている"]],["いつ","できごと","内容"])}
+    ${note("歴史の評価は、立場や国によって大きく違うことが多い。ここでは、多くの研究者が認めるできごとと、おおよその数字を中心に書いている。","cool")}
+    ${src("戦争の死者数は推計で、研究によって幅がある。広島・長崎の死者数は広島市・長崎市による1945年末までの推計。")}
+    ${links(see("war","戦争と平和の章へ"),see("politics","国と政治の章へ"),map("timeline","年表で世界史を見る"))}`});
+})();
+
+/* 第11部：いま・これから */
+(function(){
+  const {bar,tbl,fig,dots,map,see,cards,flow,note,src,links}=EB;
+  EB.part("now","いま・これから","🔭","いま地球が抱える課題、世界の共通目標（SDGs）、これからの人類、宇宙へ送ったメッセージ、人類に会ったら。");
+
+  EB.add({id:"issues",ic:"⚠️",t:"いま地球が抱える課題",k:"課題 問題 気候変動 地球温暖化 二酸化炭素 生物多様性 絶滅 核兵器 戦争 紛争 難民 貧困 飢餓 感染症 薬剤耐性 AI プラスチック 水 高齢化 エネルギー危機",h:`
+    <p class="eblead">人類はかつてない豊かさと知識を手に入れました。同時に、地球全体に影響する問題も、自分たちで生み出してきました。どれも、一つの国だけでは解決できない問題です。</p>
+    <h4>おもな課題と、いまの数字</h4>
+    ${tbl([["気候変動","2025年の世界の平均気温は、産業革命前より約1.44℃高かった（2023〜25年の3年平均は約1.48℃）。大気の二酸化炭素は2025年に426.8ppmで、産業革命前（約278ppm）の1.5倍を超え、毎年増え続けている"],["生き物の減少","調べられている野生の脊椎動物の集団は、1970年から平均で73%小さくなった。最も減ったのは川や湖の生き物（85%）。評価された約17万3,000種のうち約4万9,000種に絶滅のおそれがある"],["戦争と核兵器","国家が関わる武力紛争は2025年に65件で、1946年以降で最多。9か国が約1万2,000発の核弾頭を持つ"],["家を追われた人","約1億1,780万人（2025年末）。日本の人口に近い"],["飢餓と貧困","約6億4,500万人が飢餓に苦しみ（2025年）、約8億人が1日3ドル未満で暮らす"],["感染症","新型コロナでは、2020〜21年の2年間だけで約1,490万人の死亡が増えたとWHOは推計した。抗生物質が効かない細菌（薬剤耐性菌）で、年に100万人以上が亡くなっている"],["エネルギーと資源","エネルギーの約86%を化石燃料に頼る。2026年には中東の戦争でホルムズ海峡がふさがれ、石油とガスの価格が急に上がった"],["プラスチック","1年に約4億3,000万トン作られ、多くは使い捨て。海や体の中からも見つかっている"],["水とトイレ","約21億人が安全な飲み水を、約34億人が安全なトイレを使えない"],["AI","人に近い知的作業をする機械が急速に発達している。仕事や教育への影響、誤った情報、悪用、AIそのものの安全性について、ルールづくりが進められている"]],["課題","いまの状況"])}
+    <h4>課題はつながっている</h4>
+    ${cards([["気候 → 食べ物と水","暑さ・干ばつ・洪水が作物と水を奪い、飢餓や移住を増やす。","#ff8f8f"],["戦争 → 飢餓と難民","飢餓の多くは紛争地で起きている。家を追われた人の数は、10年でほぼ倍になった。","#f4b942"],["貧困 → 病気","安全な水とトイレがないと感染症が広がり、病気がさらに貧しさを生む。","#c99cf2"],["エネルギー → 気候と平和","化石燃料を燃やすと気候が変わり、燃料の奪い合いは争いの原因にもなる。","#7fb2ff"]],210)}
+    ${note("どれも、人類が協力すれば小さくできる問題です。オゾン層を壊すガスを世界でやめたこと（1987年のモントリオール議定書。オゾン層は回復に向かっている）や、天然痘の根絶は、それができることを示しています。","cool")}
+    ${src("気温：WMO（2026年1月）。二酸化炭素：WMO「温室効果ガス年報」第22号（2026年10月）。野生生物：WWF「生きている地球レポート2026」。絶滅のおそれ：IUCNレッドリスト（2025年10月）。紛争：UCDP（2026年6月）。核弾頭：SIPRI年鑑2026。避難民：UNHCR（2026年6月）。飢餓：FAO ほか「SOFI 2026」。貧困：世界銀行。新型コロナ：WHO（2022年5月）。プラスチック：Plastics Europe（2024年）。水とトイレ：WHO・UNICEF（2025年）。")}
+    ${links(see("sdgs","次の章：SDGs"),see("war","戦争と平和の章へ"),see("weather","大気・天気・気候の章へ"))}`});
+
+  EB.add({id:"sdgs",ic:"🎯",t:"SDGs：世界の17の目標",k:"SDGs 持続可能な開発目標 2030アジェンダ 国連 目標 貧困 飢餓 健康 教育 ジェンダー 水 エネルギー 気候 海 陸 平和 パートナーシップ",h:`
+    <p class="eblead">2015年、国連に加盟するすべての国が、2030年までに達成をめざす17の目標に合意しました。「持続可能な開発目標（SDGs）」です。「だれ一人取り残さない」ことを合言葉にしています。</p>
+    <h4>17の目標</h4>
+    ${tbl([["1","貧困をなくそう"],["2","飢餓をゼロに"],["3","すべての人に健康と福祉を"],["4","質の高い教育をみんなに"],["5","ジェンダー平等を実現しよう"],["6","安全な水とトイレを世界中に"],["7","エネルギーをみんなに そしてクリーンに"],["8","働きがいも経済成長も"],["9","産業と技術革新の基盤をつくろう"],["10","人や国の不平等をなくそう"],["11","住み続けられるまちづくりを"],["12","つくる責任 つかう責任"],["13","気候変動に具体的な対策を"],["14","海の豊かさを守ろう"],["15","陸の豊かさも守ろう"],["16","平和と公正をすべての人に"],["17","パートナーシップで目標を達成しよう"]],["番号","目標"])}
+    <h4>どこまで進んだか（2026年の国連の報告）</h4>
+    ${bar([["順調か、ある程度進んでいる",36,"#6fd2a0"],["進みが遅すぎる",49,"#f4b942"],["2015年より悪くなった",15,"#ff8f8f"]],"%")}
+    <p>データのある139のターゲット（目標の中の具体的な項目）のうち、2030年に間に合いそうなのは3分の1あまり。それでも、確かに進んだこともある。</p>
+    ${tbl([["インターネット","使う人の割合が40%から74%に（2015→2025年）"],["水とトイレ","約9億6,000万人が安全な飲み水を、約12億人が安全なトイレを使えるようになった（2015〜2024年）"],["HIV","新しい感染は30%、エイズによる死亡は35%減った（2015→2024年）"],["まだ遠いもの","発育の遅れた子どもが1億5,000万人以上。出産で亡くなる母親の割合は目標の約3倍。ジェンダー平等のターゲットは一つも順調でない"]],["","内容"])}
+    ${src("国連「The Sustainable Development Goals Report 2026」（2026年7月）。目標の日本語名は国連広報センターの訳。")}
+    ${links(see("issues","いま地球が抱える課題"),see("future","次の章：これからの人類"))}`});
+
+  EB.add({id:"future",ic:"🔭",t:"これからの人類",k:"未来 将来 予測 人口 高齢化 気候 温暖化 1.5℃ パリ協定 エネルギー転換 核融合 AI 宇宙 月 火星 カルダシェフ Type I 太陽 アンドロメダ",h:`
+    <p class="eblead">未来は予言できません。けれど、人口・気候・エネルギーのように、ゆっくり大きく動くものには、ある程度の見通しがあります。ここでは、根拠のある予測と、まだ「もしも」にすぎない構想を分けて紹介します。</p>
+    <h4>かなり確かな見通し</h4>
+    ${tbl([["人口","いまの約82億人から増え続け、2080年代半ばに約103億人でピークになり、その後ゆっくり減ると予測されている"],["高齢化","2070年代後半には、65歳以上の人が18歳未満の子どもより多くなる見込み。日本はすでに約3割が65歳以上"],["都市","都市に住む人の割合は、これからも増え続ける"],["電気","太陽光と風力が急速に増え、2025年には再生可能エネルギーの発電量が石炭を上回った。電気自動車は2026年に新車の約3割になる見込み"]],["分野","見通し"])}
+    <h4>気候はどこへ向かうか</h4>
+    ${bar([["いまの政策のまま",2.8,"#ff8f8f"],["各国の約束を守る",2.6,"#f4b942","国が決めた削減目標（NDC）"],["＋実質ゼロの目標も",2.1,"#f4d79a"],["パリ協定の目標",1.5,"#6fd2a0"]],"℃",3)}
+    <p>今世紀末に、産業革命前より何℃上がるかの予測（国連環境計画、2026年）。1.5℃を一時的に超えることはもう避けられないが、温室効果ガスを2030年までに18%、2035年までに45%、2040年までに69%減らせば（2025年比）、上昇を1.7〜1.8℃で止め、今世紀末に1.5℃以下へ戻せる可能性があるとされる。</p>
+    <h4>カルダシェフの尺度で見た人類</h4>
+    <p>人類はいま約1.9×10¹³Wのエネルギーを使い、尺度では <b>Type 0.73</b> 前後にいる。Type I（約10¹⁶W）はその約500倍。もし使うエネルギーが毎年2%ずつ増え続けたとすると、Type Iに届くのは約300年後になる計算だ（1%なら約600年、3%なら約200年）。ただし、エネルギーを増やすことと、気候を守ることを両立させる必要がある。太陽光は、人類がいま使う量の約9,000倍が地球に降り注いでいる。</p>
+    ${links(map("overview","文明マップで Type I〜III の「もしもの世界」を見る"))}
+    <h4>まだ「もしも」の技術</h4>
+    ${tbl([["核融合発電","太陽と同じしくみで電気を作る。2022年にアメリカの実験で、入れたレーザーのエネルギーより多いエネルギーを初めて取り出した。国際共同のITERは2030年代に本格的な実験を始める計画で、発電所になるのはまだ先"],["人工知能","人と同じかそれ以上に幅広い知的作業をするAI（汎用人工知能）がいつ、どのように実現するか、そもそも実現するかについて、専門家の意見は大きく分かれている"],["月と火星","アメリカは2028年、中国は2030年までに人を月へ送る計画。月の基地や火星への有人飛行も構想されている"],["宇宙での暮らし","宇宙ホテル、宇宙での太陽光発電、小惑星の資源。技術と費用の壁はまだ高い"]],["技術","いまの状況"])}
+    <h4>とても遠い未来（天文学の予測）</h4>
+    ${tbl([["約10億年後","太陽が少しずつ明るくなり、地球の海が蒸発し始めるとされる"],["数十億年後","天の川銀河とアンドロメダ銀河が合体するかもしれない。2025年の研究では、今後100億年のうちに合体する確率は約50%とされた"],["約50億年後","太陽が赤色巨星にふくらむ。地球がのみこまれるかどうかは、はっきりしていない"]],["いつ","できごと"])}
+    ${note("「人類の未来」は、決まった運命ではありません。いま生きている人の選択の積み重ねです。過去の人類は、飢饉や疫病や戦争を何度も乗り越えて、ここまで来ました。","cool")}
+    ${src("人口・高齢化：国連「World Population Prospects 2024」。電気：Ember（2026年）、IEA「Global EV Outlook 2026」。気候：国連環境計画（UNEP）「Emissions Gap Report 2026」。核融合：ローレンス・リバモア国立研究所（2022年）、ITER機構。銀河の合体：Sawala ほか、Nature Astronomy（2025年）。")}
+    ${links(see("energy","エネルギーの章へ"),see("space","宇宙開発の章へ"),see("universe","宇宙の歴史と行く末"))}`});
+
+  EB.add({id:"msg",ic:"📡",t:"私たちが宇宙へ送ったメッセージ",k:"メッセージ パイオニア アレシボ ボイジャー 金のレコード 宇宙人 地球外知的生命",h:`
+    <p class="eblead">人類は、まだ見ぬ誰かに向けて、いくつかの手紙を宇宙へ送ってきました。どれも、届くかどうかわからないまま、それでも送られたものです。</p>
+    ${tbl([["パイオニアの金属板（1972・73年）","男女の姿、太陽系、パルサーから見た太陽の位置を刻んだ板。探査機パイオニア10号・11号に取り付けた"],["アレシボ・メッセージ（1974年）","電波望遠鏡から、約2万5,000光年先の球状星団M13へ送った1,679ビットの電波。1,679＝23×73（2つの素数の積）なので、23×73に並べると絵になる：1〜10の数、DNAの元素、二重らせん、人の姿、太陽系、望遠鏡"],["ボイジャーの金のレコード（1977年）","探査機ボイジャー1号・2号に積んだ。写真115枚、55の言語のあいさつ、地球の音（風・鳥・心臓の音）、約90分の音楽（バッハ、ベートーヴェン、チャック・ベリー、日本の尺八「鶴の巣籠」など）"]],["名前","内容"])}
+    <p>ボイジャー1号は2012年に太陽圏の外へ出た。<b>2026年11月18日ごろ、地球から1光日（光で1日かかる距離、約259億km）に達した</b>。いまここから電波を送っても、届くのは明日になる。最も近い恒星のそばを通るのは約4万年後。<b>このページは、それらのメッセージの続きのつもりで作られています。</b></p>
+    ${links(see("seti","宇宙の仲間を探す章へ"))}`});
+
+  EB.add({id:"meet",ic:"🤝",t:"人類に会ったら",k:"出会い あいさつ 接触 ファーストコンタクト 国連",h:`
+    <p class="eblead">もしあなたが地球に着いて、人類に会うことになったら。ここまでの章をふまえた、いくつかの助言です。</p>
+    <ul><li><b>ゆっくり、手のひらを見せて近づいてください。</b>急な動きや大きな音は、人を怖がらせます。</li><li><b>笑顔（口角を上げる）は友好の合図</b>です。</li><li>私たちは数学・物理・化学を共通の言葉にできます。素数の列（2, 3, 5, 7, 11…）を送れば、知的な相手だと気づくはずです。</li><li>人類は一つの政府を持っていません。代表を探すなら、193か国が加盟する国際連合（ニューヨーク）が最も近い存在です。</li><li>人類は約7,100の言語を話します。英語・中国語・スペイン語・アラビア語などを使えば、多くの人に伝わります。</li><li>私たちは争いも多いけれど、知りたい・つながりたいという気持ちも強い生き物です。</li></ul>
+    ${links(see("read","はじめに戻る"),see("language","言葉と文字の章へ"))}`});
+})();
+
+/* ---------- ⑥ 地球大全：文明マップの中で読む（表紙・目次・章・本文検索） ----------
+   行き先（URL の # のあと）
+     #earth-book          表紙と全体の目次
+     #eb-part-<部のid>     表紙のその部
+     #eb-<章のid>          章          #eb-<章のid>.<番号>  章の中の見出し
+     #eb-q=<語>           本文検索の結果
+   章の中身は src/eb_p*.js（EB.add）。部品は src/eb_core.js。 */
+window.EBVIEW=(()=>{
+  const $=id=>document.getElementById(id);
+  const {parts,chapters}=EB;
+  const byId=Object.fromEntries(chapters.map(c=>[c.id,c]));
+  const pById=Object.fromEntries(parts.map(p=>[p.id,p]));
+  const pLabel=p=>{const i=parts.indexOf(p);return i===0?"序":`第${i}部`;};
+  const view=$("v-earth-book"),main=$("ebmain"),side=$("ebside"),toc=$("ebtoc"),tocb=$("ebtocb"),q=$("ebq"),qres=$("ebqres");
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const plain=h=>h.replace(/<(script|style)[\s\S]*?<\/\1>/g," ").replace(/<[^>]+>/g," ").replace(/&nbsp;/g," ").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/\s+/g," ").trim();
+  const norm=s=>s.normalize("NFKC").toLowerCase().replace(/[\u30a1-\u30f6]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60));
+  const store={get(k){try{return localStorage.getItem(k);}catch(e){return null;}},set(k,v){try{localStorage.setItem(k,v);}catch(e){}}};
+  const TITLE_TAIL="｜カルダシェフ文明マップ";
+
+  // ---- 検索の材料（本文の文字だけ） ----
+  const IDX=chapters.map(c=>{const hs=[...c.h.matchAll(/<h4[^>]*>([\s\S]*?)<\/h4>/g)].map(m=>plain(m[1]));const t=plain(c.h);return {c,t,nt:norm(t),nti:norm(c.t+" "+(c.k||"")),hs,nhs:hs.map(norm)};});
+  const nTables=(chapters.map(c=>c.h).join("").match(/<table/g)||[]).length;
+  const nHeads=IDX.reduce((a,x)=>a+x.hs.length,0);
+  $("ebcount").textContent=`序＋${parts.length-1}部・${chapters.length}章`;
+
+  // ---- 目次（「目次」ボタンで開く） ----
+  toc.innerHTML=`<a class="ebtoc-home" href="#earth-book" data-id=""><span aria-hidden="true">📘</span>表紙と全体の目次</a><div class="ebtocg">`+
+    parts.map(p=>`<div class="ebtoc-part"><div class="ebtoc-ph"><span aria-hidden="true">${p.ic}</span><small>${pLabel(p)}</small>${p.t}</div>${p.ch.map(c=>`<a class="ebtoc-ch" href="#eb-${c.id}" data-id="${c.id}"><span class="ebn">${c.n}</span><span>${c.t}</span></a>`).join("")}</div>`).join("")+`</div>`;
+  function openToc(){toc.hidden=false;tocb.setAttribute("aria-expanded","true");qres.hidden=true;const a=toc.querySelector("a.on");if(a)a.scrollIntoView({block:"nearest"});}
+  function closeToc(){if(toc.hidden)return;toc.hidden=true;tocb.setAttribute("aria-expanded","false");}
+  tocb.addEventListener("click",()=>toc.hidden?openToc():closeToc());
+  toc.addEventListener("click",e=>{if(e.target.closest("a"))closeToc();});
+  function setOn(id){toc.querySelectorAll("[data-id]").forEach(a=>{const on=a.dataset.id===id;a.classList.toggle("on",on);if(on)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});}
+
+  // ---- 表紙 ----
+  function cover(pid){
+    const last=byId[store.get("eb:last")];
+    main.innerHTML=`<section class="ebcover">
+      <div class="cv-hero"><div><h3 class="cv-title">この世のしくみを、順に<small>数と物質から、宇宙・地球・生命・人間・社会・文化・技術・歴史まで</small></h3>
+        <p class="eblead">地球の外から来た知的存在が「地球とは何か、人類とは何か」を理解するための手引きです。前の章の言葉を使って次の章を説明するので、はじめから順に読むと全体がつながります。</p>
+        <div class="cv-act"><a class="ebbtn pri" href="#eb-${chapters[0].id}">最初から読む</a>${last?`<a class="ebbtn" href="#eb-${last.id}">続きから：${esc(last.t)}</a>`:""}</div></div>
+        <div class="cv-stats"><div><b class="num">${parts.length-1}</b><small>部（＋序）</small></div><div><b class="num">${chapters.length}</b><small>章</small></div><div><b class="num">${nTables}</b><small>表</small></div><div><b class="num">${nHeads}</b><small>見出し</small></div></div></div>
+      <div class="cv-parts">${parts.map(p=>`<section class="cv-part" id="eb-part-${p.id}"><h3><span aria-hidden="true">${p.ic}</span><small>${pLabel(p)}</small>${p.t}</h3><p>${p.desc}</p><ol>${p.ch.map(c=>`<li><a href="#eb-${c.id}"><span class="ebn">${c.n}</span><span>${c.t}</span></a></li>`).join("")}</ol></section>`).join("")}</div>
+      <p class="cv-foot">数字は概数です。年によって変わる数字には、年と出典を添えています（各章の終わりの「出典・注」）。2027年より後のことは予測や想像で、全体マップの「もしもの世界（Type I〜IV）」とつながっています。</p>
+    </section>`;
+    side.innerHTML="";side.hidden=true;view.classList.remove("eb-reading");
+    document.title="地球大全"+TITLE_TAIL;setOn("");curId=null;
+    if(pid){const el=$("eb-part-"+pid);if(el){el.scrollIntoView({block:"start"});el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1600);}}
+  }
+
+  // ---- 章 ----
+  let curId=null;
+  function chapter(c,sec,terms){
+    const p=pById[c.part],prev=chapters[c.n-1],next=chapters[c.n+1];
+    main.innerHTML=`<article class="ebch" data-id="${c.id}">
+      <nav class="crumb" aria-label="現在地"><a href="#earth-book">地球大全</a><span aria-hidden="true">›</span><a href="#eb-part-${p.id}">${pLabel(p)} ${p.t}</a></nav>
+      <header class="ebch-h"><span class="ebic" aria-hidden="true">${c.ic}</span><div><small>第${c.n}章</small><h3>${c.t}</h3></div></header>
+      <ul class="outl" aria-label="この章の見出し"></ul>
+      ${c.c3d?`<canvas class="c3d ebc3d" data-k="${c.c3d}" data-hi="2" aria-label="${esc(c.t)}の立体図"></canvas>`:""}
+      <div class="ebbody">${c.h}</div>
+      <nav class="ebpager" aria-label="前後の章">${prev?`<a class="pv" href="#eb-${prev.id}"><small>← 前の章（第${prev.n}章）</small><b>${prev.t}</b></a>`:""}${next?`<a class="nx" href="#eb-${next.id}"><small>次の章（第${next.n}章） →</small><b>${next.t}</b></a>`:`<a class="nx" href="#earth-book"><small>おわり</small><b>表紙へ戻る</b></a>`}</nav>
+    </article>`;
+    const hs=[...main.querySelectorAll(".ebbody h4")];
+    hs.forEach((h,k)=>h.id=`eb-${c.id}.${k+1}`);
+    const links=hs.map((h,k)=>`<a href="#eb-${c.id}.${k+1}">${esc(h.textContent)}</a>`);
+    const outl=main.querySelector(".outl");
+    if(hs.length)outl.innerHTML=links.map(a=>`<li>${a}</li>`).join("");else outl.remove();
+    side.innerHTML=hs.length?`<b>この章の見出し</b>${links.join("")}`:"";side.hidden=!hs.length;view.classList.toggle("eb-reading",hs.length>0);
+    document.title=`${c.t}｜地球大全`+TITLE_TAIL;
+    setOn(c.id);curId=c.id;store.set("eb:last",c.id);
+    if(terms&&terms.length)highlight(terms);
+    const target=sec?document.getElementById(`eb-${c.id}.${sec}`):main.querySelector("mark.hit");
+    if(target)target.scrollIntoView({block:terms&&!sec?"center":"start"});else toTop();
+    if(window.L3D&&main.querySelector("canvas.c3d"))L3D.scan(main);
+    watchSections(hs);
+  }
+  // 章の題名が、上の固定の行（時代バー・地球大全の道具の行）のすぐ下に来る位置へ
+  function toTop(){const sh=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--stickyH"))||0;const th=view.querySelector(".ebtools").offsetHeight;window.scrollTo(0,Math.max(0,scrollY+main.getBoundingClientRect().top-sh-th-12));}
+  let so=null;
+  function watchSections(hs){if(so)so.disconnect();if(!hs.length)return;so=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)side.querySelectorAll("a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id));});},{rootMargin:"-25% 0px -65% 0px"});hs.forEach(h=>so.observe(h));}
+  // 検索語を本文の中で光らせる
+  function highlight(terms){const root=main.querySelector(".ebch");const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const nodes=[];while(w.nextNode())nodes.push(w.currentNode);let n=0;
+    for(const tn of nodes){if(n>60)break;const s=tn.nodeValue,ns=norm(s);let hit=-1,len=0;for(const t of terms){const i=ns.indexOf(t);if(i>=0&&(hit<0||i<hit)){hit=i;len=t.length;}}if(hit<0||tn.parentNode.closest("mark,script,style"))continue;
+      const m=document.createElement("mark");m.className=n?"":"hit";const r=document.createRange();r.setStart(tn,hit);r.setEnd(tn,Math.min(s.length,hit+len));try{r.surroundContents(m);n++;}catch(e){}}}
+
+  // ---- 本文検索 ----
+  function find(raw){
+    const terms=norm(raw).split(/[\s　]+/).filter(Boolean);const out=[];
+    if(!terms.length)return {terms,out};
+    for(const x of IDX){let sc=0,ok=true;for(const t of terms){const inT=x.nti.includes(t),hi=x.nhs.findIndex(h=>h.includes(t)),cnt=x.nt.split(t).length-1;if(!inT&&hi<0&&!cnt){ok=false;break;}sc+=(inT?30:0)+(hi>=0?12:0)+Math.min(cnt,20);}
+      if(!ok)continue;const hi=x.nhs.findIndex(h=>terms.some(t=>h.includes(t)));const i=x.nt.indexOf(terms[0]);
+      const snip=i>=0?x.t.slice(Math.max(0,i-36),i+70):x.t.slice(0,90);out.push({x,sc,hi,snip});}
+    out.sort((a,b)=>b.sc-a.sc);return {terms,out};
+  }
+  const mark=(s,terms)=>{let o=esc(s);terms.forEach(t=>{const re=new RegExp(t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"gi");o=o.replace(re,m=>`<mark>${m}</mark>`);});return o;};
+  const item=(r,k,terms,selK)=>{const c=r.x.c,p=pById[c.part];return `<a href="#eb-${c.id}${r.hi>=0?"."+(r.hi+1):""}" data-k="${k}" role="option"${k===selK?' class="sel"':""}><b>${mark(c.t,terms)}</b><small>第${c.n}章 ・ ${pLabel(p)} ${p.t}${r.hi>=0?" ・ "+esc(r.x.hs[r.hi]):""}</small><span>…${mark(r.snip,terms)}…</span></a>`;};
+  let sel=-1;
+  function live(raw){
+    const {terms,out}=find(raw);
+    if(!terms.length){qres.hidden=true;return;}
+    sel=out.length?0:-1;closeToc();
+    qres.innerHTML=`<div class="qh">「${esc(raw)}」— ${out.length}章で見つかりました${out.length>40?"（上位40件）":""}</div>`+out.slice(0,40).map((r,k)=>item(r,k,terms,sel)).join("")+
+      (out.length?`<a class="qall" href="#eb-q=${encodeURIComponent(raw.trim())}">結果をすべて本文の場所に並べて見る →</a>`:`<div class="qh">見つかりませんでした。言い方を変えるか、画面の上の🔍（<kbd>/</kbd>キー）で文明マップ全体から探してください。</div>`);
+    qres.hidden=false;qres._terms=terms;
+  }
+  function results(raw){
+    const {terms,out}=find(raw);q.value=raw;
+    main.innerHTML=`<section class="ebres"><h3>「${esc(raw)}」の検索結果 <small>${out.length}章</small></h3>${out.length?`<div class="ebres-list">${out.map((r,k)=>item(r,k,terms,-1)).join("")}</div>`:`<p class="note">見つかりませんでした。言い方を変えてみてください。</p>`}</section>`;
+    main._terms=terms;
+    side.innerHTML="";side.hidden=true;view.classList.remove("eb-reading");setOn("");curId=null;
+    document.title=`「${raw}」の検索結果｜地球大全`+TITLE_TAIL;toTop();
+  }
+  let qt=0;q.addEventListener("input",()=>{clearTimeout(qt);qt=setTimeout(()=>live(q.value),120);});
+  q.addEventListener("focus",()=>{if(q.value.trim())live(q.value);});
+  q.addEventListener("keydown",e=>{const items=[...qres.querySelectorAll("a[data-k]")];
+    if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();if(!items.length)return;sel=(sel+(e.key==="ArrowDown"?1:-1)+items.length)%items.length;items.forEach((a,k)=>a.classList.toggle("sel",k===sel));items[sel].scrollIntoView({block:"nearest"});}
+    else if(e.key==="Enter"){e.preventDefault();const a=items[Math.max(0,sel)];if(a)a.click();else if(q.value.trim())location.hash="eb-q="+encodeURIComponent(q.value.trim());}
+    else if(e.key==="Escape"){qres.hidden=true;q.blur();}});
+  // 検索結果から章へ：見つかった言葉を本文の中で光らせる
+  let pendingTerms=null;
+  function go(a,terms){pendingTerms=terms;qres.hidden=true;q.blur();const h=a.getAttribute("href");if(location.hash===h)route(h.slice(1));else location.hash=h;}
+  qres.addEventListener("click",e=>{const a=e.target.closest("a[data-k]");if(!a)return;e.preventDefault();go(a,qres._terms);});
+  main.addEventListener("click",e=>{const a=e.target.closest(".ebres a[data-k]");if(!a)return;e.preventDefault();go(a,main._terms);});
+  document.addEventListener("click",e=>{if(!e.target.closest("#ebsrch"))qres.hidden=true;if(!e.target.closest("#ebtoc,#ebtocb"))closeToc();});
+
+  // ---- 行き先 ----
+  function route(h){
+    h=decodeURIComponent(h||"");closeToc();qres.hidden=true;
+    if(!h||h==="earth-book"){cover();return;}
+    if(h.startsWith("eb-part-")){cover(h.slice(8));return;}
+    if(h.startsWith("eb-q=")){results(h.slice(5));return;}
+    const [id,sec]=h.slice(3).split(".");const c=byId[id];
+    if(!c){cover();return;}
+    if(c.id===curId&&sec&&!pendingTerms){const el=document.getElementById(`eb-${c.id}.${sec}`);if(el){el.scrollIntoView({block:"start"});return;}}
+    const t=pendingTerms;pendingTerms=null;chapter(c,sec,t);
+  }
+
+  // ---- キー：← → 前後の章、Esc 目次と検索を閉じる（地球大全を見ているときだけ） ----
+  document.addEventListener("keydown",e=>{
+    if(!view.classList.contains("on"))return;
+    if(e.key==="Escape"){closeToc();qres.hidden=true;return;}
+    const ae=document.activeElement;
+    if(e.metaKey||e.ctrlKey||e.altKey||(ae&&(/INPUT|TEXTAREA|SELECT/.test(ae.tagName)||ae.closest('[role="slider"],.eradock'))))return;
+    if((e.key==="ArrowRight"||e.key==="ArrowLeft")&&curId){const c=byId[curId];const t=chapters[c.n+(e.key==="ArrowRight"?1:-1)];if(t){e.preventDefault();location.hash="eb-"+t.id;}}
+  });
+
+  return {route,chapters:chapters.length};
 })();
 
 show();
